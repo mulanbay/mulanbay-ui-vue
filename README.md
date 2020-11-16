@@ -28,7 +28,6 @@ Vue、Element UI、Echarts
 
 ```bash
 # 克隆项目
-git clone https://gitee.com/mulanbay-ui-vue
 
 # 进入项目目录
 cd mulanbay-ui-vue
@@ -50,6 +49,7 @@ npm run dev
 ```bash
 # 构建测试环境
 npm run build:stage
+git clone https://gitee.com/mulanbay/mulanbay-ui-vue.git
 
 # 构建生产环境
 npm run build:prod
