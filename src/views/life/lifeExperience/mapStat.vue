@@ -15,17 +15,16 @@
           :picker-options="datePickerOptions"
         ></el-date-picker>
       </el-form-item>
-      <el-form-item label="所呆天数">
+      <el-form-item v-if="moreCdn==true" label="所呆天数">
           <el-input-number v-model="queryParams.minDays" clearable :min="0" label="" style="width: 120px"></el-input-number>
           <el-input-number v-model="queryParams.maxDays" clearable :min="0" label="" style="width: 120px"></el-input-number>
       </el-form-item>
-      <el-form-item label="类型" prop="types">
+      <el-form-item v-if="moreCdn==true&&'LC_NAME'==queryParams.mapType" label="类型" prop="types">
         <el-select
           v-model="queryParams.types"
           placeholder="类型"
           clearable
           multiple
-          disabled
           collapse-tags
           size="small"
           style="width: 240px"
@@ -74,6 +73,7 @@
       <el-form-item>
         <el-button type="stat" icon="el-icon-s-data" size="mini" @click="handleQuery" v-hasPermi="['life:lifeExperience:mapStat']">统计</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+        <el-button type="primary" icon="el-icon-more" size="mini" @click="handleMoreCdn">{{cdnTitle}}</el-button>
       </el-form-item>
     </el-form>
 
@@ -112,6 +112,10 @@ export default {
   },
   data() {
     return {
+      //查询条件更多属性 start
+      cdnTitle:'更多',
+      moreCdn:false,
+      //查询条件更多属性 end
       // 加载层信息
       loading: [],
       //加载层配置
@@ -154,6 +158,17 @@ export default {
     });
   },
   methods: {
+    /** 更多查询条件处理 */
+    handleMoreCdn(){
+      if(this.moreCdn==true){
+        //this.resetForm("queryForm");
+        this.moreCdn=false;
+        this.cdnTitle='更多';
+      }else{
+        this.moreCdn=true;
+        this.cdnTitle='取消';
+      }
+    },
     // 打开加载层
     openLoading() {
       this.loading = this.$loading(this.loadingOptions);
@@ -179,7 +194,7 @@ export default {
           //组装chart数据
           this.chart = echarts.init(document.getElementById(this.id));
           const mapType = this.queryParams.mapType;
-          if(mapType=='LOCATION'){
+          if(mapType=='LOCATION'||mapType=='LC_NAME'){
             const n = response.dataList==null ? 0: response.dataList.length;
             if(n<=20){
               createNTLocationMapChart(response,this.chart);

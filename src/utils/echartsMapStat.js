@@ -380,7 +380,7 @@ export function createLocationMapChart(mapData, myChart) {
     tooltip: {
       trigger: 'item',
       formatter: function(params) {
-        return params.name + ' : ' + params.value[2];
+        return params.name + ' : ' + params.value[2]+mapData.unit;
       }
     },
     legend: {
@@ -518,7 +518,7 @@ export function createNTLocationMapChart(mapData, myChart) {
     tooltip: {
       trigger: 'item',
       formatter: function(params) {
-        return params.name + ' : ' + params.value[2];
+        return params.name + ' : ' + params.value[2]+mapData.unit;
       }
     },
     legend: {
