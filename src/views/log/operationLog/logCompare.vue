@@ -25,6 +25,7 @@
         />
       </el-form-item>
       <el-form-item>
+        <el-button type="query" icon="el-icon-search" size="mini" @click="loadEditData" v-hasPermi="['dream:query']">搜索</el-button>
         <el-button type="query" icon="el-icon-d-arrow-left" size="mini" @click="handleFetch('EARLY')" v-hasPermi="['log:operationLog:getNearstCompareData']">往前</el-button>
         <el-button type="query" icon="el-icon-d-arrow-right" size="mini" @click="handleFetch('LATER')" v-hasPermi="['log:operationLog:getNearstCompareData']">往后</el-button>
       </el-form-item>
@@ -70,7 +71,7 @@
         </el-card>
       </el-col>
       <el-col :span="8" class="card-box"  align="center">
-        <el-card>
+        <el-card v-loading="cdLoading">
           <div class="chart-wrapper">
             <current-list :jsonData="currentData"/>
           </div>
@@ -107,6 +108,7 @@ export default {
   },
   data() {
     return {
+      cdLoading:false,
       loading:false,
       //被操作对象的主键
       beanId:undefined,
@@ -206,6 +208,7 @@ export default {
         beanName:this.queryParams.beanName,
         compareType:this.queryParams.compareType
       };
+      this.cdLoading = true;
       getEditLogData(para).then(
         response => {
           this.dbData={
@@ -227,6 +230,7 @@ export default {
           };
           this.currentInfo=this.genOperInfo(response.currentData);
           this.compareInfo=this.genOperInfo(response.compareData);
+          this.cdLoading = false;
         }
       );
     },
