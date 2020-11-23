@@ -215,26 +215,14 @@
           <span>{{ row.emergencyScore }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="困难等级" align="center" width="160">
+      <el-table-column label="困难等级" align="center" width="80">
         <template slot-scope="{row}">
-          <el-rate
-            v-model="row.difficulty"
-            disabled
-            show-score
-            text-color="#ff9900"
-            score-template="{value}">
-          </el-rate>
+          <span>{{ row.difficulty }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="重要等级" align="center" width="160">
+      <el-table-column label="重要等级" align="center" width="80">
         <template slot-scope="{row}">
-          <el-rate
-            v-model="row.importantLevel"
-            disabled
-            show-score
-            text-color="#ff9900"
-            score-template="{value}">
-          </el-rate>
+          <span>{{ row.importantLevel }}</span>
         </template>
       </el-table-column>
       <el-table-column label="预计花费天数" align="center" width="120">
@@ -729,7 +717,9 @@ export default {
         rate: 0,
         expectDays:0,
         rewardPoint:0,
-        remind:false
+        remind:false,
+        userPlanId:undefined,
+        remark:undefined
       };
       this.resetForm("form");
     },
@@ -761,6 +751,9 @@ export default {
       const id = row.id || this.ids.join(",")
       getDream(id).then(response => {
         this.form = response;
+        if(this.form.userPlan!=null){
+          this.form.userPlanId = ''+this.form.userPlan.id;
+        }
         this.open = true;
         this.title = "修改";
       });
@@ -773,14 +766,15 @@ export default {
             updateDream(this.form).then(response => {
               this.msgSuccess("修改成功");
               this.getList();
+              this.open = false;
             });
           } else {
             createDream(this.form).then(response => {
               this.msgSuccess("新增成功");
               this.getList();
+              this.open = false;
             });
           }
-          this.open = false;
         }
       });
     },
