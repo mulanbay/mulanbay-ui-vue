@@ -122,6 +122,13 @@
           <span>{{ formatMoneyWithSymbal(row.incomeAmount) }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="详情" width="80"  align="center">
+        <template slot-scope="{row}">
+          <span v-if="row.budget == null">
+           <span class="link-type" @click="handlePeriodStat(row)"><i class="el-icon-info"></i></span>
+          </span>
+        </template>
+      </el-table-column>
       <el-table-column label="重新统计" width="80"  align="center">
         <template slot-scope="{row}">
           <span v-if="row.budget == null">
@@ -355,6 +362,17 @@ export default {
           this.budgetSnapshotList = response.rows;
         }
       );
+    },
+    /** 详情 */
+    handlePeriodStat(row){
+      let date='';
+      if(row.period=='MONTHLY'){
+        date = row.occurDate.substring(0,7);
+      }else{
+        date = row.occurDate.substring(0,4);
+      }
+      //路由定向
+      this.$router.push({name:'BudgetLog/periodStat',query: {date:date}})
     },
     /** 重新统计 */
     handleReStat(id){

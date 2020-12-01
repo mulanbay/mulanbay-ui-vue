@@ -209,6 +209,13 @@ export function getDayByDate(n,dateString){
     return dd.Format('yyyy-MM-dd');
 }
 
+// 获取距离当前日期，n为距离月数，负数表示往前
+export function getMonth(n,dateString){
+    var dd = new Date(dateString.replace(/-/,"/"))
+    dd.setMonth(dd.getMonth()+n);
+    return dd.Format('yyyy-MM-dd');
+}
+
 export function getYear(n){
     var dd = new Date();
     return dd.getFullYear()+n;

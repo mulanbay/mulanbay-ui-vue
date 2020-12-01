@@ -26,18 +26,12 @@
 </template>
 
 <script>
-  import {
-    getBudgetLogStat
-  } from "@/api/fund/budgetLog";
-  import {
-    getBudgetTree
-  } from "@/api/fund/budget";
+  import {getBudgetLogStat} from "@/api/fund/budgetLog";
+  import {getBudgetTree} from "@/api/fund/budget";
   import Treeselect from "@riophae/vue-treeselect";
   import "@riophae/vue-treeselect/dist/vue-treeselect.css";
   import echarts from 'echarts'
-  import {
-    deepClone
-  } from "@/utils/index";
+  import {deepClone} from "@/utils/index";
   require('echarts/theme/macarons') // echarts theme
   import resize from '../../dashboard/mixins/resize.js'
 

@@ -51,6 +51,14 @@ export function getBudgetLogStat(query) {
   })
 }
 
+export function getBudgetLogPeriodStat(query) {
+  return request({
+    url: '/budgetLog/getPeriodStat',
+    method: 'get',
+    params: query
+  })
+}
+
 export function reSaveBudgetLog(id) {
   const data = {
       id

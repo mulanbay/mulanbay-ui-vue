@@ -1,0 +1,398 @@
+<template>
+  <div class="app-container">
+    <el-row>
+      <el-col :span="24" class="card-box">
+          <div>
+            <el-form :model="queryParams" ref="queryForm" :inline="true">
+              <el-form-item label="预算周期" prop="period">
+                <el-radio-group v-model="queryParams.period">
+                  <el-radio
+                    v-for="dict in periodOptions"
+                    :key="dict.id"
+                    :label="dict.id"
+                  >{{dict.text}}</el-radio>
+                </el-radio-group>
+              </el-form-item>
+              <el-form-item v-if="queryParams.period == 'YEARLY'" label="选择年份">
+                <el-date-picker
+                  v-model="queryParams.year"
+                  type="year"
+                  value-format="yyyy"
+                  style="width: 120px"
+                  placeholder="选择年份">
+                </el-date-picker>
+              </el-form-item>
+              <el-form-item v-if="queryParams.period == 'MONTHLY'" label="选择月份">
+                <el-date-picker
+                  v-model="queryParams.yearMonth"
+                  type="month"
+                  value-format="yyyy-MM"
+                  style="width: 120px"
+                  placeholder="选择月份">
+                </el-date-picker>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="stat" icon="el-icon-s-data" size="mini" @click="handleQuery" v-hasPermi="['fund:budgetLog:periodStat']">统计</el-button>
+                <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+                <el-button type="primary" icon="el-icon-d-arrow-left" size="mini" @click="getNext(-1)" v-hasPermi="['fund:budgetLog:periodStat']">往前</el-button>
+                <el-button type="primary" icon="el-icon-d-arrow-right" size="mini" @click="getNext(1)" v-hasPermi="['fund:budgetLog:periodStat']">往后</el-button>
+              </el-form-item>
+            </el-form>
+          </div>
+      </el-col>
+
+      <el-col :span="16" class="card-box">
+        <el-card>
+          <div class="chart-wrapper">
+            <pie-chart ref="chart" :chartData="chartData"/>
+          </div>
+          <div align="center">
+            <el-button type="stat" icon="el-icon-s-data" size="mini" @click="consumeChartStat" >消费分析</el-button>
+            <el-button type="stat" icon="el-icon-s-data" size="mini" @click="incomeChartStat" >收入分析</el-button>
+          </div>
+        </el-card>
+      </el-col>
+
+      <el-col :span="8" class="card-box">
+        <el-card>
+          <div slot="header"><span>{{ statData.bussKey }}消费&预算统计数据</span></div>
+          <div class="el-table el-table--enable-row-hover el-table--medium">
+            <table cellspacing="0" style="width: 100%;">
+              <thead>
+                <tr>
+                  <th class="is-leaf"><div class="cell">名称</div></th>
+                  <th class="is-leaf"><div class="cell">统计值</div></th>
+                  <th class="is-leaf" width="60px"><div class="cell">链接</div></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><div class="cell">预算金额</div></td>
+                  <td><div class="cell">{{ formatMoneyWithSymbal(statData.budgetAmount) }}</div></td>
+                  <td>
+                    <div class="cell">
+                      <span class="link-type" @click="handleDispatch('Budget')"><i class="el-icon-s-promotion" /></span>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td><div class="cell">普通消费</div></td>
+                  <td><div class="cell">{{ formatMoneyWithSymbal(statData.ncAmount) }}</div></td>
+                  <td>
+                    <div class="cell">
+                      <span class="link-type" @click="handleDispatch('BuyRecord')"><i class="el-icon-s-promotion" /></span>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td><div class="cell">突发消费</div></td>
+                  <td><div class="cell">{{ formatMoneyWithSymbal(statData.bcAmount) }}</div></td>
+                  <td>
+                    <div class="cell">
+                      <span class="link-type" @click="handleDispatch('BuyRecord')"><i class="el-icon-s-promotion" /></span>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td><div class="cell">看病(自费)</div></td>
+                  <td><div class="cell">{{ formatMoneyWithSymbal(statData.trAmount) }}</div></td>
+                  <td>
+                    <div class="cell">
+                      <span class="link-type" @click="handleDispatch('TreatRecord')"><i class="el-icon-s-promotion" /></span>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td><div class="cell">收入统计</div></td>
+                  <td><div class="cell">{{ formatMoneyWithSymbal(statData.incomeAmount) }}</div></td>
+                  <td>
+                    <div class="cell">
+                      <span class="link-type" @click="handleDispatch('Income')"><i class="el-icon-s-promotion" /></span>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td><div class="cell">总共消费</div></td>
+                  <td><div class="cell">{{ formatMoneyWithSymbal(statData.totalConsume) }}</div></td>
+                  <td>
+                    <div class="cell">
+                      <span class="link-type" @click="handleDispatch('BuyRecord')"><i class="el-icon-s-promotion" /></span>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="cell">
+                      <span v-if="statData.totalConsume>statData.budgetAmount" style="color: red;">
+                       超出预算
+                      </span>
+                      <span v-else style="color: green;">
+                       低于预算
+                      </span>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="cell">
+                      {{ formatMoneyWithSymbal(statData.cb) }}
+                    </div>
+                    <td>
+                      <div class="cell">
+                        <span class="link-type" @click="handleDispatch('BuyRecord')"><i class="el-icon-s-promotion" /></span>
+                      </div>
+                    </td>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="cell">
+                      <span v-if="statData.totalConsume>statData.incomeAmount" style="color: red;">
+                       存款减少
+                      </span>
+                      <span v-else style="color: green;">
+                       存款增加
+                      </span>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="cell">
+                      {{ formatMoneyWithSymbal(statData.ib) }}
+                    </div>
+                    <td>
+                      <div class="cell">
+                        <span class="link-type" @click="handleDispatch('Income')"><i class="el-icon-s-promotion" /></span>
+                      </div>
+                    </td>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </el-card>
+      </el-col>
+
+      <el-col :span="24" class="card-box">
+        <el-card>
+          <div slot="header">
+            <span>{{ statData.bussKey }}预算快照信息</span>
+          </div>
+          <div class="el-table el-table--enable-row-hover el-table--medium">
+            <table cellspacing="0" style="width: 100%;">
+              <thead>
+                <tr>
+                  <th class="is-leaf"><div class="cell">名称</div></th>
+                  <th class="is-leaf"><div class="cell">类型</div></th>
+                  <th class="is-leaf"><div class="cell">周期</div></th>
+                  <th class="is-leaf"><div class="cell">金额</div></th>
+                  <th class="is-leaf"><div class="cell">实际花费</div></th>
+                  <th class="is-leaf"><div class="cell">支付时间</div></th>
+                </tr>
+              </thead>
+              <tbody v-for="item in snapshotList">
+                <tr>
+                  <td><div class="cell">{{ item.name }}</div></td>
+                  <td><div class="cell">{{ item.typeName }}</div></td>
+                  <td><div class="cell">{{ item.periodName }}</div></td>
+                  <td><div class="cell">{{ formatMoneyWithSymbal(item.amount) }}</div></td>
+                  <td><div class="cell">{{ formatMoneyWithSymbal(item.cpPaidAmount) }}</div></td>
+                  <td><div class="cell">{{ item.cpPaidTime }}</div></td>
+
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </el-card>
+      </el-col>
+
+    </el-row>
+  </div>
+</template>
+
+<script>
+  import {getBudgetLogPeriodStat} from "@/api/fund/budgetLog";
+  import {fetchList as getBudgetSnapshotData} from "@/api/fund/budgetSnapshot";
+  import {statWithTreat} from "@/api/consume/buyRecord";
+  import {getIncomeStat} from "@/api/fund/income";
+  import {getPercent} from "@/utils/mulanbay";
+  import PieChart from '../../chart/pieChart'
+  import resize from '../../dashboard/mixins/resize.js'
+  import {copyObject,getQueryObject} from "@/utils/index";
+  import {getMonth} from "@/utils/datetime";
+
+export default {
+  name: "PeriodStat",
+  mixins: [resize],
+  components: {
+    'pie-chart':PieChart
+  },
+  data() {
+    return {
+      // 加载层信息
+      loading: [],
+      loadingOptions:this.loadingOptions,
+      //周期表
+      periodOptions:[
+        {
+          id: 'YEARLY',
+          text: '年'
+        },
+        {
+          id: 'MONTHLY',
+          text: '月'
+        }
+      ],
+      queryParams:{
+        period:undefined,
+        year:undefined,
+        yearMonth:undefined
+      },
+      chartData:{},
+      statData:{},
+      snapshotList:[]
+    };
+  },
+  created() {
+    let qb = getQueryObject(null);
+    if(!this.isObjectEmpty(qb.date)){
+      if(qb.date.length==4){
+        //年
+        this.queryParams.period = 'YEARLY';
+        this.queryParams.year = qb.date;
+      }else{
+        //月
+        this.queryParams.period = 'MONTHLY';
+        this.queryParams.yearMonth = qb.date;
+      }
+    }else{
+        //默认月
+        this.queryParams.period = 'MONTHLY';
+        this.queryParams.yearMonth = this.getFormatDate(new Date(),"yyyy-MM");
+    }
+    this.getList();
+  },
+  methods: {
+    //跳转
+    handleDispatch(pathName){
+      //路由定向
+      this.$router.push({name:pathName,query: {}})
+    },
+    /** 搜索按钮操作 */
+    handleQuery() {
+      this.getList();
+    },
+    /** 重置按钮操作 */
+    resetQuery() {
+      this.resetForm("queryForm");
+      this.handleQuery();
+    },
+    /** 计算运营日 */
+    getDateRange(){
+      let ds = undefined;
+      if(this.queryParams.period=='YEARLY'){
+        ds = this.getYearDateRange(this.queryParams.year);
+      }else{
+        const date = this.queryParams.yearMonth+'-01';
+        ds = this.getMonthDateRange(new Date(date.replace(/-/,"/")));
+      }
+      return {startDate:ds[0],endDate:ds[1]};
+    },
+    /** 往前往后 */
+    getNext(n){
+      const period = this.queryParams.period;
+      if(period=='YEARLY'){
+        this.queryParams.year = (parseInt(this.queryParams.year)+n)+'';
+      }else{
+        const date = this.queryParams.yearMonth+'-01';
+        let m = getMonth(n,date);
+        this.queryParams.yearMonth = m.substring(0,7);
+      }
+      this.getList();
+    },
+    /** 统计 */
+    getList() {
+      this.dataStat();
+    },
+    // 数据统计
+    dataStat(){
+      const period = this.queryParams.period;
+      let para = {bussKey:undefined};
+      if(period=='YEARLY'){
+        para.bussKey = 'MS'+this.queryParams.year;
+      }else{
+        para.bussKey = 'MS'+this.queryParams.yearMonth.replace('-','');
+      }
+      getBudgetLogPeriodStat(para).then(
+        response => {
+          if(response==null){
+            this.msgError('没有相关数据');
+            return;
+          }
+          this.statData = response;
+          this.statData.totalConsume = response.ncAmount+response.bcAmount+response.trAmount;
+          //预算和消费差值
+          let aa = response.budgetAmount-this.statData.totalConsume;
+          this.statData.cb = Math.abs(aa);
+          //收入与消费差值
+          let bb = response.incomeAmount-this.statData.totalConsume;
+          this.statData.ib = Math.abs(bb);
+          //统计
+          this.consumeChartStat();
+          //预算快照
+          this.budgetSnapshotList(response.id);
+        }
+      );
+    },
+    // 预算快照列表
+    budgetSnapshotList(budgetLogId){
+      let para = {
+        budgetLogId:budgetLogId,
+        page:0,
+        needTotal:false
+      };
+      getBudgetSnapshotData(para).then(
+        response => {
+          this.snapshotList=response.rows;
+        }
+      );
+    },
+    // 消费图表统计
+    consumeChartStat(){
+      let para = this.getDateRange();
+      this.openLoading();
+      statWithTreat(para).then(
+        response => {
+          //组装chart数据
+          response.chartType='PIE';
+          response.height = '410px';
+          this.chartData = response;
+          this.loading.close();
+        }
+      );
+    },
+    // 收入图表统计
+    incomeChartStat(){
+      let para = this.getDateRange();
+      this.openLoading();
+      getIncomeStat(para).then(
+        response => {
+          //组装chart数据
+          response.chartType='PIE';
+          response.height = '410px';
+          this.chartData = response;
+          this.loading.close();
+        }
+      );
+    },
+    // 打开加载层
+    openLoading() {
+      this.loading = this.$loading(this.loadingOptions);
+    }
+  }
+};
+</script>
+<style lang="scss" scoped>
+@media (max-width:1024px) {
+  .chart-wrapper {
+    padding: 8px;
+  }
+}
+</style>
