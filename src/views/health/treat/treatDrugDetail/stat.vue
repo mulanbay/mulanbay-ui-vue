@@ -36,17 +36,17 @@
 
     <!--列表数据-->
     <el-table v-loading="loading" :data="statList">
-      <el-table-column label="ID" prop="id" sortable="custom" align="center" width="80">
+      <el-table-column label="ID" prop="id" v-if="false==queryParams.mergeSameName" sortable="custom" align="center" width="80">
         <template slot-scope="{row}">
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="药品名" min-width="250px">
+      <el-table-column label="药品名" min-width="160px"  :show-overflow-tooltip="true">
         <template slot-scope="{row}">
           <span class="link-type" @click="handleUpdate(row)">{{ row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="看病时间" align="center" width="120px">
+      <el-table-column label="看病时间" v-if="false==queryParams.mergeSameName"  align="center" width="120px">
         <template slot-scope="{row}">
           <span>{{ row.treatDate }}</span>
         </template>
@@ -108,7 +108,7 @@ export default {
       queryParams: {
         page:0,
         name: undefined,
-        mergeSameName: false
+        mergeSameName: true
       }
     };
   },
