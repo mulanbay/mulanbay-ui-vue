@@ -15,6 +15,10 @@
           :picker-options="datePickerOptions"
         ></el-date-picker>
       </el-form-item>
+      <el-form-item label="合并相同药名" prop="mergeSameName">
+        <el-switch v-model="queryParams.mergeSameName"  @change="handleQuery"></el-switch>
+        <span class="link-type" @click="msgAlert('提示','合并相同药名：多次看病记录有相同药品名称的药合并在一起统计。否则只统计该次看病记录中该药品的记录')"><i class="el-icon-question" /></span>
+      </el-form-item>
       <el-form-item>
         <el-button type="query" icon="el-icon-search" size="mini" @click="handleQuery" v-hasPermi="['health:treat:treatDrugDetail:query']">搜索</el-button>
         <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleCreate" v-hasPermi="['health:treat:treatDrugDetail:create']">新增</el-button>
@@ -116,7 +120,8 @@ export default {
       queryParams: {
         page: 1,
         pageSize: 10,
-        name: undefined
+        name: undefined,
+        mergeSameName:false
       },
       booleanOptions:this.booleanOptions,
       //疾病标签

@@ -435,7 +435,7 @@
     </el-dialog>
 
     <!-- 用药列表页面 -->
-    <el-dialog :title="drugDetailListTitle" width="650px" :visible.sync="drugDetailListVisible"  append-to-body>
+    <el-dialog :title="drugDetailListTitle" width="750px" :visible.sync="drugDetailListVisible"  append-to-body>
       <treat-drug-detail-list
         :treatForDrugDetailListData="treatForDrugDetailListData"
       />

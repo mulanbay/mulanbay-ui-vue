@@ -12,6 +12,7 @@
           v-model="queryParams.year"
           type="year"
           value-format="yyyy"
+          style="width: 120px"
           placeholder="选择年">
         </el-date-picker>
       </el-form-item>
@@ -20,8 +21,13 @@
           v-model="queryParams.yearMonth"
           type="month"
           value-format="yyyy-MM"
+          style="width: 120px"
           placeholder="选择月份">
         </el-date-picker>
+      </el-form-item>
+      <el-form-item label="合并相同药名" prop="mergeSameName">
+        <el-switch v-model="queryParams.mergeSameName"  @change="handleQuery"></el-switch>
+        <span class="link-type" @click="msgAlert('提示','合并相同药名：多次看病记录有相同药品名称的药合并在一起统计。否则只统计该次看病记录中该药品的记录')"><i class="el-icon-question" /></span>
       </el-form-item>
       <el-form-item>
         <el-button type="stat" icon="el-icon-s-data" size="mini" @click="handleQuery" v-hasPermi="['health:treat:treatDrugDetail:calendarStat']">统计</el-button>
@@ -90,7 +96,8 @@ export default {
       // 查询参数
       queryParams: {
         dateGroupType:'MONTH',
-        yearMonth:(new Date()).Format("yyyy-MM")
+        yearMonth:(new Date()).Format("yyyy-MM"),
+        mergeSameName:true
       }
     };
   },
