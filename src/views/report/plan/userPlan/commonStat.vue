@@ -6,13 +6,14 @@
         v-model="queryParams.relatedBeans"
         style="width: 240px"
         clearable
+        @change="loadUserPlan"
         placeholder="请选择">
-          <el-option
-            v-for="dict in relatedBeansOptions"
-            :key="dict.id"
-            :label="dict.text"
-            :value="dict.id"
-          />
+        <el-option
+          v-for="dict in relatedBeansOptions"
+          :key="dict.id"
+          :label="dict.text"
+          :value="dict.id"
+        />
         </el-select>
       </el-form-item>
       <el-form-item v-if="moreCdn==true" label="选取计划" prop="userPlanId">
@@ -26,7 +27,7 @@
         :searchable="true"
         placeholder="请选择"
         />
-      </el-form-item> 
+      </el-form-item>
       <el-form-item v-if="queryParams.dataType=='HISTORY'" label="起止日期">
         <el-date-picker
           v-model="dateRange"
@@ -318,7 +319,7 @@ export default {
       this.queryParams.relatedBeans = qb.beanName;
     }
     this.getList();
-    this.getUserPlanOptionsTreeselect(this.queryParams.planType,this.queryParams.relatedBeans);
+    this.loadUserPlan();
     this.getEnumTree('PlanType','FIELD',false).then(response => {
       this.planTypeOptions = response;
     });
@@ -340,6 +341,10 @@ export default {
         this.moreCdn=true;
         this.cdnTitle='取消';
       }
+    },
+    /** 加载用户计划 */
+    loadUserPlan(){
+      this.getUserPlanOptionsTreeselect(this.queryParams.planType,this.queryParams.relatedBeans);
     },
     /** 格式化名称，计算各数值 */
     formatName(row){
