@@ -1,19 +1,21 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true">
-      <el-form-item label="选取计划" prop="userPlanId">
-       <treeselect
-        v-model="queryParams.userPlanId"
-        @input="handleQuery"
+      <el-form-item label="关联业务" prop="relatedBeans">
+        <el-select
+        v-model="queryParams.relatedBeans"
         style="width: 240px"
-        :options="userPlanOptions"
-        :disable-branch-nodes="true"
-        :show-count="true"
-        :searchable="true"
-        placeholder="请选择"
-        />
+        clearable
+        placeholder="请选择">
+          <el-option
+            v-for="dict in relatedBeansOptions"
+            :key="dict.id"
+            :label="dict.text"
+            :value="dict.id"
+          />
+        </el-select>
       </el-form-item>
-      <el-form-item label="起止日期">
+      <el-form-item v-if="queryParams.dataType=='HISTORY'" label="起止日期">
         <el-date-picker
           v-model="dateRange"
           size="small"
@@ -68,100 +70,113 @@
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
         <el-button type="primary" icon="el-icon-more" size="mini" @click="handleMoreCdn">{{cdnTitle}}</el-button>
         <el-button type="stat" icon="el-icon-s-data" size="mini" @click="notifyStat" v-hasPermi="['report:plan:userPlan:commonStat']">提醒统计</el-button>
-        
+
       </el-form-item>
     </el-form>
 
-    <!--列表数据-->
-    <el-table v-loading="loading" :data="planReportList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="ID" prop="id" sortable="custom" align="center" width="80">
-        <template slot-scope="{row}">
-          <span>{{ row.id }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="名称" align="center" width="160" :show-overflow-tooltip="true">
-        <template slot-scope="{row}">
-          <span>{{ formatName(row) }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="计划类型" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.userPlan.planConfig==null ? '--': row.userPlan.planConfig.planTypeName}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="业务日期" align="center" width="150">
-        <template slot-scope="{row}">
-          <span>{{ row.bussDay }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="次数值" align="center" :show-overflow-tooltip="true" width="150">
-        <template slot-scope="{row}">
-          <span v-if="row.cf=='T'">
-           <span style="color:green">{{ row.cv }}&nbsp;<i class="el-icon-check" /></span>
-          </span>
-          <span v-else-if="row.cf=='F'">
-           <span style="color:red">{{ row.cv }}</span>
-          </span>
-          <span v-else>
-           <span>{{ row.cv }}</span>
-          </span>
-        </template>
-      </el-table-column>
-      <el-table-column label="值" align="center" :show-overflow-tooltip="true" width="150">
-        <template slot-scope="{row}">
-          <span v-if="row.vf=='T'">
-           <span style="color:green">{{ row.vv }}&nbsp;<i class="el-icon-check" /></span>
-          </span>
-          <span v-else-if="row.vf=='F'">
-           <span style="color:red">{{ row.vv }}</span>
-          </span>
-          <span v-else>
-           <span>{{ row.vv }}</span>
-          </span>
-        </template>
-      </el-table-column>
-      <el-table-column label="比较类型" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.userPlan.planConfig.compareTypeName }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="计划次数" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.planCountValue+'次' }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="计划值" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.planValue==0 ? '--' : row.planValue +row.userPlan.unit}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="数据参考年份" align="center" width="120">
-        <template slot-scope="{row}">
-          <span>{{ row.planConfigYear }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="进度统计" align="center">
-        <template slot-scope="{row}">
-          <span class="link-type" @click="timelineStat(row)"><i class="el-icon-s-data" /></span>
-        </template>
-      </el-table-column>
-      <el-table-column label="计划统计" align="center">
-        <template slot-scope="{row}">
-          <span class="link-type" @click="planStat(row)"><i class="el-icon-s-data" /></span>
-        </template>
-      </el-table-column>
-      <el-table-column label="统计日期" align="center" width="120">
-        <template slot-scope="{row}">
-          <span>{{ row.bussStatDate.substring(0,10) }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="统计时间" align="center" width="180">
-        <template slot-scope="{row}">
-          <span>{{ row.createdTime }}</span>
-        </template>
-      </el-table-column>
-    </el-table>
+    <el-row v-loading="loading" >
+      <template v-for="item in planReportList">
+        <el-col :span="12" class="card-box">
+          <el-card>
+            <el-col :span="12">
+              <div class="el-table el-table--enable-row-hover el-table--medium">
+              <table cellspacing="0" style="width: 100%;">
+                <tbody>
+                  <tr>
+                    <td><div class="cell">计划编号</div></td>
+                    <td><div class="cell">{{ item.id }}</div></td>
+                  </tr>
+                  <tr>
+                    <td><div class="cell">计划名称</div></td>
+                    <td><div class="cell">{{ formatName(item) }}</div></td>
+                  </tr>
+                  <tr>
+                    <td><div class="cell">计划类型</div></td>
+                    <td><div class="cell">{{ item.userPlan.planConfig==null ? '--': item.userPlan.planConfig.planTypeName}}</div></td>
+                  </tr>
+                  <tr>
+                    <td><div class="cell">业务日期</div></td>
+                    <td><div class="cell">{{ item.bussDay }}</div></td>
+                  </tr>
+                  <tr>
+                    <td><div class="cell">次数统计</div></td>
+                    <td><div class="cell">{{ item.reportCountValue+'次(计划:'+item.planCountValue+'次)' }}</div></td>
+                  </tr>
+                  <tr>
+                    <td><div class="cell">值统计</div></td>
+                    <td><div class="cell">{{ item.reportValue+item.userPlan.unit+'(计划:'+item.planValue+item.userPlan.unit+')' }}</div></td>
+                  </tr>
+                  <tr>
+                    <td><div class="cell">比较类型</div></td>
+                    <td><div class="cell">{{ item.userPlan.planConfig.compareTypeName }}</div></td>
+                  </tr>
+                  <tr>
+                    <td><div class="cell">数据参考年份</div></td>
+                    <td><div class="cell">{{ item.planConfigYear }}</div></td>
+                  </tr>
+                </tbody>
+              </table>
+              </div>
+            </el-col>
+            <el-col :span="12">
+              <div>
+              <table cellspacing="0" style="width: 100%;">
+                <tbody>
+                  <tr>
+                    <td align="center">
+                      <span v-if="'MORE'==item.userPlan.planConfig.compareType">
+                       <el-progress type="dashboard" :width="150" :percentage="item.cp" :color="moreColors"></el-progress>
+                      </span>
+                      <span v-else>
+                       <el-progress type="dashboard" :width="150" :percentage="item.cp" :color="lessColors"></el-progress>
+                      </span>
+                    </td>
+                    <td align="center">
+                      <span v-if="'MORE'==item.userPlan.planConfig.compareType">
+                       <el-progress type="dashboard" :width="150" :percentage="item.vp" :color="moreColors"></el-progress>
+                      </span>
+                      <span v-else>
+                       <el-progress type="dashboard" :width="150" :percentage="item.vp" :color="lessColors"></el-progress>
+                      </span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td align="center"><div class="cell"><i class="el-icon-info"></i>次数进度</div></td>
+                    <td align="center"><div class="cell"><i class="el-icon-info"></i>值进度</div></td>
+                  </tr>
+                  <tr>
+                    <td align="center"></td>
+                  </tr>
+                </tbody>
+              </table>
+              </div>
+              <div class="el-table el-table--enable-row-hover el-table--medium">
+              <table cellspacing="0" style="width: 100%;">
+                <tbody>
+                  <tr>
+                    <td><div class="cell">统计日期</div></td>
+                    <td><div class="cell">{{ item.bussStatDate.substring(0,10) }}</div></td>
+                  </tr>
+                  <tr>
+                    <td><div class="cell">统计时间</div></td>
+                    <td><div class="cell">{{ item.createdTime }}</div></td>
+                  </tr>
+                  <tr>
+                    <td><div class="cell">进度统计</div></td>
+                    <td><div class="cell"><span class="link-type" @click="timelineStat(item)"><i class="el-icon-s-data" /></span></div></td>
+                  </tr>
+                  <tr>
+                    <td><div class="cell">计划统计</div></td>
+                    <td><div class="cell"><span class="link-type" @click="planStat(item)"><i class="el-icon-s-data" /></span></div></td>
+                  </tr>
+                </tbody>
+              </table>
+              </div>
+            </el-col>
+          </el-card>
+        </el-col>
+      </template>
+    </el-row>
 
     <pagination
       v-show="total>0"
@@ -186,7 +201,7 @@
     <el-dialog :title="notifyTitle" width="800px" :visible.sync="notifyOpen"  append-to-body>
       <notify-stat :userNotifyData="userNotifyData"/>
     </el-dialog>
-    
+
   </div>
 </template>
 
@@ -195,13 +210,14 @@
   import {fetchList as fetchUserPlanList} from "@/api/report/plan/userPlan";
   import {getUserPlanTree} from "@/api/report/plan/userPlan";
   import {deepClone,getQueryObject} from "@/utils/index";
-  import {getValueCompareResult,getCompareYearString} from "@/utils/planUtils";
+  import {getBussTypeTree} from "@/api/common";
+  import {getValueCompareResult,getCompareYearString,getPercent} from "@/utils/planUtils";
   import Treeselect from "@riophae/vue-treeselect";
   import "@riophae/vue-treeselect/dist/vue-treeselect.css";
   import TimelineStat from '../planReport/timelineStat'
   import PlanStat from './stat'
-  import NotifyStat from '../../notify/userNotify/stat' 
-  
+  import NotifyStat from '../../notify/userNotify/stat'
+
 export default {
   name: "CommonStat",
   components: {
@@ -216,6 +232,23 @@ export default {
       cdnTitle:'更多',
       moreCdn:false,
       //查询条件更多属性 end
+      //大于类进度显示环颜色
+      moreColors: [
+        {color: '#f56c6c', percentage: 20},
+        {color: '#e6a23c', percentage: 40},
+        {color: '#6f7ad3', percentage: 60},
+        {color: '#1989fa', percentage: 80},
+        {color: '#5cb87a', percentage: 100}
+      ],
+      //小于类进度显示环颜色
+      lessColors: [
+        {color: '#f56c6c', percentage: 100},
+        {color: '#e6a23c', percentage: 80},
+        {color: '#6f7ad3', percentage: 60},
+        {color: '#1989fa', percentage: 40},
+        {color: '#5cb87a', percentage: 20}
+      ],
+      relatedBeansOptions:[],
       //提醒统计
       notifyTitle:'',
       notifyOpen:false,
@@ -246,7 +279,8 @@ export default {
         dataType:'LATEST',
         filterType:'ORIGINAL',
         status:'ENABLE',
-        statNow:true
+        statNow:true,
+        relatedBeans:undefined
       },
       booleanOptions:this.booleanOptions,
       //用户计划
@@ -279,6 +313,9 @@ export default {
     this.getEnumTree('PlanReportDataStatFilterType','FIELD',false).then(response => {
       this.filterTypeOptions = response;
     });
+    getBussTypeTree(false).then(response => {
+      this.relatedBeansOptions = response;
+    });
   },
   methods: {
     /** 更多查询条件处理 */
@@ -296,13 +333,11 @@ export default {
     formatName(row){
       if(!this.isObjectEmpty(row.reportCountValue)){
         //完成值与进度
-        let countResult = getValueCompareResult(row.reportCountValue,row.planCountValue,row.userPlan.planConfig.compareType,'次');
-        row.cf = countResult.finished;
-        row.cv = countResult.valueStr;
-        let valueResult = getValueCompareResult(row.reportValue,row.planValue,row.userPlan.planConfig.compareType,row.userPlan.unit);
-        row.vf = valueResult.finished;
-        row.vv = valueResult.valueStr;
-
+        row.cp = getPercent(row.reportCountValue,row.planCountValue);
+        row.vp = getPercent(row.reportValue,row.planValue);
+      }else{
+        row.cp = 0;
+        row.vp = 0;
       }
       return row.userPlan ==null ? '--' : row.userPlan.title;
     },

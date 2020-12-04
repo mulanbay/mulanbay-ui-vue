@@ -22,6 +22,12 @@
           </span>
         </el-tooltip>
 
+        <el-tooltip content="计划统计" effect="dark" placement="bottom">
+          <span class="right-menu-item hover-effect">
+            <svg-icon icon-class="plan" @click="handleDispatch('UserPlan/commonStat')"/>
+          </span>
+        </el-tooltip>
+
         <search id="header-search" class="right-menu-item" />
 
         <el-tooltip content="我的日历" effect="dark" placement="bottom">
