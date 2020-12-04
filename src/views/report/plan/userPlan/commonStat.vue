@@ -15,6 +15,18 @@
           />
         </el-select>
       </el-form-item>
+      <el-form-item v-if="moreCdn==true" label="选取计划" prop="userPlanId">
+       <treeselect
+        v-model="queryParams.userPlanId"
+        @input="handleQuery"
+        style="width: 240px"
+        :options="userPlanOptions"
+        :disable-branch-nodes="true"
+        :show-count="true"
+        :searchable="true"
+        placeholder="请选择"
+        />
+      </el-form-item> 
       <el-form-item v-if="queryParams.dataType=='HISTORY'" label="起止日期">
         <el-date-picker
           v-model="dateRange"
