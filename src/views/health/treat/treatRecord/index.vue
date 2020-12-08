@@ -210,34 +210,10 @@
           <span>{{ row.treatDate }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="挂号费">
-        <template slot-scope="{row}">
-          <span>{{ formatMoneyWithSymbal(row.registeredFee) }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="药费">
-        <template slot-scope="{row}">
-          <span>{{ formatMoneyWithSymbal(row.drugFee) }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="手术/治疗费用" width="110">
-        <template slot-scope="{row}">
-          <span>{{ formatMoneyWithSymbal(row.operationFee) }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="总共花费">
+      <el-table-column label="费用" width="120">
         <template slot-scope="{row}">
           <span>{{ formatMoneyWithSymbal(row.totalFee) }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="医保花费">
-        <template slot-scope="{row}">
-          <span>{{ formatMoneyWithSymbal(row.medicalInsurancePaidFee) }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="个人支付费用" width="110">
-        <template slot-scope="{row}">
-          <span>{{ formatMoneyWithSymbal(row.personalPaidFee) }}</span>
+          <span class="link-type" @click="showFeeDetail(row)"><i class="el-icon-s-grid" /></span>
         </template>
       </el-table-column>
       <el-table-column label="疼痛级别" align="center" width="95">
@@ -290,7 +266,7 @@
     />
 
     <!-- 表单页面 -->
-    <el-dialog :title="title" width="780px" :visible.sync="open" customClass="customDialogCss" append-to-body>
+    <el-dialog :title="title" width="780px" :visible.sync="open" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="120px">
           <el-row>
             <el-col :span="12">
@@ -400,20 +376,6 @@
             </el-col>
           </el-row>
           <el-row>
-            <el-col :span="12">
-              <el-form-item label="看病时间" prop="treatDate">
-                <el-date-picker type="datetime" v-model="form.treatDate" format="yyyy-MM-dd HH:mm:ss" value-format="yyyy-MM-dd HH:mm:ss"
-                          :style="{width: '100%'}" placeholder="请选择时间" clearable >
-                </el-date-picker>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="是否有病" prop="isSick">
-                <el-switch v-model="form.isSick"></el-switch>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
             <el-col :span="24">
               <el-form-item label="疾病标签" prop="tags">
                 <el-tag
@@ -502,49 +464,26 @@
           </el-row>
           <el-row>
             <el-col :span="12">
-              <el-form-item label="药费" prop="drugFee">
-                <el-input-number v-model="form.drugFee" :style="{width: '90%'}" placeholder="单位:元" controls-position="right" :min="0" :controls="false" :precision="2"/>
-                元
+              <el-form-item label="看病时间" prop="treatDate">
+                <el-date-picker type="datetime" v-model="form.treatDate" format="yyyy-MM-dd HH:mm:ss" value-format="yyyy-MM-dd HH:mm:ss"
+                          :style="{width: '100%'}" placeholder="请选择时间" clearable >
+                </el-date-picker>
               </el-form-item>
             </el-col>
-            <el-col :span="12">
-              <el-form-item label="手术/治疗费用" prop="operationFee">
-                <el-input-number v-model="form.operationFee" :style="{width: '90%'}" placeholder="单位:元" controls-position="right" :min="0" :controls="false" :precision="2"/>
-                元
+            <el-col :span="6">
+              <el-form-item label="是否有病" prop="isSick">
+                <el-switch v-model="form.isSick"></el-switch>
               </el-form-item>
             </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="12">
-              <el-form-item label="个人支付" prop="personalPaidFee">
-                <el-input-number v-model="form.personalPaidFee" :style="{width: '90%'}" placeholder="单位:元" controls-position="right" :min="0" :controls="false" :precision="2"/>
-                元
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="医保花费" prop="medicalInsurancePaidFee">
-                <el-input-number v-model="form.medicalInsurancePaidFee" :style="{width: '90%'}" placeholder="单位:元" controls-position="right" :min="0" :controls="false" :precision="2"/>
-                元
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="12">
-              <el-form-item label="挂号费用" prop="registeredFee">
-                <el-input-number v-model="form.registeredFee" :style="{width: '90%'}" placeholder="单位:元" controls-position="right" :min="0" :controls="false" :precision="2"/>
-                元
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="总共花费" prop="totalFee">
-                <el-input-number v-model="form.totalFee" :style="{width: '90%'}" placeholder="单位:元" controls-position="right" :min="0" :controls="false" :precision="2"/>
-                元
+            <el-col :span="6">
+              <el-form-item label="费用信息">
+                <span class="link-type" @click="showFee()"><i class="el-icon-setting" /></span>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="24">
-              <el-form-item label="备注">
+              <el-form-item label="备注信息">
                 <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"></el-input>
               </el-form-item>
             </el-col>
@@ -578,6 +517,72 @@
     <!-- 概要统计 -->
     <el-dialog title="概要统计" width="1100px" :visible.sync="statOpen">
       <stat/>
+    </el-dialog>
+
+    <!-- 费用信息 -->
+    <el-dialog title="费用信息" width="700px" :visible.sync="feeOpen">
+      <el-form ref="form" :model="form" :rules="rules" label-width="120px">
+        <el-card>
+          <div slot="header" align="center"><span>分项费用明细</span></div>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="药品费用" prop="drugFee">
+              <el-input-number v-model="form.drugFee" :style="{width: '90%'}" placeholder="单位:元" controls-position="right" :min="0" :controls="false" :precision="2"/>
+              元
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="手术/治疗费用" prop="operationFee">
+              <el-input-number v-model="form.operationFee" :style="{width: '90%'}" placeholder="单位:元" controls-position="right" :min="0" :controls="false" :precision="2"/>
+              元
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="挂号费用" prop="registeredFee">
+              <el-input-number v-model="form.registeredFee" :style="{width: '90%'}" placeholder="单位:元" controls-position="right" :min="0" :controls="false" :precision="2"/>
+              元
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="其他费用" prop="otherFee">
+              <el-input-number v-model="form.otherFee" :style="{width: '90%'}" placeholder="单位:元" controls-position="right" :min="0" :controls="false" :precision="2"/>
+              元
+            </el-form-item>
+          </el-col>
+        </el-row>
+        </el-card>
+        </br>
+        <el-card>
+          <div slot="header" align="center"><span>支付详情</span></div>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="个人支付" prop="personalPaidFee">
+              <el-input-number v-model="form.personalPaidFee" @change="calTotalFee" :style="{width: '90%'}" placeholder="单位:元" controls-position="right" :min="0" :controls="false" :precision="2"/>
+              元
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="医保花费" prop="medicalInsurancePaidFee">
+              <el-input-number v-model="form.medicalInsurancePaidFee" @change="calTotalFee" :style="{width: '90%'}" placeholder="单位:元" controls-position="right" :min="0" :controls="false" :precision="2"/>
+              元
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="总共花费" prop="totalFee">
+              <el-input-number v-model="form.totalFee" :style="{width: '90%'}" placeholder="单位:元" controls-position="right" :min="0" :controls="false" :precision="2"/>
+              元
+            </el-form-item>
+          </el-col>
+        </el-row>
+        </el-card>
+      </el-form>
+      <div slot="footer" class="dialog-footer" align="center">
+        <el-button type="primary" @click="closeFee">确 定</el-button>
+      </div>
     </el-dialog>
 
   </div>
@@ -624,6 +629,7 @@ export default {
       //金额统计
       statOpen:false,
       //表单页面修改
+      feeOpen:false,
       title:'',
       open:false,
       // 遮罩层
@@ -692,6 +698,9 @@ export default {
         ],
         treatDate: [
           { required: true, message: "看病时间不能为空", trigger: "blur" }
+        ],
+        osName: [
+          { required: true, message: "门诊类型不能为空", trigger: "blur" }
         ]
       }
     };
@@ -715,6 +724,22 @@ export default {
         this.moreCdn=true;
         this.cdnTitle='取消';
       }
+    },
+    /** 费用信息 */
+    showFee(){
+      this.feeOpen=true;
+    },
+    closeFee(){
+      this.feeOpen=false;
+    },
+    /** 计算总费用 */
+    calTotalFee(){
+      this.form.totalFee=this.form.personalPaidFee+this.form.medicalInsurancePaidFee;
+    },
+    /** 显示费用详情 */
+    showFeeDetail(row){
+      this.feeOpen=true;
+      this.form = row;
     },
     /** 同步档案 */
     handleLifeArchives(){
@@ -915,7 +940,8 @@ export default {
         personalPaidFee:0,
         medicalInsurancePaidFee:0,
         registeredFee:0,
-        totalFee:0
+        totalFee:0,
+        otherFee:0
       };
       this.resetForm("form");
       this.drugList=[];
