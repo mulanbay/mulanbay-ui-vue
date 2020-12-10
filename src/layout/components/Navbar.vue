@@ -28,6 +28,12 @@
           </span>
         </el-tooltip>
 
+        <el-tooltip content="提醒统计" effect="dark" placement="bottom">
+          <span class="right-menu-item hover-effect">
+            <svg-icon icon-class="notify" @click="handleDispatch('NotifyStatList')"/>
+          </span>
+        </el-tooltip>
+        
         <search id="header-search" class="right-menu-item" />
 
         <el-tooltip content="我的日历" effect="dark" placement="bottom">

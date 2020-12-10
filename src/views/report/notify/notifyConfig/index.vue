@@ -325,6 +325,7 @@
           <el-col :span="24">
             <el-form-item label="链接地址" prop="url">
               <el-input v-model="form.url" style="width: 580px"  placeholder="" />
+              <span class="link-type" @click="msgAlert('提示','VUE版本的路由跳转名称')"><i class="el-icon-question" /></span>
             </el-form-item>
           </el-col>
         </el-row>

@@ -101,7 +101,12 @@
                   </tr>
                   <tr>
                     <td><div class="cell">计划名称</div></td>
-                    <td><div class="cell">{{ formatName(item) }}</div></td>
+                    <td>
+                      <div class="cell">
+                      {{ formatName(item) }}
+                      <span class="link-type" @click="handleDispatch(item.userPlan.planConfig.url)"><i class="el-icon-s-promotion" /></span>
+                      </div>
+                    </td>
                   </tr>
                   <tr>
                     <td><div class="cell">计划类型</div></td>
@@ -341,6 +346,11 @@ export default {
         this.moreCdn=true;
         this.cdnTitle='取消';
       }
+    },
+    //路由跳转
+    handleDispatch(name) {
+      //路由定向
+      this.$router.push({name:name,query: {}})
     },
     /** 加载用户计划 */
     loadUserPlan(){
