@@ -55,11 +55,11 @@ export function deleteBudget(ids) {
   })
 }
 
-export function getBudgetTree(needRoot) {
+export function getBudgetTree(needRoot,filterEmpty) {
   return request({
     url: '/budget/getBudgetTree',
     method: 'get',
-    params: { needRoot }
+    params: { needRoot,filterEmpty }
   })
 }
 

@@ -5,6 +5,23 @@
         <el-form-item label="名称" prop="name">
           <el-input v-model="form.name" placeholder="请输入名称" />
         </el-form-item>
+        <el-form-item label="类型" prop="period">
+          <el-select
+            v-model="form.period"
+            placeholder="类型"
+            clearable
+            size="small"
+            style="width: 160px"
+          >
+            <el-option
+              v-for="dict in periodOptions"
+              :key="dict.id"
+              :label="dict.text"
+              :value="dict.id"
+            />
+          </el-select>
+          <span class="link-type" @click="msgAlert('提示','月初:代表上一个月，年初:代表去年，空为普通快照')"><i class="el-icon-question" /></span>
+        </el-form-item>
         <el-form-item label="备注">
           <el-input v-model="form.remark" type="textarea" placeholder="请输入备注"></el-input>
         </el-form-item>
@@ -29,10 +46,16 @@ export default {
     return {
       // 表单参数
       form: {},
-      defaultProps: {
-        children: "children",
-        label: "label"
-      },
+      periodOptions:[
+        {
+          id: 'MONTHLY',
+          text: '月初快照'
+        },
+        {
+          id: 'YEARLY',
+          text: '年初快照'
+        }
+      ],
       // 表单校验
       rules: {
         name: [
@@ -49,6 +72,7 @@ export default {
       this.form = {
         id: undefined,
         name: undefined,
+        period: undefined,
         remark: undefined
       };
       this.resetForm("form");

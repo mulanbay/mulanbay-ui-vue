@@ -77,6 +77,19 @@
           </span>
         </template>
       </el-table-column>
+      <el-table-column label="来源" width="60px"  align="center">
+        <template slot-scope="{row}">
+          <span v-if=" 'MANUAL' == row.source">
+           <el-tag size="mini">{{ row.sourceName }}</el-tag>
+          </span>
+          <span v-else-if=" 'AUTO' == row.source">
+           <el-tag type="success" size="mini">{{ row.sourceName }}</el-tag>
+          </span>
+          <span v-else-if=" 'REAL_TIME' == row.source">
+           <el-tag type="danger" size="mini">{{ row.sourceName }}</el-tag>
+          </span>
+        </template>
+      </el-table-column>
       <el-table-column label="业务KEY" align="center" width="160" >
         <template slot-scope="{row}">
           <span>{{ row.bussKey }}</span>

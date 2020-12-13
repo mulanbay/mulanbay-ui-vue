@@ -2,11 +2,11 @@
   <div class="app-container">
     <el-form ref="form" :model="form" :rules="rules" label-width="120px">
         <el-form-item label="选择关联预算" prop="budgetId">
-          <treeselect 
-            v-model="form.budgetId" 
-            :options="budgetOptions" 
-            :disable-branch-nodes="true" 
-            :show-count="true" 
+          <treeselect
+            v-model="form.budgetId"
+            :options="budgetOptions"
+            :disable-branch-nodes="true"
+            :show-count="true"
             placeholder="请选择预算" />
         </el-form-item>
         <el-form-item label="实际消费金额" prop="amount">
@@ -17,7 +17,7 @@
                          placeholder="请选择时间" clearable :style="{width: '200px'}" >
               </el-date-picker>
         </el-form-item>
-        <el-form-item label="备注">
+        <el-form-item label="预算备注信息">
           <el-input v-model="form.remark" type="textarea" placeholder="请输入备注"></el-input>
         </el-form-item>
       </el-form>
@@ -39,9 +39,9 @@ export default {
   name: "Detail",
   components: { Treeselect },
   props: {
-      //父层带过来的预算信息值
+      //父层带过来的值(id:不为空表示为修改，budgetId不为空表示为新增)
       budgetData: {
-        budgetId: '',
+        budgetId: undefined,
         id:undefined
       }
   },
@@ -52,7 +52,9 @@ export default {
       // 表单参数
       form: {
         id:undefined,
-        budgetId:undefined
+        budgetId:undefined,
+        amount:undefined,
+        remark:undefined
       },
       defaultProps: {
         children: "children",
@@ -73,41 +75,42 @@ export default {
     };
   },
   created() {
-    this.reset();
-    this.getBudgetTreeselect();
-    const budgetId = this.budgetData.budgetId+'';
-    const id = this.budgetData.id;
-    this.form.budgetId=budgetId;
-    this.form.id=id;
-    this.loadBudgetLog(this.form.id);
-    //console.log(JSON.stringify(this.form));
+    this.handleReceiveData(this.budgetData);
   },
-  //监听父层带过来的账户信息值
+  //监听父层带过来的值
   watch:{
     budgetData(newVal,oldVal){
-      this.reset();
-      //需要重新查询账户树，否则显示不更新
-      this.getBudgetTreeselect();
-      this.form.budgetId=newVal.budgetId+'';
-      this.form.id=newVal.id;
-      this.loadBudgetLog(this.form.id);
-      console.log("watch:"+JSON.stringify(this.form));
+      this.budgetData = newVal;
+      this.handleReceiveData(this.budgetData);
     }
   },
   methods: {
+    /** 处理父类发起的数据 */
+    handleReceiveData(data){
+      this.reset();
+      this.getBudgetTreeselect();
+      //console.log("watch:"+JSON.stringify(data));
+      this.form.budgetId = data.budgetId;
+      const id = data.id;
+      this.loadBudgetLog(id);
+    },
     /** 查询预算下拉树结构 */
     getBudgetTreeselect() {
-      getBudgetTree(false).then(response => {
+      getBudgetTree(false,true).then(response => {
         this.budgetOptions = response;
       });
     },
     //加载预算流水明细
     loadBudgetLog(id){
-      if(id==undefined|| id==null){
+      if(this.isObjectEmpty(id)){
         return;
       }
       getBudgetLog(id).then(response => {
         this.form = response;
+        this.form.amount = response.ncAmount;
+        if(response.budget!=null){
+          this.form.budgetId = response.budget.id;
+        }
       });
     },
     // 表单重置

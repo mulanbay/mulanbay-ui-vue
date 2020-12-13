@@ -316,9 +316,9 @@ export default {
       const period = this.queryParams.period;
       let para = {bussKey:undefined};
       if(period=='YEARLY'){
-        para.bussKey = 'MS'+this.queryParams.year;
+        para.bussKey = this.queryParams.year;
       }else{
-        para.bussKey = 'MS'+this.queryParams.yearMonth.replace('-','');
+        para.bussKey = this.queryParams.yearMonth.replace('-','');
       }
       getBudgetLogPeriodStat(para).then(
         response => {

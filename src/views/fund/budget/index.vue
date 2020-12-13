@@ -207,11 +207,6 @@
           <el-switch v-model="row.remind" disabled></el-switch>
         </template>
       </el-table-column>
-      <el-table-column label="绑定流水" align="center" width="100">
-        <template slot-scope="{row}">
-          <el-switch v-model="row.bindFlow" disabled></el-switch>
-        </template>
-      </el-table-column>
       <el-table-column label="状态" align="center" width="100">
         <template slot-scope="{row}">
           <el-switch v-model="row.status" active-value="ENABLE" inactive-value="DISABLE" disabled></el-switch>
@@ -247,7 +242,7 @@
     />
 
     <!-- 添加或修改对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="640px" append-to-body>
+    <el-dialog :title="title" :visible.sync="open" width="650px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-row>
           <el-col :span="24">
@@ -259,7 +254,11 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="预算金额" prop="amount">
-              <el-input-number v-model="form.amount" placeholder="单位:元" controls-position="right" :min="0" :controls="false" :precision="2" />
+              <el-input-number
+                v-model="form.amount"
+                placeholder="单位:元"
+                controls-position="right"
+                :min="0" :controls="false" :precision="2" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -268,7 +267,6 @@
                 v-model="form.type"
                 placeholder="类型"
                 clearable
-                size="small"
               >
                 <el-option
                   v-for="dict in typeOptions"
@@ -287,7 +285,6 @@
                 v-model="form.period"
                 placeholder="周期"
                 clearable
-                size="small"
               >
                 <el-option
                   v-for="dict in periodOptions"
@@ -299,11 +296,53 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="绑定流水" prop="bindFlow">
-              <el-switch
-                v-model="form.bindFlow">
-              </el-switch>
-              <span class="link-type" @click="msgAlert('提示','如果绑定了，那么首页中的月度预算会统计这部分数据，且定时调度提醒会检查其流水记录')"><i class="el-icon-question" /></span>
+            <el-form-item label="资金类型" prop="feeType">
+              <el-select
+                v-model="form.feeType"
+                placeholder="类型"
+                clearable
+                @change="onFeeTypeChange"
+              >
+                <el-option
+                  v-for="dict in feeTypeOptions"
+                  :key="dict.id"
+                  :label="dict.text"
+                  :value="dict.id"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row v-if="'BUY_RECORD'==this.form.feeType">
+          <el-col :span="12">
+            <el-form-item label="商品类型" prop="goodsTypeId">
+              <!--普通的el-option会导致显示问题-->
+              <treeselect
+                v-model="form.goodsTypeId"
+                :options="goodsTypeOptions"
+                @input="getSubGoodsTypeTreeselect"
+                :disable-branch-nodes="false"
+                :show-count="true"
+                size="small"
+                placeholder="请选择商品类型" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="商品子类" prop="subGoodsTypeId">
+              <treeselect
+                v-model="form.subGoodsTypeId"
+                :options="subGoodsTypeOptions"
+                :disable-branch-nodes="false"
+                :show-count="true"
+                placeholder="请选择商品子类" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row v-if="'BUY_RECORD'==this.form.feeType">
+          <el-col :span="24">
+            <el-form-item label="商品标签" prop="keywords">
+              <el-input v-model="form.keywords" :style="{width: '510px'}"/>
+              <span class="link-type" @click="msgAlert('提示','商品名称或商品标签中包含的关键字')"><i class="el-icon-question" /></span>
             </el-form-item>
           </el-col>
         </el-row>
@@ -317,22 +356,10 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="预算标签" prop="keywords">
-              <el-select
-                v-model="form.keywords"
-                filterable
-                allow-create
-                size="small"
-                default-first-option
-              >
-                <el-option
-                  v-for="dict in keywordsOptions"
-                  :key="dict.id"
-                  :label="dict.text"
-                  :value="dict.id"
-                />
-              </el-select>
-              <span class="link-type" @click="msgAlert('提示','如果设置了标签，则可以通过消费记录的标签关联，统计该标签的具体消费金额')"><i class="el-icon-question" /></span>
+            <el-form-item label="是否提醒" prop="remind">
+              <el-switch
+                v-model="form.remind">
+              </el-switch>
             </el-form-item>
           </el-col>
         </el-row>
@@ -347,13 +374,6 @@
                 >{{dict.text}}
                 </el-radio>
               </el-radio-group>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="是否提醒" prop="remind">
-              <el-switch
-                v-model="form.remind">
-              </el-switch>
             </el-form-item>
           </el-col>
         </el-row>
@@ -378,14 +398,17 @@
 </template>
 
 <script>
-import {fetchList,changeBudgetStatus,changeBudget,getBudget,createBudget,updateBudget,deleteBudget} from "@/api/fund/budget";
-import {getBuyRecordKeywordsTree} from "@/api/consume/buyRecord";
-import BudgetLogDetail from '../budgetLog/detail'
-import BudgetAnalyseDetail from './analyseDetail'
+  import {fetchList,changeBudgetStatus,changeBudget,getBudget,createBudget,updateBudget,deleteBudget} from "@/api/fund/budget";
+  import BudgetLogDetail from '../budgetLog/detail'
+  import BudgetAnalyseDetail from './analyseDetail'
+  import Treeselect from "@riophae/vue-treeselect";
+  import "@riophae/vue-treeselect/dist/vue-treeselect.css";
+  import {getGoodsTypeTree} from "@/api/consume/goodsType";
 
 export default {
   name: "Budget",
   components: {
+    Treeselect,
     'budget-log-detail':BudgetLogDetail,
     'budget-anaylse-detail':BudgetAnalyseDetail
   },
@@ -423,8 +446,12 @@ export default {
       statusOptions:this.commonStatusOptions,
       //周期
       periodOptions:[],
-      //标签列表
-      keywordsOptions:[],
+      //资金列表
+      feeTypeOptions:[],
+      //商品类型
+      goodsTypeOptions:[],
+      //商品子类
+      subGoodsTypeOptions:[],
       // 查询参数
       queryParams: {
         page: 1,
@@ -462,7 +489,10 @@ export default {
     this.getEnumTree('PeriodType','FIELD',false).then(response => {
       this.periodOptions = response;
     });
-    this.getKeywordsTreeselect();
+    this.getEnumTree('BudgetFeeType','FIELD',false).then(response => {
+      this.feeTypeOptions = response;
+    });
+    this.getGoodsTypeTreeselect();
   },
   methods: {
     /** 查询列表 */
@@ -476,11 +506,33 @@ export default {
         }
       );
     },
-    /** 标签列表 */
-    getKeywordsTreeselect() {
-      getBuyRecordKeywordsTree(null,false).then(response => {
-        this.keywordsOptions = response;
+    /** 资金类型改变 */
+    onFeeTypeChange(){
+      if('BUY_RECORD'==this.form.feeType){
+        this.getGoodsTypeTreeselect();
+      }else{
+        this.goodsTypeOptions = [];
+        this.form.goodsTypeId = undefined;
+        this.form.subGoodsTypeId = undefined;
+      }
+    },
+    /** 查询商品大类下拉树结构 */
+    getGoodsTypeTreeselect() {
+      getGoodsTypeTree(0,'COMMON',false).then(response => {
+        this.goodsTypeOptions = response;
       });
+    },
+    /** 查询商品子类下拉树结构 */
+    getSubGoodsTypeTreeselect() {
+      const pid = this.form.goodsTypeId;
+      if(this.isObjectEmpty(pid)){
+        this.subGoodsTypeOptions = [];
+        this.form.subGoodsTypeId = undefined;
+      }else{
+        getGoodsTypeTree(pid,'COMMON',false).then(response => {
+          this.subGoodsTypeOptions = response;
+        });
+      }
     },
     /** 本期支付时间 */
     formatCurrentPaidTime(row){
@@ -581,7 +633,7 @@ export default {
         period: "MONTHLY",
         status:'ENABLE',
         remind:false,
-        bindFlow:false
+        feeType:undefined
       };
       this.resetForm("form");
     },
