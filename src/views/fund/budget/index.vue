@@ -140,6 +140,15 @@
           v-hasPermi="['fund:budget:analyse']"
         >预算分析</el-button>
       </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="stat"
+          icon="el-icon-s-data"
+          size="mini"
+          @click="handleBudgetLogValueErrorStat"
+          v-hasPermi="['fund:budgetLog:valueErrorStat']"
+        >误差统计</el-button>
+      </el-col>
     </el-row>
 
     <!--列表数据-->
@@ -583,6 +592,11 @@ export default {
     handleBudgetLogStat(){
       //路由定向
       this.$router.push({name:'BudgetLog/stat',query: {}})
+    },
+    //误差统计
+    handleBudgetLogValueErrorStat(){
+      //路由定向
+      this.$router.push({name:'BudgetLog/valueErrorStat',query: {}})
     },
     //预算分析
     handleBudgetAnalyse(){

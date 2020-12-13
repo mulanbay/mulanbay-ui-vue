@@ -51,6 +51,14 @@ export function getBudgetLogStat(query) {
   })
 }
 
+export function getBudgetLogValueErrorStat(query) {
+  return request({
+    url: '/budgetLog/valueErrorStat',
+    method: 'get',
+    params: query
+  })
+}
+
 export function getBudgetLogPeriodStat(query) {
   return request({
     url: '/budgetLog/getPeriodStat',

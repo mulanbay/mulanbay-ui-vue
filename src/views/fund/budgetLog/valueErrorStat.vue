@@ -1,14 +1,21 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true">
-      <el-form-item label="关联预算" prop="budgetKey">
-        <treeselect
-          v-model="queryParams.budgetKey"
-          :options="budgetOptions"
-          :disable-branch-nodes="false"
-          :show-count="true"
-          placeholder="请选择预算"
-          style="width: 240px" />
+      <el-form-item label="预算周期" prop="period">
+        <el-select
+          v-model="queryParams.period"
+          placeholder="预算周期"
+          clearable
+          size="small"
+          style="width: 160px"
+        >
+          <el-option
+            v-for="dict in periodOptions"
+            :key="dict.id"
+            :label="dict.text"
+            :value="dict.id"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item label="流水日期">
         <el-date-picker
@@ -24,11 +31,8 @@
           :picker-options="datePickerOptions">
         </el-date-picker>
       </el-form-item>
-      <el-form-item label="包含突发消费" prop="needOutBurst">
-        <el-switch v-model="queryParams.needOutBurst"></el-switch>
-      </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-s-data" size="mini" @click="handleQuery" v-hasPermi="['fund:budgetLog:stat']">统计</el-button>
+        <el-button type="primary" icon="el-icon-s-data" size="mini" @click="handleQuery" v-hasPermi="['fund:budgetLog:valueErrorStat']">统计</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
@@ -41,10 +45,7 @@
 </template>
 
 <script>
-  import {getBudgetLogStat} from "@/api/fund/budgetLog";
-  import {getBudgetTree} from "@/api/fund/budget";
-  import Treeselect from "@riophae/vue-treeselect";
-  import "@riophae/vue-treeselect/dist/vue-treeselect.css";
+  import {getBudgetLogValueErrorStat} from "@/api/fund/budgetLog";
   import echarts from 'echarts'
   import {deepClone} from "@/utils/index";
   require('echarts/theme/macarons') // echarts theme
@@ -52,10 +53,7 @@
 
 
   export default {
-    name: "Stat",
-    components: {
-      Treeselect
-    },
+    name: "ValueErrorStat",
     mixins: [resize],
     props: {
       className: {
@@ -92,29 +90,30 @@
         loadingOptions: this.loadingOptions,
         //预算列表
         budgetOptions: [],
+        //周期
+        periodOptions: [{
+            id: 'MONTHLY',
+            text: '月度预算'
+          },
+          {
+            id: 'YEARLY',
+            text: '年度预算'
+          }
+        ],
         //日期范围快速选择
         datePickerOptions: this.datePickerOptions,
         // 日期范围
         dateRange: this.getYearDateRange(0),
         // 查询参数
         queryParams: {
-          type: 'MONTHLY',
-          needOutBurst: true,
-          budgetKey: "p3"
+          period:undefined
         }
       };
     },
     created() {
-      this.getBudgetTreeselect();
       this.initChart();
     },
     methods: {
-      /** 查询预算下拉树结构 */
-      getBudgetTreeselect() {
-        getBudgetTree(false).then(response => {
-          this.budgetOptions = response;
-        });
-      },
       // 打开加载层
       openLoading() {
         this.loading = this.$loading(this.loadingOptions);
@@ -130,7 +129,7 @@
       },
       initChart() {
         this.openLoading();
-        getBudgetLogStat(this.addDateRange(this.queryParams, this.dateRange)).then(
+        getBudgetLogValueErrorStat(this.addDateRange(this.queryParams, this.dateRange)).then(
           response => {
             //组装chart数据
             this.chart = echarts.init(document.getElementById(this.id));
@@ -212,14 +211,14 @@
               }],
               yAxis: [{
                   type: 'value',
-                  name: '金额',
+                  name: '误差值',
                   axisLabel: {
                     formatter: '{value} 元'
                   }
                 },
                 {
                   type: 'value',
-                  name: '花费/预算百分率',
+                  name: '误差率',
                   axisLabel: {
                     formatter: '{value} %'
                   }
@@ -236,28 +235,12 @@
                 },
                 {
                   name: chartData.ydata[1].name,
-                  type: 'bar',
-                  itemStyle:itemStyle,
-                  markPoint:markPoint,
-                  markLine:markLine,
-                  data: chartData.ydata[1].data
-                },
-                {
-                  name: chartData.ydata[2].name,
-                  type: 'bar',
-                  itemStyle:itemStyle,
-                  markPoint:markPoint,
-                  markLine:markLine,
-                  data: chartData.ydata[2].data
-                },
-                {
-                  name: chartData.ydata[3].name,
                   type: 'line',
                   itemStyle:itemStyle,
                   markPoint:markPoint,
                   markLine:markLine,
                   yAxisIndex: 1,
-                  data: chartData.ydata[3].data
+                  data: chartData.ydata[1].data
                 }
               ]
             };

@@ -217,7 +217,7 @@
                     </div>
                     <td>
                       <div class="cell">
-                        <span class="link-type" @click="handleDispatch('Income')"><i class="el-icon-s-promotion" /></span>
+                        <span class="link-type" @click="handleDispatch('BudgetLog/valueErrorStat')"><i class="el-icon-s-promotion" /></span>
                       </div>
                     </td>
                   </td>
