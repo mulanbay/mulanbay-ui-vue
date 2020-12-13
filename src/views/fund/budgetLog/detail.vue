@@ -138,14 +138,16 @@ export default {
           if (this.form.id != undefined) {
             updateBudgetLog(this.form).then(response => {
               this.msgSuccess("修改成功");
+              this.$emit('closeMe');
+              this.$emit('refreshList');
             });
           } else {
             createBudgetLog(this.form).then(response => {
               this.msgSuccess("新增成功");
+              this.$emit('closeMe');
+              this.$emit('refreshList');
             });
           }
-          this.$emit('closeMe');
-          this.$emit('refreshList');
         }
       });
     }
