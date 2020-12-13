@@ -67,6 +67,13 @@
               </thead>
               <tbody>
                 <tr>
+                  <td colspan="3">
+                    <div class="cell" align="center" style="color: royalblue;">
+                      <i class="el-icon-info" />统计数据
+                    </div>
+                  </td>
+                </tr>
+                <tr>
                   <td><div class="cell">预算金额</div></td>
                   <td><div class="cell">{{ formatMoneyWithSymbal(statData.budgetAmount) }}</div></td>
                   <td>
@@ -121,13 +128,22 @@
                   </td>
                 </tr>
                 <tr>
+                  <td colspan="3">
+                    <div class="cell" align="center" style="color: royalblue;">
+                      <i class="el-icon-info" />数据比较
+                    </div>
+                  </td>
+                </tr>
+                <tr>
                   <td>
                     <div class="cell">
                       <span v-if="statData.totalConsume>statData.budgetAmount" style="color: red;">
                        超出预算
+                       <span class="link-type" @click="msgAlert('提示','总消费金额大于预算金额')"><i class="el-icon-question" /></span>
                       </span>
                       <span v-else style="color: green;">
                        低于预算
+                       <span class="link-type" @click="msgAlert('提示','总消费金额低于预算金额')"><i class="el-icon-question" /></span>
                       </span>
                     </div>
                   </td>
@@ -147,15 +163,57 @@
                     <div class="cell">
                       <span v-if="statData.totalConsume>statData.incomeAmount" style="color: red;">
                        存款减少
+                       <span class="link-type" @click="msgAlert('提示','存款值=收入-总消费金额')"><i class="el-icon-question" /></span>
                       </span>
                       <span v-else style="color: green;">
                        存款增加
+                       <span class="link-type" @click="msgAlert('提示','存款值=收入-总消费金额')"><i class="el-icon-question" /></span>
                       </span>
                     </div>
                   </td>
                   <td>
                     <div class="cell">
                       {{ formatMoneyWithSymbal(statData.ib) }}
+                    </div>
+                    <td>
+                      <div class="cell">
+                        <span class="link-type" @click="handleDispatch('Income')"><i class="el-icon-s-promotion" /></span>
+                      </div>
+                    </td>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="cell">
+                      <span v-if="statData.accountChangeAmount==null">
+                        账户变化
+                      </span>
+                      <span v-else-if="statData.accountChangeAmount<0" style="color: red;">
+                        账户减少
+                      </span>
+                      <span v-else style="color: green;">
+                        账户增加
+                      </span>
+                      <span class="link-type" @click="msgAlert('提示','账户管理页面中的账户总值变化')"><i class="el-icon-question" /></span>
+                    </div>
+                  </td>
+                  <td><div class="cell">{{ formatMoneyWithSymbal(Math.abs(statData.accountChangeAmount)) }}</div></td>
+                  <td>
+                    <div class="cell">
+                      <span class="link-type" @click="handleDispatch('Account')"><i class="el-icon-s-promotion" /></span>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="cell">
+                      账户/存款差率
+                      <span class="link-type" @click="msgAlert('提示','差率=(账户变化值-存款变化值)/存款变化值，代表着账户里的银行卡余额变化和系统的消费、收入统计数据之间的差值，数字越小说明越精确')"><i class="el-icon-question" /></span>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="cell">
+                      {{ statData.aiv }}
                     </div>
                     <td>
                       <div class="cell">
@@ -334,6 +392,13 @@ export default {
           //收入与消费差值
           let bb = response.incomeAmount-this.statData.totalConsume;
           this.statData.ib = Math.abs(bb);
+          //账户/存款差率
+          if(bb==0||response.accountChangeAmount==null){
+            this.statData.aiv = null;
+          }else{
+            let aiv = getPercent(response.accountChangeAmount-bb,this.statData.ib);
+            this.statData.aiv =aiv+'%';
+          }
           //统计
           this.consumeChartStat();
           //预算快照
@@ -362,7 +427,7 @@ export default {
         response => {
           //组装chart数据
           response.chartType='PIE';
-          response.height = '410px';
+          response.height = '585px';
           this.chartData = response;
           this.loading.close();
         }
@@ -376,7 +441,7 @@ export default {
         response => {
           //组装chart数据
           response.chartType='PIE';
-          response.height = '410px';
+          response.height = '585px';
           this.chartData = response;
           this.loading.close();
         }

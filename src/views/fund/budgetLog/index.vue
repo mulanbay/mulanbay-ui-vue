@@ -74,6 +74,7 @@
           <span>{{ isObjectEmpty(row.budget) ? '预算合计' : row.budget.name }}</span>
           <span v-if="row.budget == null">
            <el-tag type="success" size="mini">{{ row.periodName }}</el-tag>
+           <span class="link-type" @click="handlePeriodStat(row)"><i class="el-icon-info"></i></span>
           </span>
         </template>
       </el-table-column>
@@ -90,14 +91,9 @@
           </span>
         </template>
       </el-table-column>
-      <el-table-column label="业务KEY" align="center" width="160" >
+      <el-table-column label="业务时间" align="center" width="100" >
         <template slot-scope="{row}">
           <span>{{ row.bussKey }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="发生时间" align="center" width="180">
-        <template slot-scope="{row}">
-          <span>{{ row.occurDate }}</span>
         </template>
       </el-table-column>
       <el-table-column label="预算金额" align="center" width="160">
@@ -135,11 +131,12 @@
           <span>{{ formatMoneyWithSymbal(row.incomeAmount) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="详情" width="80"  align="center">
+      <el-table-column label="账户变化" align="center"  width="160">
         <template slot-scope="{row}">
-          <span v-if="row.budget == null">
-           <span class="link-type" @click="handlePeriodStat(row)"><i class="el-icon-info"></i></span>
+          <span v-if="row.accountChangeAmount == null&&row.budget == null">
+           <span class="link-type" @click="handleAccountChange(row.bussKey)"><i class="el-icon-s-promotion"></i></span>
           </span>
+          <span v-else>{{ formatMoneyWithSymbal(row.accountChangeAmount) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="重新统计" width="80"  align="center">
@@ -159,6 +156,11 @@
       <el-table-column label="说明" align="center" width="160" :show-overflow-tooltip="true">
         <template slot-scope="{row}">
           <span>{{ row.remark }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="发生时间" align="center" width="180">
+        <template slot-scope="{row}">
+          <span>{{ row.occurDate }}</span>
         </template>
       </el-table-column>
       <el-table-column label="创建时间" align="center" width="180">
@@ -262,6 +264,7 @@
 <script>
   import {fetchList,getBudgetLog,createBudgetLog,updateBudgetLog,deleteBudgetLog,reSaveBudgetLog} from "@/api/fund/budgetLog";
   import {fetchList as fetchSnapshotList} from "@/api/fund/budgetSnapshot";
+  import {updateBudgetLogAccountChange} from "@/api/fund/account";
   import {getBudgetTree} from "@/api/fund/budget";
   import Treeselect from "@riophae/vue-treeselect";
   import "@riophae/vue-treeselect/dist/vue-treeselect.css";
@@ -386,6 +389,19 @@ export default {
       }
       //路由定向
       this.$router.push({name:'BudgetLog/periodStat',query: {date:date}})
+    },
+    /** 账户变化统计 */
+    handleAccountChange(bussKey){
+      this.$confirm('是否要统计该条记录的账户变化值?', "警告", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        }).then(function() {
+          return updateBudgetLogAccountChange(bussKey);
+        }).then(() => {
+          this.getList();
+          this.msgSuccess("统计成功");
+        }).catch(function() {});
     },
     /** 重新统计 */
     handleReStat(id){

@@ -920,6 +920,7 @@ export default {
     handleManualNew(){
       this.manualNewTitle='手动执行调度';
       this.manualNewOpen=true;
+      this.manualNewForm.sync = false;
       getTaskTriggerTree(false).then(response => {
         this.taskTriggerOptions = response;
       });
@@ -927,6 +928,7 @@ export default {
     submitManualNew(){
       this.$refs["manualNewForm"].validate(valid => {
         if (valid) {
+          this.manualNewOpen = false;
           manualNew(this.manualNewForm).then(response => {
             this.msgSuccess("调度成功");
             this.manualNewOpen = false;

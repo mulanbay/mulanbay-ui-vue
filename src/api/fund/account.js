@@ -96,3 +96,14 @@ export function createAccountSnapshotInfo(data) {
     data
   })
 }
+
+export function updateBudgetLogAccountChange(bussKey) {
+  const data = {
+      bussKey
+  }
+  return request({
+    url: '/account/updateBudgetLogAccountChange',
+    method: 'post',
+    data
+  })
+}
