@@ -65,12 +65,12 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="stat" icon="el-icon-search" size="mini" @click="handleQuery" v-hasPermi="['fund:account:stat']">统计</el-button>
+        <el-button type="stat" icon="el-icon-s-data" size="mini" @click="handleQuery" v-hasPermi="['fund:account:stat']">统计</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handlePreSnapshot">上一个快照</el-button>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleNextSnapshot">下一个快照</el-button>
+        <el-button type="primary" icon="el-icon-d-arrow-left" size="mini" @click="handlePreSnapshot">上一个快照</el-button>
+        <el-button type="primary" icon="el-icon-d-arrow-right" size="mini" @click="handleNextSnapshot">下一个快照</el-button>
         <el-button type="danger" icon="el-icon-delete" size="mini" @click="handleDeleteSnapshot" v-hasPermi="['fund:accountSnapshotInfo:delete']">删除当前快照</el-button>
       </el-form-item>
     </el-form>
