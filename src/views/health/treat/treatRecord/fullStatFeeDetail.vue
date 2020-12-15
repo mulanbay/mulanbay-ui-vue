@@ -6,6 +6,9 @@
           <div class="chart-wrapper" v-loading="loading">
             <pie-chart :chartData="chartData"/>
           </div>
+          <div align="center">
+            <el-button type="primary" icon="el-icon-refresh" size="mini" @click="initChart()" >刷新</el-button>
+          </div>
         </el-card>
       </el-col>
 
@@ -13,7 +16,6 @@
         <el-card>
           <div slot="header" align="center">
             <span>统计数据&nbsp; &nbsp; </span>
-            <span class="link-type" @click="initChart()"><i class="el-icon-refresh"/></i></span>
             </div>
           <div class="el-table el-table--enable-row-hover el-table--medium">
             <table cellspacing="0" style="width: 100%;">
@@ -149,9 +151,9 @@ export default {
       };
       this.chartData = Object.assign({}, this.chartData, cd);
       //重新设定高度
-      this.chartData.height = '395px';
+      this.chartData.height = '365px';
       this.loading = false;
-      
+
     }
   }
 };
