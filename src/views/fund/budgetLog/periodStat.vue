@@ -271,10 +271,10 @@
   import {statWithTreat} from "@/api/consume/buyRecord";
   import {getIncomeStat} from "@/api/fund/income";
   import {getPercent} from "@/utils/mulanbay";
+  import {getDay,getMonth} from "@/utils/datetime";
   import PieChart from '../../chart/pieChart'
   import resize from '../../dashboard/mixins/resize.js'
   import {copyObject,getQueryObject} from "@/utils/index";
-  import {getMonth} from "@/utils/datetime";
 
 export default {
   name: "PeriodStat",
@@ -323,7 +323,10 @@ export default {
     }else{
         //默认月
         this.queryParams.period = 'MONTHLY';
-        this.queryParams.yearMonth = this.getFormatDate(new Date(),"yyyy-MM");
+        const day = getDay(0);
+        //默认取上一个月
+        const md = getMonth(-1,day);
+        this.queryParams.yearMonth = md.substring(0,7);
     }
     this.getList();
   },
