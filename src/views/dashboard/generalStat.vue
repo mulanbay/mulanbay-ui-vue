@@ -52,7 +52,10 @@
 
       <el-col :span="8" class="card-box">
         <el-card>
-          <div slot="header"><span>消费&预算统计数据</span></div>
+          <div slot="header">
+            <span>消费&预算统计数据</span>
+            <span class="link-type" @click="handleDispatch('BudgetLog/periodStat')">(历史数据<i class="el-icon-s-promotion" />)</span>
+          </div>
           <div class="el-table el-table--enable-row-hover el-table--medium">
             <table cellspacing="0" style="width: 100%;">
               <thead>
