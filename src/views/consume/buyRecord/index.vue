@@ -440,7 +440,7 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="商品价格" prop="price">
+            <el-form-item label="商品单价" prop="price">
               <el-input-number v-model="form.price" placeholder="单位:元" :style="{width: '100%'}" controls-position="right" :min="0" :controls="false" :precision="2"/>
             </el-form-item>
           </el-col>
@@ -457,10 +457,15 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="是否二手" prop="secondhand">
-              <el-switch
-                v-model="form.secondhand">
-              </el-switch>
+            <el-form-item label="支付方式">
+              <el-select v-model="form.payment" :style="{width: '100%'}" placeholder="请选择">
+                <el-option
+                  v-for="dict in paymentOptions"
+                  :key="dict.id"
+                  :label="dict.text"
+                  :value="dict.id"
+                />
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -482,26 +487,28 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="支付方式">
-              <el-select v-model="form.payment" :style="{width: '100%'}" placeholder="请选择">
-                <el-option
-                  v-for="dict in paymentOptions"
-                  :key="dict.id"
-                  :label="dict.text"
-                  :value="dict.id"
-                />
-              </el-select>
+            <el-form-item label="是否二手" prop="secondhand">
+              <el-switch
+                v-model="form.secondhand">
+              </el-switch>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="出售信息" prop="showSold">
+              <el-switch
+                v-model="showSold">
+              </el-switch>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="售出价格" prop="soldPrice">
+            <el-form-item label="售出价格" prop="soldPrice" v-if="true==showSold">
               <el-input-number v-model="form.soldPrice" placeholder="单位:元" :style="{width: '100%'}" controls-position="right" :min="0" :controls="false" :precision="2"/>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="售出时间" prop="deleteDate">
+            <el-form-item label="售出时间" prop="deleteDate" v-if="true==showSold">
               <el-date-picker type="datetime" v-model="form.deleteDate" format="yyyy-MM-dd HH:mm:ss" value-format="yyyy-MM-dd HH:mm:ss"
                         :style="{width: '100%'}" placeholder="请选择时间" clearable >
               </el-date-picker>
@@ -632,6 +639,8 @@ export default {
       datePickerOptions:this.datePickerOptions,
       // 日期范围
       dateRange: [],
+      // 出售信息
+      showSold:false,
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -669,7 +678,7 @@ export default {
           { required: true, message: "店铺名称不能为空", trigger: "blur" }
         ],
         price: [
-          { required: true, message: "商品价格不能为空", trigger: "blur" }
+          { required: true, message: "商品单价不能为空", trigger: "blur" }
         ],
         buyDate: [
           { required: true, message: "购买时间不能为空", trigger: "blur" }
