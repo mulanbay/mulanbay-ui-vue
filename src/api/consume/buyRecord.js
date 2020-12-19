@@ -56,12 +56,13 @@ export function deleteBuyRecord(ids) {
   })
 }
 
-export function getBuyRecordKeywordsTree(startDate,needRoot) {
+export function getBuyRecordKeywordsTree(startDate,endDate,needRoot) {
   return request({
     url: '/buyRecord/getKeywordsTree',
     method: 'get',
     params: {
-      startDate:startDate ,
+      startDate:startDate,
+      endDate:endDate ,
       needRoot:needRoot
     }
   })

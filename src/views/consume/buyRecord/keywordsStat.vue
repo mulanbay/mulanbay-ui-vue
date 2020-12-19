@@ -32,6 +32,21 @@
             :value="dict.id"
           />
         </el-select>
+        <el-select
+          v-model="days"
+          placeholder="更多标签"
+          clearable
+          size="small"
+          style="width: 120px"
+          @change="getBuyRecordKeywordsTreeselect"
+        >
+          <el-option
+            v-for="dict in daysOptions"
+            :key="dict.id"
+            :label="dict.text"
+            :value="dict.id"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item v-if="moreCdn==true" label="商品类型" prop="goodsType">
         <el-select
@@ -85,6 +100,7 @@
   import {getBuyRecordKeywordsTree,getBuyRecordKeywordsStat,getBuyRecordKeywordsDetailStat} from "@/api/consume/buyRecord";
   import {getGoodsTypeTree} from "@/api/consume/goodsType";
   import {getBuyTypeTree} from "@/api/consume/buyType";
+  import {getDay} from "@/utils/datetime";
   import CommonChart from '../../chart/commonChart'
 
 export default {
@@ -109,6 +125,10 @@ export default {
       subGoodsTypeOptions:[],
       //标签
       keywordsOptions:[],
+      //标签选择天数
+      days:undefined,
+      //时间选取器
+      daysOptions:[],
       //日期范围快速选择
       datePickerOptions:this.datePickerOptions,
       // 日期范围
@@ -125,6 +145,10 @@ export default {
   created() {
     //加载查询条件和表单的
     this.getGoodsTypeTreeselect();
+    //请求方式
+    this.getDictItemTree('TAGS_DAYS_OPTION',false).then(response => {
+      this.daysOptions = response;
+    });
     this.getBuyRecordKeywordsTreeselect();
   },
   methods: {
@@ -158,7 +182,13 @@ export default {
     },
     /** 查询商品标签下拉树结构 */
     getBuyRecordKeywordsTreeselect() {
-      getBuyRecordKeywordsTree(this.dateRange[0],false).then(response => {
+      let startDate=undefined;
+      let endDate=undefined;
+      if(!this.isObjectEmpty(this.days)){
+        endDate = getDay(0);
+        startDate = getDay(0-parseInt(this.days));
+      }
+      getBuyRecordKeywordsTree(startDate,endDate,false).then(response => {
         this.keywordsOptions = response;
       });
     },

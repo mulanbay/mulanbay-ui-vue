@@ -168,6 +168,7 @@ export function createLineChart(data, myChart) {
     let serie = {
       name: data.ydata[i].name,
       type: 'line',
+      //smooth: true,//是否平滑
       dataView: {
         show: true,
         readOnly: false
