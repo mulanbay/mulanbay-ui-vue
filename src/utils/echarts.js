@@ -65,38 +65,180 @@ export function createChart(option, myChart) {
  * @param {Object} myChart
  */
 export function createBarChart(data, myChart) {
-  let series = new Array();
-  for (let i = 0; i < data.ydata.length; i++) {
+  const unit = data.unit==null ? '':data.unit;
+  //是否显示折线上的图标
+  let showItemStyle = data.showItemStyle==null ? true : data.showItemStyle;
+  //显示最大最小值
+  let showMarkPoint = data.showMarkPoint==null ? true : data.showMarkPoint;
+  //显示平均值
+  let showMarkLine = data.showMarkLine==null ? false : data.showMarkLine;
+  //显示右上角的菜单
+  let showToolbox = data.showToolbox==null ? true : data.showToolbox;
+  let showLegend = data.showLegend==null ? true : data.showLegend;
+  let markPoint={};
+  if(showMarkPoint==true){
+    markPoint={
+      data: [
+        {type: 'max', name: '最大值'},
+        {type: 'min', name: '最小值'}
+      ]
+    };
+  }
+  let markLine={};
+  if(showMarkLine==true){
+    markLine={
+      data: [
+        {type: 'average', name: '平均值'}
+      ]
+    };
+  };
+  let series =new Array();
+  for(let i=0;i<data.ydata.length;i++){
     let serie = {
-      name: data.ydata[i].name,
-      type: 'bar',
+      name:data.ydata[i].name,
+      type:'bar',
       stack: data.ydata[i].stack,
-      data: data.ydata[i].data,
+      data:data.ydata[i].data,
       itemStyle: {
-        normal: {
-          label: {
-            show: true,
-            position: 'top',
-            formatter: '{c}'
+        show: showItemStyle,
+        borderColor: '#fff',
+        borderWidth: 1
+      },
+      markPoint : markPoint,
+      markLine : markLine
+    };
+    series.push(serie);
+  }
+  let xAxisType='category';
+  let xAxis ;
+  let yAxis ;
+  if(data.xAxisType){
+    xAxisType = data.xAxisType;
+  }
+  if(xAxisType=='category'){
+    xAxis = [
+        {
+          type : 'category',
+          data : data.xdata
+        }
+    ];
+    yAxis =[
+        {
+          type : 'value',
+          axisLabel: {
+            formatter: '{value}'+unit
           }
         }
-      },
-      markPoint: {
-        data: [{
-            type: 'max',
-            name: '最大值'
-          },
-          {
-            type: 'min',
-            name: '最小值'
+    ];
+  }else{
+    yAxis = [
+        {
+          type : 'category',
+          data : data.xdata
+        }
+    ];
+    xAxis=[
+        {
+          type : 'value',
+          axisLabel: {
+            formatter: '{value}'+unit
           }
-        ]
+        }
+    ];
+  }
+  let option = {
+    title : {
+        text: data.title,
+        subtext: data.subTitle,
+        x: 'center'
+    },
+    tooltip : {
+        trigger: 'axis'
+    },
+    color: colorList,
+    legend: {
+        data:data.legendData,
+        orient: 'horizontal',
+        x: 'center',
+        y: 'bottom'
+    },
+    toolbox: {
+        show : false,
+        feature : {
+          dataView : {show: true, readOnly: false},
+          magicType : {show: true, type: ['line', 'bar']},
+          restore : {show: true},
+          saveAsImage : {show: true}
+        }
+    },
+    grid: {//四周的宽度
+      left: '2%',
+      right: '3%',
+      bottom: '5%',
+      containLabel: true
+    },
+    calculable : true,
+    xAxis : xAxis,
+    yAxis : yAxis,
+    series : series
+  };
+  createChart(option, myChart);
+}
+
+/**折线图
+ * @param {Object} data
+ * @param {Object} myChart
+ */
+export function createLineChart(data, myChart) {
+  const unit = data.unit==null ? '':data.unit;
+  //是否显示折线上的图标
+  let showItemStyle = data.showItemStyle==null ? true : data.showItemStyle;
+  //显示最大最小值
+  let showMarkPoint = data.showMarkPoint==null ? true : data.showMarkPoint;
+  //显示平均值
+  let showMarkLine = data.showMarkLine==null ? false : data.showMarkLine;
+  //显示右上角的菜单
+  let showToolbox = data.showToolbox==null ? true : data.showToolbox;
+  let showLegend = data.showLegend==null ? true : data.showLegend;
+  let smooth = data.smooth==null ? false : data.smooth;
+  let markPoint={};
+  if(showMarkPoint==true){
+    markPoint={
+      data: [
+        {type: 'max', name: '最大值'},
+        {type: 'min', name: '最小值'}
+      ],
+      //位置偏移量
+      //symbolOffset:[0, '-25px']
+    };
+  }
+  let markLine={};
+  if(showMarkLine==true){
+    markLine={
+      data: [
+        {type: 'average', name: '平均值'}
+      ]
+    };
+  };
+  let series =new Array();
+  for(let i=0;i<data.ydata.length;i++){
+    let serie = {
+      name:data.ydata[i].name,
+      type:'line',
+      smooth: smooth,
+      dataView : {show: true, readOnly: false},
+      itemStyle: {
+        show: showItemStyle,
+        borderColor: '#fff',
+        borderWidth: 1
       },
-      markLine: {
-        data: [{
-          type: 'average',
-          name: '平均值'
-        }]
+      data:data.ydata[i].data,
+      markPoint: markPoint,
+      markLine: markLine,
+      label: {
+        //是否显示数值
+        show: false,
+        position: 'top'
       }
     };
     series.push(serie);
@@ -104,10 +246,148 @@ export function createBarChart(data, myChart) {
   let option = {
     title: {
       text: data.title,
-      subtext: data.subTitle
+      subtext: data.subTitle,
+      x:'center',
+      y:'top',
+      textAlign:'left'
     },
     tooltip: {
-      trigger: 'axis'
+      trigger: 'axis',
+      axisPointer: {
+          type: 'cross'
+      }
+    },
+    color: colorList,
+    legend: {
+      show:showLegend,
+      data:data.legendData,
+      orient: 'horizontal',
+      x: 'center',
+      y: 'bottom'
+    },
+    grid: {//四周的宽度
+      left: '2%',
+      right: '3%',
+      bottom: '5%',
+      containLabel: true
+    },
+    toolbox: {
+      show: showToolbox,
+      feature: {
+        dataZoom: {
+          yAxisIndex: 'none'
+        },
+        dataView: {readOnly: false},
+        magicType: {type: ['line', 'bar']},
+        restore: {},
+        saveAsImage: {}
+      }
+    },
+    //color: colorList,
+    xAxis:  {
+      type: 'category',
+      boundaryGap: false,
+      data: data.xdata
+    },
+    yAxis: {
+      type: 'value',
+      axisLabel: {
+        formatter: '{value}'+unit
+      }
+    },
+    series: series
+  };
+  createChart(option, myChart);
+}
+
+/**
+ * 混合柱状图、折线图
+ * 最后一个是折线图
+ * @param {Object} data
+ * @param {Object} myChart
+ */
+export function createMixLineBarChart(data, myChart){
+  if(data.ydata==null||data.ydata.length<2){
+    createChart({}, myChart);
+    return;
+  }
+  //是否显示折线上的图标
+  let showItemStyle = data.showItemStyle==null ? true : data.showItemStyle;
+  //显示最大最小值
+  let showMarkPoint = data.showMarkPoint==null ? true : data.showMarkPoint;
+  //显示平均值
+  let showMarkLine = data.showMarkLine==null ? false : data.showMarkLine;
+  //显示右上角的菜单
+  let showToolbox = data.showToolbox==null ? true : data.showToolbox;
+  let showLegend = data.showLegend==null ? true : data.showLegend;
+  let markPoint={};
+  if(showMarkPoint==true){
+    markPoint={
+      data: [
+        {type: 'max', name: '最大值'},
+        {type: 'min', name: '最小值'}
+      ]
+    };
+  }
+  let markLine={};
+  if(showMarkLine==true){
+    markLine={
+      data: [
+        {type: 'average', name: '平均值'}
+      ]
+    };
+  };
+  const itemStyle = {
+    borderColor: '#fff',
+    borderWidth: 1
+  };
+  let ya0Name='';
+  let ya0Unit='';
+  let ya1Name='';
+  let ya1Unit='';
+  if(data.yaxis.length>0){
+    ya0Name = data.yaxis[0].name;
+    ya0Unit = data.yaxis[0].unit;
+    ya1Name = data.yaxis[1].name;
+    ya1Unit = data.yaxis[1].unit;
+  }
+  let series =new Array();
+  let n = data.ydata.length;
+  for(let i=0;i<n;i++){
+    let cd = data.ydata[i];
+    let yAxisIndex = 0;
+    let type = 'bar';
+    if(i==n-1){
+      yAxisIndex = 1;
+      type = 'line';
+    }
+    let serie = {
+      name: cd.name,
+      type: type,
+      yAxisIndex: yAxisIndex,
+      itemStyle:itemStyle,
+      markPoint: markPoint,
+      markLine: markLine,
+      data: cd.data
+    };
+    series.push(serie);
+  }
+  let option = {
+    title: {
+      text: data.title,
+      subtext: data.subTitle,
+      x:'center',
+      y:'top',
+      textAlign:'left'
+    },
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: {
+        type: 'cross',
+        crossStyle: {
+          color: '#999'
+        }
+      }
     },
     label: {
       normal: {
@@ -115,12 +395,10 @@ export function createBarChart(data, myChart) {
         position: 'top'
       }
     },
-    legend: {
-      data: data.legendData
-    },
+    color: colorList,
     toolbox: {
-      show: true,
       feature: {
+        show:showToolbox,
         dataView: {
           show: true,
           readOnly: false
@@ -137,132 +415,40 @@ export function createBarChart(data, myChart) {
         }
       }
     },
-    color: colorList,
-    calculable: true,
+    legend: {
+      data: data.legendData,
+      orient: 'horizontal',
+      x: 'center',
+      y: 'bottom'
+    },
     grid: {//四周的宽度
       left: '2%',
       right: '3%',
-      bottom: '2%',
+      bottom: '5%',
       containLabel: true
     },
     xAxis: [{
       type: 'category',
-      data: data.xdata
+      data: data.xdata,
+      axisPointer: {
+        type: 'shadow'
+      }
     }],
     yAxis: [{
-      type: 'value'
-    }],
-    series: series
-  };
-  createChart(option, myChart);
-}
-
-/**折线图
- * @param {Object} data
- * @param {Object} myChart
- */
-export function createLineChart(data, myChart) {
-  const itemLabelShow = data.itemLabelShow==null ? true : data.itemLabelShow;
-  let series = new Array();
-  for (let i = 0; i < data.ydata.length; i++) {
-    let serie = {
-      name: data.ydata[i].name,
-      type: 'line',
-      //smooth: true,//是否平滑
-      dataView: {
-        show: true,
-        readOnly: false
-      },
-      itemStyle: {
-        normal: {
-          label: {
-            show: itemLabelShow
-          }
+        type: 'value',
+        name: ya0Name,
+        axisLabel: {
+          formatter: '{value} '+ya0Unit
         }
       },
-      data: data.ydata[i].data,
-      markPoint: {
-        data: [{
-            type: 'max',
-            name: '最大值'
-          },
-          {
-            type: 'min',
-            name: '最小值'
-          }
-        ]
-      },
-      markLine: {
-        data: [{
-            type: 'average',
-            name: '平均值'
-          },
-          [{
-            symbol: 'none',
-            x: '90%',
-            yAxis: 'max'
-          }, {
-            symbol: 'circle',
-            label: {
-              normal: {
-                position: 'start',
-                formatter: '最大值'
-              }
-            },
-            type: 'max',
-            name: '最高点'
-          }]
-        ]
+      {
+        type: 'value',
+        name: ya1Name,
+        axisLabel: {
+          formatter: '{value} '+ya1Unit
+        }
       }
-    };
-    series.push(serie);
-  }
-  let option = {
-    title: {
-      text: data.title,
-      subtext: data.subTitle
-    },
-    tooltip: {
-      trigger: 'axis'
-    },
-    legend: {
-      data: data.legendData
-    },
-    grid: {//四周的宽度
-      left: '2%',
-      right: '3%',
-      bottom: '2%',
-      containLabel: true
-    },
-    toolbox: {
-      show: true,
-      feature: {
-        dataZoom: {
-          yAxisIndex: 'none'
-        },
-        dataView: {
-          show: true,
-          readOnly: false
-        },
-        magicType: {
-          type: ['line', 'bar']
-        },
-        restore: {},
-        saveAsImage: {}
-      }
-    },
-    color: colorList,
-    xAxis: {
-      type: 'category',
-      boundaryGap: false,
-      data: data.xdata
-    },
-    yAxis: {
-      type: 'value',
-      axisLabel: {
-        formatter: '{value}'
-      }
-    },
+    ],
     series: series
   };
   createChart(option, myChart);
@@ -274,68 +460,73 @@ export function createLineChart(data, myChart) {
  * @param {Object} myChart
  */
 export function createPieChart(data, myChart) {
+  const unit = data.unit==null ? '' :data.unit;
+  //显示项目
+  let showLegend = data.showLegend==null ? true : data.showLegend;
   let series = new Array();
-  for (let i = 0; i < data.detailData.length; i++) {
-    let serie = {
-      name: data.detailData[i].name,
-      type: 'pie',
-      radius: '55%',
-      center: ['50%', '60%'],
-      data: data.detailData[i].data,
-      itemStyle: {
-        emphasis: {
-          shadowBlur: 10,
-          shadowOffsetX: 0,
-          shadowColor: 'rgba(0, 0, 0, 0.5)'
+    for (let i = 0; i < data.detailData.length; i++) {
+      let serie = {
+        name: data.detailData[i].name,
+        type: 'pie',
+        radius: '55%',
+        center: ['50%', '60%'],
+        data: data.detailData[i].data,
+        itemStyle: {
+          borderColor: '#fff',
+          borderWidth: 1
         },
-        normal: {
-          label: {
-            show: true,
-            formatter: '{b} : {c} ({d}%)'
-          },
-          labelLine: {
-            show: true
+        label: {
+          alignTo: 'labelLine',//labelLine
+          formatter: '{name|{b}}\n{time|{c} '+unit+' ({d}%)}',
+          minMargin: 5,
+          edgeDistance: 10,
+          lineHeight: 15,
+          rich: {
+            time: {
+              fontSize: 12,
+              color: '#460000'
+            }
           }
         }
-      }
+      };
+      series.push(serie);
     };
-    series.push(serie);
-  };
-  let option = {
-    title: {
-      text: data.title,
-      subtext: data.subTitle,
-      x: 'center'
-    },
-    color: colorList,
-    toolbox: {
-      show: false,
-      feature: {
-        dataZoom: {
-          yAxisIndex: 'none'
-        },
-        dataView: {
-          show: true,
-          readOnly: false
-        },
-        magicType: {
-          type: ['line', 'bar']
-        },
-        restore: {},
-        saveAsImage: {}
-      }
-    },
-    tooltip: {
-      trigger: 'item',
-      formatter: "{a} <br/>{b} : {c} ({d}%)"
-    },
-    legend: {
-      orient: 'vertical',
-      left: 'left',
-      data: data.xdata
-    },
-    series: series
-  };
+    let option = {
+      title: {
+        text: data.title,
+        subtext: data.subTitle,
+        x: 'center'
+      },
+      toolbox: {
+        show: false,
+        feature: {
+          dataZoom: {
+            yAxisIndex: 'none'
+          },
+          dataView: {
+            show: true,
+            readOnly: false
+          },
+          magicType: {
+            type: ['line', 'bar']
+          },
+          restore: {},
+          saveAsImage: {}
+        }
+      },
+      tooltip: {
+        trigger: 'item',
+        formatter: "{a} <br/>{b} : {c} "+unit+"({d}%)"
+      },
+      color: colorList,
+      legend: {
+        show:showLegend,
+        orient: 'vertical',
+        left: 'left',
+        data: data.xdata
+      },
+      series: series
+    };
   createChart(option, myChart);
 }
 
@@ -345,6 +536,7 @@ export function createPieChart(data, myChart) {
  * @param {Object} myChart
  */
 export function createDoublePieChart(data, myChart) {
+  const unit = data.unit==null ? '' :data.unit;
   let option = {
     title: {
       text: data.title,
@@ -371,11 +563,12 @@ export function createDoublePieChart(data, myChart) {
     },
     tooltip: {
       trigger: 'item',
-      formatter: "{a} <br/>{b} : {c} ({d}%)"
+      formatter: '{a} <br/>{b} : {c} '+unit+' ({d}%)'
     },
     legend: {
-      orient: 'vertical',
-      left: 'left',
+      orient: 'horizontal',
+      x: 'center',
+      y: 'bottom',
       data: data.xdata
     },
     series: [{
@@ -394,23 +587,7 @@ export function createDoublePieChart(data, myChart) {
             show: false
           }
         },
-        data: data.detailData[0].data,
-        itemStyle: {
-          emphasis: {
-            shadowBlur: 10,
-            shadowOffsetX: 0,
-            shadowColor: 'rgba(0, 0, 0, 0.5)'
-          },
-          normal: {
-            label: {
-              show: true,
-              formatter: '{b} : {c} ({d}%)'
-            },
-            labelLine: {
-              show: true
-            }
-          }
-        }
+        data: data.detailData[0].data
       },
       {
         name: data.detailData[1].name,
@@ -418,18 +595,19 @@ export function createDoublePieChart(data, myChart) {
         radius: ['40%', '55%'],
         data: data.detailData[1].data,
         itemStyle: {
-          emphasis: {
-            shadowBlur: 10,
-            shadowOffsetX: 0,
-            shadowColor: 'rgba(0, 0, 0, 0.5)'
-          },
-          normal: {
-            label: {
-              show: true,
-              formatter: '{b} : {c} ({d}%)'
-            },
-            labelLine: {
-              show: true
+          borderColor: '#fff',
+          borderWidth: 1
+        },
+        label: {
+          alignTo: 'labelLine',//labelLine
+          formatter: '{name|{b}}\n{time|{c} '+unit+' ({d}%)}',
+          minMargin: 5,
+          edgeDistance: 10,
+          lineHeight: 15,
+          rich: {
+            time: {
+              fontSize: 12,
+              color: '#460000'
             }
           }
         }
@@ -445,7 +623,7 @@ export function createDoublePieChart(data, myChart) {
  * @param {Object} myChart
  */
 export function createCalanderChart(data, myChart) {
-
+  let cellSize =20;
   let graphData = data.graphData;
   let links = {};
   if (graphData) {
@@ -490,20 +668,16 @@ export function createCalanderChart(data, myChart) {
     symbolSize: 15,
     calendarIndex: 0,
     itemStyle: {
-      normal: {
-        color: 'green',
-        shadowBlue: 9,
-        shadowOffsetX: 1.5,
-        shadowOffsetY: 3,
-        shadowColor: '#555'
-      }
+      color: 'green',
+      shadowBlue: 9,
+      shadowOffsetX: 1.5,
+      shadowOffsetY: 3,
+      shadowColor: '#555'
     },
     lineStyle: {
-      normal: {
-        color: '#D10E00',
-        width: 1,
-        opacity: 1
-      }
+      color: '#D10E00',
+      width: 1,
+      opacity: 1
     },
     data: data.graphData,
     z: 20
@@ -517,20 +691,16 @@ export function createCalanderChart(data, myChart) {
     symbolSize: 15,
     calendarIndex: 1,
     itemStyle: {
-      normal: {
-        color: 'green',
-        shadowBlue: 9,
-        shadowOffsetX: 1.5,
-        shadowOffsetY: 3,
-        shadowColor: '#555'
-      }
+      color: 'green',
+      shadowBlue: 9,
+      shadowOffsetX: 1.5,
+      shadowOffsetY: 3,
+      shadowColor: '#555'
     },
     lineStyle: {
-      normal: {
-        color: '#D10E00',
-        width: 1,
-        opacity: 1
-      }
+      color: '#D10E00',
+      width: 1,
+      opacity: 1
     },
     data: data.graphData,
     z: 20
@@ -546,9 +716,7 @@ export function createCalanderChart(data, myChart) {
       return getSymbolSize(val);
     },
     itemStyle: {
-      normal: {
-        color: 'red'
-      }
+      color: 'red'
     }
   };
   seriesData.push(serie);
@@ -563,9 +731,7 @@ export function createCalanderChart(data, myChart) {
       return getSymbolSize(val);
     },
     itemStyle: {
-      normal: {
-        color: 'red'
-      }
+      color: 'red'
     }
   };
   seriesData.push(serie);
@@ -588,11 +754,9 @@ export function createCalanderChart(data, myChart) {
       },
       hoverAnimation: true,
       itemStyle: {
-        normal: {
-          color: '#f4e925',
-          shadowBlur: 10,
-          shadowColor: '#333'
-        }
+        color: '#f4e925',
+        shadowBlur: 10,
+        shadowColor: '#333'
       },
       zlevel: 1
     };
@@ -614,11 +778,9 @@ export function createCalanderChart(data, myChart) {
       },
       hoverAnimation: true,
       itemStyle: {
-        normal: {
-          color: '#f4e925',
-          shadowBlur: 10,
-          shadowColor: '#333'
-        }
+        color: '#f4e925',
+        shadowBlur: 10,
+        shadowColor: '#333'
       },
       zlevel: 1
     };
@@ -669,11 +831,9 @@ export function createCalanderChart(data, myChart) {
         }
       },
       itemStyle: {
-        normal: {
-          color: '#323c48',
-          borderWidth: 1,
-          borderColor: '#111'
-        }
+        color: '#323c48',
+        borderWidth: 1,
+        borderColor: '#111'
       }
     }, {
       top: 260,
@@ -694,11 +854,9 @@ export function createCalanderChart(data, myChart) {
         }
       },
       itemStyle: {
-        normal: {
-          color: '#323c48',
-          borderWidth: 1,
-          borderColor: '#111'
-        }
+        color: '#323c48',
+        borderWidth: 1,
+        borderColor: '#111'
       }
     }],
     series: seriesData
@@ -748,14 +906,16 @@ export function createCalanderPieChart(data, myChart,echarts) {
   }
 
   let option = {
-    //backgroundColor: '#404a59',
 
     title: {
       show: true,
-      top: 0,
+      top: 'auto',
+      bottom:'45',
       text: data.title,
       subtext: data.subTitle,
-      left: 'left'
+      x:'center',
+      y:'top',
+      textAlign:'left'
     },
     tooltip: {},
     legend: {
@@ -786,6 +946,7 @@ export function createCalanderPieChart(data, myChart,echarts) {
     series: [{
       id: 'label',
       type: 'scatter',
+      name:'用药',
       coordinateSystem: 'calendar',
       symbolSize: 1,
       label: {
@@ -834,9 +995,9 @@ export function createCalanderHeatMapChart(data, myChart,echarts) {
   let calendars = new Array();
   for (let i = 0; i < data.years.length; i++) {
     let c = {
-      top: 80 + i * 180,
+      top: 100 + i * 180,
       range: data.years[i],
-      cellSize: ['auto', 20],
+      cellSize: ['auto', 30],
       right: 5
     };
     calendars.push(c);
@@ -910,11 +1071,9 @@ export function createScatterChart(data, myChart) {
       markArea: {
         silent: true,
         itemStyle: {
-          normal: {
-            color: 'transparent',
-            borderWidth: 1,
-            borderType: 'dashed'
-          }
+          color: 'transparent',
+          borderWidth: 1,
+          borderType: 'dashed'
         },
         data: [
           [{
@@ -960,7 +1119,10 @@ export function createScatterChart(data, myChart) {
   let option = {
     title: {
       text: data.title,
-      subtext: data.subTitle
+      subtext: data.subTitle,
+      x:'center',
+      y:'top',
+      textAlign:'left'
     },
     grid: {
       left: '3%',
@@ -1002,7 +1164,9 @@ export function createScatterChart(data, myChart) {
     brush: {},
     legend: {
       data: data.legendData,
-      left: 'center'
+      orient: 'horizontal',
+      x: 'center',
+      y: 'bottom'
     },
     xAxis: [{
       type: 'value',
@@ -1410,7 +1574,6 @@ export function createTreeMapChart(data, myChart,echarts) {
   }
 
   let option = {
-
     title: {
       text: data.name,
       left: 'center'
@@ -1564,6 +1727,7 @@ export function createTreeChart(data, myChart,echarts) {
  * @param {Object} myChart
  */
 export function createGaugeChart(data, myChart) {
+  const unit = data.unit==null ? '%':data.unit;
   let alertOption = {
     tooltip: {
       formatter: "{a} <br/>{b} : {c}%"
@@ -1580,17 +1744,53 @@ export function createGaugeChart(data, myChart) {
       x: 'center'
     },
     series: [{
-      center: ["50%", "60%"], // 仪表位置
-      name: '业务指标',
       type: 'gauge',
+      axisLine: {
+        lineStyle: {
+          width: 10,
+          color: [
+              [0.3, '#67e0e3'],
+              [0.7, '#37a2da'],
+              [1, '#fd666d']
+          ]
+        }
+      },
+      pointer: {
+          itemStyle: {
+              color: 'auto'
+          }
+      },
+      axisTick: {
+          distance: -30,
+          length: 8,
+          lineStyle: {
+              color: '#fff',
+              width: 2
+          }
+      },
+      splitLine: {
+          distance: -30,
+          length: 30,
+          lineStyle: {
+              color: '#fff',
+              width: 4
+          }
+      },
+      axisLabel: {
+          color: 'auto',
+          distance: 40,
+          fontSize: 15
+      },
       detail: {
-        formatter: '{value}%'
+          valueAnimation: true,
+          formatter: '{value} '+unit,
+          color: 'auto',
+          fontSize: 20
       },
       data: [{
-        value: data.value,
-        name: data.name
+        value: data.value
       }]
-    }]
+  }]
   };
   createChart(alertOption, myChart);
 }
@@ -1623,6 +1823,7 @@ export function createShadowChart(data,myChart){
       legend: {
           data:data.legendData
       },
+      color:colorList,
       toolbox: {
           feature: {
               saveAsImage: {}

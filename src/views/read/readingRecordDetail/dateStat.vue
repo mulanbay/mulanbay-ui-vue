@@ -88,16 +88,7 @@ export default {
       //统计分类
       dateGroupTypeOptions:[],
       //图表类型
-      chartTypeOptions:[
-        {
-          id: 'BAR',
-          text: '柱状图'
-        },
-        {
-          id: 'LINE',
-          text: '折线图'
-        }
-      ],
+      chartTypeOptions:[],
       //日期范围快速选择
       datePickerOptions:this.datePickerOptions,
       // 日期范围
@@ -106,13 +97,16 @@ export default {
       queryParams: {
         dateGroupType:'MONTH',
         compliteDate:true,
-        chartType:'BAR'
+        chartType:'MIX_LINE_BAR'
       }
     };
   },
   created() {
     this.getDictItemTree('CHART_DATE_GROUP',false).then(response => {
       this.dateGroupTypeOptions = response;
+    });
+    this.getDictItemTree('DATE_STAT_CHART_TYPE',false).then(response => {
+      this.chartTypeOptions = response;
     });
     this.initChart();
   },

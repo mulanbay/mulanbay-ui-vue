@@ -127,7 +127,7 @@ export default {
           text: '饼图'
         },
         {
-          id: 'BAR',
+          id: 'MIX_LINE_BAR',
           text: '柱状图'
         }
       ],

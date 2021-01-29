@@ -3,8 +3,8 @@
 </template>
 
 <script>
-import echarts from 'echarts'
-import {createShadowChart} from "@/utils/echarts";
+  import * as echarts from 'echarts';
+  import {createShadowChart} from "@/utils/echarts";
 
 require('echarts/theme/macarons') // echarts theme
 import resize from '../dashboard/mixins/resize.js'
@@ -64,7 +64,9 @@ export default {
       if(this.isObjectEmpty(this.chartData)){
         return;
       }
-      this.chart = echarts.init(this.$el, 'macarons');
+      if(this.chart==null){
+        this.chart = echarts.init(this.$el);
+      }
       createShadowChart(this.chartData,this.chart);
     }
   }

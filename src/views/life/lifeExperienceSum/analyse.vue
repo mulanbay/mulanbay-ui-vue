@@ -55,6 +55,8 @@ export default {
     return {
       shadowChartData:{},
       pieChartData:{},
+      //加载层配置
+      loadingOptions: this.loadingOptions,
       // 查询参数
       queryParams: {
 
@@ -74,11 +76,17 @@ export default {
       this.resetForm("queryForm");
       this.initChart();
     },
+    // 打开加载层
+    openLoading() {
+      this.loading = this.$loading(this.loadingOptions);
+    },
     initChart() {
+      this.openLoading();
       analyseLifeExperienceSum(this.queryParams).then(
         response => {
           this.shadowChartData= response.chartShadowData;
           this.pieChartData= response.chartPieData;
+          this.loading.close();
         }
       );
     }
@@ -88,7 +96,7 @@ export default {
 <style lang="scss" scoped>
 @media (max-width:1024px) {
   .chart-wrapper {
-    padding: 8px;
+    padding: 0px;
   }
 }
 </style>

@@ -3,13 +3,12 @@
 </template>
 
 <script>
-import echarts from 'echarts'
-require('echarts/theme/macarons') // echarts theme
-import resize from './mixins/resize'
-import {fetchList} from "@/api/report/plan/userPlan";
-import {getPlanReportTimelineStat} from "@/api/report/plan/planReport";
-import {getNowDateString} from "@/utils/datetime";
-import {createLineChart} from "@/utils/echarts";
+  import * as echarts from 'echarts';
+  import resize from './mixins/resize'
+  import {fetchList} from "@/api/report/plan/userPlan";
+  import {getPlanReportTimelineStat} from "@/api/report/plan/planReport";
+  import {getNowDateString} from "@/utils/datetime";
+  import {createLineChart} from "@/utils/echarts";
 
 export default {
   mixins: [resize],
@@ -76,9 +75,10 @@ export default {
         response => {
           //组装chart数据
           let chartData = response;
-          this.chart = echarts.init(this.$el, 'macarons');
+          this.chart = echarts.init(this.$el);
           //折线上是否显示值
-          chartData.itemLabelShow = false;
+          chartData.showLegend = false;
+          chartData.smooth = true;
           createLineChart(chartData,this.chart);
         }
       );

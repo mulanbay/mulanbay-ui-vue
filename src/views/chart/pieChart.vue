@@ -3,8 +3,8 @@
 </template>
 
 <script>
-import echarts from 'echarts'
-import {createPieChart} from "@/utils/echarts";
+  import * as echarts from 'echarts';
+  import {createPieChart} from "@/utils/echarts";
 
 require('echarts/theme/macarons') // echarts theme
 
@@ -63,7 +63,9 @@ export default {
       if(this.isObjectEmpty(this.chartData)){
         return;
       }
-      this.chart = echarts.init(this.$el, 'macarons');
+      if(this.chart==null){
+        this.chart = echarts.init(this.$el);
+      }
       createPieChart(this.chartData,this.chart);
     }
   }

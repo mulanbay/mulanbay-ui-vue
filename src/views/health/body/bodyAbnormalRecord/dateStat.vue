@@ -110,16 +110,9 @@ export default {
       //统计分类
       dateGroupTypeOptions:[],
       diseaseOptions:[],
-      chartTypeOptions:[
-        {
-          id: 'BAR',
-          text: '柱状图'
-        },
-        {
-          id: 'LINE',
-          text: '折线图'
-        }
-      ],
+      chartTypeOptions:[],
+      //加载层配置
+      loadingOptions: this.loadingOptions,
       //日期范围快速选择
       datePickerOptions:this.datePickerOptions,
       // 日期范围
@@ -128,13 +121,16 @@ export default {
       queryParams: {
         dateGroupType:'MONTH',
         compliteDate:true,
-        chartType:'LINE'
+        chartType:'MIX_LINE_BAR'
       }
     };
   },
   created() {
     this.getDictItemTree('CHART_DATE_GROUP',false).then(response => {
       this.dateGroupTypeOptions = response;
+    });
+    this.getDictItemTree('DATE_STAT_CHART_TYPE',false).then(response => {
+      this.chartTypeOptions = response;
     });
     this.initChart();
   },
@@ -156,7 +152,12 @@ export default {
       this.resetForm("queryForm");
       this.initChart();
     },
+    // 打开加载层
+    openLoading() {
+      this.loading = this.$loading(this.loadingOptions);
+    },
     initChart() {
+      this.openLoading();
       getBodyAbnormalRecordDateStat(this.addDateRange(this.queryParams, this.dateRange)).then(
         response => {
           //组装chart数据
@@ -168,6 +169,7 @@ export default {
             response.chartType=chartType;
           }
           this.chartData = response;
+          this.loading.close();
         }
       );
     }

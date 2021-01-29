@@ -65,7 +65,7 @@
   import {getLifeExperienceTree,getLifeExperienceCostStat} from "@/api/life/lifeExperience";
   import {chartProps,createBarChart,createPieChart} from "@/utils/echarts";
 
-  import echarts from 'echarts'
+  import * as echarts from 'echarts';
   import resize from '../../dashboard/mixins/resize.js'
 
 
@@ -159,7 +159,9 @@ export default {
       getLifeExperienceCostStat(this.addDateRange(this.queryParams, this.dateRange)).then(
         response => {
           //组装chart数据
-          this.chart = echarts.init(document.getElementById(this.id));
+          if(this.chart==null){
+            this.chart = echarts.init(document.getElementById(this.id));
+          }
           createPieChart(response,this.chart);
         }
       );

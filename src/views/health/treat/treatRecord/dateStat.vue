@@ -47,7 +47,7 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="名称查询" prop="name">
+      <el-form-item v-if="moreCdn==true" label="名称查询" prop="name">
         <el-input
           v-model="queryParams.name"
           placeholder="请输入名称"
@@ -147,16 +147,7 @@ export default {
       feeFieldOptions:[],
       //统计分类
       dateGroupTypeOptions:[],
-      chartTypeOptions:[
-        {
-          id: 'BAR',
-          text: '柱状图'
-        },
-        {
-          id: 'LINE',
-          text: '折线图'
-        }
-      ],
+      chartTypeOptions:[],
       diseaseOptions:[],
       treatTypeOptions:[],
       //日期范围快速选择
@@ -168,7 +159,7 @@ export default {
         dateGroupType:'MONTH',
         compliteDate:true,
         feeField:'total_fee',
-        chartType:'BAR'
+        chartType:'MIX_LINE_BAR'
       }
     };
   },
@@ -181,6 +172,9 @@ export default {
     });
     this.getEnumTree('TreatType','ORDINAL',false).then(response => {
       this.treatTypeOptions = response;
+    });
+    this.getDictItemTree('DATE_STAT_CHART_TYPE',false).then(response => {
+      this.chartTypeOptions = response;
     });
     this.initChart();
     getTreatCategoryTree('disease',false).then(response => {

@@ -85,8 +85,7 @@
   import {chartProps} from "@/utils/echarts";
   import {deepClone} from "@/utils/index";
 
-  import echarts from 'echarts'
-  import 'echarts/map/js/china'
+  import * as echarts from 'echarts';
   import resize from '../../dashboard/mixins/resize.js'
 
 
@@ -170,7 +169,9 @@ export default {
       getLifeExperienceTransferMapStat(acQueryParams).then(
         response => {
           //组装chart数据
-          this.chart = echarts.init(document.getElementById(this.id));
+          if(this.chart==null){
+            this.chart = echarts.init(document.getElementById(this.id));
+          }
           if(this.queryParams.mapType=='TRANSFER_DOUBLE'){
             createDoubleTransferMapChart(response,this.chart);
           }else{

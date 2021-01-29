@@ -103,16 +103,9 @@ export default {
       dateGroupTypeOptions:[],
       typesOptions:[],
       //图表类型
-      chartTypeOptions:[
-        {
-          id: 'BAR',
-          text: '柱状图'
-        },
-        {
-          id: 'LINE',
-          text: '折线图'
-        }
-      ],
+      chartTypeOptions:[],
+      //加载层配置
+      loadingOptions: this.loadingOptions,
       //日期范围快速选择
       datePickerOptions:this.datePickerOptions,
       // 日期范围
@@ -121,7 +114,7 @@ export default {
       queryParams: {
         dateGroupType:'MONTH',
         compliteDate:true,
-        chartType:'BAR'
+        chartType:'MIX_LINE_BAR'
       }
     };
   },
@@ -131,6 +124,9 @@ export default {
     });
     this.getEnumTree('ExperienceType','FIELD',false).then(response => {
       this.typesOptions = response;
+    });
+    this.getDictItemTree('DATE_STAT_CHART_TYPE',false).then(response => {
+      this.chartTypeOptions = response;
     });
     this.initChart();
   },
@@ -144,12 +140,17 @@ export default {
       this.resetForm("queryForm");
       this.initChart();
     },
+    // 打开加载层
+    openLoading() {
+      this.loading = this.$loading(this.loadingOptions);
+    },
     initChart() {
       let qp = this.addDateRange(this.queryParams, this.dateRange);
       let acQueryParams = deepClone(qp);
       if(acQueryParams.types!=null){
         acQueryParams.types = acQueryParams.types.join(',');
       }
+      this.openLoading();
       getLifeExperienceDateStat(acQueryParams).then(
         response => {
           //组装chart数据
@@ -161,6 +162,7 @@ export default {
             response.chartType=chartType;
           }
           this.chartData = response;
+          this.loading.close();
         }
       );
     }

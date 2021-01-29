@@ -125,6 +125,7 @@ export default {
       let cd = {
         "title": "["+this.statData.tags+"]费用统计",
         "subTitle": "2020-01-01~2020-12-31",
+        "unit" : "元",
         "xdata": ["医保支付", "个人支付", "挂号费", "药费", "手术费"],
         "detailData": [{
           "name": "医保/个人",

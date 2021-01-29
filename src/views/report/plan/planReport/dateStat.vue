@@ -110,6 +110,8 @@ export default {
       userPlanOptions:[],
       statResultsOptions:[],
       dataStatTypeOptions:[],
+      //加载层配置
+      loadingOptions: this.loadingOptions,
       //日期范围快速选择
       datePickerOptions:this.datePickerOptions,
       // 日期范围
@@ -147,6 +149,10 @@ export default {
       this.resetForm("queryForm");
       this.initChart();
     },
+    // 打开加载层
+    openLoading() {
+      this.loading = this.$loading(this.loadingOptions);
+    },
     initChart() {
       let qp = this.addDateRange(this.queryParams, this.dateRange);
       let acQueryParams = deepClone(qp);
@@ -159,11 +165,13 @@ export default {
       if(acQueryParams.minValue=='null'){
         acQueryParams.minValue=undefined;
       }
+      this.openLoading();
       getPlanReportDateStat(acQueryParams).then(
         response => {
           //组装chart数据
-          response.chartType='LINE';
+          response.chartType='MIX_LINE_BAR';
           this.chartData = response;
+          this.loading.close();
         }
       );
     }

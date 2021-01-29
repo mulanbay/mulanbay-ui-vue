@@ -67,7 +67,7 @@
         <el-switch v-model="queryParams.compliteDate"  @change="handleQuery"></el-switch>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">统计</el-button>
+        <el-button type="primary" icon="el-icon-s-data" size="mini" @click="handleQuery">统计</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>

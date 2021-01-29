@@ -53,7 +53,7 @@
           <el-input-number v-model="queryParams.pageSize" clearable :min="0" label="数量" style="width: 120px"></el-input-number>
       </el-form-item>
       <el-form-item>
-        <el-button type="stat" icon="el-icon-search" size="mini" @click="handleQuery" v-hasPermi="['fund:accountFlow:analyse']">统计</el-button>
+        <el-button type="stat" icon="el-icon-s-data" size="mini" @click="handleQuery" v-hasPermi="['fund:accountFlow:analyse']">统计</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
@@ -69,8 +69,7 @@
   import {getAccountTree} from "@/api/fund/account";
   import {getAccountFlowAnalyse} from "@/api/fund/accountFlow";
   import {chartProps,createLineChart} from "@/utils/echarts";
-
-  import echarts from 'echarts'
+  import * as echarts from 'echarts';
   import resize from '../../dashboard/mixins/resize.js'
 
 export default {
@@ -189,7 +188,9 @@ export default {
       getAccountFlowAnalyse(this.addDateRange(this.queryParams, this.dateRange)).then(
         response => {
           //组装chart数据
-          this.chart = echarts.init(document.getElementById(this.id));
+          if(this.chart==null){
+            this.chart = echarts.init(document.getElementById(this.id));
+          }
           createLineChart(response,this.chart);
           this.loading.close();
         }

@@ -3,11 +3,9 @@
 </template>
 
 <script>
-import echarts from 'echarts'
-import {createDoublePieChart} from "@/utils/echarts";
-
-require('echarts/theme/macarons') // echarts theme
-import resize from '../dashboard/mixins/resize.js'
+  import * as echarts from 'echarts';
+  import {createDoublePieChart} from "@/utils/echarts";
+  import resize from '../dashboard/mixins/resize.js'
 
 export default {
   mixins: [resize],
@@ -64,7 +62,9 @@ export default {
       if(this.chartData.height){
         this.height=this.chartData.height;
       }
-      this.chart = echarts.init(this.$el, 'macarons');
+      if(this.chart==null){
+        this.chart = echarts.init(this.$el);
+      }
       createDoublePieChart(this.chartData,this.chart);
     }
   }

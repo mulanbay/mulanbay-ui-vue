@@ -31,7 +31,7 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="价格类型" prop="priceType">
+      <el-form-item v-if="moreCdn==true" label="价格类型" prop="priceType">
         <el-select
           v-model="queryParams.priceType"
           placeholder="价格类型"
@@ -96,7 +96,7 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="消费类型" prop="consumeType">
+      <el-form-item v-if="moreCdn==true" label="消费类型" prop="consumeType">
         <el-select
           v-model="queryParams.consumeType"
           placeholder="方式"
@@ -178,16 +178,7 @@ export default {
       //消费类型
       consumeTypeOptions:[],
       //图表类型
-      chartTypeOptions:[
-        {
-          id: 'BAR',
-          text: '柱状图'
-        },
-        {
-          id: 'LINE',
-          text: '折线图'
-        }
-      ],
+      chartTypeOptions:[],
       //价格类型
       priceTypeOptions:[
         {
@@ -199,6 +190,8 @@ export default {
           text: '运费'
         }
       ],
+      //加载层配置
+      loadingOptions: this.loadingOptions,
       //日期范围快速选择
       datePickerOptions:this.datePickerOptions,
       // 日期范围
@@ -206,7 +199,7 @@ export default {
       // 查询参数
       queryParams: {
         name: undefined,
-        chartType: 'BAR',
+        chartType: 'MIX_LINE_BAR',
         dateGroupType:'MONTH',
         priceType:'TOTALPRICE',
         compliteDate:true
@@ -222,6 +215,9 @@ export default {
     });
     this.getDictItemTree('CHART_DATE_GROUP',false).then(response => {
       this.dateGroupTypeOptions = response;
+    });
+    this.getDictItemTree('DATE_STAT_CHART_TYPE',false).then(response => {
+      this.chartTypeOptions = response;
     });
   },
   methods: {
@@ -268,7 +264,12 @@ export default {
       this.resetForm("queryForm");
       this.initChart();
     },
+    // 打开加载层
+    openLoading() {
+      this.loading = this.$loading(this.loadingOptions);
+    },
     initChart() {
+      this.openLoading();
       getBuyRecordDateStat(this.addDateRange(this.queryParams, this.dateRange)).then(
         response => {
           const dateGroupType = this.queryParams.dateGroupType;
@@ -279,6 +280,7 @@ export default {
             response.chartType=chartType;
           }
           this.chartData = response;
+          this.loading.close();
         }
       );
     }

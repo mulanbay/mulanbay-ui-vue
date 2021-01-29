@@ -205,11 +205,9 @@ export function createDoubleTransferMapChart(data, myChart) {
         symbolSize: 3
       },
       lineStyle: {
-        normal: {
-          color: color[i],
-          width: 0,
-          curveness: 0.2
-        }
+        color: color[i],
+        width: 0,
+        curveness: 0.2
       },
       data: convertData(item[1])
     }, {
@@ -224,12 +222,10 @@ export function createDoubleTransferMapChart(data, myChart) {
         symbolSize: 5
       },
       lineStyle: {
-        normal: {
-          color: color[i],
-          width: 1,
-          opacity: 0.4,
-          curveness: 0.2
-        }
+        color: color[i],
+        width: 1,
+        opacity: 0.4,
+        curveness: 0.2
       },
       data: convertData(item[1])
     }, {
@@ -241,19 +237,12 @@ export function createDoubleTransferMapChart(data, myChart) {
         brushType: 'stroke'
       },
       label: {
-        normal: {
-          show: true,
-          position: 'right',
-          formatter: '{b}'
-        }
+        show: true,
+        position: 'right',
+        formatter: '{b}'
       },
-      //                    symbolSize: function (val) {
-      //                        return val[2] / 8;
-      //                    },
       itemStyle: {
-        normal: {
-          color: color[i]
-        }
+        color: color[i]
       },
       data: item[1].map(function(dataItem) {
         return {
@@ -305,14 +294,12 @@ export function createDoubleTransferMapChart(data, myChart) {
         }
       },
       roam: true,
+      emphasis: {
+        areaColor: '#2a333d'
+      },
       itemStyle: {
-        normal: {
-          areaColor: '#323c48',
-          borderColor: '#404a59'
-        },
-        emphasis: {
-          areaColor: '#2a333d'
-        }
+        areaColor: '#323c48',
+        borderColor: '#404a59'
       }
     },
     series: series

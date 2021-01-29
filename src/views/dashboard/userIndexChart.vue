@@ -3,11 +3,11 @@
 </template>
 
 <script>
-import echarts from 'echarts'
-require('echarts/theme/macarons') // echarts theme
-import resize from './mixins/resize'
-import {createPieChart,createBarChart} from "@/utils/echarts";
-import {getShowIndexChart,getChartPara,statChart} from "@/api/report/chart/userChart";
+  import * as echarts from 'echarts';
+  require('echarts/theme/macarons') // echarts theme
+  import resize from './mixins/resize'
+  import {createPieChart,createBarChart} from "@/utils/echarts";
+  import {getShowIndexChart,getChartPara,statChart} from "@/api/report/chart/userChart";
 
 export default {
   mixins: [resize],
@@ -81,7 +81,7 @@ export default {
       statChart(url,para).then(
         response => {
           let chartData = response;
-          chartData.xdata=[];
+          chartData.showLegend=false;
           //组装chart数据
           this.chart = echarts.init(this.$el, 'macarons');
           //折线上是否显示值

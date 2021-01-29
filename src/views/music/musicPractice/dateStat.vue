@@ -47,7 +47,7 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="跟踪曲子" prop="tuneType">
+      <el-form-item v-if="moreCdn==true" label="跟踪曲子" prop="tuneType">
         <el-select
           v-model="queryParams.tuneType"
           placeholder="类型"
@@ -114,6 +114,10 @@ export default {
   },
   data() {
     return {
+      //查询条件更多属性 start
+      cdnTitle:'更多',
+      moreCdn:false,
+      //查询条件更多属性 end
       //图表数据
       chartData:{},
       //乐器列表
@@ -141,7 +145,7 @@ export default {
       // 查询参数
       queryParams: {
         name: undefined,
-        chartType: 'BAR',
+        chartType: 'MIX_LINE_BAR',
         dateGroupType:'MONTH',
         compliteDate:true,
         tuneType:undefined
@@ -160,6 +164,17 @@ export default {
     });
   },
   methods: {
+    /** 更多查询条件处理 */
+    handleMoreCdn(){
+      if(this.moreCdn==true){
+        //this.resetForm("queryForm");
+        this.moreCdn=false;
+        this.cdnTitle='更多';
+      }else{
+        this.moreCdn=true;
+        this.cdnTitle='取消';
+      }
+    },
     /** 查询乐器下拉树结构 */
     getMusicInstrumentTreeselect() {
       getMusicInstrumentTree(false).then(response => {
@@ -190,10 +205,8 @@ export default {
           const chartType = this.queryParams.chartType;
           if(dateGroupType=='DAYCALENDAR'){
             response.chartType='CALANDER';
-          }else if(chartType=='BAR'){
-            response.chartType='BAR';
           }else{
-            response.chartType='LINE';
+            response.chartType='MIX_LINE_BAR';
           }
           this.chartData = response;
         }

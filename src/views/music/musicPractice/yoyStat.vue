@@ -117,6 +117,8 @@ export default {
           text: '次数'
         }
       ],
+      //加载层配置
+      loadingOptions: this.loadingOptions,
       // 查询参数
       queryParams: {
         name: undefined,
@@ -151,11 +153,15 @@ export default {
       this.resetForm("queryForm");
       //this.initChart();
     },
+    // 打开加载层
+    openLoading() {
+      this.loading = this.$loading(this.loadingOptions);
+    },
     initChart() {
       //转换多选框的中挂号问题
       var acQueryParams = deepClone(this.queryParams);
       acQueryParams.years = acQueryParams.years.join(',');
-      //alert(JSON.stringify(acQueryParams));
+      this.openLoading();
       getMusicPracticeYoyStat(acQueryParams).then(
         response => {
           //组装chart数据
@@ -166,6 +172,7 @@ export default {
             response.chartType='LINE';
           }
           this.chartData = response;
+          this.loading.close();
         }
       );
     }

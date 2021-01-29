@@ -166,6 +166,8 @@ export default {
           text: '商品名称'
         }
       ],
+      //加载层配置
+      loadingOptions: this.loadingOptions,
       //日期范围快速选择
       datePickerOptions:this.datePickerOptions,
       // 日期范围
@@ -235,7 +237,12 @@ export default {
       this.resetForm("queryForm");
       this.initChart();
     },
+    // 打开加载层
+    openLoading() {
+      this.loading = this.$loading(this.loadingOptions);
+    },
     initChart() {
+      this.openLoading();
       getBuyRecordGoodsNameAvgSimilarity(this.addDateRange(this.queryParams, this.dateRange)).then(
         response => {
           //组装chart数据
@@ -247,6 +254,7 @@ export default {
           gaugeChartData.subTitle='商品重复度:'+avg+'%';
           gaugeChartData.chartType='GAUGE';
           this.chartData = gaugeChartData;
+          this.loading.close();
         }
       );
     }

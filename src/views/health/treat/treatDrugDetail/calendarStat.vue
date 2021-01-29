@@ -48,7 +48,7 @@
   import Treeselect from "@riophae/vue-treeselect";
   import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 
-  import echarts from 'echarts'
+  import * as echarts from 'echarts';
   import resize from '../../../dashboard/mixins/resize.js'
 
 export default {
@@ -142,7 +142,9 @@ export default {
       getTreatDrugDetailCalendarStat(this.queryParams).then(
         response => {
           //组装chart数据
-          this.chart = echarts.init(document.getElementById(this.id));
+          if(this.chart==null){
+            this.chart = echarts.init(document.getElementById(this.id));
+          }
           if(dateGroupType=='YEAR'){
             createCalanderChart(response,this.chart);
           }else{

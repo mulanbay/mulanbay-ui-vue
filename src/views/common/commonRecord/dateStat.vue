@@ -98,6 +98,8 @@ export default {
       chartData:{},
       //类型
       commonRecordTypeOptions:[],
+      //加载层配置
+      loadingOptions: this.loadingOptions,
       //统计分类
       dateGroupTypeOptions:[],
       //日期范围快速选择
@@ -147,7 +149,12 @@ export default {
       this.resetForm("queryForm");
       this.initChart();
     },
+    // 打开加载层
+    openLoading() {
+      this.loading = this.$loading(this.loadingOptions);
+    },
     initChart() {
+      this.openLoading();
       getCommonRecordDateStat(this.addDateRange(this.queryParams, this.dateRange)).then(
         response => {
           //组装chart数据
@@ -155,9 +162,10 @@ export default {
           if(dateGroupType=='DAYCALENDAR'){
             response.chartType = 'CALANDER';
           }else{
-            response.chartType='LINE';
+            response.chartType='MIX_LINE_BAR';
           }
           this.chartData = response;
+          this.loading.close();
         }
       );
     }

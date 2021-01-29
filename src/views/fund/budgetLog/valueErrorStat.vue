@@ -38,44 +38,21 @@
     </el-form>
 
     <!--图表数据-->
-    <div :id="id" :class="className" :style="{height:height,width:width,margin:0 }" />
-  </div>
+    <div>
+      <common-chart :chartData="chartData"/>
+    </div>
 
   </div>
 </template>
 
 <script>
   import {getBudgetLogValueErrorStat} from "@/api/fund/budgetLog";
-  import echarts from 'echarts'
-  import {deepClone} from "@/utils/index";
-  require('echarts/theme/macarons') // echarts theme
-  import resize from '../../dashboard/mixins/resize.js'
-
+  import CommonChart from '../../chart/commonChart'
 
   export default {
     name: "ValueErrorStat",
-    mixins: [resize],
-    props: {
-      className: {
-        type: String,
-        default: 'chart'
-      },
-      id: {
-        type: String,
-        default: 'chart'
-      },
-      width: {
-        type: String,
-        default: '100%'
-      },
-      height: {
-        type: String,
-        default: (document.body.clientHeight - 160).toString() + 'px'
-      },
-      autoResize: {
-        type: Boolean,
-        default: true
-      }
+    components: {
+      'common-chart':CommonChart
     },
     mounted() {
       //this.initChart();
@@ -83,7 +60,7 @@
     data() {
       return {
         //图表数据
-        chart: null,
+        chartData:{},
         // 加载层信息
         loading: [],
         //加载层配置
@@ -132,120 +109,8 @@
         getBudgetLogValueErrorStat(this.addDateRange(this.queryParams, this.dateRange)).then(
           response => {
             //组装chart数据
-            this.chart = echarts.init(document.getElementById(this.id));
-            this.chart.resize();
-            let chartData = response;
-            const itemStyle = {
-              normal: {
-                label: {
-                  show: true,
-                  position: 'top',
-                  formatter: '{c}'
-                }
-              }
-            };
-            const markPoint = {
-              data: [{
-                  type: 'max',
-                  name: '最大值'
-                },
-                {
-                  type: 'min',
-                  name: '最小值'
-                }
-              ]
-            };
-            const markLine = {
-              data: [{
-                type: 'average',
-                name: '平均值'
-              }]
-            };
-            let option = {
-              title: {
-                text: chartData.title,
-                subtext: chartData.subTitle
-              },
-              tooltip: {
-                trigger: 'axis',
-                axisPointer: {
-                  type: 'cross',
-                  crossStyle: {
-                    color: '#999'
-                  }
-                }
-              },
-              label: {
-                normal: {
-                  show: true,
-                  position: 'top'
-                }
-              },
-              toolbox: {
-                feature: {
-                  dataView: {
-                    show: true,
-                    readOnly: false
-                  },
-                  magicType: {
-                    show: true,
-                    type: ['line', 'bar']
-                  },
-                  restore: {
-                    show: true
-                  },
-                  saveAsImage: {
-                    show: true
-                  }
-                }
-              },
-              legend: {
-                data: chartData.legendData
-              },
-              xAxis: [{
-                type: 'category',
-                data: chartData.xdata,
-                axisPointer: {
-                  type: 'shadow'
-                }
-              }],
-              yAxis: [{
-                  type: 'value',
-                  name: '误差值',
-                  axisLabel: {
-                    formatter: '{value} 元'
-                  }
-                },
-                {
-                  type: 'value',
-                  name: '误差率',
-                  axisLabel: {
-                    formatter: '{value} %'
-                  }
-                }
-              ],
-              series: [
-                {
-                  name: chartData.ydata[0].name,
-                  type: 'bar',
-                  itemStyle:itemStyle,
-                  markPoint:markPoint,
-                  markLine:markLine,
-                  data: chartData.ydata[0].data
-                },
-                {
-                  name: chartData.ydata[1].name,
-                  type: 'line',
-                  itemStyle:itemStyle,
-                  markPoint:markPoint,
-                  markLine:markLine,
-                  yAxisIndex: 1,
-                  data: chartData.ydata[1].data
-                }
-              ]
-            };
-            this.chart.clear();
-            this.chart.setOption(option, true);
+            response.chartType='MIX_LINE_BAR';
+            this.chartData = response;
             this.loading.close();
           }
         );

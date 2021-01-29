@@ -34,9 +34,8 @@
 <script>
   import {getLifeExperienceTree,getLifeExperienceTransferMapByLifeExpStat} from "@/api/life/lifeExperience";
   import {createDoubleTransferMapChart} from "@/utils/echartsMapStat";
-
-  import echarts from 'echarts'
-  import 'echarts/map/js/china'
+  import * as echarts from 'echarts';
+  import '@/components/echarts/map/china'
   import resize from '../../dashboard/mixins/resize.js'
 
 
@@ -130,7 +129,9 @@ export default {
       getLifeExperienceTransferMapByLifeExpStat(this.queryParams).then(
         response => {
           //组装chart数据
-          this.chart = echarts.init(document.getElementById(this.id));
+          if(this.chart==null){
+            this.chart = echarts.init(document.getElementById(this.id));
+          }
           createDoubleTransferMapChart(response,this.chart);
           this.loading.close();
         }

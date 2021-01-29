@@ -141,7 +141,7 @@ export default {
           if(this.queryParams.dateGroupType=='DAYCALENDAR'){
             response.chartType='COMPARE_CALANDER';
           }else{
-            response.chartType='LINE';
+            response.chartType='MIX_LINE_BAR';
           }
           this.chartData = response;
           this.loading.close();

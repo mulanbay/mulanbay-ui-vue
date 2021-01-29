@@ -82,16 +82,7 @@ export default {
       chartData:{},
       //统计分类
       dateGroupTypeOptions:[],
-      chartTypeOptions:[
-        {
-          id: 'BAR',
-          text: '柱状图'
-        },
-        {
-          id: 'LINE',
-          text: '折线图'
-        }
-      ],
+      chartTypeOptions:[],
       //日期范围快速选择
       datePickerOptions:this.datePickerOptions,
       // 日期范围
@@ -100,13 +91,16 @@ export default {
       queryParams: {
         dateGroupType:'DAY',
         compliteDate:true,
-        chartType:'LINE'
+        chartType:'MIX_LINE_BAR'
       }
     };
   },
   created() {
     this.getDictItemTree('CHART_DATE_GROUP',false).then(response => {
       this.dateGroupTypeOptions = response;
+    });
+    this.getDictItemTree('DATE_STAT_CHART_TYPE',false).then(response => {
+      this.chartTypeOptions = response;
     });
     this.initChart();
   },
@@ -121,16 +115,16 @@ export default {
       this.initChart();
     },
     initChart() {
+      if(this.queryParams.dateGroupType=='DAYCALENDAR'){
+        this.msgError('暂未支持的分组类型');
+        return;
+      }
       getBodyBasicInfoDateStat(this.addDateRange(this.queryParams, this.dateRange)).then(
         response => {
           //组装chart数据
           const dateGroupType = this.queryParams.dateGroupType;
           const chartType = this.queryParams.chartType;
-          if(dateGroupType=='DAYCALENDAR'){
-            response.chartType = 'CALANDER';
-          }else{
-            response.chartType=chartType;
-          }
+          response.chartType=chartType;
           this.chartData = response;
         }
       );

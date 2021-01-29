@@ -127,6 +127,8 @@ export default {
       keywordsOptions:[],
       //标签选择天数
       days:undefined,
+      //加载层配置
+      loadingOptions: this.loadingOptions,
       //时间选取器
       daysOptions:[],
       //日期范围快速选择
@@ -201,6 +203,10 @@ export default {
       this.resetForm("queryForm");
       this.initChart();
     },
+    // 打开加载层
+    openLoading() {
+      this.loading = this.$loading(this.loadingOptions);
+    },
     initChart() {
       const keywords = this.queryParams.keywords;
       if(this.isObjectEmpty(keywords)){
@@ -211,21 +217,27 @@ export default {
     },
     /** 以标签分组统计 */
     getBuyRecordKeywordsStatChart() {
+      this.openLoading();
       getBuyRecordKeywordsStat(this.addDateRange(this.queryParams, this.dateRange)).then(
         response => {
           //组装chart数据
-          response.chartType='BAR';
+          response.chartType='MIX_LINE_BAR';
           this.chartData = response;
+          this.loading.close();
         }
       )
     },
     /** 以标签明细的类型统计 */
     getBuyRecordKeywordsStatDetailChart() {
+      //设置为0
+      this.dateRange =[];
+      this.openLoading();
       getBuyRecordKeywordsDetailStat(this.addDateRange(this.queryParams, this.dateRange)).then(
         response => {
           //组装chart数据
           response.chartType='PIE';
           this.chartData = response;
+          this.loading.close();
         }
       )
     }

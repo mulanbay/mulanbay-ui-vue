@@ -90,11 +90,10 @@
   import {chartProps} from "@/utils/echarts";
   import {deepClone} from "@/utils/index";
 
-  import echarts from 'echarts'
-  import 'echarts/map/js/china'
-  import 'echarts/map/js/world'
+  import * as echarts from 'echarts';
+  import '@/components/echarts/map/china'
+  import '@/components/echarts/map/world'
   import resize from '../../dashboard/mixins/resize.js'
-
 
 export default {
   name: "MapStat",

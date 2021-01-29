@@ -98,7 +98,7 @@
   import {chartProps,createPieChart,createBarChart,createLineChart} from "@/utils/echarts";
   import {getMusicPracticeTuneTree} from "@/api/music/musicPraticeTune";
 
-  import echarts from 'echarts'
+  import * as echarts from 'echarts';
   import resize from '../../dashboard/mixins/resize.js'
 
 
@@ -187,7 +187,9 @@ export default {
       getMusicPracticeTimeStat(this.addDateRange(this.queryParams, this.dateRange)).then(
         response => {
           //组装chart数据
-          this.chart = echarts.init(document.getElementById(this.id));
+          if(this.chart==null){
+            this.chart = echarts.init(document.getElementById(this.id));
+          }
           const chartType = this.queryParams.chartType;
           if(chartType=='PIE'){
             createPieChart(response,this.chart);

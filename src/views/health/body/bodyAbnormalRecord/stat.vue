@@ -88,6 +88,8 @@ export default {
           text: '柱状图'
         }
       ],
+      //加载层配置
+      loadingOptions: this.loadingOptions,
       //日期范围快速选择
       datePickerOptions:this.datePickerOptions,
       // 日期范围
@@ -123,13 +125,19 @@ export default {
       this.resetForm("queryForm");
       this.initChart();
     },
+    // 打开加载层
+    openLoading() {
+      this.loading = this.$loading(this.loadingOptions);
+    },
     initChart() {
+      this.openLoading();
       getBodyAbnormalRecordStat(this.addDateRange(this.queryParams, this.dateRange)).then(
         response => {
           //组装chart数据
           const chartType = this.queryParams.chartType;
           response.chartType=chartType;
           this.chartData = response;
+          this.loading.close();
         }
       );
     }

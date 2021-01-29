@@ -192,7 +192,7 @@ export default {
           if(dg=='DAYCALENDAR'||dg=='DIET_SOURCE'||dg=='FOOD_TYPE'||dg=='DIET_TYPE'){
             response.chartType='PIE';
           }else {
-            response.chartType='BAR';
+            response.chartType='MIX_LINE_BAR';
           }
           this.chartData = response;
           this.loading.close();

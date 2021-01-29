@@ -21,7 +21,7 @@
 <script>
   import {getUserScoreAnalyse,getUserScoreNextId} from "@/api/data/userScore";
   import {chartProps,createRadarChart} from "@/utils/echarts";
-  import echarts from 'echarts'
+  import * as echarts from 'echarts';
   import resize from '../../dashboard/mixins/resize.js'
 export default {
   name: "Analyse",
@@ -123,7 +123,9 @@ export default {
       getUserScoreAnalyse(this.queryParams).then(
         response => {
           //组装chart数据
-          this.chart = echarts.init(document.getElementById(this.id));
+          if(this.chart==null){
+            this.chart = echarts.init(document.getElementById(this.id));
+          }
           createRadarChart(response,this.chart);
           this.loading.close();
         }

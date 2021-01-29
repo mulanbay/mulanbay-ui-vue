@@ -3,11 +3,9 @@
 </template>
 
 <script>
-import echarts from 'echarts'
-import {createGaugeChart} from "@/utils/echarts";
-
-require('echarts/theme/macarons') // echarts theme
-import resize from '../dashboard/mixins/resize.js'
+  import * as echarts from 'echarts';
+  import {createGaugeChart} from "@/utils/echarts";
+  import resize from '../dashboard/mixins/resize.js'
 
 export default {
   mixins: [resize],
@@ -61,7 +59,9 @@ export default {
       if(this.isObjectEmpty(this.chartData)){
         return;
       }
-      this.chart = echarts.init(this.$el, 'macarons');
+      if(this.chart==null){
+        this.chart = echarts.init(this.$el);
+      }
       createGaugeChart(this.chartData,this.chart);
     }
   }
