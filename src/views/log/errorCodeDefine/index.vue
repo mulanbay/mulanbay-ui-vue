@@ -170,8 +170,8 @@
     />
 
     <!-- 添加或修改对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="650px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+    <el-dialog :title="title" :visible.sync="open" width="650px" append-to-body customClass="customDialogCss">
+      <el-form ref="form" :model="form" :rules="rules" label-width="100px">
         <el-row>
           <el-col :span="24">
             <el-form-item label="错误代码" prop="code">
@@ -188,7 +188,7 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="等级" prop="level">
+            <el-form-item label="代码等级" prop="level">
              <el-select
                v-model="form.level"
                placeholder="等级"
@@ -207,7 +207,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="分类" prop="bussType">
+            <el-form-item label="代码分类" prop="bussType">
              <el-select
                v-model="form.bussType"
                placeholder="分类"
@@ -252,8 +252,22 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="消息限流" prop="limitPeriod">
-              <el-input-number v-model="form.limitPeriod" controls-position="right" :min="0" :controls="true" :precision="0"/>
+              <el-input-number v-model="form.limitPeriod" controls-position="right" :min="0" :controls="true" :precision="0" style="width: 80%;"/>
               秒
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="电脑端连接" prop="url">
+              <el-input v-model="form.url" style="width: 505px" placeholder="请输入连接地址" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="移动端连接" prop="mobileUrl">
+              <el-input v-model="form.mobileUrl" style="width: 505px" placeholder="请输入连接地址" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -273,7 +287,7 @@
         </el-row>
         <el-row>
           <el-col :span="24">
-            <el-form-item label="备注" prop="remark">
+            <el-form-item label="备注信息" prop="remark">
               <el-input v-model="form.remark" type="textarea" :rows="4"  style="width: 505px"  placeholder="请输入内容"></el-input>
             </el-form-item>
           </el-col>
