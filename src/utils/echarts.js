@@ -1743,6 +1743,13 @@ export function createGaugeChart(data, myChart) {
       subtext: data.subTitle,
       x: 'center'
     },
+    grid: {//四周的宽度
+      top:'5%',
+      left: '3%',
+      right: '4%',
+      bottom: '3%',
+      containLabel: true
+    },
     series: [{
       type: 'gauge',
       axisLine: {
@@ -1788,7 +1795,11 @@ export function createGaugeChart(data, myChart) {
           fontSize: 20
       },
       data: [{
-        value: data.value
+        value: data.value,
+        name: data.name,
+        title:{
+          offsetCenter : [0, '100%']//设置完成率位置
+        }
       }]
   }]
   };

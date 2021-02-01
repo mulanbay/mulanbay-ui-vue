@@ -181,6 +181,7 @@ export default {
       this.tlLoading = true;
       stat(this.resourceType).then(
         response => {
+          response.smooth=true;
           this.timelineChartData = response;
           this.tlLoading = false;
         }
