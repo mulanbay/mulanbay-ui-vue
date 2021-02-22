@@ -30,7 +30,7 @@ export default {
   data() {
     return {
       chart: null,
-      height:'350px'
+      height:'360px'
     }
   },
   watch: {
