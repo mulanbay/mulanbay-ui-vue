@@ -54,25 +54,25 @@
 
     <el-timeline v-loading="loading" :reverse="reverse" >
       <template v-for="item in activities">
-          <el-timeline-item :timestamp="item.timestamp" :type="item.type" placement="top">
-            <el-card class="box-card">
-              <div slot="header" class="clearfix">
-                <svg-icon :icon-class="item.icon" />
-                <span>
-                  {{ item.behaviorTypeName }}
-                </span>
-                <el-tag v-if="true==item.allDay" type="danger">全天</el-tag>
-                <el-button v-if="true==item.allDay" size="mini" type="text" style="color: green;float: right; padding: 3px 0" icon="el-icon-date">
-                  {{ item.dateRange }}
-                </el-button>
-              </div>
-              <div>
-                <p>{{item.content}}</p>
-              </div>
-            </el-card>
-          </el-timeline-item>
-        </template>
-      </el-timeline>
+        <el-timeline-item :timestamp="item.timestamp" :type="item.type" placement="top">
+          <el-card class="box-card">
+            <div slot="header" class="clearfix">
+              <svg-icon :icon-class="item.icon" />
+              <span>
+                {{ item.behaviorTypeName }}
+              </span>
+              <el-tag v-if="true==item.allDay" type="danger">全天</el-tag>
+              <el-button v-if="true==item.allDay" size="mini" type="text" style="color: green;float: right; padding: 3px 0" icon="el-icon-date">
+                {{ item.dateRange }}
+              </el-button>
+            </div>
+            <div>
+              <p>{{item.content}}</p>
+            </div>
+          </el-card>
+        </el-timeline-item>
+      </template>
+    </el-timeline>
   </div>
 </template>
 

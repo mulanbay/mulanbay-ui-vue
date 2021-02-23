@@ -126,3 +126,10 @@ export function refreshSchedule(data) {
     data
   })
 }
+
+export function recentSchedules() {
+  return request({
+    url: '/taskTrigger/recentSchedules',
+    method: 'get'
+  })
+}

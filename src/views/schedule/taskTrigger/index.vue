@@ -115,6 +115,15 @@
           v-hasPermi="['schedule:taskTrigger:getScheduleInfo']"
         >调度信息</el-button>
       </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="primary"
+          icon="el-icon-info"
+          size="mini"
+          @click="handleRecentSchedules"
+          v-hasPermi="['schedule:taskTrigger:recentSchedules']"
+        >24H调度</el-button>
+      </el-col>
     </el-row>
 
     <!--列表数据-->
@@ -609,6 +618,11 @@
       <schedule-info />
     </el-dialog>
 
+    <!-- 最近的调度 -->
+    <el-dialog :title="recentSchedulesTitle" width="600px" :visible.sync="recentSchedulesOpen" append-to-body customClass="customDialogCss">
+      <recent-schedules/>
+    </el-dialog>
+
     <!-- 参数编辑对话框 -->
     <el-dialog :title="parasEditTitle" :visible.sync="parasEditOpen" width="600px" append-to-body>
       <form-create v-model="peApi" :option="peOption"  :rule="peRule"></form-create>
@@ -731,6 +745,7 @@
   import ScheduleDetail from './scheduleDetail'
   import LastExeInfo from './lastExecuteInfo'
   import ScheduleInfo from './scheduleInfo'
+  import RecentSchedules from './recentSchedules'
 
 export default {
   name: "TaskTrigger",
@@ -739,10 +754,14 @@ export default {
     formCreate:formCreate.$form(),
     'schedule-detail': ScheduleDetail,
     'last-exe-info': LastExeInfo,
-    'schedule-info': ScheduleInfo
+    'schedule-info': ScheduleInfo,
+    'recent-schedules': RecentSchedules
   },
   data() {
     return {
+      //最近调度
+      recentSchedulesTitle:undefined,
+      recentSchedulesOpen:false,
       //手动执行
       manualNewTitle:'',
       manualNewOpen:false,
@@ -1058,6 +1077,11 @@ export default {
     handleScheduleInfo(){
       this.siTitle='调度详情';
       this.siOpen=true;
+    },
+    /** 最近调度 */
+    handleRecentSchedules(){
+      this.recentSchedulesTitle='24H调度';
+      this.recentSchedulesOpen=true;
     },
     /** 调度执行时间分析 */
     HandleExeCostTimeStat(row){
