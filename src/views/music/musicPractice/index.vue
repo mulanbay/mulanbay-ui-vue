@@ -128,14 +128,9 @@
           <span>{{ row.practiceDate }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="开始时间" align="center" width="140">
+      <el-table-column label="练习时间" align="center" width="200">
         <template slot-scope="{row}">
-          <span>{{ row.practiceStartTime.substring(11,16) }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="结束时间" align="center" width="140">
-        <template slot-scope="{row}">
-          <span>{{ row.practiceEndTime.substring(11,16) }}</span>
+          <span>{{ formatPracticeRange(row) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="时长(分钟)" align="center" width="120">
@@ -240,6 +235,7 @@
         <el-button type="primary" @click="submitForm">确 定</el-button>
         <el-button @click="cancel">关 闭</el-button>
       </div>
+      
       <!--列表数据-->
       <el-table v-loading="loading" :data="tuneList" >
         <el-table-column label="ID" prop="id" sortable="custom" align="center" width="60">
@@ -547,6 +543,11 @@ export default {
     });
   },
   methods: {
+    /** 练习区间 */
+    formatPracticeRange(row){
+      let s = row.practiceStartTime.substr(11,5)+'~~'+row.practiceEndTime.substr(11,5);
+      return s;
+    },
     /** 计划统计 */
     planStat(){
       dispatchCommonStat('MusicPractice',this.$router);

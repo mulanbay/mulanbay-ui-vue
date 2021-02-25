@@ -88,14 +88,9 @@
           <span class="link-type" @click="handleUpdate(row)">{{ row.sleepDate }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="睡觉时间" align="center" width="180">
+      <el-table-column label="睡觉时间" align="center" width="200">
         <template slot-scope="{row}">
-          <span>{{ row.sleepTime }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="起床时间" align="center" width="180">
-        <template slot-scope="{row}">
-          <span>{{ row.getUpTime }}</span>
+          <span>{{ formatSleepRange(row) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="睡眠总时长" align="center" width="120">
@@ -111,6 +106,11 @@
           </span>
         </template>
       </el-table-column>
+      <el-table-column label="睡眠质量" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.quality }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="浅睡时长" align="center">
         <template slot-scope="{row}">
           <span>{{ formatSleepTimes(row.lightSleep) }}</span>
@@ -119,11 +119,6 @@
       <el-table-column label="深睡时长" align="center">
         <template slot-scope="{row}">
           <span>{{ formatSleepTimes(row.deepSleep) }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="睡眠质量" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.quality }}</span>
         </template>
       </el-table-column>
       <el-table-column label="创建时间" width="180">
@@ -262,6 +257,15 @@ export default {
     this.getList();
   },
   methods: {
+    /** 睡眠时间 */
+    formatSleepRange(row){
+      let s = row.sleepTime.substr(11,5);
+      if(row.getUpTime!=null){
+        s+='~~'+row.getUpTime.substr(11,5);
+      }
+      return s;
+    },
+    /** 睡眠时长 */
     formatSleepTimes(minutes){
       return tillNowString(minutes*60);
     },
