@@ -48,10 +48,6 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="页数">
-          <el-input-number v-model="queryParams.page" clearable :min="0" label="页" style="width: 120px"></el-input-number>
-          <el-input-number v-model="queryParams.pageSize" clearable :min="0" label="数量" style="width: 120px"></el-input-number>
-      </el-form-item>
       <el-form-item>
         <el-button type="stat" icon="el-icon-s-data" size="mini" @click="handleQuery" v-hasPermi="['fund:accountFlow:analyse']">统计</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -68,7 +64,8 @@
 <script>
   import {getAccountTree} from "@/api/fund/account";
   import {getAccountFlowAnalyse} from "@/api/fund/accountFlow";
-  import {chartProps,createLineChart} from "@/utils/echarts";
+  import {chartProps,createChart} from "@/utils/echarts";
+  import {getQueryObject} from "@/utils/index";
   import * as echarts from 'echarts';
   import resize from '../../dashboard/mixins/resize.js'
 
@@ -76,10 +73,6 @@ export default {
   name: "Analyse",
   mixins: [resize],
   props: {
-    //父层带过来的账户信息值
-    queryAccountData: {
-      id: '',
-    },
     className: {
       type: String,
       default: 'chart'
@@ -94,7 +87,7 @@ export default {
     },
     height: {
       type: String,
-      default: (document.body.clientHeight - 400).toString() + 'px'
+      default: (document.body.clientHeight - 200).toString() + 'px'
     },
   },
   mounted() {
@@ -133,29 +126,17 @@ export default {
       dateRange: this.getYearDateRange(0),
       // 查询参数
       queryParams: {
-        page:undefined,
-        pageSize:undefined
+        page:0,
+        pageSize:10
       }
     };
   },
   created() {
     //查询账户树
     this.getAccountTreeselect();
-    const accountId = this.queryAccountData.id+'';
-    this.queryParams.accountId=accountId;
-    //this.$set(this.queryParams, this.queryParams.accountId, accountId);
-    //this.$forceUpdate();
+    let qb = getQueryObject(null);
+    this.queryParams.accountId=qb.id;
     this.initChart();
-  },
-  //监听父层带过来的账户信息值
-  watch:{
-    queryAccountData(newVal,oldVal){
-      //需要重新查询账户树，否则显示不更新
-      this.getAccountTreeselect();
-      //console.log('watch:'+JSON.stringify(newVal));
-      this.queryParams.accountId=newVal.id+'';
-      this.initChart();
-    }
   },
   methods: {
     // 打开加载层
@@ -191,7 +172,72 @@ export default {
           if(this.chart==null){
             this.chart = echarts.init(document.getElementById(this.id));
           }
-          createLineChart(response,this.chart);
+          let data = response;
+          let option = {
+            title: {
+              text: data.title,
+              subtext: data.subTitle
+            },
+            tooltip: {
+              trigger: 'axis'
+            },
+            legend: {
+              data: data.legendData
+            },
+            toolbox: {
+              show: true,
+              feature: {
+                dataZoom: {
+                  yAxisIndex: 'none'
+                },
+                dataView: {readOnly: false},
+                magicType: {type: ['line', 'bar']},
+                restore: {},
+                saveAsImage: {}
+              }
+            },
+            xAxis: {
+              type: 'category',
+              boundaryGap: false,
+              data: data.xdata
+            },
+            yAxis: {
+              type: 'value',
+              axisLabel: {
+                formatter: '{value} '+data.unit
+              }
+            },
+            series: [
+              {
+                name: data.legendData[0],
+                type: 'line',
+                data: data.ydata[0].data,
+                markPoint: {
+                  data: [
+                      {type: 'max', name: '最大值'},
+                      {type: 'min', name: '最小值'}
+                  ]
+                }
+              },
+              {
+                name: data.legendData[1],
+                type: 'line',
+                data: data.ydata[1].data,
+                markPoint: {
+                  data: [
+                      {type: 'max', name: '最大值'},
+                      {type: 'min', name: '最小值'}
+                  ]
+                },
+                markLine: {
+                  data: [
+                      {type: 'average', name: '平均值'}
+                  ]
+                }
+              }
+            ]
+          };
+          createChart(option,this.chart);
           this.loading.close();
         }
       );

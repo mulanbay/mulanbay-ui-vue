@@ -241,11 +241,6 @@
       </div>
     </el-dialog>
 
-    <!-- 账户分析 -->
-    <el-dialog title="账户分析" width="1000px" :visible.sync="analyseVisible">
-      <flow-analyse :queryAccountData="queryAccountData" />
-    </el-dialog>
-
     <!-- 生成快照 -->
     <el-dialog title="生成快照" width="500px" :visible.sync="createSnapshotVisible">
       <!-- closeMe为子组件中的关闭方法-->
@@ -257,24 +252,15 @@
 
 <script>
 import {fetchList,changeAccountStatus,changeAccount,getAccount,createAccount,updateAccount,deleteAccount} from "@/api/fund/account";
-//import openWindow from '@/utils/open-window'
-import FlowAnalyse from '../accountFlow/analyse'
 import SnapshotDetail from '../accountSnapshotInfo/detail'
 
 export default {
   name: "Account",
   components: {
-    'flow-analyse':FlowAnalyse,
     'snapshot-detail':SnapshotDetail
   },
   data() {
     return {
-      //账户分析页面的账户主键值
-      queryAccountData: {
-        id:''
-      },
-      // 分析页面
-      analyseVisible:false,
       //生成快照
       createSnapshotVisible:false,
       // 遮罩
@@ -440,10 +426,8 @@ export default {
     handleAnalyse(row) {
       //openWindow('accountFlow/analyse','账户分析',800,600);
       const id = (row ===null ? "" : row.id);
-      this.analyseVisible = true;
-      this.queryAccountData = Object.assign({}, this.queryAccountData, {
-        id: id
-      });
+      //路由定向
+      this.$router.push({name:'AccountFlow/analyse',query: {id:id}})
     },
     //账户统计
     handleStat() {

@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true">
-      <el-form-item label="统计分组" prop="groupField">
+      <el-form-item v-if="moreCdn==true" label="统计分组" prop="groupField">
         <el-select
           v-model="queryParams.groupField"
           placeholder="字段"
@@ -143,7 +143,7 @@
           <span :style="{'color':getDaysColor(row.days)}">{{ formatUseDuration(row) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="寿命比对" min-width="30px" align="center" >
+      <el-table-column label="寿命比对" width="80px" align="center" >
         <template slot-scope="{row}">
           <span class="link-type" @click="handleCompare(row)"><svg-icon icon-class="compare"/></span>
         </template>

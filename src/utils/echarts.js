@@ -52,6 +52,8 @@ export const chartDialogProps = {
  * @param {Object} myChart
  */
 export function createChart(option, myChart) {
+  //设置颜色
+  option.color=colorList;
   myChart.clear();
   myChart.setOption(option, true);
   //自适应
@@ -147,6 +149,7 @@ export function createBarChart(data, myChart) {
     ];
   }
   let option = {
+    darkMode:true,
     title : {
         text: data.title,
         subtext: data.subTitle,
@@ -155,7 +158,6 @@ export function createBarChart(data, myChart) {
     tooltip : {
         trigger: 'axis'
     },
-    color: colorList,
     legend: {
         data:data.legendData,
         orient: 'horizontal',
@@ -257,7 +259,6 @@ export function createLineChart(data, myChart) {
           type: 'cross'
       }
     },
-    color: colorList,
     legend: {
       show:showLegend,
       data:data.legendData,
@@ -283,7 +284,6 @@ export function createLineChart(data, myChart) {
         saveAsImage: {}
       }
     },
-    //color: colorList,
     xAxis:  {
       type: 'category',
       boundaryGap: false,
@@ -395,7 +395,6 @@ export function createMixLineBarChart(data, myChart){
         position: 'top'
       }
     },
-    color: colorList,
     toolbox: {
       feature: {
         show:showToolbox,
@@ -518,7 +517,6 @@ export function createPieChart(data, myChart) {
         trigger: 'item',
         formatter: "{a} <br/>{b} : {c} "+unit+"({d}%)"
       },
-      color: colorList,
       legend: {
         show:showLegend,
         orient: 'vertical',
@@ -543,7 +541,6 @@ export function createDoublePieChart(data, myChart) {
       subtext: data.subTitle,
       x: 'center'
     },
-    color: colorList,
     toolbox: {
       show: false,
       feature: {
@@ -1578,7 +1575,6 @@ export function createTreeMapChart(data, myChart,echarts) {
       text: data.name,
       left: 'center'
     },
-    color: colorList,
     tooltip: {
       formatter: function(info) {
         let value = info.value;
@@ -1643,7 +1639,6 @@ export function createPolarBarChart(data, myChart) {
       text: data.title,
       x: 'center'
     },
-    color: colorList,
     radiusAxis: {},
     tooltip: {
       position: 'top',
@@ -1717,6 +1712,60 @@ export function createTreeChart(data, myChart,echarts) {
       animationDuration: 550,
       animationDurationUpdate: 750
     }]
+  };
+  createChart(option, myChart);
+}
+
+/**
+ * 堆积条形图
+ * @param {Object} data
+ * @param {Object} myChart
+ */
+export function createStaHorBarChart(data, myChart) {
+  const unit = data.unit==null ? '%':data.unit;
+  let seriesData = new Array();
+  for (let i = 0; i < data.ydata.length; i++) {
+    let serie = {
+      name: data.ydata[i].name,
+      type: 'bar',
+      stack: 'total',
+      label: {
+          show: true
+      },
+      emphasis: {
+          focus: 'series'
+      },
+      data: data.ydata[i].data
+    };
+    seriesData.push(serie);
+  }
+  let option = {
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: {            // Use axis to trigger tooltip
+          type: 'shadow'        // 'shadow' as default; can also be 'line' or 'shadow'
+      }
+    },
+    legend: {
+      data: data.legendData
+    },
+    grid: {
+      left: '3%',
+      right: '4%',
+      bottom: '3%',
+      containLabel: true
+    },
+    xAxis: {
+      type: 'value',
+      axisLabel: {
+        formatter: '{value}'+unit
+      }
+    },
+    yAxis: {
+      type: 'category',
+      data: data.xdata
+    },
+    series: seriesData
   };
   createChart(option, myChart);
 }
@@ -1863,6 +1912,11 @@ export function createShadowChart(data,myChart){
   createChart(option, myChart);
 }
 
+/**
+ * 旭日图
+ * @param {Object} chartData
+ * @param {Object} myChart
+ */
 export function createSunburstChart(chartData,myChart) {
   let colors = ['#FFAE57', '#FF7853', '#EA5151', '#CC3F57', '#9A2555', '#9B2655'];
   let bgColor = '#2E2733';

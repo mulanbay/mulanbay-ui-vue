@@ -128,7 +128,7 @@ export default {
       getDietCompare(this.addDateRange(this.queryParams, this.dateRange)).then(
         response => {
           //组装chart数据
-          response.chartType='BAR';
+          response.chartType='STA_HOR_BAR';
           this.chartData = response;
           this.loading.close();
         }
