@@ -37,7 +37,7 @@
           placeholder="统计分类"
           clearable
           size="small"
-          style="width: 240px"
+          style="width: 120px"
         >
           <el-option
             v-for="dict in dateGroupTypeOptions"
@@ -52,7 +52,7 @@
           v-model="queryParams.chartType"
           placeholder="图表类型"
           size="small"
-          style="width: 240px"
+          style="width: 120px"
           @change="handleQuery"
         >
           <el-option
@@ -102,16 +102,7 @@ export default {
       //统计分类
       dateGroupTypeOptions:[],
       //图表类型
-      chartTypeOptions:[
-        {
-          id: 'BAR',
-          text: '柱状图'
-        },
-        {
-          id: 'LINE',
-          text: '折线图'
-        }
-      ],
+      chartTypeOptions:[],
       //日期范围快速选择
       datePickerOptions:this.datePickerOptions,
       // 日期范围
@@ -119,7 +110,7 @@ export default {
       // 查询参数
       queryParams: {
         name: undefined,
-        chartType: 'BAR',
+        chartType: 'MIX_LINE_BAR',
         dateGroupType:'MONTH',
         compliteDate:true
       }
@@ -130,6 +121,9 @@ export default {
     this.getAccountTreeselect();
     this.getDictItemTree('CHART_DATE_GROUP',false).then(response => {
       this.dateGroupTypeOptions = response;
+    });
+    this.getDictItemTree('DATE_STAT_CHART_TYPE',false).then(response => {
+      this.chartTypeOptions = response;
     });
   },
   methods: {
@@ -156,10 +150,8 @@ export default {
           const chartType = this.queryParams.chartType;
           if(dateGroupType=='DAYCALENDAR'){
             response.chartType='CALANDER';
-          }else if(chartType=='BAR'){
-            response.chartType='BAR';
           }else{
-            response.chartType='LINE';
+            response.chartType=chartType;
           }
           this.chartData = response;
         }

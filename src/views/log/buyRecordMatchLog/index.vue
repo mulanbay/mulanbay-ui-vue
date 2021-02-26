@@ -79,8 +79,8 @@
       </el-table-column>
       <el-table-column label="数据比较" align="center" width="80">
         <template slot-scope="{row}">
-           <span @click="showCompare(row)">
-            <i class="el-icon-info" />
+           <span class="link-type" @click="showCompare(row)">
+            <svg-icon icon-class="compare" />
            </span>
         </template>
       </el-table-column>

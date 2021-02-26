@@ -104,7 +104,7 @@ export default {
           if(dateGroupType=='DAYCALENDAR'){
             response.chartType = 'CALANDER';
           }else{
-            response.chartType='BAR';
+            response.chartType='MIX_LINE_BAR';
           }
           this.chartData = response;
         }

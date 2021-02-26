@@ -143,7 +143,7 @@
       <el-table-column label="修改日志" align="center" width="80">
         <template slot-scope="{row}">
            <span v-if="row.idValue!=null" class="link-type" @click="showLogCompare(row)">
-            <i class="el-icon-info" />
+            <svg-icon icon-class="compare" />
            </span>
            <span v-else>--</span>
         </template>

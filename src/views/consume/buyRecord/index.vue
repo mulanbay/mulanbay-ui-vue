@@ -262,7 +262,7 @@
       <el-table-column label="购买日期" align="center" width="190">
         <template slot-scope="{row}">
           <span>{{ row.buyDate }}</span>
-          <span class="link-type" @click="handleCompare(row)"><i class="el-icon-info" /></span>
+          <span class="link-type" @click="handleCompare(row)"><svg-icon icon-class="compare" /></span>
         </template>
       </el-table-column>
       <el-table-column label="所属用户" v-if="familyMode=='F'" align="center" width="95">

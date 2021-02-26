@@ -143,9 +143,9 @@
           <span :style="{'color':getDaysColor(row.days)}">{{ formatUseDuration(row) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="寿命比对" min-width="80px" align="center" >
+      <el-table-column label="寿命比对" min-width="30px" align="center" >
         <template slot-scope="{row}">
-          <span class="link-type" @click="handleCompare(row)"><i class="el-icon-info" /></span>
+          <span class="link-type" @click="handleCompare(row)"><svg-icon icon-class="compare"/></span>
         </template>
       </el-table-column>
       <el-table-column label="买入价格" align="center" width="95">
@@ -158,7 +158,7 @@
           <span>{{ formatMoneyWithSymbal(row.soldPrice) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="折旧率" :show-overflow-tooltip="true">
+      <el-table-column label="折旧率" :show-overflow-tooltip="true"  align="center">
         <template slot-scope="{row}">
           <span>{{ formatDepreciation(row) }}</span>
         </template>

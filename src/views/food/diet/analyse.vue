@@ -103,10 +103,6 @@
       <el-form-item v-if="moreCdn==true" label="数据值:最低">
           <el-input-number v-model="queryParams.minCount" clearable :min="0" label="" style="width: 120px"></el-input-number>
       </el-form-item>
-      <el-form-item v-if="moreCdn==true" label="分页信息">
-          第<el-input-number v-model="queryParams.page" clearable :min="0" label="%" style="width: 120px"></el-input-number>页,
-          每页<el-input-number v-model="queryParams.pageSize" clearable :min="0" label="%" style="width: 120px"></el-input-number>条
-      </el-form-item>
       <el-form-item>
         <el-button type="stat" icon="el-icon-s-data" size="mini" @click="handleQuery" v-hasPermi="['food:diet:analyse']">统计</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -118,6 +114,15 @@
     <div>
       <common-chart :chartData="chartData"/>
     </div>
+
+    <pagination
+      v-show="total>0"
+      :total="total"
+      :page.sync="queryParams.page"
+      :limit.sync="queryParams.pageSize"
+      @pagination="initChart"
+    />
+
 
   </div>
 </template>
@@ -144,6 +149,8 @@ export default {
       chartData:{},
       // 加载层信息
       loading: [],
+      // 总条数(目前写死只能显示前200条)
+      total: 200,
       //加载层配置
       loadingOptions:this.loadingOptions,
       foodTypeOptions:[],

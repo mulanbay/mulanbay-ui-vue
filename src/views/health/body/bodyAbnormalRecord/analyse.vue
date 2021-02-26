@@ -57,7 +57,7 @@
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="名称"  fixed="left" min-width="160px" :show-overflow-tooltip="true">
+      <el-table-column label="名称"  fixed="left" min-width="120px" :show-overflow-tooltip="true">
         <template slot-scope="{row}">
           <span>{{ formatName(row) }}</span>
         </template>
