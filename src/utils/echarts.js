@@ -1,8 +1,8 @@
 /**
  * Created by fenghong on 2017/2/7.
  */
-const colorList = ['#284554', '#61a0a8', '#d48265', '#91c7ae', '#749f83',
-  '#ca8622', '#bda29a', '#6e7074', '#546570', '#c23531', '#8B0A50',
+const colorList = ['#284554', '#61a0a8', '#d48265', '#c23531', '#8B0A50', '#91c7ae', '#749f83',
+  '#ca8622', '#bda29a', '#6e7074', '#546570',
   '#080808', '#800000', '#006400', '#191970'
 ];
 
@@ -53,7 +53,7 @@ export const chartDialogProps = {
  */
 export function createChart(option, myChart) {
   //设置颜色
-  option.color=colorList;
+  //option.color=colorList;
   myChart.clear();
   myChart.setOption(option, true);
   //自适应
@@ -297,6 +297,83 @@ export function createLineChart(data, myChart) {
     },
     series: series
   };
+  createChart(option, myChart);
+}
+
+/**
+ * 堆叠面积图
+ * @param {Object} data
+ * @param {Object} myChart
+ */
+export function createStackedAreaChart(data, myChart) {
+  const unit = data.unit==null ? '':data.unit;
+  let smooth = data.smooth==null ? false : data.smooth;
+  let series =new Array();
+  const n = data.ydata.length;
+  for(let i=0;i<n;i++){
+    const showLabel = i==n-1 ? true:false;
+    let serie = {
+        name: data.ydata[i].name,
+        type: 'line',
+        smooth: smooth,
+        stack: '总量',
+        areaStyle: {},
+        emphasis: {
+            focus: 'series'
+        },
+        label: {
+            show: showLabel,
+            position: 'top'
+        },
+        data: data.ydata[i].data
+    };
+    series.push(serie);
+  }
+  let option = {
+    title: {
+      text: data.title,
+      subtext: data.subTitle
+    },
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: {
+          type: 'cross',
+          label: {
+              backgroundColor: '#6a7985'
+          }
+      }
+    },
+    legend: {
+      data:data.legendData
+    },
+    toolbox: {
+      feature: {
+        saveAsImage: {}
+      }
+    },
+    grid: {
+      left: '3%',
+      right: '4%',
+      bottom: '3%',
+      containLabel: true
+    },
+    xAxis: [
+      {
+        type: 'category',
+        boundaryGap: false,
+        data: data.xdata
+      }
+    ],
+    yAxis: [
+      {
+        type: 'value',
+        axisLabel: {
+          formatter: '{value}'+unit
+        }
+      }
+    ],
+    series: series
+};
   createChart(option, myChart);
 }
 
