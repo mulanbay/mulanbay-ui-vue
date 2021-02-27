@@ -55,7 +55,6 @@
     </el-form>
 
   <!--图表数据-->
-
   <div :id="id" :class="className" :style="{height:height,width:width,margin:0 }" />
   </div>
 

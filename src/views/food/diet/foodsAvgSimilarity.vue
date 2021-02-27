@@ -99,20 +99,20 @@
 
     <!--图表数据-->
     <div>
-      <common-chart :chartData="chartData"/>
+      <simi-chart :chartData="chartData"/>
     </div>
-
+  
   </div>
 </template>
 
 <script>
   import {getFoodsAvgSimilarity} from "@/api/food/diet";
-  import CommonChart from '../../chart/commonChart'
+  import SimiChart from '../../chart/simiChart'
 
 export default {
   name: "FoodsAvgSimilarity",
   components: {
-    'common-chart':CommonChart
+    'simi-chart':SimiChart
   },
   mounted() {
      //this.initChart();
@@ -200,14 +200,10 @@ export default {
       getFoodsAvgSimilarity(this.addDateRange(this.queryParams, this.dateRange)).then(
         response => {
           //组装chart数据
-          let avg = (response*100).toFixed(0);
-          let gaugeChartData={};
-          gaugeChartData.value = avg;
-          gaugeChartData.name = '重复度';
-          gaugeChartData.title='饮食多样性分析';
-          gaugeChartData.subTitle='饮食重复度:'+avg+'%';
-          this.chartData = gaugeChartData;
-          this.chartData.chartType='GAUGE';
+          this.chartData = {
+            avg:response,
+            title:'饮食重复度'
+          };
           this.loading.close();
         }
       );

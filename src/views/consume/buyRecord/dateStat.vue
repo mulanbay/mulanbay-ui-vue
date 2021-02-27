@@ -140,6 +140,7 @@
   <div>
     <common-chart :chartData="chartData"/>
   </div>
+  
 </div>
 </template>
 

@@ -10,7 +10,7 @@
   createTreeMapChart,createRadarChart,createCalanderChart,createLineChart,
   createScatterChart,createShadowChart,createDoublePieChart,
   createCompareCalanderChart,createCalanderPieChart,
-  createPolarBarChart,createTreeChart,createSunburstChart,createStaHorBarChart} from "@/utils/echarts";
+  createPolarBarChart,createTreeChart,createSunburstChart,createStaHorBarChart,createStackedAreaChart} from "@/utils/echarts";
   import {deepClone} from "@/utils/index";
   import resize from '../dashboard/mixins/resize.js'
 
@@ -137,6 +137,9 @@ export default {
         return;
       }else if(chartType=='STA_HOR_BAR'){
         createStaHorBarChart(newChartData,this.chart);
+        return;
+      }else if(chartType=='STACKED_AREA'){
+        createStackedAreaChart(newChartData,this.chart);
         return;
       }else{
         this.msgError('暂不支持的图形类型:'+chartType);

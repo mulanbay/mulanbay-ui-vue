@@ -115,7 +115,7 @@
 
     <!--图表数据-->
     <div>
-      <common-chart :chartData="chartData"/>
+      <simi-chart :chartData="chartData"/>
     </div>
 
   </div>
@@ -126,13 +126,12 @@
   import {getBuyRecordKeywordsTree,getBuyRecordGoodsNameAvgSimilarity} from "@/api/consume/buyRecord";
   import {getGoodsTypeTree} from "@/api/consume/goodsType";
   import {getBuyTypeTree} from "@/api/consume/buyType";
-  import {chartProps,createGaugeChart} from "@/utils/echarts";
-  import CommonChart from '../../chart/commonChart'
+  import SimiChart from '../../chart/simiChart'
 
 export default {
   name: "GoodsNameAvgSimilarity",
   components: {
-    'common-chart':CommonChart
+    'simi-chart':SimiChart
   },
   mounted() {
      this.initChart();
@@ -246,14 +245,11 @@ export default {
       getBuyRecordGoodsNameAvgSimilarity(this.addDateRange(this.queryParams, this.dateRange)).then(
         response => {
           //组装chart数据
-          var avg = (response*100).toFixed(0);
-          var gaugeChartData={};
-          gaugeChartData.value = avg;
-          gaugeChartData.name = '重复度';
-          gaugeChartData.title='商品多样性分析';
-          gaugeChartData.subTitle='商品重复度:'+avg+'%';
-          gaugeChartData.chartType='GAUGE';
-          this.chartData = gaugeChartData;
+          //组装chart数据
+          this.chartData = {
+            avg:response,
+            title:'商品重复度'
+          };
           this.loading.close();
         }
       );
