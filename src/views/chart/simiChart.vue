@@ -74,6 +74,10 @@ export default {
     /** 构建Option */
     createChartOption(avg,title){
       let option = {
+        title: {
+          text: title,
+          x: 'center'
+        },
         series: [{
           type: 'gauge',
           min: 0,

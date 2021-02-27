@@ -52,8 +52,10 @@ export const chartDialogProps = {
  * @param {Object} myChart
  */
 export function createChart(option, myChart) {
-  //设置颜色
+  //自定义颜色
   //option.color=colorList;
+  //深色模式
+  //option.backgroundColor='#0f375f';
   myChart.clear();
   myChart.setOption(option, true);
   //自适应
