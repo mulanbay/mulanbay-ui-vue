@@ -6,9 +6,7 @@
 
 <script>
   import * as echarts from 'echarts';
-  import {
-    createChart
-  } from "@/utils/echarts";
+  import {createChart} from "@/utils/echarts";
   import resize from '../../dashboard/mixins/resize.js'
 
   export default {
@@ -81,8 +79,11 @@
             left: 'center',
             align: 'right'
           },
-          grid: {
-            bottom: 80
+          grid: {//四周的宽度
+            left: '2%',
+            right: '3%',
+            bottom: '5%',
+            containLabel: true
           },
           toolbox: {
             feature: {
@@ -107,14 +108,14 @@
           dataZoom: [{
               show: true,
               realtime: true,
-              start: 65,
-              end: 85
+              start: 0,
+              end: 100
             },
             {
               type: 'inside',
               realtime: true,
-              start: 65,
-              end: 85
+              start: 0,
+              end: 100
             }
           ],
           xAxis: [{
