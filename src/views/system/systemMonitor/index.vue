@@ -82,7 +82,7 @@
   import {getSystemDetail,stat} from "@/api/system/systemMonitor";
   import {sendCmd} from "@/api/system/commandConfig";
   import GaugeChart from '../../chart/gauge'
-  import LineChart from '../../chart/mixLineBarChart'
+  import LineChart from './lineChart'
   import SystemDetail from './detail'
 
 export default {
