@@ -399,6 +399,7 @@ export function createMixLineBarChart(data, myChart){
   //显示右上角的菜单
   let showToolbox = data.showToolbox==null ? true : data.showToolbox;
   let showLegend = data.showLegend==null ? true : data.showLegend;
+  let smooth = data.smooth==null ? false : data.smooth;
   let markPoint={};
   if(showMarkPoint==true){
     markPoint={
@@ -443,6 +444,7 @@ export function createMixLineBarChart(data, myChart){
     let serie = {
       name: cd.name,
       type: type,
+      smooth: smooth,
       yAxisIndex: yAxisIndex,
       itemStyle:itemStyle,
       markPoint: markPoint,
