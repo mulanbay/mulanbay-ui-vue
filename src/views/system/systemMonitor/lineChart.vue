@@ -105,19 +105,6 @@
             data: this.chartData.legendData,
             left: 10
           },
-          dataZoom: [{
-              show: true,
-              realtime: true,
-              start: 0,
-              end: 100
-            },
-            {
-              type: 'inside',
-              realtime: true,
-              start: 0,
-              end: 100
-            }
-          ],
           xAxis: [{
             type: 'category',
             boundaryGap: false,

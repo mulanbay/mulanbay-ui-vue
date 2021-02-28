@@ -6,8 +6,6 @@
   import * as echarts from 'echarts';
   import {createPieChart} from "@/utils/echarts";
 
-require('echarts/theme/macarons') // echarts theme
-
 export default {
   props: {
     className: {
@@ -56,7 +54,6 @@ export default {
       if(this.chartData.height!=null){
         this.height = this.chartData.height;
       }
-      console.log('height:'+this.height);
       this.initChart();
     },
     initChart() {
