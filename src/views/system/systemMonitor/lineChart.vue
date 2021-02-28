@@ -97,10 +97,7 @@
             trigger: 'axis',
             axisPointer: {
               type: 'cross',
-              animation: false,
-              label: {
-                backgroundColor: '#505765'
-              }
+              animation: false
             }
           },
           legend: {
@@ -140,9 +137,9 @@
               nameLocation: 'start',
               type: 'value',
               axisLabel: {
-                formatter: '{value} '+this.chartData.yaxis[0].unit
+                formatter: '{value} '+this.chartData.yaxis[1].unit
               },
-              inverse: true
+              inverse: false
             }
           ],
           series: [{
