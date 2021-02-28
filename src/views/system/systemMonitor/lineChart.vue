@@ -122,12 +122,10 @@
             },
             {
               name: this.chartData.yaxis[1].name,
-              nameLocation: 'start',
               type: 'value',
               axisLabel: {
                 formatter: '{value} '+this.chartData.yaxis[1].unit
-              },
-              inverse: false
+              }
             }
           ],
           series: [{

@@ -313,7 +313,7 @@
   import {generalStat} from "@/api/main";
   import {statWithTreat} from "@/api/consume/buyRecord";
   import {getPercent} from "@/utils/mulanbay";
-  import PieChart from '../chart/pieChart'
+  import PieChart from './generalStatChart'
   import resize from './mixins/resize.js'
 
 export default {
@@ -417,7 +417,6 @@ export default {
       statWithTreat(para).then(
         response => {
           //组装chart数据
-          response.chartType='PIE';
           response.height = '700px';
           this.chartData = response;
           this.loading.close();
