@@ -217,12 +217,12 @@
       </el-table-column>
       <el-table-column label="困难等级" align="center" width="140">
         <template slot-scope="{row}">
-          <el-rate v-model="row.difficulty"></el-rate>
+          <el-rate v-model="row.difficulty" disabled></el-rate>
         </template>
       </el-table-column>
       <el-table-column label="重要等级" align="center" width="140">
         <template slot-scope="{row}">
-          <el-rate v-model="row.importantLevel"></el-rate>
+          <el-rate v-model="row.importantLevel" disabled></el-rate>
         </template>
       </el-table-column>
       <el-table-column label="预计花费天数" align="center" width="120">
@@ -315,7 +315,6 @@
              <el-rate
                v-model="form.difficulty"
                show-score
-               allow-half
                text-color="#ff9900"
                score-template="{value}">
              </el-rate>

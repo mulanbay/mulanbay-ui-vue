@@ -108,7 +108,7 @@
       </el-table-column>
       <el-table-column label="睡眠质量"  align="center" width="140">
         <template slot-scope="{row}">
-          <el-rate v-model="row.quality"></el-rate>
+          <el-rate v-model="row.quality" disabled show-text></el-rate>
         </template>
       </el-table-column>
       <el-table-column label="浅睡时长" align="center">
