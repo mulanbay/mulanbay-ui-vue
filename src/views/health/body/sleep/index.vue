@@ -106,9 +106,9 @@
           </span>
         </template>
       </el-table-column>
-      <el-table-column label="睡眠质量" align="center">
+      <el-table-column label="睡眠质量"  align="center" width="140">
         <template slot-scope="{row}">
-          <span>{{ row.quality }}</span>
+          <el-rate v-model="row.quality"></el-rate>
         </template>
       </el-table-column>
       <el-table-column label="浅睡时长" align="center">
@@ -180,8 +180,7 @@
           <el-rate
             v-model="form.quality"
             show-score
-            :max="10"
-            allow-half
+            :max="5"
             text-color="#ff9900"
             score-template="{value}">
           </el-rate>
@@ -295,7 +294,7 @@ export default {
         id: undefined,
         lightSleep: 0,
         deepSleep: 0,
-        quality:6
+        quality:3
       };
       this.resetForm("form");
     },

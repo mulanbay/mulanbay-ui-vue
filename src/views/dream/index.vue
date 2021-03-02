@@ -215,14 +215,14 @@
           <span>{{ row.emergencyScore }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="困难等级" align="center" width="80">
+      <el-table-column label="困难等级" align="center" width="140">
         <template slot-scope="{row}">
-          <span>{{ row.difficulty }}</span>
+          <el-rate v-model="row.difficulty"></el-rate>
         </template>
       </el-table-column>
-      <el-table-column label="重要等级" align="center" width="80">
+      <el-table-column label="重要等级" align="center" width="140">
         <template slot-scope="{row}">
-          <span>{{ row.importantLevel }}</span>
+          <el-rate v-model="row.importantLevel"></el-rate>
         </template>
       </el-table-column>
       <el-table-column label="预计花费天数" align="center" width="120">
