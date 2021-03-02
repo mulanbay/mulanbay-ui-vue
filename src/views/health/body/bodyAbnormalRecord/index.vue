@@ -208,7 +208,6 @@
              <el-rate
                v-model="form.painLevel"
                show-score
-               allow-half
                text-color="#ff9900"
                score-template="{value}">
              </el-rate>

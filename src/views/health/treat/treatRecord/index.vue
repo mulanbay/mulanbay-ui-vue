@@ -216,14 +216,14 @@
           <span class="link-type" @click="showFeeDetail(row)"><i class="el-icon-s-grid" /></span>
         </template>
       </el-table-column>
-      <el-table-column label="疼痛级别" align="center" width="95">
+      <el-table-column label="疼痛级别" align="center" width="140">
         <template slot-scope="{row}">
-          <span>{{ row.painLevel }}</span>
+          <el-rate v-model="row.painLevel" disabled show-text></el-rate>
         </template>
       </el-table-column>
-      <el-table-column label="重要等级" align="center" width="95">
+      <el-table-column label="重要等级" align="center" width="140">
         <template slot-scope="{row}">
-          <span>{{ row.importantLevel }}</span>
+          <el-rate v-model="row.importantLevel" disabled show-text></el-rate>
         </template>
       </el-table-column>
       <el-table-column label="门诊类型">
@@ -418,7 +418,6 @@
                <el-rate
                  v-model="form.painLevel"
                  show-score
-                 allow-half
                  :max="5"
                  text-color="#ff9900"
                  score-template="{value}">

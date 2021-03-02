@@ -185,9 +185,9 @@
           <span>{{ row.shop }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="评分" align="center">
+      <el-table-column label="评分" align="center" width="140">
         <template slot-scope="{row}">
-          <span>{{ row.score }}</span>
+          <el-rate v-model="row.score" disabled show-text></el-rate>
         </template>
       </el-table-column>
       <el-table-column label="价格" align="center">
@@ -203,11 +203,6 @@
       <el-table-column label="发生时间" align="center" width="180">
         <template slot-scope="{row}">
           <span>{{ row.occurTime }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="创建时间" align="center"  width="180">
-        <template slot-scope="{row}">
-          <span>{{ row.createdTime }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" fixed="right" width="150" class-name="small-padding fixed-width">

@@ -175,14 +175,9 @@
           </span>
         </template>
       </el-table-column>
-      <el-table-column label="评分" align="center" >
+      <el-table-column label="评分" align="center"  width="140">
         <template slot-scope="{row}">
-          <span v-if="row.score >=7">
-           <span style="color:red">{{ row.score }}</span>
-          </span>
-          <span v-else>
-           <span>{{ row.score }}</span>
-          </span>
+          <el-rate v-model="row.score" disabled show-text></el-rate>
         </template>
       </el-table-column>
       <el-table-column label="语言" align="center">
