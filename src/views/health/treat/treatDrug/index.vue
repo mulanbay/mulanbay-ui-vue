@@ -123,6 +123,15 @@
           v-hasPermi="['health:treat:treatDrugDetail:stat']"
         >用药统计</el-button>
       </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="stat"
+          icon="el-icon-date"
+          size="mini"
+          @click="handleCalendar"
+          v-hasPermi="['health:treat:treatDrug:calendar']"
+        >用药日历</el-button>
+      </el-col>
     </el-row>
 
     <!--列表数据-->
@@ -144,14 +153,14 @@
       <el-table-column label="明细" width="80" align="center">
         <template slot-scope="{row}">
           <span class="link-type" @click="handleAddDrugDetail(row)"><i class="el-icon-circle-plus"></i></span>
-          &nbsp;&nbsp;
+          <el-divider direction="vertical"></el-divider>
           <span class="link-type" @click="handleDetailList(row)"><i class="el-icon-s-grid" /></span>
         </template>
       </el-table-column>
       <el-table-column label="统计" width="80" align="center">
         <template slot-scope="{row}">
           <span class="link-type" @click="handleDetailCalendarStat(row)"><i class="el-icon-s-data" /></span>
-          &nbsp;&nbsp;
+          <el-divider direction="vertical"></el-divider>
           <span class="link-type" @click="handleDetailTimeStat(row)"><i class="el-icon-c-scale-to-original" /></span>
         </template>
       </el-table-column>
@@ -245,7 +254,7 @@
             @click="handleStop(scope.row)"
             v-if="scope.row.active == true"
             v-hasPermi="['health:treat:treatDrug:edit']"
-          >停药</el-button>
+          >暂停</el-button>
           <el-button
             size="mini"
             type="text"
@@ -474,6 +483,11 @@
       <treat-drug-detail-stat/>
     </el-dialog>
 
+    <!-- 用药日历 -->
+    <el-dialog :title="calendarTitle" width="600px" :visible.sync="calendarVisible" append-to-body customClass="customDialogCss">
+      <treat-drug-calendar/>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -485,6 +499,7 @@
   import TreatDrugDetailCalendarStat from '../treatDrugDetail/calendarStat'
   import TreatDrugDetailTimeStat from '../treatDrugDetail/timeStat'
   import TreatDrugDetailStat from '../treatDrugDetail/stat'
+  import TreatDrugCalendar from './calendar'
   import {getDay,getDayByDate,getNowDateString} from "@/utils/datetime";
   import {copyObject} from "@/utils/index";
 
@@ -496,7 +511,8 @@ export default {
     'treat-drug-detail-list':TreatDrugDetailList,
     'treat-drug-detail-calendar-stat':TreatDrugDetailCalendarStat,
     'treat-drug-detail-time-stat':TreatDrugDetailTimeStat,
-    'treat-drug-detail-stat':TreatDrugDetailStat
+    'treat-drug-detail-stat':TreatDrugDetailStat,
+    'treat-drug-calendar':TreatDrugCalendar
   },
   props: {
     //父层带过来的账户信息值
@@ -515,7 +531,9 @@ export default {
       open:false,
       //新增的按钮状态
       createDisable:true,
-
+      //用药日历
+      calendarTitle:undefined,
+      calendarVisible:false,
       //用药明细start
       drugDetailTitle:'',
       drugDetailVisible:false,
@@ -530,13 +548,13 @@ export default {
       drugDetailListVisible:false,
       //用药详情列表页面 end
 
-      //用药详情日历统计页面 start
-      drugDetailCalendarStatTitle:'',
-      drugDetailCalendarStatVisible:false,
       //给药品信息使用的外键
       treatDrugData:{
         treatDrugId:undefined
       },
+      //用药详情日历统计页面 start
+      drugDetailCalendarStatTitle:'',
+      drugDetailCalendarStatVisible:false,
       //用药详情日历统计页面 end
       //用药详情时间点统计页面 start
       drugDetailTimeStatTitle:'',
@@ -724,6 +742,11 @@ export default {
     handleDetailStat(){
       this.drugDetailStatTitle="用药统计",
       this.drugDetailStatVisible = true;
+    },
+    /** 用药日历操作 */
+    handleCalendar(){
+      this.calendarTitle="用药日历",
+      this.calendarVisible = true;
     },
     /** 增加用药详情编辑操作 */
     handleAddDrugDetail(row){

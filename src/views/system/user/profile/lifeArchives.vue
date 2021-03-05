@@ -75,7 +75,9 @@
               <span class="link-type" @click="handleUpdate(item)">
                 {{ item.title }}
               </span>
+              <el-divider direction="vertical"></el-divider>
               <el-tag>{{ item.dayDesc }}</el-tag>
+              <el-divider direction="vertical"></el-divider>
               <el-tag v-if="true==item.bmn" type="danger">本命年</el-tag>
               <el-button size="mini" type="text" style="color: red;float: right; padding: 3px 0" icon="el-icon-delete" @click="handleDelete(item)"
                 v-hasPermi="['life:lifeArchives:delete']">

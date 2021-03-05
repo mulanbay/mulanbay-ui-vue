@@ -125,7 +125,8 @@
       <el-table-column label="阅读明细" width="80" align="center">
         <template slot-scope="{row}">
           <span class="link-type" @click="handleDetailList(row)"><i class="el-icon-s-grid" /></span>
-          <span class="link-type" @click="handleCostTimes(row)"><i class="el-icon-s-data" /></span>
+          <el-divider direction="vertical"></el-divider>
+					<span class="link-type" @click="handleCostTimes(row)"><i class="el-icon-s-data" /></span>
         </template>
       </el-table-column>
       <el-table-column label="借入/购买日期" align="center" width="120">

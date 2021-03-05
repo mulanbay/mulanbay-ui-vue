@@ -51,7 +51,7 @@
     </el-form>
 
     <!--列表数据-->
-    <el-table v-loading="loading" :data="dataList" >
+    <el-table v-loading="loading" :data="dataList" :max-height="tableHeight">
       <el-table-column label="ID" prop="id" fixed="left" sortable="custom" align="center" width="80">
         <template slot-scope="{row}">
           <span>{{ row.id }}</span>
@@ -204,6 +204,8 @@ export default {
   name: "Analyse",
   data() {
     return {
+      //表格高度，固定表头使用
+      tableHeight:document.body.clientHeight - 180,
       // 遮罩层
       loading: true,
       // 选中数组

@@ -27,7 +27,8 @@ export default {
       //父层带过来的信息值
       treatForDrugDetailData:{
         id:undefined,
-        treatDrugId:undefined
+        treatDrugId:undefined,
+        occurTime:undefined
       },
   },
   data() {
@@ -36,7 +37,8 @@ export default {
       // 表单参数
       form: {
         id:undefined,
-        treatDrugId:undefined
+        treatDrugId:undefined,
+        occurTime:undefined
       },
       // 表单校验
       rules: {
@@ -61,6 +63,7 @@ export default {
       this.reset();
       this.form.id=data.id;
       this.form.treatDrugId=data.treatDrugId;
+      this.form.occurTime = data.occurTime;
       this.loadTreatDrugDetail(this.form.id);
       //console.log("receive data:"+JSON.stringify(this.form));
     },
@@ -95,14 +98,16 @@ export default {
           if (this.form.id != undefined) {
             updateTreatDrugDetail(this.form).then(response => {
               this.msgSuccess("修改成功");
+              this.$emit('closeMe');
+              this.$emit('refreshList');
             });
           } else {
             createTreatDrugDetail(this.form).then(response => {
               this.msgSuccess("新增成功");
+              this.$emit('closeMe');
+              this.$emit('refreshList');
             });
           }
-          this.$emit('closeMe');
-          this.$emit('refreshList');
         }
       });
     }
