@@ -155,7 +155,19 @@ export default {
       getWorkOvertimeDateStat(this.addDateRange(this.queryParams, this.dateRange)).then(
         response => {
           //组装chart数据
-          response.chartType=this.queryParams.chartType;
+          const chartType = this.queryParams.chartType;
+          switch (this.queryParams.dateGroupType) {
+            case 'DAYCALENDAR':
+              //日历图
+              response.chartType = 'CALANDER';
+              break;
+            case 'HOURMINUTE':
+            //散点图
+              response.chartType = 'SCATTER';
+              break;
+            default:
+              response.chartType=chartType;
+          }
           this.chartData = response;
           this.loading.close();
         }

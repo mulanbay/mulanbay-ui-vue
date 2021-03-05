@@ -95,6 +95,8 @@ export default {
   },
   data() {
     return {
+      //加载层配置
+      loadingOptions: this.loadingOptions,
       //图表数据
       chartData:{},
       //账户列表
@@ -142,18 +144,31 @@ export default {
       this.resetForm("queryForm");
       this.initChart();
     },
+    // 打开加载层
+    openLoading() {
+      this.loading = this.$loading(this.loadingOptions);
+    },
     initChart() {
+      this.openLoading();
       getIncomeDateStat(this.addDateRange(this.queryParams, this.dateRange)).then(
         response => {
           //组装chart数据
           const dateGroupType = this.queryParams.dateGroupType;
           const chartType = this.queryParams.chartType;
-          if(dateGroupType=='DAYCALENDAR'){
-            response.chartType='CALANDER';
-          }else{
-            response.chartType=chartType;
+          switch (this.queryParams.dateGroupType) {
+            case 'DAYCALENDAR':
+              //日历图
+              response.chartType = 'CALANDER';
+              break;
+            case 'HOURMINUTE':
+            //散点图
+              response.chartType = 'SCATTER';
+              break;
+            default:
+              response.chartType=chartType;
           }
           this.chartData = response;
+          this.loading.close();
         }
       );
     }

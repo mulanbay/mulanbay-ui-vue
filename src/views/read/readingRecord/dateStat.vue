@@ -137,6 +137,15 @@ export default {
         response => {
           //组装chart数据
           response.chartType=this.queryParams.chartType;
+          const chartType = this.queryParams.chartType;
+          switch (this.queryParams.dateGroupType) {
+            case 'HOURMINUTE':
+            //散点图
+              response.chartType = 'SCATTER';
+              break;
+            default:
+              response.chartType=chartType;
+          }
           this.chartData = response;
           this.loading.close();
         }

@@ -160,6 +160,8 @@ export default {
   },
   data() {
     return {
+      //加载层配置
+      loadingOptions: this.loadingOptions,
       //图表数据
       chartData:{},
       //运动类型
@@ -226,13 +228,19 @@ export default {
       this.resetForm("queryForm");
       this.initChart();
     },
+    // 打开加载层
+    openLoading() {
+      this.loading = this.$loading(this.loadingOptions);
+    },
     initChart() {
+      this.openLoading();
       getTreatRecordAnalyseStat(this.addDateRange(this.queryParams, this.dateRange)).then(
         response => {
           //组装chart数据
           const chartType = this.queryParams.chartType;
           response.chartType=chartType;
           this.chartData = response;
+          this.loading.close();
         }
       );
     }

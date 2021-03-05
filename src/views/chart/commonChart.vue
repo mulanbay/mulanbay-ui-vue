@@ -85,64 +85,66 @@ export default {
        * 主要是createCalanderChart
        */
       let newChartData = deepClone(this.chartData);
-      if(chartType=='PIE'){
-        createPieChart(newChartData,this.chart);
-        return;
-      }else if(chartType=='DOUBLE_PIE'){
-        createDoublePieChart(newChartData,this.chart);
-        return;
-      }else if(chartType=='BAR'){
-        createBarChart(newChartData,this.chart);
-        return;
-      }else if(chartType=='MIX_LINE_BAR'){
-        createMixLineBarChart(newChartData,this.chart);
-        return;
-      }else if(chartType=='TREE_MAP'){
-        createTreeMapChart(newChartData,this.chart,echarts);
-        return;
-      }else if(chartType=='CALANDER'){
-        createCalanderChart(newChartData,this.chart);
-        return;
-      }else if(chartType=='CALANDER_HEAT_MAP'){
-        createCalanderHeatMapChart(newChartData,this.chart,echarts);
-        return;
-      }else if(chartType=='RADAR'){
-        createRadarChart(newChartData,this.chart);
-        return;
-      }else if(chartType=='LINE'){
-        createLineChart(newChartData,this.chart);
-      }else if(chartType=='GAUGE'){
-        createGaugeChart(newChartData,this.chart);
-        return;
-      }else if(chartType=='SCATTER'){
-        createScatterChart(newChartData,this.chart);
-        return;
-      }else if(chartType=='SHADOW'){
-        createShadowChart(newChartData,this.chart);
-        return;
-      }else if(chartType=='COMPARE_CALANDER'){
-        createCompareCalanderChart(newChartData,this.chart);
-        return;
-      }else if(chartType=='CALANDER_PIE'){
-        createCalanderPieChart(newChartData,this.chart,echarts);
-        return;
-      }else if(chartType=='POLAR_BAR'){
-        createPolarBarChart(newChartData,this.chart);
-        return;
-      }else if(chartType=='TREE'){
-        createTreeChart(newChartData,this.chart,echarts);
-        return;
-      }else if(chartType=='SUNBURST'){
-        createSunburstChart(newChartData,this.chart);
-        return;
-      }else if(chartType=='STA_HOR_BAR'){
-        createStaHorBarChart(newChartData,this.chart);
-        return;
-      }else if(chartType=='STACKED_AREA'){
-        createStackedAreaChart(newChartData,this.chart);
-        return;
-      }else{
-        this.msgError('暂不支持的图形类型:'+chartType);
+      switch (chartType) {
+        case 'PIE':
+          createPieChart(newChartData,this.chart);
+          break;
+        case 'DOUBLE_PIE':
+          createDoublePieChart(newChartData,this.chart);
+          break;
+        case 'BAR':
+          createBarChart(newChartData,this.chart);
+          break;
+        case 'MIX_LINE_BAR':
+          createMixLineBarChart(newChartData,this.chart);
+          break;
+        case 'TREE_MAP':
+          createTreeMapChart(newChartData,this.chart,echarts);
+          break;
+        case 'CALANDER':
+          createCalanderChart(newChartData,this.chart);
+          break;
+        case 'CALANDER_HEAT_MAP':
+          createCalanderHeatMapChart(newChartData,this.chart,echarts);
+          break;
+        case 'RADAR':
+          createRadarChart(newChartData,this.chart);
+          break;
+        case 'LINE':
+          createLineChart(newChartData,this.chart);
+          break;
+        case 'GAUGE':
+          createGaugeChart(newChartData,this.chart);
+          break;
+        case 'SCATTER':
+          createScatterChart(newChartData,this.chart);
+          break;
+        case 'SHADOW':
+          createShadowChart(newChartData,this.chart);
+          break;
+        case 'COMPARE_CALANDER':
+          createCompareCalanderChart(newChartData,this.chart);
+          break;
+        case 'CALANDER_PIE':
+          createCalanderPieChart(newChartData,this.chart,echarts);
+          break;
+        case 'POLAR_BAR':
+          createPolarBarChart(newChartData,this.chart);
+          break;
+        case 'TREE':
+          createTreeChart(newChartData,this.chart,echarts);
+          break;
+        case 'SUNBURST':
+          createSunburstChart(newChartData,this.chart);
+          break;
+        case 'STA_HOR_BAR':
+          createStaHorBarChart(newChartData,this.chart);
+          break;
+        case 'STACKED_AREA':
+          createStackedAreaChart(newChartData,this.chart);
+          break;
+        default:
+          this.msgError('暂不支持的图形类型:'+chartType);
       }
     }
   }

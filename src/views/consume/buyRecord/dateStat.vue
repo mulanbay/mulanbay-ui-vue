@@ -140,7 +140,7 @@
   <div>
     <common-chart :chartData="chartData"/>
   </div>
-  
+
 </div>
 </template>
 
@@ -275,10 +275,17 @@ export default {
         response => {
           const dateGroupType = this.queryParams.dateGroupType;
           const chartType = this.queryParams.chartType;
-          if(dateGroupType=='DAYCALENDAR'){
-            response.chartType = 'CALANDER';
-          }else{
-            response.chartType=chartType;
+          switch (this.queryParams.dateGroupType) {
+            case 'DAYCALENDAR':
+              //日历图
+              response.chartType = 'CALANDER';
+              break;
+            case 'HOURMINUTE':
+            //散点图
+              response.chartType = 'SCATTER';
+              break;
+            default:
+              response.chartType=chartType;
           }
           this.chartData = response;
           this.loading.close();

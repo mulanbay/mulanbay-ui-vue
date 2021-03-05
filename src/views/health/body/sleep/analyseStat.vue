@@ -75,6 +75,8 @@ export default {
   },
   data() {
     return {
+      //加载层配置
+      loadingOptions: this.loadingOptions,
       //图表数据
       chartData:{},
       xgroupTypeOptions:[],
@@ -109,13 +111,19 @@ export default {
       this.resetForm("queryForm");
       this.initChart();
     },
+    // 打开加载层
+    openLoading() {
+      this.loading = this.$loading(this.loadingOptions);
+    },
     initChart() {
+      this.openLoading();
       getSleepAnalyseStat(this.addDateRange(this.queryParams, this.dateRange)).then(
         response => {
           //组装chart数据
           response.chartType='SCATTER';
           response.dateGroup=this.queryParams.xgroupType;
           this.chartData = response;
+          this.loading.close();
         }
       );
     }

@@ -141,6 +141,8 @@ export default {
       cdnTitle:'更多',
       moreCdn:false,
       //查询条件更多属性 end
+      //加载层配置
+      loadingOptions: this.loadingOptions,
       //图表数据
       chartData:{},
       //运动类型
@@ -202,18 +204,31 @@ export default {
       this.resetForm("queryForm");
       this.initChart();
     },
+    // 打开加载层
+    openLoading() {
+      this.loading = this.$loading(this.loadingOptions);
+    },
     initChart() {
+      this.openLoading();
       getTreatRecordDateStat(this.addDateRange(this.queryParams, this.dateRange)).then(
         response => {
           //组装chart数据
           const dateGroupType = this.queryParams.dateGroupType;
           const chartType = this.queryParams.chartType;
-          if(dateGroupType=='DAYCALENDAR'){
-            response.chartType = 'CALANDER';
-          }else{
-            response.chartType=chartType;
+          switch (this.queryParams.dateGroupType) {
+            case 'DAYCALENDAR':
+              //日历图
+              response.chartType = 'CALANDER';
+              break;
+            case 'HOURMINUTE':
+            //散点图
+              response.chartType = 'SCATTER';
+              break;
+            default:
+              response.chartType=chartType;
           }
           this.chartData = response;
+          this.loading.close();
         }
       );
     }

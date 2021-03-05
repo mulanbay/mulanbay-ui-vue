@@ -1120,7 +1120,7 @@ export function createCalanderHeatMapChart(data, myChart,echarts) {
 }
 
 /**
- * 日历热点图
+ * 散点图
  * @param {Object} data
  * @param {Object} myChart
  */
@@ -1172,21 +1172,6 @@ export function createScatterChart(data, myChart) {
           {
             type: 'min',
             name: '最小值'
-          }
-        ]
-      },
-      markLine: {
-        lineStyle: {
-          normal: {
-            type: 'solid'
-          }
-        },
-        data: [{
-            type: 'average',
-            name: '平均值'
-          },
-          {
-            xAxis: data.seriesDatas[i].xAxisAverage
           }
         ]
       }

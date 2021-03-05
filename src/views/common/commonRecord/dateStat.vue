@@ -159,10 +159,17 @@ export default {
         response => {
           //组装chart数据
           const dateGroupType = this.queryParams.dateGroupType;
-          if(dateGroupType=='DAYCALENDAR'){
-            response.chartType = 'CALANDER';
-          }else{
-            response.chartType='MIX_LINE_BAR';
+          switch (this.queryParams.dateGroupType) {
+            case 'DAYCALENDAR':
+              //日历图
+              response.chartType = 'CALANDER';
+              break;
+            case 'HOURMINUTE':
+            //散点图
+              response.chartType = 'SCATTER';
+              break;
+            default:
+              response.chartType='MIX_LINE_BAR';
           }
           this.chartData = response;
           this.loading.close();
