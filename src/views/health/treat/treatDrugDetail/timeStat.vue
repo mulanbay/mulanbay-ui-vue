@@ -1,36 +1,26 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true">
-      <el-form-item label="统计类型" prop="dateGroupType">
-        <el-radio-group v-model="queryParams.dateGroupType">
-          <el-radio label="YEAR">年</el-radio>
-          <el-radio label="MONTH">月</el-radio>
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item v-if="queryParams.dateGroupType == 'YEAR'" label="选择年份">
+      <el-form-item label="用药日期">
         <el-date-picker
-          v-model="queryParams.year"
-          type="year"
-          value-format="yyyy"
-          style="width: 120px"
-          placeholder="选择年">
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item v-if="queryParams.dateGroupType == 'MONTH'" label="选择月份">
-        <el-date-picker
-          v-model="queryParams.yearMonth"
-          type="month"
-          value-format="yyyy-MM"
-          style="width: 120px"
-          placeholder="选择月份">
-        </el-date-picker>
+          v-model="dateRange"
+          size="small"
+          style="width: 240px"
+          value-format="yyyy-MM-dd"
+          type="daterange"
+          unlink-panels
+          range-separator="-"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          :picker-options="datePickerOptions"
+        ></el-date-picker>
       </el-form-item>
       <el-form-item label="合并相同药名" prop="mergeSameName">
         <el-switch v-model="queryParams.mergeSameName"  @change="handleQuery"></el-switch>
         <span class="link-type" @click="msgAlert('提示','合并相同药名：多次看病记录有相同药品名称的药合并在一起统计。否则只统计该次看病记录中该药品的记录')"><i class="el-icon-question" /></span>
       </el-form-item>
       <el-form-item>
-        <el-button type="stat" icon="el-icon-s-data" size="mini" @click="handleQuery" v-hasPermi="['health:treat:treatDrugDetail:calendarStat']">统计</el-button>
+        <el-button type="stat" icon="el-icon-s-data" size="mini" @click="handleQuery" v-hasPermi="['health:treat:treatDrugDetail:timeStat']">统计</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
@@ -43,16 +33,13 @@
 </template>
 
 <script>
-  import {getTreatDrugDetailCalendarStat} from "@/api/health/treat/treatDrugDetail";
-  import {chartProps,createCalanderPieChart,createCalanderChart} from "@/utils/echarts";
-  import Treeselect from "@riophae/vue-treeselect";
-  import "@riophae/vue-treeselect/dist/vue-treeselect.css";
-
+  import {getTreatDrugDetailTimeStat} from "@/api/health/treat/treatDrugDetail";
+  import {chartProps,createScatterChart} from "@/utils/echarts";
   import * as echarts from 'echarts';
   import resize from '../../../dashboard/mixins/resize.js'
 
 export default {
-  name: "CalendarStat",
+  name: "TimeStat",
   mixins: [resize],
   props: {
     //父层带过来的账户信息值
@@ -93,11 +80,13 @@ export default {
       //加载层配置
       loadingOptions:this.loadingOptions,
       chart: null,
+			//日期范围快速选择
+			datePickerOptions:this.datePickerOptions,
+			// 日期范围
+			dateRange: this.getYearDateRange(0),
       // 查询参数
       queryParams: {
-        dateGroupType:'MONTH',
-        yearMonth:(new Date()).Format("yyyy-MM"),
-        mergeSameName:true
+        mergeSameName:false
       }
     };
   },
@@ -131,25 +120,13 @@ export default {
     },
     initChart() {
       this.openLoading();
-      const dateGroupType = this.queryParams.dateGroupType;
-      if(dateGroupType=='MONTH'){
-        let v = this.queryParams.yearMonth;
-        this.queryParams.year = v.substring(0,4);
-        this.queryParams.month = v.substring(5,7);
-      }else{
-        this.queryParams.month = undefined;
-      }
-      getTreatDrugDetailCalendarStat(this.queryParams).then(
+      getTreatDrugDetailTimeStat(this.addDateRange(this.queryParams, this.dateRange)).then(
         response => {
           //组装chart数据
           if(this.chart==null){
             this.chart = echarts.init(document.getElementById(this.id));
           }
-          if(dateGroupType=='YEAR'){
-            createCalanderChart(response,this.chart);
-          }else{
-            createCalanderPieChart(response,this.chart,echarts);
-          }
+          createScatterChart(response,this.chart);
           this.loading.close();
         }
       );

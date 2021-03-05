@@ -1228,8 +1228,8 @@ export function createScatterChart(data, myChart) {
     legend: {
       data: data.legendData,
       orient: 'horizontal',
-      x: 'center',
-      y: 'bottom'
+      x: 'left',
+      y: 'left'
     },
     xAxis: [{
       type: 'value',

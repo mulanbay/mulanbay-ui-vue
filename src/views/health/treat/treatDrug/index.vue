@@ -135,22 +135,27 @@
       </el-table-column>
       <el-table-column label="药品名" width="250" :show-overflow-tooltip="true">
         <template slot-scope="{row}">
-          <span v-if="row.eating == true">
-           <el-tag type="danger">吃药中</el-tag>
+          <span v-if="row.active == true">
+           <el-tag type="danger">用药中</el-tag>
           </span>
           <span class="link-type" @click="handleUpdate(row)">{{ row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="用药明细" width="100" align="center">
+      <el-table-column label="明细" width="80" align="center">
         <template slot-scope="{row}">
           <span class="link-type" @click="handleAddDrugDetail(row)"><i class="el-icon-circle-plus"></i></span>
-          &nbsp;
+          &nbsp;&nbsp;
           <span class="link-type" @click="handleDetailList(row)"><i class="el-icon-s-grid" /></span>
-          &nbsp;
-          <span class="link-type" @click="handleDetailCalendarStat(row)"><i class="el-icon-s-data" /></span>
         </template>
       </el-table-column>
-      <el-table-column label="用药频率" align="center" width="100">
+      <el-table-column label="统计" width="80" align="center">
+        <template slot-scope="{row}">
+          <span class="link-type" @click="handleDetailCalendarStat(row)"><i class="el-icon-s-data" /></span>
+          &nbsp;&nbsp;
+          <span class="link-type" @click="handleDetailTimeStat(row)"><i class="el-icon-c-scale-to-original" /></span>
+        </template>
+      </el-table-column>
+      <el-table-column label="频率" align="center" width="100">
         <template slot-scope="{row}">
           <span>{{ row.perDay+'天' }}</span>
           <el-tag type="danger">{{ row.perTimes }}</el-tag>
@@ -183,7 +188,7 @@
       </el-table-column>
       <el-table-column label="看病日期" width="110" :show-overflow-tooltip="true">
         <template slot-scope="{row}">
-          <span>{{ formatTreatDate(row) }}</span>
+          <span>{{ row.treatDate }}</span>
         </template>
       </el-table-column>
       <el-table-column label="数量" :show-overflow-tooltip="true">
@@ -236,10 +241,19 @@
           <el-button
             size="mini"
             type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
+            icon="el-icon-circle-close"
+            @click="handleStop(scope.row)"
+            v-if="scope.row.active == true"
             v-hasPermi="['health:treat:treatDrug:edit']"
-          >修改</el-button>
+          >停药</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-circle-check"
+            v-if="scope.row.active == false"
+            @click="handleReOpen(scope.row)"
+            v-hasPermi="['health:treat:treatDrug:edit']"
+          >启用</el-button>
           <el-button
             size="mini"
             type="text"
@@ -444,7 +458,14 @@
     <!-- 用药日历统计页面 -->
     <el-dialog :title="drugDetailCalendarStatTitle" width="800px" :visible.sync="drugDetailCalendarStatVisible"  append-to-body>
       <treat-drug-detail-calendar-stat
-        :treatForDrugDetailCalendarStatData="treatForDrugDetailCalendarStatData"
+        :treatDrugData="treatDrugData"
+      />
+    </el-dialog>
+
+    <!-- 用药时间点统计页面 -->
+    <el-dialog :title="drugDetailTimeStatTitle" width="800px" :visible.sync="drugDetailTimeStatVisible"  append-to-body>
+      <treat-drug-detail-time-stat
+        :treatDrugData="treatDrugData"
       />
     </el-dialog>
 
@@ -462,8 +483,9 @@
   import TreatDrugDetailDetail from '../treatDrugDetail/detail'
   import TreatDrugDetailList from '../treatDrugDetail/index'
   import TreatDrugDetailCalendarStat from '../treatDrugDetail/calendarStat'
+  import TreatDrugDetailTimeStat from '../treatDrugDetail/timeStat'
   import TreatDrugDetailStat from '../treatDrugDetail/stat'
-  import {getDay} from "@/utils/datetime";
+  import {getDay,getDayByDate,getNowDateString} from "@/utils/datetime";
   import {copyObject} from "@/utils/index";
 
 
@@ -473,6 +495,7 @@ export default {
     'treat-drug-detail-detail':TreatDrugDetailDetail,
     'treat-drug-detail-list':TreatDrugDetailList,
     'treat-drug-detail-calendar-stat':TreatDrugDetailCalendarStat,
+    'treat-drug-detail-time-stat':TreatDrugDetailTimeStat,
     'treat-drug-detail-stat':TreatDrugDetailStat
   },
   props: {
@@ -509,12 +532,16 @@ export default {
 
       //用药详情日历统计页面 start
       drugDetailCalendarStatTitle:'',
+      drugDetailCalendarStatVisible:false,
       //给药品信息使用的外键
-      treatForDrugDetailCalendarStatData:{
+      treatDrugData:{
         treatDrugId:undefined
       },
-      drugDetailCalendarStatVisible:false,
       //用药详情日历统计页面 end
+      //用药详情时间点统计页面 start
+      drugDetailTimeStatTitle:'',
+      drugDetailTimeStatVisible:false,
+      //用药详情时间点统计页面 end
 
       //用药详情统计页面 start
       drugDetailStatTitle:'',
@@ -622,23 +649,6 @@ export default {
     refreshDrug(){
       //目前什么也不做
     },
-    /** 商品名称 */
-    formatTreatDate(row) {
-      //先计算出days供下面的方法使用
-      if(!this.isObjectEmpty(row.beginDate)&&!this.isObjectEmpty(row.endDate)){
-        const nowTime = new Date();
-        const bd = new Date(Date.parse(row.beginDate.replace(/-/g,"/")));
-        const ed = new Date(Date.parse(row.endDate.replace(/-/g,"/")));
-        const s1 = parseInt(bd - nowTime);
-        const s2 = parseInt(ed - nowTime);
-        if(s1<0&&s2>0){
-          row.eating = true;
-        }else{
-          row.eating = false;
-        }
-      }
-      return row.treatDate;
-    },
     /** 初始化下拉树结构 */
     initOptionList(){
       getTreatDrugCategoryTree('name',false).then(response => {
@@ -672,6 +682,23 @@ export default {
       fetchList(this.queryParams).then(
         response => {
           this.treatDrugList = response.rows;
+          const n = this.treatDrugList.length;
+          const nowTime = new Date(Date.parse(getNowDateString().replace(/-/g,"/")));
+          for(let i=0;i<n;i++){
+            let row = this.treatDrugList[i];
+            //先计算出days供下面的方法使用
+            if(!this.isObjectEmpty(row.beginDate)&&!this.isObjectEmpty(row.endDate)){
+              const bd = new Date(Date.parse(row.beginDate.replace(/-/g,"/")));
+              const ed = new Date(Date.parse(row.endDate.replace(/-/g,"/")));
+              const s1 = parseInt(bd - nowTime);
+              const s2 = parseInt(ed - nowTime);
+              if(s1<0&&s2>=0){
+                row.active = true;
+              }else{
+                row.active = false;
+              }
+            }
+          }
           this.total = response.total;
           this.loading = false;
         }
@@ -718,7 +745,15 @@ export default {
     handleDetailCalendarStat(row){
       this.drugDetailCalendarStatVisible = true;
       this.drugDetailCalendarStatTitle = "("+row.name+")"+"用药统计分析";
-      this.treatForDrugDetailCalendarStatData = Object.assign({}, this.treatForDrugDetailCalendarStatData, {
+      this.treatDrugData = Object.assign({}, this.treatDrugData, {
+        treatDrugId: row.id
+      });
+    },
+    /** 用药详情时间点统计操作 */
+    handleDetailTimeStat(row){
+      this.drugDetailTimeStatVisible = true;
+      this.drugDetailTimeStatTitle = "("+row.name+")"+"用药时间点分析";
+      this.treatDrugData = Object.assign({}, this.treatDrugData, {
         treatDrugId: row.id
       });
     },
@@ -796,6 +831,44 @@ export default {
           }
         }
       });
+    },
+    /** 启用操作 */
+    handleReOpen(row) {
+      let formData = row;
+      let that = this;
+      this.$confirm('是否要重新启用[' + formData.name + ']药品?默认药品结束使用时间为今天的后两个星期', "警告", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+      }).then(function() {
+        formData.treatRecordId = formData.treatRecord.id;
+        //设置用药结束时间为当期时间+两个星期
+        const newDate = getDayByDate(14,getNowDateString());
+        formData.endDate = newDate;
+        updateTreatDrug(formData).then(response => {
+          that.getList();
+          that.msgSuccess("启用成功");
+        });
+      })
+    },
+    /** 停药操作 */
+    handleStop(row) {
+      let formData = row;
+      let that = this;
+      this.$confirm('是否要停止服用[' + formData.name + ']药品?', "警告", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+      }).then(function() {
+        formData.treatRecordId = formData.treatRecord.id;
+        //设置用药结束时间为昨天
+        const newDate = getDayByDate(-1,getNowDateString());
+        formData.endDate = newDate;
+        updateTreatDrug(formData).then(response => {
+          that.getList();
+          that.msgSuccess("停药成功");
+        });
+      })
     },
     /** 新增按钮操作 */
     handleCreate() {

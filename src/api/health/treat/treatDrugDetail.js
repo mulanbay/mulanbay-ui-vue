@@ -58,3 +58,11 @@ export function getTreatDrugDetailStat(query) {
     params: query
   })
 }
+
+export function getTreatDrugDetailTimeStat(query) {
+  return request({
+    url: '/treatDrugDetail/timeStat',
+    method: 'get',
+    params: query
+  })
+}

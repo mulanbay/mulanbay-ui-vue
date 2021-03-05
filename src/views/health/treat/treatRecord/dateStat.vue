@@ -221,7 +221,7 @@ export default {
               response.chartType = 'CALANDER';
               break;
             case 'HOURMINUTE':
-            //散点图
+              //散点图
               response.chartType = 'SCATTER';
               break;
             default:
