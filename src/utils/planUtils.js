@@ -83,39 +83,7 @@ export function dispatchCommonStat(beanName,router) {
  * @param {Object} bussType
  */
 export function getBussIconClass(bussType) {
-  if(bussType=='BUY'||bussType=='BUY_RECORD'){
-    return 'consume';
-  }else if(bussType=='MUSIC'){
-    return 'music';
-  }else if(bussType=='DREAM'){
-    return 'dream';
-  }else if(bussType=='LIFE_EXPERIENCE'||bussType=='LIFE'){
-    return 'life';
-  }else if(bussType=='MUSIC_PRACTICE'){
-    return 'music';
-  }else if(bussType=='READING_RECORD'||bussType=='READ'){
-    return 'education';
-  }else if(bussType=='SPORT_EXERCISE'){
-    return 'sport';
-  }else if(bussType=='TREAT_RECORD'){
-    return 'treat';
-  }else if(bussType=='HEALTH'){
-    return 'health';
-  }else if(bussType=='COMMON_RECORD'||bussType=='COMMON'){
-    return 'common';
-  }else if(bussType=='DIARY'){
-    return 'el-icon-files';
-  }else if(bussType=='WORK_OVER_TIME'){
-    return 'workout';
-  }else if(bussType=='WORK'){
-    return 'work';
-  }else if(bussType=='SLEEP'){
-    return 'sleep';
-  }else if(bussType=='DIET'){
-    return 'food';
-  }else if(bussType=='FUND'){
-    return 'fund';
-  }else{
-    return 'icon';
-  }
+  let b = bussType.toLowerCase();
+  const sa = b.split("_"); //分割
+  return sa[0];
 }
