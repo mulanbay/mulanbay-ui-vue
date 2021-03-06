@@ -40,10 +40,16 @@
                   删除
                 </el-button>
                 <el-divider direction="vertical"></el-divider>
-                <el-button size="mini" type="text" style="color: royalblue;float: right; padding: 3px 0" icon="el-icon-close" @click="finishUserCalendar(item)"
+                <el-button size="mini" type="text" style="color: darkmagenta;float: right; padding: 3px 0" icon="el-icon-close" @click="finishUserCalendar(item)"
                   v-if="'ONCE'==item.period"
                   v-hasPermi="['data:userCalendar:finish']">
                   关闭
+                </el-button>
+                <el-divider direction="vertical"></el-divider>
+                <el-button size="mini" type="text" style="color: royalblue;float: right; padding: 3px 0" icon="el-icon-info" @click="showMessageDetail(item)"
+                  v-if="item.messageId!=null"
+                  v-hasPermi="['data:userCalendar:finish']">
+                  源消息
                 </el-button>
               </div>
               <div>
@@ -79,6 +85,7 @@
 
 <script>
   import { getList as getDailyCalendarList,sendCalendarMessage,finishUserCalendar,deleteUserCalendar } from '@/api/data/userCalendar'
+  import {getUserMessageByUser} from "@/api/log/userMessage";
   import {getNowDateString,getNowDateTimeString,getDayByDate,tillNowDays} from "@/utils/datetime";
 
 export default {
@@ -135,6 +142,18 @@ export default {
             this.bussDayTitle=(0-days)+'天前,'+this.bussDay.substr(5,5);
           }
       }
+    },
+    /** 源消息内容 */
+    showMessageDetail(row){
+      getUserMessageByUser(row.messageId).then(
+        response => {
+          if(response==null){
+            this.msgError('未找到相关消息内容');
+          }else{
+            this.msgAlert(response.title, response.content);
+          }
+        }
+      );
     },
     /** 查询列表 */
     getList() {

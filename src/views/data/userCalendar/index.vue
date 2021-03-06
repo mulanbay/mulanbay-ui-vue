@@ -235,7 +235,7 @@
           <span>{{ row.finishedTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="完成消息内容" align="center" width="120">
+      <el-table-column label="完成消息" align="center" width="80">
         <template slot-scope="{row}">
           <span v-if="row.finishSourceId!=null" class="link-type" @click="showFinishMessageDetail(row)">
             <i class="el-icon-info" />
@@ -243,7 +243,7 @@
           <span v-else>--</span>
         </template>
       </el-table-column>
-      <el-table-column label="源消息内容" align="center" width="120">
+      <el-table-column label="源消息" align="center" width="80">
         <template slot-scope="{row}">
           <span v-if="row.messageId!=null" class="link-type" @click="showMessageDetail(row)">
             <i class="el-icon-info" />
