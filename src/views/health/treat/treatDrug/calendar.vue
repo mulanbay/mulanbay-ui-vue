@@ -58,13 +58,13 @@
                 <el-divider direction="vertical"></el-divider>
                 <span>
                   {{ item.perDay }}天
-                  <el-tag type="danger">{{ item.perTimes }}</el-tag>
+                  <el-tag>{{ item.perTimes }}</el-tag>
                   次
                 </span>
                 <el-divider direction="vertical"></el-divider>
                 <span>
                   每次
-                  <el-tag type="danger">{{ item.ec }}</el-tag>
+                  <el-tag>{{ item.ec }}</el-tag>
                   {{ item.eu }}
                 </span>
                 <el-divider direction="vertical"></el-divider>
