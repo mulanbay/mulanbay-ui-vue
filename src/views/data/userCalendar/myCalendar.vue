@@ -2,7 +2,7 @@
   <div>
     <div id="lnb-tui">
       <div class="lnb-new-schedule" align="center">
-        <el-button type="primary" size="medium" style="width: 160px;" round @click="handleCreate" >新增</el-button>
+        <el-button type="primary" icon="el-icon-plus" size="medium" style="width: 160px;" round @click="handleCreate" >新增</el-button>
       </div>
       <div id="lnb-calendars" class="lnb-calendars">
         <div>
@@ -63,12 +63,17 @@
       </div>
       <div>
         <div class="lnb-calendars-item" align="center">
-          <el-button type="primary" size="medium" style="width: 160px;" round @click="getScheduleList">刷新</el-button>
+          <el-button type="primary" icon="el-icon-refresh" size="medium" style="width: 160px;" round @click="getScheduleList">刷新</el-button>
         </div>
       </div>
       <div>
         <div class="lnb-calendars-item" align="center">
-          <el-button type="primary" size="medium" style="width: 160px;" round @click="showListView">列表</el-button>
+          <el-button type="success" icon="el-icon-s-grid" size="medium" style="width: 160px;" round @click="showListView">列表</el-button>
+        </div>
+      </div>
+      <div>
+        <div class="lnb-calendars-item" align="center">
+          <el-button type="success" icon="el-icon-timer" size="medium" style="width: 160px;" round @click="handleDaily">每日</el-button>
         </div>
       </div>
     </div>
@@ -79,9 +84,9 @@
           </el-option>
         </el-select>
         <span>
-          <el-button type="primary" size="small" round @click="moveTo('today')">今天</el-button>
-          <el-button type="success" size="small" round @click="moveTo('prev')">往前</el-button>
-          <el-button type="success" size="small" round @click="moveTo('next')">往后</el-button>
+          <el-button type="primary" icon="el-icon-timer" size="small" round @click="moveTo('today')">今天</el-button>
+          <el-button type="success" icon="el-icon-d-arrow-left" size="small" round @click="moveTo('prev')">往前</el-button>
+          <el-button type="success" icon="el-icon-d-arrow-right" size="small" round @click="moveTo('next')">往后</el-button>
         </span>
         <span class="render-range">{{dateRange}}</span>
       </div>
@@ -120,6 +125,11 @@
       <source-detail :jsonData="jsonData"/>
     </el-dialog>
 
+    <!-- 每日日历 -->
+    <el-dialog :title="dcTitle" width="600px" :visible.sync="dcOpen"  append-to-body customClass="customDialogCss">
+      <daily-calendar/>
+    </el-dialog>
+
   </div>
 </template>
 <script>
@@ -143,6 +153,7 @@
   import {getList,createUserCalendar2,updateUserCalendar,deleteUserCalendar,finishUserCalendar,getUserCalendarSource} from "@/api/data/userCalendar";
   import {getUserMessageByUser} from "@/api/log/userMessage";
   import UserCalendarDetail from './detail'
+  import DailyCalendar from './dailyCalendar'
   import SourceDetail from '../../common/jsonTreeTable'
 
   const today = new Date();
@@ -161,6 +172,7 @@
     components: {
       'calendar': Calendar,
       'user-calendar-detail':UserCalendarDetail,
+      'daily-calendar':DailyCalendar,
       'source-detail':SourceDetail
     },
     data() {
@@ -175,6 +187,10 @@
           id:undefined
         },
         //日历明细 end
+        //每日日历 start
+        dcTitle:undefined,
+        dcOpen:false,
+        //每日日历 end
         //来源详情 start
         // 弹出层标题
         sourceTitle: "",
@@ -259,6 +275,11 @@
       /** 关闭详情操作 */
       closeDetail(){
         this.open = false;
+      },
+      /** 每日日历按钮操作 */
+      handleDaily() {
+        this.dcOpen = true;
+        this.dcTitle = "每日日历";
       },
       /** 新增按钮操作 */
       handleCreate() {

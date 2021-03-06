@@ -20,90 +20,69 @@
       </el-form-item>
     </el-form>
 
-    <el-row>
-      <el-col :span="24">
-        <div align="center">
-          <span style="color: red;">{{bussDayTitle}}</span>
-        </div>
-      </el-col>
-    </el-row>
-    <template v-for="cld in dataList">
-      <el-divider content-position="center">
-        <i class="el-icon-message-solid"></i>
-        {{cld.name}}
-      </el-divider>
+    <el-divider content-position="center">
+      <i class="el-icon-message-solid"></i>
+      <span style="color: red;">{{bussDayTitle}}</span>
+    </el-divider>
+    <template>
       <el-timeline v-loading="loading" :reverse="reverse" >
-        <el-timeline-item :timestamp="cld.startHour+':00'" type="success" icon="el-icon-message-solid" placement="top">
-        </el-timeline-item>
-        <template v-for="item in cld.detailList">
+        <template v-for="item in dataList">
           <el-timeline-item :timestamp="item.occurTimeStr" :type="item.type" placement="top">
             <el-card class="box-card">
               <div slot="header" class="clearfix">
-                <svg-icon icon-class="health" />
+                <svg-icon icon-class="life" />
                 <span>
-                  针对疾病:{{item.disease}}
+                  {{item.title}}
                 </span>
-                <el-button size="mini" type="text" style="color: red;float: right; padding: 3px 0" icon="el-icon-delete" @click="handleStop(item)"
-                  v-hasPermi="['health:treat:treatDrug:edit']">
-                  暂停
+                <el-button size="mini" type="text" style="color: red;float: right; padding: 3px 0" icon="el-icon-delete" @click="handleDelete(item)"
+                  v-if="item.id>0"
+                  v-hasPermi="['data:userCalendar:delete']">
+                  删除
                 </el-button>
                 <el-divider direction="vertical"></el-divider>
-                <el-button size="mini" type="text" style="float: right; padding: 3px 0" icon="el-icon-plus" @click="handleAddDrugDetail(item)"
-                  v-if="item.occurTime == null"
-                  v-hasPermi="['health:treat:treatDrugDetail:create']">
-                  服用
+                <el-button size="mini" type="text" style="color: royalblue;float: right; padding: 3px 0" icon="el-icon-close" @click="finishUserCalendar(item)"
+                  v-if="'ONCE'==item.period"
+                  v-hasPermi="['data:userCalendar:finish']">
+                  关闭
                 </el-button>
               </div>
               <div>
                 <el-divider direction="vertical"></el-divider>
                 <span>
-                  {{ item.perDay }}天
-                  <el-tag type="danger">{{ item.perTimes }}</el-tag>
+                  来源:<el-tag>{{item.sourceTypeName}}</el-tag>
+                </span>
+                <el-divider direction="vertical"></el-divider>
+                <span v-if="item.period!=null">
+                  {{item.periodName}}
+                  <span v-if="!isObjectEmpty(item.periodValues)">
+                    <el-tag type="success" >{{ item.periodValues }}</el-tag>
+                  </span>
+                </span>
+                <span v-else>--</span>
+                <el-divider direction="vertical"></el-divider>
+                <span>
+                  延迟:
+                  <el-tag type="danger">{{ item.delayCounts }}</el-tag>
                   次
                 </span>
                 <el-divider direction="vertical"></el-divider>
-                <span>
-                  每次
-                  <el-tag type="danger">{{ item.ec }}</el-tag>
-                  {{ item.eu }}
-                </span>
-                <el-divider direction="vertical"></el-divider>
-                <span>
-                  <el-tag>{{item.useWay}}</el-tag>
-                </span>
-                <el-divider direction="vertical"></el-divider>
-                <p>{{item.name}}</p>
+                <p>{{item.content}}</p>
               </div>
             </el-card>
           </el-timeline-item>
         </template>
-        <el-timeline-item :timestamp="cld.endHour+':59'" type="success" icon="el-icon-message-solid" placement="top">
-        </el-timeline-item>
       </el-timeline>
     </template>
-
-    <!-- 新增用药页面 -->
-    <el-dialog :title="drugDetailTitle" width="450px" :visible.sync="drugDetailVisible"  append-to-body>
-      <treat-drug-detail-detail
-        :treatForDrugDetailData="treatForDrugDetailData"
-        @closeMe="closeTreatDrugDetailDetail"
-        @refreshList="getList"
-      />
-    </el-dialog>
 
   </div>
 </template>
 
 <script>
-  import {calendar} from "@/api/health/treat/treatDrug";
+  import { getList as getDailyCalendarList,sendCalendarMessage,finishUserCalendar,deleteUserCalendar } from '@/api/data/userCalendar'
   import {getNowDateString,getNowDateTimeString,getDayByDate,tillNowDays} from "@/utils/datetime";
-  import TreatDrugDetailDetail from '../treatDrugDetail/detail'
 
 export default {
-  name: "Calendar",
-  components: {
-    'treat-drug-detail-detail':TreatDrugDetailDetail
-  },
+  name: "DailyCalendar",
   data() {
     return {
       reverse:false,
@@ -112,12 +91,7 @@ export default {
       dataList:[],
       //日期标题
       bussDayTitle:undefined,
-      bussDay:getNowDateString(),
-      //用药明细start
-      drugDetailTitle:'',
-      drugDetailVisible:false,
-      treatForDrugDetailData:{},
-      //用药明细end
+      bussDay:getNowDateString()
     };
   },
   created() {
@@ -162,27 +136,6 @@ export default {
           }
       }
     },
-    /** 增加用药详情编辑操作 */
-    handleAddDrugDetail(row){
-      this.drugDetailVisible = true;
-      this.drugDetailTitle = "添加用药("+row.name+")";
-      const now = getNowDateTimeString();
-      const occurTime = this.bussDay+now.substr(10,8);
-      this.treatForDrugDetailData = Object.assign({}, this.treatForDrugDetailData, {
-        treatDrugId: row.treatDrugId,
-        occurTime:occurTime
-      });
-    },
-    closeTreatDrugDetailDetail(){
-      this.drugDetailVisible = false;
-    },
-    /** 停药操作 */
-    handleStop(row){
-      this.$message({
-        message: '暂时未实现',
-        type: 'warning'
-      });
-    },
     /** 查询列表 */
     getList() {
       this.getCalendarList();
@@ -190,27 +143,28 @@ export default {
     //列表数据
     getCalendarList() {
       this.loading=true;
-      let para={
-        bussDay:this.bussDay
-      };
-      calendar(para).then(
+      // 请求接口数据
+      const para = {
+        startDate:this.bussDay,
+        endDate:this.bussDay,
+        needTotal:false,
+        needFinished:false,
+        needPeriod:true,
+        needBudget:true,
+        needTreatDrug:true,
+        needBandLog:false
+      }
+      getDailyCalendarList(para).then(
         response => {
           let datas = response;
           for(let i=0;i<datas.length;i++){
-            let detailList = datas[i].detailList;
-            for(let j=0;j<detailList.length;j++){
-              let dt = detailList[j];
-              if(dt.occurTime==null){
-                dt.occurTimeStr = '未用药';
-                dt.type='danger';
-              }else{
-                dt.occurTimeStr = dt.occurTime.substr(11,5);
-                dt.type='primary';
-              }
-              if(dt.match==false){
-                dt.occurTimeStr+='(未匹配)';
-                dt.type='warning';
-              }
+            let dt = datas[i];
+            if(dt.allDay==true){
+              dt.occurTimeStr = '全天';
+              dt.type='danger';
+            }else{
+              dt.occurTimeStr = dt.bussDay.substr(11,5);
+              dt.type='primary';
             }
           }
           this.dataList = datas;
@@ -221,6 +175,33 @@ export default {
     /** 搜索按钮操作 */
     handleQuery() {
       this.getList();
+    },
+    /** 删除按钮操作 */
+    handleDelete(row) {
+      const ids = row.id;
+      this.$confirm('是否确认删除"' + row.title + '"的日历?', "警告", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        }).then(function() {
+          return deleteUserCalendar(ids);
+        }).then(() => {
+          this.getList();
+          this.msgSuccess("删除成功");
+        }).catch(function() {});
+    },
+    /** 关闭按钮操作 */
+    finishUserCalendar(row){
+      this.$confirm('是否确认关闭"' + row.title + '"的日历?', "警告", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        }).then(function() {
+          return finishUserCalendar(row.id);
+        }).then(() => {
+          this.getList();
+          this.msgSuccess("关闭成功");
+        }).catch(function() {});
     }
   }
 };
