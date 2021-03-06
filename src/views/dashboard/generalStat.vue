@@ -313,7 +313,7 @@
   import {generalStat} from "@/api/main";
   import {statWithTreat} from "@/api/consume/buyRecord";
   import {getPercent} from "@/utils/mulanbay";
-  import PieChart from './generalStatChart'
+  import PieChart from '../chart/pieChart';
   import resize from './mixins/resize.js'
 
 export default {

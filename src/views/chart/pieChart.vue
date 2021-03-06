@@ -54,7 +54,12 @@ export default {
       if(this.chartData.height!=null){
         this.height = this.chartData.height;
       }
-      this.initChart();
+      //解决定义高度后，无法resize问题
+      let that=this;
+      setTimeout(function()  {
+        that.initChart()
+      }, 100);
+      //this.initChart();
     },
     initChart() {
       if(this.isObjectEmpty(this.chartData)){

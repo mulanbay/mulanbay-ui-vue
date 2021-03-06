@@ -75,7 +75,9 @@ export default {
         response => {
           //组装chart数据
           let chartData = response;
-          this.chart = echarts.init(this.$el);
+          if(this.chart==null){
+            this.chart = echarts.init(this.$el);
+          }
           //折线上是否显示值
           chartData.showLegend = false;
           chartData.smooth = true;

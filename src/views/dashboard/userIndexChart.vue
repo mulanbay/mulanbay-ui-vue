@@ -4,7 +4,6 @@
 
 <script>
   import * as echarts from 'echarts';
-  require('echarts/theme/macarons') // echarts theme
   import resize from './mixins/resize'
   import {createPieChart,createBarChart} from "@/utils/echarts";
   import {getShowIndexChart,getChartPara,statChart} from "@/api/report/chart/userChart";
@@ -82,8 +81,14 @@ export default {
         response => {
           let chartData = response;
           chartData.showLegend=false;
-          //组装chart数据
-          this.chart = echarts.init(this.$el, 'macarons');
+          /**
+           * 组装chart数据
+           * 如果div使用id模式，那么同一个页面里不支持多个图表
+           * 如果想支持多个id需要动态
+           */
+          if(this.chart==null){
+            this.chart = echarts.init(this.$el);
+          }
           //折线上是否显示值
           if(chartType=='PIE'){
             createPieChart(chartData,this.chart);

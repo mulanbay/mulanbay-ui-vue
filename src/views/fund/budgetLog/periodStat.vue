@@ -240,8 +240,9 @@
                   <th class="is-leaf"><div class="cell">名称</div></th>
                   <th class="is-leaf"><div class="cell">类型</div></th>
                   <th class="is-leaf"><div class="cell">周期</div></th>
-                  <th class="is-leaf"><div class="cell">金额</div></th>
+                  <th class="is-leaf"><div class="cell">预算金额</div></th>
                   <th class="is-leaf"><div class="cell">实际花费</div></th>
+                  <th class="is-leaf"><div class="cell">比例</div></th>
                   <th class="is-leaf"><div class="cell">支付时间</div></th>
                 </tr>
               </thead>
@@ -252,8 +253,8 @@
                   <td><div class="cell">{{ item.periodName }}</div></td>
                   <td><div class="cell">{{ formatMoneyWithSymbal(item.amount) }}</div></td>
                   <td><div class="cell">{{ formatMoneyWithSymbal(item.cpPaidAmount) }}</div></td>
+                  <td><div class="cell">{{ item.pp }}</div></td>
                   <td><div class="cell">{{ item.cpPaidTime }}</div></td>
-
                 </tr>
               </tbody>
             </table>
@@ -272,8 +273,8 @@
   import {getIncomeStat} from "@/api/fund/income";
   import {getPercent} from "@/utils/mulanbay";
   import {getDay,getMonth} from "@/utils/datetime";
-  import PieChart from '../../chart/pieChart'
-  import resize from '../../dashboard/mixins/resize.js'
+  import PieChart from '../../chart/pieChart';
+  import resize from '../../dashboard/mixins/resize.js';
   import {copyObject,getQueryObject} from "@/utils/index";
 
 export default {
@@ -418,7 +419,18 @@ export default {
       };
       getBudgetSnapshotData(para).then(
         response => {
-          this.snapshotList=response.rows;
+          this.snapshotList = new Array();
+          let datas = response.rows;
+          const n = datas.length;
+          for(let i=0;i<n;i++){
+            if(datas[i].cpPaidAmount==null){
+              datas[i].pp = '--';
+            }else{
+              let aiv = getPercent(datas[i].cpPaidAmount,datas[i].amount);
+              datas[i].pp =aiv.toFixed(0)+'%';
+            }
+          }
+          this.snapshotList = datas;
         }
       );
     },

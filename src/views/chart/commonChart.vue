@@ -45,12 +45,8 @@ export default {
     }
   },
   watch: {
-    chartData: {
-      deep: true,
-      handler(val) {
-        this.chartData =val;
-        this.initChart();
-      }
+    chartData(newVal,oldVal){
+      this.handleReceiveData(newVal);
     }
   },
   mounted() {
@@ -66,12 +62,21 @@ export default {
     this.chart = null
   },
   methods: {
+    handleReceiveData(data){
+      this.chartData =data;
+      if(this.chartData.height!=null){
+        this.height = this.chartData.height;
+      }
+      //解决定义高度后，无法resize问题
+      let that=this;
+      setTimeout(function()  {
+        that.initChart()
+      }, 100);
+      //this.initChart();
+    },
     initChart() {
       if(this.isObjectEmpty(this.chartData)){
         return;
-      }
-      if(this.chartData.height){
-        this.height=this.chartData.height;
       }
       if(this.chart==null){
         this.chart = echarts.init(document.getElementById(this.id));
