@@ -250,36 +250,7 @@
           <div slot="header">
             <span>{{ statData.bussKey }}预算快照信息</span>
           </div>
-          <div class="el-table el-table--enable-row-hover el-table--medium">
-            <table cellspacing="0" style="width: 100%;">
-              <thead>
-                <tr>
-                  <th class="is-leaf"><div class="cell">名称</div></th>
-                  <th class="is-leaf"><div class="cell">类型</div></th>
-                  <th class="is-leaf"><div class="cell">周期</div></th>
-                  <th class="is-leaf"><div class="cell">预算金额</div></th>
-                  <th class="is-leaf"><div class="cell">实际花费</div></th>
-                  <th class="is-leaf"><div class="cell">比例</div></th>
-                  <th class="is-leaf"><div class="cell">支付时间</div></th>
-                </tr>
-              </thead>
-              <tbody v-for="item in snapshotList">
-                <tr>
-                  <td><div class="cell">{{ item.name }}</div></td>
-                  <td><div class="cell">{{ item.typeName }}</div></td>
-                  <td><div class="cell">{{ item.periodName }}</div></td>
-                  <td><div class="cell">{{ formatMoneyWithSymbal(item.amount) }}</div></td>
-                  <td><div class="cell">{{ formatMoneyWithSymbal(item.cpPaidAmount) }}</div></td>
-                  <td>
-                    <div class="cell">
-                      <el-progress :percentage="item.pp" :color="customColors"></el-progress>
-                    </div>
-                  </td>
-                  <td><div class="cell">{{ item.cpPaidTime }}</div></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+          <snapshot :budgetData="budgetData"/>
         </el-card>
       </el-col>
 
@@ -289,12 +260,12 @@
 
 <script>
   import {getBudgetLogPeriodStat} from "@/api/fund/budgetLog";
-  import {fetchList as getBudgetSnapshotData} from "@/api/fund/budgetSnapshot";
   import {statWithTreat} from "@/api/consume/buyRecord";
   import {getIncomeStat} from "@/api/fund/income";
   import {getPercent,progressColors} from "@/utils/mulanbay";
   import {getDay,getMonth} from "@/utils/datetime";
   import PieChart from '../../chart/pieChart';
+  import Snapshot from './snapshot';
   import resize from '../../dashboard/mixins/resize.js';
   import {copyObject,getQueryObject} from "@/utils/index";
 
@@ -302,7 +273,8 @@ export default {
   name: "PeriodStat",
   mixins: [resize],
   components: {
-    'pie-chart':PieChart
+    'pie-chart':PieChart,
+    'snapshot':Snapshot
   },
   data() {
     return {
@@ -327,8 +299,10 @@ export default {
       },
       chartData:{},
       statData:{},
-      //预算快照列表
-      snapshotList:[],
+      //预算快照
+      budgetData: {
+        budgetLogId: undefined
+      },
       //进度百分比颜色
       customColors: progressColors
     };
@@ -439,27 +413,9 @@ export default {
     },
     // 预算快照列表
     budgetSnapshotList(budgetLogId){
-      let para = {
-        budgetLogId:budgetLogId,
-        page:0,
-        needTotal:false
-      };
-      getBudgetSnapshotData(para).then(
-        response => {
-          this.snapshotList = new Array();
-          let datas = response.rows;
-          const n = datas.length;
-          for(let i=0;i<n;i++){
-            if(datas[i].cpPaidAmount==null){
-              datas[i].pp = 0;
-            }else{
-              let aiv = getPercent(datas[i].cpPaidAmount,datas[i].amount);
-              datas[i].pp = parseInt(aiv.toFixed(0));
-            }
-          }
-          this.snapshotList = datas;
-        }
-      );
+      this.budgetData = Object.assign({}, this.budgetData, {
+        budgetLogId: budgetLogId
+      });
     },
     // 消费图表统计
     consumeChartStat(){

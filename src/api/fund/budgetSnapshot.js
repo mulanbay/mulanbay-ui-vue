@@ -7,3 +7,11 @@ export function fetchList(query) {
     params: query
   })
 }
+
+export function getList(query) {
+  return request({
+    url: '/budgetSnapshot/getList',
+    method: 'get',
+    params: query
+  })
+}

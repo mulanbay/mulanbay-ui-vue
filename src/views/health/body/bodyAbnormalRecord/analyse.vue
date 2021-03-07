@@ -273,7 +273,6 @@ export default {
     /** 查看看病记录 */
     showTreatRecord(id){
       //路由跳转
-      //路由定向
       this.$router.push({name:'TreatRecord',query: {id:id}})
     },
     /** 关闭表单编辑操作 */
