@@ -316,21 +316,21 @@
     <!-- 花费统计页面 -->
     <el-dialog :title="costStatTitle" width="800px" :visible.sync="costStatVisible"  append-to-body>
       <life-experience-cost-stat
-        :lifeExperienceForCostStatData="lifeExperienceForCostStatData"
+        :lifeExpData="lifeExpData"
       />
     </el-dialog>
 
     <!-- 地图统计页面 -->
     <el-dialog :title="transferMapStatTitle" width="800px" :visible.sync="transferMapStatVisible"  append-to-body>
       <life-experience-transfer-map-stat
-        :lifeExperienceForTransferMapStatData="lifeExperienceForTransferMapStatData"
+        :lifeExpData="lifeExpData"
       />
     </el-dialog>
 
     <!-- 明细列表页面 -->
     <el-dialog :title="detailListTitle" width="850px" :visible.sync="detailListVisible"  append-to-body>
       <life-experience-detail-list
-        :lifeExperienceForDetailListData="lifeExperienceForDetailListData"
+        :lifeExpData="lifeExpData"
       />
     </el-dialog>
 
@@ -408,26 +408,21 @@ export default {
       ladOpen:false,
       lifeArchivesData:{},
       //同步档案属性 end
+      //外部页面数据
+      lifeExpData:{
+        lifeExperienceId:undefined
+      },
       //花费统计属性start
       costStatTitle:'',
       costStatVisible:false,
-      lifeExperienceForCostStatData:{
-        lifeExperienceId:undefined
-      },
       //花费统计属性end
       //地图统计属性start
       transferMapStatTitle:'',
       transferMapStatVisible:false,
-      lifeExperienceForTransferMapStatData:{
-        lifeExperienceId:undefined
-      },
       //地图统计属性end
       //明细列表属性start
       detailListTitle:'',
       detailListVisible:false,
-      lifeExperienceForDetailListData:{
-        lifeExperienceId:undefined
-      },
       //明细列表属性end
       //地理位置选择
       mapLocTitle:'',
@@ -606,7 +601,7 @@ export default {
     handleCostStat(row){
       this.costStatTitle='花费统计';
       this.costStatVisible=true;
-      this.lifeExperienceForCostStatData = Object.assign({}, this.lifeExperienceForCostStatData, {
+      this.lifeExpData = Object.assign({}, this.lifeExpData, {
         lifeExperienceId: row.id
       });
     },
@@ -614,7 +609,7 @@ export default {
     handleTransferMapStat(row){
       this.transferMapStatTitle='花费统计';
       this.transferMapStatVisible=true;
-      this.lifeExperienceForTransferMapStatData = Object.assign({}, this.lifeExperienceForTransferMapStatData, {
+      this.lifeExpData = Object.assign({}, this.lifeExpData, {
         lifeExperienceId: row.id
       });
     },
@@ -622,7 +617,7 @@ export default {
     handleDetailList(row){
       this.detailListTitle='['+row.name+']明细列表';
       this.detailListVisible=true;
-      this.lifeExperienceForDetailListData = Object.assign({}, this.lifeExperienceForDetailListData, {
+      this.lifeExpData = Object.assign({}, this.lifeExpData, {
         lifeExperienceId: row.id
       });
     },

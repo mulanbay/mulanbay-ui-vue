@@ -74,7 +74,7 @@ export default {
   mixins: [resize],
   props: {
     //父层带过来的账户信息值
-    lifeExperienceForCostStatData:{
+    lifeExpData:{
       lifeExperienceId:undefined
     },
     className: {
@@ -83,7 +83,8 @@ export default {
     },
     id: {
       type: String,
-      default: 'chart'
+      //因为在经历首页有两个图表，所以id值不能一样
+      default: 'chartCs'
     },
     width: {
       type: String,
@@ -125,12 +126,12 @@ export default {
       this.statTypeOptions = response;
     });
     this.getLifeExperienceTreeselect();
-    this.handleReceiveData(this.lifeExperienceForCostStatData);
+    this.handleReceiveData(this.lifeExpData);
     //this.initChart();
   },
   //监听父层带过来的账户信息值
   watch:{
-    lifeExperienceForCostStatData(newVal,oldVal){
+    lifeExpData(newVal,oldVal){
       this.handleReceiveData(newVal);
     }
   },

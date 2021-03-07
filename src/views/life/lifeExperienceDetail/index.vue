@@ -315,7 +315,7 @@ export default {
   },
   props: {
     //父层带过来的账户信息值
-    lifeExperienceForDetailListData:{
+    lifeExpData:{
       lifeExperienceId:undefined
     }
   },
@@ -407,11 +407,11 @@ export default {
     };
   },
   created() {
-    this.handleReceiveData(this.lifeExperienceForDetailListData);
+    this.handleReceiveData(this.lifeExpData);
   },
   //监听父层带过来的账户信息值
   watch:{
-    lifeExperienceForDetailListData(newVal,oldVal){
+    lifeExpData(newVal,oldVal){
       this.handleReceiveData(newVal);
     }
   },

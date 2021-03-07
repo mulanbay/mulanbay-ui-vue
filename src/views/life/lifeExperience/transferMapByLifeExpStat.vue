@@ -44,7 +44,7 @@ export default {
   mixins: [resize],
   props: {
     //父层带过来的账户信息值
-    lifeExperienceForTransferMapStatData:{
+    lifeExpData:{
       lifeExperienceId:undefined
     },
     className: {
@@ -53,7 +53,7 @@ export default {
     },
     id: {
       type: String,
-      default: 'chart'
+      default: 'chartTm'
     },
     width: {
       type: String,
@@ -90,12 +90,12 @@ export default {
   },
   created() {
     this.getLifeExperienceTreeselect();
-    this.handleReceiveData(this.lifeExperienceForTransferMapStatData);
+    this.handleReceiveData(this.lifeExpData);
     this.initChart();
   },
   //监听父层带过来的账户信息值
   watch:{
-    lifeExperienceForTransferMapStatData(newVal,oldVal){
+    lifeExpData(newVal,oldVal){
       this.handleReceiveData(newVal);
     }
   },
