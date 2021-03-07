@@ -48,7 +48,7 @@
     </div>
 
     <!-- 子页面 -->
-    <el-dialog :title="childrenTitle" width="800px" :visible.sync="childrenOpen"  append-to-body>
+    <el-dialog :title="childrenTitle" width="750px" :visible.sync="childrenOpen"  append-to-body>
       <snapshot-children
         :snapshotData="snapshotData"
       />
@@ -102,7 +102,7 @@ export default {
     },
     /** 展示子类 */
     showChildren(row){
-      this.childrenTitle='['+row.name+']预算执行列表';
+      this.childrenTitle='['+row.name+']'+row.bussKey+'预算执行列表';
       this.childrenOpen = true;
       this.snapshotData = Object.assign({}, this.snapshotData, row);
     },
