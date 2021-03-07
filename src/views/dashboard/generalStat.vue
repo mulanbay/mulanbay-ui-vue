@@ -152,7 +152,11 @@
                 </tr>
                 <tr>
                   <td><div class="cell">本月已经过去</div></td>
-                  <td><div class="cell">{{ statData.dayMonthRate }}%</div></td>
+                  <td>
+                    <div class="cell">
+                      <el-progress :percentage="statData.dayMonthRate" :color="customColors"></el-progress>
+                    </div>
+                  </td>
                   <td>
                     <div class="cell">
                       <span class="link-type" @click="handleDispatch('BuyRecord')"><i class="el-icon-s-promotion" /></span>
@@ -163,12 +167,7 @@
                   <td><div class="cell">本月消费/预算比例</div></td>
                   <td>
                     <div class="cell">
-                      <span v-if="statData.monthConsumeBudgetRate>=statData.dayMonthRate" style="color: red;">
-                       {{ statData.monthConsumeBudgetRate }}%
-                      </span>
-                      <span v-else style="color: green;">
-                       {{ statData.monthConsumeBudgetRate }}%
-                      </span>
+                      <el-progress :percentage="statData.monthConsumeBudgetRate" :color="customColors"></el-progress>
                     </div>
                   </td>
                   <td>
@@ -337,7 +336,15 @@ export default {
       dateRange: this.getMonthDateRange(new Date()),
       queryParams:{},
       chartData:{},
-      statData:{}
+      statData:{},
+      //进度百分比颜色
+      customColors: [
+        {color: '#5cb87a', percentage: 20},
+        {color: '#1989fa', percentage: 40},
+        {color: '#e6a23c', percentage: 60},
+        {color: '#f56c6c', percentage: 80},
+        {color: '#ad0000', percentage: 100}
+      ]
     };
   },
   created() {
@@ -398,9 +405,9 @@ export default {
             totalReadingCount: data.totalReadingCount,
             totalMusicPracticeHours:data.totalMusicPracticeHours.toFixed(1),
             totalMusicPracticeCount:data.totalMusicPracticeCount,
-            monthConsumeBudgetRate:vmonthConsumeBudgetRate,
+            monthConsumeBudgetRate:parseInt(vmonthConsumeBudgetRate.toFixed(0)),
             remainMoney:vremainMoney,
-            dayMonthRate:data.dayMonthRate,
+            dayMonthRate:parseInt(data.dayMonthRate.toFixed(0)),
             remainMonthDays:data.remainMonthDays,
             monthConsumeAmount:data.monthConsumeAmount,
             monthDays:data.monthDays,

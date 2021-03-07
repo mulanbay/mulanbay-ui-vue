@@ -81,6 +81,7 @@ export default {
           //折线上是否显示值
           chartData.showLegend = false;
           chartData.smooth = true;
+          chartData.link='/report/plan/planReport/timelineStat';
           createLineChart(chartData,this.chart);
         }
       );

@@ -201,7 +201,7 @@ export default {
             for(let j=0;j<detailList.length;j++){
               let dt = detailList[j];
               if(dt.occurTime==null){
-                dt.occurTimeStr = '未用药';
+                dt.occurTimeStr = '未服用';
                 dt.type='danger';
               }else{
                 dt.occurTimeStr = dt.occurTime.substr(11,5);

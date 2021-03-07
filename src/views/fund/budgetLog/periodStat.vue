@@ -137,6 +137,23 @@
                 <tr>
                   <td>
                     <div class="cell">
+                      预算/消费比例
+                    </div>
+                  </td>
+                  <td>
+                    <div class="cell">
+                      <el-progress :percentage="statData.monthConsumeBudgetRate" :color="customColors"></el-progress>
+                    </div>
+                    <td>
+                      <div class="cell">
+                        <span class="link-type" @click="handleDispatch('BuyRecord')"><i class="el-icon-s-promotion" /></span>
+                      </div>
+                    </td>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="cell">
                       <span v-if="statData.totalConsume>statData.budgetAmount" style="color: red;">
                        超出预算
                        <span class="link-type" @click="msgAlert('提示','总消费金额大于预算金额')"><i class="el-icon-question" /></span>
@@ -253,7 +270,11 @@
                   <td><div class="cell">{{ item.periodName }}</div></td>
                   <td><div class="cell">{{ formatMoneyWithSymbal(item.amount) }}</div></td>
                   <td><div class="cell">{{ formatMoneyWithSymbal(item.cpPaidAmount) }}</div></td>
-                  <td><div class="cell">{{ item.pp }}</div></td>
+                  <td>
+                    <div class="cell">
+                      <el-progress :percentage="item.pp" :color="customColors"></el-progress>
+                    </div>
+                  </td>
                   <td><div class="cell">{{ item.cpPaidTime }}</div></td>
                 </tr>
               </tbody>
@@ -306,7 +327,16 @@ export default {
       },
       chartData:{},
       statData:{},
-      snapshotList:[]
+      //预算快照列表
+      snapshotList:[],
+      //进度百分比颜色
+      customColors: [
+        {color: '#5cb87a', percentage: 20},
+        {color: '#1989fa', percentage: 40},
+        {color: '#e6a23c', percentage: 60},
+        {color: '#f56c6c', percentage: 80},
+        {color: '#ad0000', percentage: 100}
+      ]
     };
   },
   created() {
@@ -403,6 +433,9 @@ export default {
             let aiv = getPercent(response.accountChangeAmount-bb,this.statData.ib);
             this.statData.aiv =aiv+'%';
           }
+          //消费/预算比例
+          let monthConsumeBudgetRate = getPercent(this.statData.totalConsume,this.statData.budgetAmount);
+          this.statData.monthConsumeBudgetRate = parseInt(monthConsumeBudgetRate.toFixed(0));
           //统计
           this.consumeChartStat();
           //预算快照
@@ -424,10 +457,10 @@ export default {
           const n = datas.length;
           for(let i=0;i<n;i++){
             if(datas[i].cpPaidAmount==null){
-              datas[i].pp = '--';
+              datas[i].pp = 0;
             }else{
               let aiv = getPercent(datas[i].cpPaidAmount,datas[i].amount);
-              datas[i].pp =aiv.toFixed(0)+'%';
+              datas[i].pp = parseInt(aiv.toFixed(0));
             }
           }
           this.snapshotList = datas;
@@ -442,7 +475,7 @@ export default {
         response => {
           //组装chart数据
           response.chartType='PIE';
-          response.height = '585px';
+          response.height = '630px';
           this.chartData = response;
           this.loading.close();
         }
@@ -456,7 +489,7 @@ export default {
         response => {
           //组装chart数据
           response.chartType='PIE';
-          response.height = '585px';
+          response.height = '630px';
           this.chartData = response;
           this.loading.close();
         }

@@ -253,7 +253,8 @@ export function createLineChart(data, myChart) {
       subtext: data.subTitle,
       x:'center',
       y:'top',
-      textAlign:'left'
+      textAlign:'left',
+      link:data.link
     },
     tooltip: {
       trigger: 'axis',
