@@ -117,7 +117,7 @@
                   </td>
                 </tr>
                 <tr>
-                  <td><div class="cell">今年预算金额</div></td>
+                  <td><div class="cell">预算金额</div></td>
                   <td><div class="cell">{{ formatMoneyWithSymbal(statData.yearBudget) }}</div></td>
                   <td>
                     <div class="cell">
@@ -133,7 +133,7 @@
                   </td>
                 </tr>
                 <tr>
-                  <td><div class="cell">本月预算金额</div></td>
+                  <td><div class="cell">预算金额</div></td>
                   <td><div class="cell">{{ formatMoneyWithSymbal(statData.monthBudget) }}</div></td>
                   <td>
                     <div class="cell">
@@ -142,7 +142,7 @@
                   </td>
                 </tr>
                 <tr>
-                  <td><div class="cell">本月已经消费</div></td>
+                  <td><div class="cell">已经消费</div></td>
                   <td><div class="cell">{{ formatMoneyWithSymbal(statData.monthConsumeAmount) }}</div></td>
                   <td>
                     <div class="cell">
@@ -151,7 +151,7 @@
                   </td>
                 </tr>
                 <tr>
-                  <td><div class="cell">本月已经过去</div></td>
+                  <td><div class="cell">已经过去</div></td>
                   <td>
                     <div class="cell">
                       <el-progress :percentage="statData.dayMonthRate" :color="customColors"></el-progress>
@@ -159,12 +159,12 @@
                   </td>
                   <td>
                     <div class="cell">
-                      <span class="link-type" @click="handleDispatch('BuyRecord')"><i class="el-icon-s-promotion" /></span>
+                      {{statData.monthPassDays+'天'}}
                     </div>
                   </td>
                 </tr>
                 <tr>
-                  <td><div class="cell">本月消费/预算比例</div></td>
+                  <td><div class="cell">消费/预算比例</div></td>
                   <td>
                     <div class="cell">
                       <el-progress :percentage="statData.monthConsumeBudgetRate" :color="customColors"></el-progress>
@@ -177,7 +177,7 @@
                   </td>
                 </tr>
                 <tr>
-                  <td><div class="cell">本月还可消费</div></td>
+                  <td><div class="cell">还可消费</div></td>
                   <td><div class="cell">{{ formatMoneyWithSymbal(statData.monthRemainConsume) }}</div></td>
                   <td>
                     <div class="cell">
@@ -186,7 +186,7 @@
                   </td>
                 </tr>
                 <tr>
-                  <td><div class="cell">本月每天还可消费</div></td>
+                  <td><div class="cell">每天还可消费</div></td>
                   <td><div class="cell">{{ formatMoneyWithSymbal(statData.monthRCPerDay) }}</div></td>
                   <td>
                     <div class="cell">
@@ -311,7 +311,7 @@
 <script>
   import {generalStat} from "@/api/main";
   import {statWithTreat} from "@/api/consume/buyRecord";
-  import {getPercent} from "@/utils/mulanbay";
+  import {getPercent,progressColors} from "@/utils/mulanbay";
   import PieChart from '../chart/pieChart';
   import resize from './mixins/resize.js'
 
@@ -338,13 +338,7 @@ export default {
       chartData:{},
       statData:{},
       //进度百分比颜色
-      customColors: [
-        {color: '#5cb87a', percentage: 20},
-        {color: '#1989fa', percentage: 40},
-        {color: '#e6a23c', percentage: 60},
-        {color: '#f56c6c', percentage: 80},
-        {color: '#ad0000', percentage: 100}
-      ]
+      customColors: progressColors
     };
   },
   created() {

@@ -292,7 +292,7 @@
   import {fetchList as getBudgetSnapshotData} from "@/api/fund/budgetSnapshot";
   import {statWithTreat} from "@/api/consume/buyRecord";
   import {getIncomeStat} from "@/api/fund/income";
-  import {getPercent} from "@/utils/mulanbay";
+  import {getPercent,progressColors} from "@/utils/mulanbay";
   import {getDay,getMonth} from "@/utils/datetime";
   import PieChart from '../../chart/pieChart';
   import resize from '../../dashboard/mixins/resize.js';
@@ -330,13 +330,7 @@ export default {
       //预算快照列表
       snapshotList:[],
       //进度百分比颜色
-      customColors: [
-        {color: '#5cb87a', percentage: 20},
-        {color: '#1989fa', percentage: 40},
-        {color: '#e6a23c', percentage: 60},
-        {color: '#f56c6c', percentage: 80},
-        {color: '#ad0000', percentage: 100}
-      ]
+      customColors: progressColors
     };
   },
   created() {

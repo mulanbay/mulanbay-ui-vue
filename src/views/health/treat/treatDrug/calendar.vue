@@ -23,10 +23,16 @@
     <el-row>
       <el-col :span="24">
         <div align="center">
+          <svg-icon icon-class="calendar" />
           <span style="color: red;">{{bussDayTitle}}</span>
         </div>
       </el-col>
     </el-row>
+
+    <!--统计-->
+    </br>
+    <calendar-stat :statData="statData"/>
+
     <template v-for="cld in dataList">
       <el-divider content-position="center">
         <i class="el-icon-message-solid"></i>
@@ -98,11 +104,13 @@
   import {calendar} from "@/api/health/treat/treatDrug";
   import {getNowDateString,getNowDateTimeString,getDayByDate,tillNowDays} from "@/utils/datetime";
   import TreatDrugDetailDetail from '../treatDrugDetail/detail'
+  import CalendarStat from './calendarStat'
 
 export default {
   name: "Calendar",
   components: {
-    'treat-drug-detail-detail':TreatDrugDetailDetail
+    'treat-drug-detail-detail':TreatDrugDetailDetail,
+    'calendar-stat':CalendarStat
   },
   data() {
     return {
@@ -118,6 +126,8 @@ export default {
       drugDetailVisible:false,
       treatForDrugDetailData:{},
       //用药明细end
+      //统计信息
+      statData:{}
     };
   },
   created() {
@@ -196,6 +206,12 @@ export default {
       calendar(para).then(
         response => {
           let datas = response;
+          //统计信息
+          let unTakes=0;
+          let takes=0;
+          let drugs=0;
+          let unMatchs=0;
+          let map = new Map();
           for(let i=0;i<datas.length;i++){
             let detailList = datas[i].detailList;
             for(let j=0;j<detailList.length;j++){
@@ -203,16 +219,28 @@ export default {
               if(dt.occurTime==null){
                 dt.occurTimeStr = '未服用';
                 dt.type='danger';
+                unTakes++;
               }else{
                 dt.occurTimeStr = dt.occurTime.substr(11,5);
                 dt.type='primary';
+                takes++;
               }
               if(dt.match==false){
                 dt.occurTimeStr+='(未匹配)';
                 dt.type='warning';
+                unMatchs++;
               }
+              map.set(dt.treatDrugId,1);
             }
           }
+          drugs=map.size;
+          //赋值
+          this.statData = Object.assign({}, this.statData, {
+            unTakes:unTakes,
+            takes:takes,
+            drugs:drugs,
+            unMatchs:unMatchs
+          });
           this.dataList = datas;
           this.loading=false;
         }

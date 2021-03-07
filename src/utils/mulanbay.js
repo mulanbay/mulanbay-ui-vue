@@ -253,3 +253,25 @@ export const booleanOptions = [{
     text: '否'
   }
 ]
+
+/**
+ * 进度颜色,越大颜色越重
+ */
+export const progressColors = [
+  {color: '#5cb87a', percentage: 20},
+  {color: '#1989fa', percentage: 40},
+  {color: '#e6a23c', percentage: 60},
+  {color: '#f56c6c', percentage: 80},
+  {color: '#ad0000', percentage: 100}
+]
+
+/**
+ * 进度颜色,越小颜色越重
+ */
+export const progressColors2 = [
+  {color: '#ad0000', percentage: 20},
+  {color: '#f56c6c', percentage: 40},
+  {color: '#e6a23c', percentage: 60},
+  {color: '#1989fa', percentage: 80},
+  {color: '#5cb87a', percentage: 100}
+]

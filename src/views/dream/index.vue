@@ -180,14 +180,8 @@
       </el-table-column>
       <el-table-column label="完成进度" align="center" width="80">
         <template slot-scope="{row}">
-          <span v-if="row.rate>=100" style="color: green;">
-           {{ row.rate }}%
-          </span>
-          <span v-else-if="row.rate<=50" style="color: red;">
-           {{ row.rate }}%
-          </span>
-          <span v-else>
-           {{ row.rate }}%
+          <span v-if="row.rate!=null">
+            <el-progress :percentage="row.rate" :color="customColors"></el-progress>
           </span>
         </template>
       </el-table-column>
@@ -476,6 +470,7 @@
   import {formatDays} from "@/utils/datetime";
   import RemindDetail from './remind'
   import {dispatchCommonStat} from "@/utils/planUtils";
+  import {progressColors2} from "@/utils/mulanbay";
 
 export default {
   name: "Dream",
@@ -528,6 +523,8 @@ export default {
       datePickerOptions:this.datePickerOptions,
       // 日期范围
       dateRange: [],
+      //进度百分比颜色
+      customColors: progressColors2,
       // 表单参数
       form: {},
       defaultProps: {

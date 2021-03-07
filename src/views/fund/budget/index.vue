@@ -149,6 +149,15 @@
           v-hasPermi="['fund:budgetLog:valueErrorStat']"
         >误差统计</el-button>
       </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="primary"
+          icon="el-icon-menu"
+          size="mini"
+          @click="handleBudgetPeriodStat"
+          v-hasPermi="['fund:budgetLog:periodStat']"
+        >预算日志</el-button>
+      </el-col>
     </el-row>
 
     <!--列表数据-->
@@ -164,14 +173,14 @@
           <span class="link-type" @click="handleUpdate(row)">{{ row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="余额" align="center" width="150">
+      <el-table-column label="预算金额" align="center" width="150">
         <template slot-scope="{row}">
           <span>{{ formatMoneyWithSymbal(row.amount) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="类型" align="center">
+      <el-table-column label="新增流水" width="80" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.typeName }}</span>
+          <span class="link-type" @click="handleAddLog(row.id)"><i class="el-icon-circle-plus"></i></span>
         </template>
       </el-table-column>
       <el-table-column label="周期类型" align="center" width="95">
@@ -179,14 +188,7 @@
           <span>{{ row.periodName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="标签" align="center" width="95">
-        <template slot-scope="{row}">
-          <span v-if="row.keywords != null">
-           <el-tag type="success">{{ row.keywords}}</el-tag>
-          </span>
-        </template>
-      </el-table-column>
-      <el-table-column label="本期支付时间" :show-overflow-tooltip="true" align="center" width="220">
+      <el-table-column label="本期支付时间" :show-overflow-tooltip="true" align="center" width="150">
         <template slot-scope="{row}">
           <span>{{ formatCurrentPaidTime(row) }}</span>
         </template>
@@ -196,9 +198,23 @@
           <span>{{ formatCurrentPaidAmount(row) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="新增流水" width="80" align="center">
+      <el-table-column label="进度" align="center" width="80">
         <template slot-scope="{row}">
-          <span class="link-type" @click="handleAddLog(row.id)"><i class="el-icon-circle-plus"></i></span>
+          <span v-if="row.cpPaidAmount!=null">
+            <el-progress :percentage="formatPercent(row)" :color="customColors"></el-progress>
+          </span>
+        </template>
+      </el-table-column>
+      <el-table-column label="类型" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.typeName }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="标签" align="center" width="95">
+        <template slot-scope="{row}">
+          <span v-if="row.keywords != null">
+           <el-tag type="success">{{ row.keywords}}</el-tag>
+          </span>
         </template>
       </el-table-column>
       <el-table-column label="首次支付时间" align="center" width="160">
@@ -413,6 +429,7 @@
   import Treeselect from "@riophae/vue-treeselect";
   import "@riophae/vue-treeselect/dist/vue-treeselect.css";
   import {getGoodsTypeTree} from "@/api/consume/goodsType";
+  import {getPercent,progressColors} from "@/utils/mulanbay";
 
 export default {
   name: "Budget",
@@ -468,6 +485,8 @@ export default {
         name: undefined,
         status: undefined
       },
+      //进度百分比颜色
+      customColors: progressColors,
       // 表单参数
       form: {},
       // 表单校验
@@ -546,17 +565,18 @@ export default {
     /** 本期支付时间 */
     formatCurrentPaidTime(row){
       if(row.cpPaidTime){
-        return row.cpPaidTime+'(已支付)';
+        return row.cpPaidTime.substr(5,5)+'(已支付)';
       }else{
         if(row.nextPaytime){
+          let cpt = row.nextPaytime.substr(5,5);
           if(row.leftDays==0){
-            return row.nextPaytime+'(今天)';
+            return cpt+'(今天)';
           }else if(row.leftDays<0){
             var ld = 0-row.leftDays;
-            return row.nextPaytime+'(已过去'+ld+'天)';
+            return cpt+'(已过去'+ld+'天)';
           }else{
             var ld = row.leftDays;
-            return row.nextPaytime+'('+ld+'天后)';
+            return cpt+'('+ld+'天后)';
           }
         }else{
           return '--';
@@ -578,6 +598,11 @@ export default {
         return '--';
       }
     },
+    /** 进度 */
+    formatPercent(row){
+      let pp = getPercent(row.cpPaidAmount,row.amount);
+      return parseInt(pp.toFixed(0));
+    },
     //统计
     handleStat(){
       //路由定向
@@ -597,6 +622,11 @@ export default {
     handleBudgetLogValueErrorStat(){
       //路由定向
       this.$router.push({name:'BudgetLog/valueErrorStat',query: {}})
+    },
+    //预算日志
+    handleBudgetPeriodStat(){
+      //路由定向
+      this.$router.push({name:'BudgetLog/periodStat',query: {}})
     },
     //预算分析
     handleBudgetAnalyse(){
