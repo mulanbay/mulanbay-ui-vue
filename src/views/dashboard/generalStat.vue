@@ -2,7 +2,7 @@
   <div class="app-container">
     <el-row>
       <el-col :span="24" class="card-box">
-        <div>
+        <div style="text-align: left;">
           <el-form :model="queryParams" ref="queryForm" :inline="true">
           <el-form-item label="消费类型" prop="consumeType">
             <el-select
@@ -41,8 +41,7 @@
           </el-form>
         </div>
       </el-col>
-    </el-row>
-    <el-row>
+
       <el-col :span="16" class="card-box">
         <el-card>
           <div class="chart-wrapper">

@@ -2,43 +2,43 @@
   <div class="app-container">
     <el-row>
       <el-col :span="24" class="card-box">
-          <div>
-            <el-form :model="queryParams" ref="queryForm" :inline="true">
-              <el-form-item label="预算周期" prop="period">
-                <el-radio-group v-model="queryParams.period">
-                  <el-radio
-                    v-for="dict in periodOptions"
-                    :key="dict.id"
-                    :label="dict.id"
-                  >{{dict.text}}</el-radio>
-                </el-radio-group>
-              </el-form-item>
-              <el-form-item v-if="queryParams.period == 'YEARLY'" label="选择年份">
-                <el-date-picker
-                  v-model="queryParams.year"
-                  type="year"
-                  value-format="yyyy"
-                  style="width: 120px"
-                  placeholder="选择年份">
-                </el-date-picker>
-              </el-form-item>
-              <el-form-item v-if="queryParams.period == 'MONTHLY'" label="选择月份">
-                <el-date-picker
-                  v-model="queryParams.yearMonth"
-                  type="month"
-                  value-format="yyyy-MM"
-                  style="width: 120px"
-                  placeholder="选择月份">
-                </el-date-picker>
-              </el-form-item>
-              <el-form-item>
-                <el-button type="stat" icon="el-icon-s-data" size="mini" @click="handleQuery" v-hasPermi="['fund:budgetLog:periodStat']">统计</el-button>
-                <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-                <el-button type="primary" icon="el-icon-d-arrow-left" size="mini" @click="getNext(-1)" v-hasPermi="['fund:budgetLog:periodStat']">往前</el-button>
-                <el-button type="primary" icon="el-icon-d-arrow-right" size="mini" @click="getNext(1)" v-hasPermi="['fund:budgetLog:periodStat']">往后</el-button>
-              </el-form-item>
-            </el-form>
-          </div>
+        <div style="text-align: left;">
+          <el-form :model="queryParams" ref="queryForm" :inline="true">
+            <el-form-item label="预算周期" prop="period">
+              <el-radio-group v-model="queryParams.period">
+                <el-radio
+                  v-for="dict in periodOptions"
+                  :key="dict.id"
+                  :label="dict.id"
+                >{{dict.text}}</el-radio>
+              </el-radio-group>
+            </el-form-item>
+            <el-form-item v-if="queryParams.period == 'YEARLY'" label="选择年份">
+              <el-date-picker
+                v-model="queryParams.year"
+                type="year"
+                value-format="yyyy"
+                style="width: 120px"
+                placeholder="选择年份">
+              </el-date-picker>
+            </el-form-item>
+            <el-form-item v-if="queryParams.period == 'MONTHLY'" label="选择月份">
+              <el-date-picker
+                v-model="queryParams.yearMonth"
+                type="month"
+                value-format="yyyy-MM"
+                style="width: 120px"
+                placeholder="选择月份">
+              </el-date-picker>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="stat" icon="el-icon-s-data" size="mini" @click="handleQuery" v-hasPermi="['fund:budgetLog:periodStat']">统计</el-button>
+              <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+              <el-button type="primary" icon="el-icon-d-arrow-left" size="mini" @click="getNext(-1)" v-hasPermi="['fund:budgetLog:periodStat']">往前</el-button>
+              <el-button type="primary" icon="el-icon-d-arrow-right" size="mini" @click="getNext(1)" v-hasPermi="['fund:budgetLog:periodStat']">往后</el-button>
+            </el-form-item>
+          </el-form>
+        </div>
       </el-col>
 
       <el-col :span="16" class="card-box">
