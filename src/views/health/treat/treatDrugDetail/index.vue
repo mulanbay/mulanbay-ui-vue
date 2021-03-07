@@ -88,10 +88,10 @@ export default {
     'treat-drug-detail-detail':TreatDrugDetailDetail
   },
   props: {
-      //父层带过来的信息值
-      treatForDrugDetailListData:{
-        treatDrugId:undefined
-      }
+    //父层带过来的信息值
+    treatForDrugDetailListData:{
+      treatDrugId:undefined
+    }
   },
   data() {
     return {

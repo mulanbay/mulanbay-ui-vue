@@ -180,7 +180,11 @@
       </el-table-column>
       <el-table-column label="新增流水" width="80" align="center">
         <template slot-scope="{row}">
-          <span class="link-type" @click="handleAddLog(row.id)"><i class="el-icon-circle-plus"></i></span>
+          <span class="link-type" @click="handleAddLog(row.id)" v-if="row.period=='ONCE'">
+            <i class="el-icon-circle-plus"></i>
+          </span>
+          <span v-else-if="row.feeType!=null">自动</span>
+          <span v-else>--</span>
         </template>
       </el-table-column>
       <el-table-column label="周期类型" align="center" width="95">
@@ -377,7 +381,7 @@
               <el-date-picker type="datetime" v-model="form.expectPaidTime" format="yyyy-MM-dd HH:mm:ss" value-format="yyyy-MM-dd HH:mm:ss"
                         :style="{width: '200px'}" placeholder="请选择时间" clearable >
               </el-date-picker>
-              <span class="link-type" @click="msgAlert('提示','<1>对于单次类型，如果设置预期实现时间，则预算金额会加入到该日期所在月的月预算中。<br><2>对于每年类型，如果设置预期实现时间，则预算金额会加入到该日期所在月的每年的该月预算中')"><i class="el-icon-question" /></span>
+              <span class="link-type" @click="msgAlert('提示','<1>对于单次类型，必须设置预期实现时间，则预算金额会加入到该日期所在月的月预算中。<br><2>对于每年类型，如果设置预期实现时间，则预算金额会加入到该日期所在月的每年的该月预算中')"><i class="el-icon-question" /></span>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -430,6 +434,7 @@
   import "@riophae/vue-treeselect/dist/vue-treeselect.css";
   import {getGoodsTypeTree} from "@/api/consume/goodsType";
   import {getPercent,progressColors} from "@/utils/mulanbay";
+  import {getQueryObject} from "@/utils/index";
 
 export default {
   name: "Budget",
@@ -509,12 +514,25 @@ export default {
       }
     };
   },
+  mounted() {
+
+  },
   created() {
+    //处理查询参数
+    let qb = getQueryObject(null);
+    if(!this.isObjectEmpty(qb.feeType)){
+      //商品类型页面过来
+      this.queryParams.feeType = qb.feeType;;
+      this.queryParams.goodsTypeId = qb.goodsTypeId;;
+      this.queryParams.subGoodsTypeId = qb.subGoodsTypeId;;
+    }
+    //查询
     this.getList();
     this.getEnumTree('BudgetType','FIELD',false).then(response => {
       this.typeOptions = response;
     });
-    this.getEnumTree('PeriodType','FIELD',false).then(response => {
+    //预算周期采用数据字典配置，有些周期类型不好实现
+    this.getDictItemTree('BUDGET_PERIOD_TYPE',false).then(response => {
       this.periodOptions = response;
     });
     this.getEnumTree('BudgetFeeType','FIELD',false).then(response => {
@@ -715,6 +733,10 @@ export default {
     },
     /** 提交按钮 */
     submitForm: function() {
+      if(this.form.period=='ONCE'&&this.form.expectPaidTime==null){
+        this.msgAlert("单次预算需要设置期望时间");
+        return;
+      }
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.form.id != undefined) {

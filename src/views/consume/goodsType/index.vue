@@ -65,6 +65,11 @@
           <span>{{ row.orderIndex }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="预算" align="center" width="80">
+        <template slot-scope="{row}">
+          <span @click="handleBudget(row)"><svg-icon icon-class="fund" /></span>
+        </template>
+      </el-table-column>
       <el-table-column label="状态" align="center" width="100">
         <template slot-scope="{row}">
           <el-switch v-model="row.status" disabled active-value="ENABLE" inactive-value="DISABLE" @change="handleStatusChange(row)"></el-switch>
@@ -148,7 +153,6 @@
       </div>
     </el-dialog>
 
-
   </div>
 </template>
 
@@ -160,7 +164,10 @@
 
 export default {
   name: "GoodsType",
-  components: { Treeselect, IconSelect },
+  components: {
+    Treeselect,
+    IconSelect
+  },
   data() {
     return {
       // 遮罩层
@@ -230,7 +237,24 @@ export default {
         }
       );
     },
-    // 状态修改
+    /** 查询预算列表 */
+    handleBudget(row){
+      let goodsTypeId=undefined;
+      let subGoodsTypeId=undefined;
+      if(row.parentId==0){
+        //大类
+        goodsTypeId = row.id;
+      }else{
+        goodsTypeId = row.parentId;
+        subGoodsTypeId = row.id;
+      }
+      this.$router.push({ name: 'Budget', query: {
+        feeType:'BUY_RECORD',
+        goodsTypeId:goodsTypeId,
+        subGoodsTypeId:subGoodsTypeId
+      }});
+    },
+    /** 状态修改 */
     handleStatusChange(row) {
       let text = row.status === "0" ? "启用" : "停用";
       this.$confirm('确认要"' + text + '""' + row.name + '"吗?', "警告", {
