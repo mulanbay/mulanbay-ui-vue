@@ -33,101 +33,84 @@
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
-    <el-form ref="form" :model="form" :rules="rules" label-width="140px" size="small" border="true">
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="预算金额" prop="budgetAmount">
-             <el-input-number v-model="form.budgetAmount" placeholder="单位:元" controls-position="right" :min="0" :controls="false" :precision="2"/>元
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="已经消费/预算比例" prop="consumeBudgetRate">
-             <el-input-number v-model="form.consumeBudgetRate" placeholder="" controls-position="right" :min="0" :controls="false" :precision="2"/>%
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="总消费金额" prop="consumeAmount">
-             <el-input-number v-model="form.consumeAmount" placeholder="单位:元" controls-position="right" :min="0" :controls="false" :precision="2"/>元
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="普通消费金额" prop="ncAmount">
-             <el-input-number v-model="form.ncAmount" placeholder="" controls-position="right" :min="0" :controls="false" :precision="2"/>元
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="突发消费金额" prop="bcAmount">
-             <el-input-number v-model="form.bcAmount" placeholder="单位:元" controls-position="right" :min="0" :controls="false" :precision="2"/>元
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="看病花费金额" prop="trAmount">
-             <el-input-number v-model="form.trAmount" placeholder="" controls-position="right" :min="0" :controls="false" :precision="2"/>元
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="收入" prop="lastIncome">
-             <el-input-number v-model="form.lastIncome" placeholder="单位:元" controls-position="right" :min="0" :controls="false" :precision="2"/>元
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
-      <div slot="footer" class="dialog-footer" align="center">
-        <!--列表数据-->
-        <el-table v-loading="loading" :data="dataList" >
-          <el-table-column label="ID" prop="id" sortable="custom" align="center" width="60">
-            <template slot-scope="{row}">
-              <span>{{ row.id }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="名称" min-width="120px">
-            <template slot-scope="{row}">
-              <span class="link-type">{{ row.name }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="预算金额" align="center" width="95">
-            <template slot-scope="{row}">
-              <span>{{ row.amount }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="类型" align="center" width="70">
-            <template slot-scope="{row}">
-              <span>{{ row.typeName }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="周期类型" align="center" width="75">
-            <template slot-scope="{row}">
-              <span>{{ row.periodName }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="系数" align="center" width="60">
-            <template slot-scope="{row}">
-              <span>{{ row.drate }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="总金额" align="center" width="95">
-            <template slot-scope="{row}">
-              <span>{{ row.ttAmount }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="百分比" align="center" width="95">
-            <template slot-scope="{row}">
-              <span>{{ row.pp }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="占据收入" align="center" width="95">
-            <template slot-scope="{row}">
-              <span>{{ row.bir }}</span>
-            </template>
-          </el-table-column>
-        </el-table>
-      </div>
+    <div class="el-table el-table--enable-row-hover el-table--medium">
+      <table cellspacing="0" style="width: 100%;">
+        <tbody>
+          <tr>
+            <td><div class="cell">预算金额</div></td>
+            <td><div class="cell" >{{ formatMoneyWithSymbal(form.budgetAmount) }}</div></td>
+            <td><div class="cell">消费/预算比例</div></td>
+            <td><div class="cell" >{{ form.consumeBudgetRate+'%' }}</div></td>
+          </tr>
+          <tr>
+            <td><div class="cell">总消费</div></td>
+            <td><div class="cell" >{{ formatMoneyWithSymbal(form.consumeAmount) }}</div></td>
+            <td><div class="cell">普通消费</div></td>
+            <td><div class="cell" >{{ formatMoneyWithSymbal(form.ncAmount) }}</div></td>
+          </tr>
+          <tr>
+            <td><div class="cell">突发消费</div></td>
+            <td><div class="cell" >{{ formatMoneyWithSymbal(form.bcAmount) }}</div></td>
+            <td><div class="cell">看病花费</div></td>
+            <td><div class="cell" >{{ formatMoneyWithSymbal(form.trAmount) }}</div></td>
+          </tr>
+          <tr>
+            <td><div class="cell">收入</div></td>
+            <td><div class="cell" >{{ formatMoneyWithSymbal(form.lastIncome) }}</div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div slot="footer" class="dialog-footer" align="center">
+      <!--列表数据-->
+      <el-table v-loading="loading" :data="dataList" >
+        <el-table-column label="ID" prop="id" sortable="custom" align="center" width="60">
+          <template slot-scope="{row}">
+            <span>{{ row.id }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="名称" min-width="120px">
+          <template slot-scope="{row}">
+            <span class="link-type">{{ row.name }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="预算金额" align="center" width="95">
+          <template slot-scope="{row}">
+            <span>{{ row.amount }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="类型" align="center" width="70">
+          <template slot-scope="{row}">
+            <span>{{ row.typeName }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="周期类型" align="center" width="75">
+          <template slot-scope="{row}">
+            <span>{{ row.periodName }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="系数" align="center" width="60">
+          <template slot-scope="{row}">
+            <span>{{ row.drate }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="总金额" align="center" width="95">
+          <template slot-scope="{row}">
+            <span>{{ row.ttAmount }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="百分比" align="center" width="95">
+          <template slot-scope="{row}">
+            <span>{{ row.pp }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="占据收入" align="center" width="95">
+          <template slot-scope="{row}">
+            <span>{{ row.bir }}</span>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
   </div>
 </template>
 

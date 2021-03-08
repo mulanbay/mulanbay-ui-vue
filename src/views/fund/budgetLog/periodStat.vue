@@ -265,7 +265,7 @@
   import {getPercent,progressColors} from "@/utils/mulanbay";
   import {getDay,getMonth} from "@/utils/datetime";
   import PieChart from '../../chart/pieChart';
-  import Snapshot from './snapshot';
+  import Snapshot from '../budgetSnapshot/snapshot';
   import resize from '../../dashboard/mixins/resize.js';
   import {copyObject,getQueryObject} from "@/utils/index";
 
@@ -452,10 +452,3 @@ export default {
   }
 };
 </script>
-<style lang="scss" scoped>
-@media (max-width:1024px) {
-  .chart-wrapper {
-    padding: 8px;
-  }
-}
-</style>

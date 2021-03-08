@@ -15,3 +15,11 @@ export function getList(query) {
     params: query
   })
 }
+
+export function getChildren(query) {
+  return request({
+    url: '/budgetSnapshot/getChildren',
+    method: 'get',
+    params: query
+  })
+}
