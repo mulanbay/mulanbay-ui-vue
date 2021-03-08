@@ -185,28 +185,6 @@ export default {
     box-shadow: 4px 4px 40px rgba(0, 0, 0, .05);
     border-color: rgba(0, 0, 0, .05);
 
-    &:hover {
-      .card-panel-icon-wrapper {
-        color: #fff;
-      }
-
-      .icon-people {
-        background: #40c9c6;
-      }
-
-      .icon-message {
-        background: #36a3f7;
-      }
-
-      .icon-money {
-        background: #f4516c;
-      }
-
-      .icon-shopping {
-        background: #34bfa3
-      }
-    }
-
     .icon-people {
       color: #40c9c6;
     }
@@ -220,7 +198,7 @@ export default {
     }
 
     .icon-shopping {
-      color: #34bfa3
+      color: #424264
     }
 
     .card-panel-icon-wrapper {

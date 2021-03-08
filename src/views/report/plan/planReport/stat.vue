@@ -2,7 +2,7 @@
   <div class="app-container">
     <el-row>
       <el-col :span="24" class="card-box">
-          <div style="text-align: left;">
+          <div>
             <el-form :model="queryParams" ref="queryForm" :inline="true">
               <el-form-item label="选取计划" prop="userPlanId">
                <treeselect

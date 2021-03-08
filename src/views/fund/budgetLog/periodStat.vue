@@ -2,7 +2,7 @@
   <div class="app-container">
     <el-row>
       <el-col :span="24" class="card-box">
-        <div style="text-align: left;">
+        <div>
           <el-form :model="queryParams" ref="queryForm" :inline="true">
             <el-form-item label="预算周期" prop="period">
               <el-radio-group v-model="queryParams.period">
@@ -270,7 +270,7 @@
   import {copyObject,getQueryObject} from "@/utils/index";
 
 export default {
-  name: "PeriodStat",
+  name: "BudgetLog/periodStat",
   mixins: [resize],
   components: {
     'pie-chart':PieChart,

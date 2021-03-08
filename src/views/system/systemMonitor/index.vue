@@ -2,7 +2,7 @@
   <div class="app-container">
     <el-row>
       <el-col :span="24" class="card-box">
-          <div style="text-align: left;">
+          <div>
             <el-form :model="queryParams" ref="queryForm" :inline="true">
               <el-form-item label="自动刷新" prop="seconds">
                 <el-input-number

@@ -804,20 +804,3 @@ export default {
   }
 };
 </script>
-<style>
-  .el-table .created-row {
-    background: '';
-  }
-  .el-table .started-row {
-    background: #00CED1;
-  }
-  .el-table .finished-row {
-    background: ##4682B4;
-  }
-  .el-table .paused-row {
-    background: #BDB76B;
-  }
-  .el-table .gaveup-row {
-    background: #8B4513;
-  }
-</style>

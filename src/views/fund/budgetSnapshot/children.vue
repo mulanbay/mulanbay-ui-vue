@@ -1,27 +1,12 @@
 <template>
-  <div class="app-container">
+  <div class="dashboard-editor-container">
 
-    <div class="el-table el-table--enable-row-hover el-table--medium">
-      <table cellspacing="0" style="width: 100%;">
-        <tbody>
-          <tr>
-            <td><div class="cell">预算总计</div></td>
-            <td><div class="cell" >{{ formatMoneyWithSymbal(sumData.budgetAmount) }}</div></td>
-            <td><div class="cell">实际花费</div></td>
-            <td><div class="cell" >{{ formatMoneyWithSymbal(sumData.cpPaidAmount) }}</div></td>
-          </tr>
-          <tr>
-            <td><div class="cell">业务日期</div></td>
-            <td><div class="cell" >{{ sumData.bussKey }}</div></td>
-            <td><div class="cell">预算比例</div></td>
-            <td>
-              <div class="cell" >
-                <el-progress :percentage="parseInt(sumData.rate.toFixed(0))" :color="customColors"></el-progress>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <!--统计数据-->
+    <children-stat :statData="statData"/>
+
+    <!--图表数据-->
+    <div>
+      <common-chart :chartData="chartData"/>
     </div>
 
     <!--列表数据-->
@@ -34,18 +19,21 @@
       </el-table-column>
       <el-table-column label="预算金额" align="center" >
         <template slot-scope="{row}">
-          <span>{{ formatMoneyWithSymbal(row.cpPaidAmount)  }}</span>
+          <span>{{ formatMoneyWithSymbal(row.amount)  }}</span>
         </template>
       </el-table-column>
       <el-table-column label="实际花费" align="center" >
         <template slot-scope="{row}">
           <span>{{ formatMoneyWithSymbal(row.cpPaidAmount)  }}</span>
+          <span v-if="row.rate>100">
+           <el-tag type="danger" size="mini">超支</el-tag>
+          </span>
         </template>
       </el-table-column>
       <el-table-column label="花费/预算比例" align="center" >
         <template slot-scope="{row}">
           <span>
-            <el-progress :percentage="parseInt(row.rate.toFixed(0))" :color="customColors"></el-progress>
+            {{row.rate.toFixed(0)+'%'}}
           </span>
         </template>
       </el-table-column>
@@ -68,15 +56,21 @@
   import {getPercent,progressColors} from "@/utils/mulanbay";
   import {getChildren} from "@/api/fund/budgetSnapshot";
   import {getQueryObject} from "@/utils/index";
+  import ChildrenStat from './childrenStat'
+  import CommonChart from '../../chart/commonChart'
 
 export default {
   name: "Children",
+  components: {
+    'children-stat':ChildrenStat,
+    'common-chart':CommonChart
+  },
   data() {
     return {
       // 遮罩
       loading: true,
       //统计信息
-      sumData:{
+      statData:{
         budgetAmount:0,
         cpPaidAmount:0,
         bussKey:undefined,
@@ -87,8 +81,11 @@ export default {
       customColors: progressColors,
       // 查询参数
       queryParams: {
-        snapshotId:undefined
+        snapshotId:undefined,
+        needChart:true
       },
+      //图表数据
+      chartData:{}
     };
   },
   created() {
@@ -107,7 +104,7 @@ export default {
             this.msgAlert("未找到相关数据");
             return;
           }
-          this.sumData = {
+          this.statData = {
             budgetAmount:response.budgetAmount,
             cpPaidAmount:response.cpPaidAmount,
             bussKey:response.bussKey,
@@ -116,6 +113,9 @@ export default {
           this.snapshotList = new Array();
           let datas = response.children;
           this.snapshotList = datas;
+          this.chartData = response.chartData;
+          this.chartData.height='350px';
+          this.chartData.chartType='MIX_LINE_BAR';
         }
       );
     }
