@@ -376,9 +376,14 @@
               </el-radio-group>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+          <el-col :span="6">
             <el-form-item label="树形统计" prop="treeStat">
               <el-switch v-model="form.treeStat"></el-switch>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="是否缓存" prop="cache" v-if="form.functionDataType == 'C'">
+              <el-switch v-model="form.cache"></el-switch>
             </el-form-item>
           </el-col>
         </el-row>
@@ -645,6 +650,7 @@ export default {
         visible:false,
         router:false,
         frame:false,
+        cache:true,
         imageName:'icon'
       };
       this.resetForm("form");
