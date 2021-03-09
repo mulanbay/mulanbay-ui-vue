@@ -209,6 +209,13 @@
           </span>
         </template>
       </el-table-column>
+      <el-table-column label="历史" align="center">
+        <template slot-scope="{row}">
+          <span class="link-type" @click="showHistory(row)" v-hasPermi="['fund:budgetSnapshot:history']">
+           <i class="el-icon-menu" />
+          </span>
+        </template>
+      </el-table-column>
       <el-table-column label="类型" align="center">
         <template slot-scope="{row}">
           <span>{{ row.typeName }}</span>
@@ -403,6 +410,7 @@
                 >{{dict.text}}
                 </el-radio>
               </el-radio-group>
+              <span class="link-type" @click="msgAlert('提示','<1>如果该预算已经被执行过，那么请直接设置预算金额为0，否则设置为无效后在年度详情中会无法查询。<br><2>或者在第二年时再设置为无效。')"><i class="el-icon-question" /></span>
             </el-form-item>
           </el-col>
         </el-row>
@@ -551,6 +559,10 @@ export default {
           this.loading = false;
         }
       );
+    },
+    /** 展示历史 */
+    showHistory(row){
+      this.$router.push({name:'BudgetSnapshotHistory',query: {budgetId:row.id}})
     },
     /** 资金类型改变 */
     onFeeTypeChange(){

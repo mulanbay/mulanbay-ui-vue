@@ -16,6 +16,14 @@ export function getList(query) {
   })
 }
 
+export function history(query) {
+  return request({
+    url: '/budgetSnapshot/history',
+    method: 'get',
+    params: query
+  })
+}
+
 export function getChildren(query) {
   return request({
     url: '/budgetSnapshot/getChildren',

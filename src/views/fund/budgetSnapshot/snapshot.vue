@@ -13,6 +13,7 @@
             <th class="is-leaf"><div class="cell">比例</div></th>
             <th class="is-leaf"><div class="cell">数据来源</div></th>
             <th class="is-leaf"><div class="cell">详情</div></th>
+            <th class="is-leaf"><div class="cell">历史</div></th>
             <th class="is-leaf"><div class="cell">支付时间</div></th>
           </tr>
         </thead>
@@ -48,6 +49,11 @@
               <div class="cell">
                 <span class="link-type" @click="showChildren(item)" v-if="item.hasChild==true"><i class="el-icon-s-grid" /></span>
                 <span v-else>--</span>
+              </div>
+            </td>
+            <td>
+              <div class="cell">
+                <span class="link-type" @click="showHistory(item)"><i class="el-icon-s-grid" /></span>
               </div>
             </td>
             <td><div class="cell">{{ item.cpPaidTime }}</div></td>
@@ -97,6 +103,10 @@ export default {
     /** 展示子类 */
     showChildren(row){
       this.$router.push({name:'BudgetSnapshotChildren',query: {snapshotId:row.snapshotId}})
+    },
+    /** 展示历史 */
+    showHistory(row){
+      this.$router.push({name:'BudgetSnapshotHistory',query: {budgetId:row.id}})
     },
     /** 预算快照列表 */
     getSnapshotList(budgetLogId){

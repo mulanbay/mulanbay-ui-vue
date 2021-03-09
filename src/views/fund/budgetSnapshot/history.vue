@@ -1,8 +1,33 @@
 <template>
-  <div class="dashboard-editor-container">
-
-    <!--统计数据-->
-    <children-stat :statData="statData"/>
+  <div class="app-container">
+    <el-form :model="queryParams" ref="queryForm" :inline="true">
+      <el-form-item label="选择预算" prop="budgetKey">
+        <treeselect v-model="queryParams.budgetId"
+        :options="budgetOptions"
+        :disable-branch-nodes="true"
+        :show-count="true" placeholder="请选择预算"
+        style="width: 240px"
+        />
+      </el-form-item>
+      <el-form-item label="日期区间">
+        <el-date-picker
+          v-model="dateRange"
+          size="small"
+          style="width: 240px"
+          value-format="yyyy-MM-dd"
+          type="daterange"
+          unlink-panels
+          range-separator="-"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          :picker-options="datePickerOptions"
+        ></el-date-picker>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="query" icon="el-icon-search" size="mini" @click="handleQuery" v-hasPermi="['fund:budgetSnapshot:history']">搜索</el-button>
+        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+      </el-form-item>
+    </el-form>
 
     <!--图表数据-->
     <div>
@@ -51,20 +76,30 @@
       </el-table-column>
     </el-table>
 
+    <pagination
+      v-show="total>0"
+      :total="total"
+      :page.sync="queryParams.page"
+      :limit.sync="queryParams.pageSize"
+      @pagination="getList"
+    />
+
   </div>
 </template>
 
 <script>
   import {getPercent,progressColors} from "@/utils/mulanbay";
-  import {getChildren} from "@/api/fund/budgetSnapshot";
+  import {history as getHistoryList} from "@/api/fund/budgetSnapshot";
+  import {getBudgetTree} from "@/api/fund/budget";
   import {getQueryObject} from "@/utils/index";
-  import ChildrenStat from './childrenStat'
   import CommonChart from '../../chart/commonChart'
+  import Treeselect from "@riophae/vue-treeselect";
+  import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 
 export default {
-  name: "BudgetSnapshotChildren",
+  name: "BudgetSnapshotHistory",
   components: {
-    'children-stat':ChildrenStat,
+    Treeselect,
     'common-chart':CommonChart
   },
   data() {
@@ -83,38 +118,54 @@ export default {
       customColors: progressColors,
       // 查询参数
       queryParams: {
-        snapshotId:undefined,
+        page: 1,
+        pageSize: 10,
+        budgetId:undefined,
         needChart:true
       },
+      // 总条数
+      total: 0,
       //图表数据
-      chartData:{}
+      chartData:{},
+      //预算列表
+      budgetOptions:[],
+      //日期范围快速选择
+      datePickerOptions:this.datePickerOptions,
+      // 日期范围
+      dateRange: []
     };
   },
   created() {
     let qb = getQueryObject(null);
-    this.queryParams.snapshotId = qb.snapshotId;
-    this.getSnapshotList();
+    this.queryParams.budgetId = qb.budgetId;
+    this.getBudgetTreeselect();
+    this.getList();
   },
   methods: {
+    /** 搜索按钮操作 */
+    handleQuery() {
+      this.queryParams.page = 1;
+      this.getList();
+    },
+    /** 重置按钮操作 */
+    resetQuery() {
+      this.resetForm("queryForm");
+      this.handleQuery();
+    },
+    /** 查询预算下拉树结构 */
+    getBudgetTreeselect() {
+      getBudgetTree(false).then(response => {
+        this.budgetOptions = response;
+      });
+    },
     /** 预算快照列表 */
-    getSnapshotList(){
+    getList(){
       this.loading = true;
-      getChildren(this.queryParams).then(
+      getHistoryList(this.addDateRange(this.queryParams, this.dateRange)).then(
         response => {
           this.loading = false;
-          if(response==null){
-            this.msgAlert("未找到相关数据");
-            return;
-          }
-          this.statData = {
-            budgetAmount:response.budgetAmount,
-            cpPaidAmount:response.cpPaidAmount,
-            bussKey:response.bussKey,
-            rate:response.rate
-          }
-          this.snapshotList = new Array();
-          let datas = response.children;
-          this.snapshotList = datas;
+          this.snapshotList = response.beanList;
+          this.total = response.maxRow;
           this.chartData = response.chartData;
           this.chartData.height='350px';
           this.chartData.chartType='MIX_LINE_BAR';
