@@ -36,7 +36,7 @@
               <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
               <el-button type="primary" icon="el-icon-d-arrow-left" size="mini" @click="getNext(-1)" v-hasPermi="['fund:budgetLog:periodStat']">往前</el-button>
               <el-button type="primary" icon="el-icon-d-arrow-right" size="mini" @click="getNext(1)" v-hasPermi="['fund:budgetLog:periodStat']">往后</el-button>
-              <el-button type="stat" icon="el-icon-s-data" size="mini" @click="handleDispatch('Finance')" v-hasPermi="['fund:finance:main']">实时数据</el-button>
+              <el-button type="query" icon="el-icon-camera-solid" size="mini" @click="handleDispatch('Finance')" v-hasPermi="['fund:finance:main']">财务速览</el-button>
             </el-form-item>
           </el-form>
         </div>

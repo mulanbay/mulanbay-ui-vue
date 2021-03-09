@@ -37,6 +37,7 @@
             <el-form-item>
               <el-button type="stat" icon="el-icon-s-data" size="mini" @click="handleQuery" v-hasPermi="['report:plan:planReport:stat']">统计</el-button>
               <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+              <el-button type="query" icon="el-icon-camera-solid" size="mini" @click="handleDispatch('Finance')" v-hasPermi="['fund:finance:main']">财务速览</el-button>
             </el-form-item>
           </el-form>
         </div>
