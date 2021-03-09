@@ -71,11 +71,16 @@
       </el-table-column>
       <el-table-column label="名称" min-width="140px" fixed="left">
         <template slot-scope="{row}">
-          <span>{{ isObjectEmpty(row.budget) ? '预算合计' : row.budget.name }}</span>
+          <span>{{ formartName(row) }}</span>
           <span v-if="row.budget == null">
            <el-tag type="success" size="mini">{{ row.periodName }}</el-tag>
            <span class="link-type" @click="handlePeriodStat(row)"><i class="el-icon-info"></i></span>
           </span>
+        </template>
+      </el-table-column>
+      <el-table-column label="业务日期" align="center" width="100" fixed="left">
+        <template slot-scope="{row}">
+          <span>{{ row.bussKey }}</span>
         </template>
       </el-table-column>
       <el-table-column label="来源" width="60px"  align="center">
@@ -89,11 +94,6 @@
           <span v-else-if=" 'REAL_TIME' == row.source">
            <el-tag type="danger" size="mini">{{ row.sourceName }}</el-tag>
           </span>
-        </template>
-      </el-table-column>
-      <el-table-column label="业务时间" align="center" width="100" >
-        <template slot-scope="{row}">
-          <span>{{ row.bussKey }}</span>
         </template>
       </el-table-column>
       <el-table-column label="预算金额" align="center" width="160">
@@ -142,14 +142,18 @@
       <el-table-column label="重新统计" width="80"  align="center">
         <template slot-scope="{row}">
           <span v-if="row.budget == null">
-           <span class="link-type" @click="handleReStat(row.id)"><i class="el-icon-s-promotion"></i></span>
+           <span class="link-type" @click="handleReStat(row.id)">
+             <i class="el-icon-s-promotion"></i>
+           </span>
           </span>
         </template>
       </el-table-column>
       <el-table-column label="预算快照" width="80"  align="center">
         <template slot-scope="{row}">
           <span v-if="row.budget == null">
-           <span class="link-type" @click="handleBudgetSnapshot(row.id)"><i class="el-icon-info"></i></span>
+           <span class="link-type" @click="handleBudgetSnapshot(row)">
+             <i class="el-icon-s-grid"></i>
+           </span>
           </span>
         </template>
       </el-table-column>
@@ -208,7 +212,7 @@
     </el-dialog>
 
     <!-- 预算快照 -->
-    <el-dialog title="快照列表" width="900px" :visible.sync="budgetSnapshotVisible">
+    <el-dialog :title="budgetSnapshotTitle" width="900px" :visible.sync="budgetSnapshotVisible">
       <el-table :data="budgetSnapshotList" >
         <el-table-column label="ID" prop="key" align="center">
           <template slot-scope="{row}">
@@ -287,6 +291,7 @@ export default {
       },
       //快照列表开启状态
       budgetSnapshotVisible:false,
+      budgetSnapshotTitle:"",
       //快照列表
       budgetSnapshotList:[],
       title:'',
@@ -348,6 +353,10 @@ export default {
     this.getBudgetTreeselect();
   },
   methods: {
+    /** 名称 */
+    formartName(row){
+      return this.isObjectEmpty(row.budget) ? '预算合计' : row.budget.name;
+    },
     /** 查询预算下拉树结构 */
     getBudgetTreeselect() {
       getBudgetTree(false).then(response => {
@@ -366,12 +375,13 @@ export default {
       );
     },
     /** 预算快照 */
-    handleBudgetSnapshot(id){
+    handleBudgetSnapshot(row){
+      this.budgetSnapshotTitle="["+this.formartName(row)+"]"+row.bussKey+"预算快照";
       this.budgetSnapshotVisible=true;
       const qp ={
         page :0,
         needTotal:false,
-        budgetLogId:id
+        budgetLogId:row.id
       }
       fetchSnapshotList(qp).then(
         response => {

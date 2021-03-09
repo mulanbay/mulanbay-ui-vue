@@ -31,3 +31,19 @@ export function getChildren(query) {
     params: query
   })
 }
+
+export function buyRecord(query) {
+  return request({
+    url: '/budgetSnapshot/buyRecord',
+    method: 'get',
+    params: query
+  })
+}
+
+export function treatRecord(query) {
+  return request({
+    url: '/budgetSnapshot/treatRecord',
+    method: 'get',
+    params: query
+  })
+}

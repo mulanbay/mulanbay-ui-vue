@@ -11,9 +11,10 @@
             <th class="is-leaf"><div class="cell">预算金额</div></th>
             <th class="is-leaf"><div class="cell">实际花费</div></th>
             <th class="is-leaf"><div class="cell">比例</div></th>
-            <th class="is-leaf"><div class="cell">数据来源</div></th>
-            <th class="is-leaf"><div class="cell">详情</div></th>
-            <th class="is-leaf"><div class="cell">历史</div></th>
+            <th class="is-leaf"><div class="cell" align="center">数据来源</div></th>
+            <th class="is-leaf"><div class="cell" align="center">详情</div></th>
+            <th class="is-leaf"><div class="cell" align="center">明细</div></th>
+            <th class="is-leaf"><div class="cell" align="center">历史</div></th>
             <th class="is-leaf"><div class="cell">支付时间</div></th>
           </tr>
         </thead>
@@ -44,15 +45,21 @@
                 </span>
               </div>
             </td>
-            <td><div class="cell">{{ item.sourceName }}</div></td>
+            <td><div class="cell" align="center">{{ item.sourceName }}</div></td>
             <td>
-              <div class="cell">
+              <div class="cell" align="center">
                 <span class="link-type" @click="showChildren(item)" v-if="item.hasChild==true"><i class="el-icon-s-grid" /></span>
                 <span v-else>--</span>
               </div>
             </td>
             <td>
-              <div class="cell">
+              <div class="cell" align="center">
+                <span class="link-type" @click="showConsume(item)"  v-if="item.feeType!=null"><i class="el-icon-s-grid" /></span>
+                <span v-else>--</span>
+              </div>
+            </td>
+            <td>
+              <div class="cell" align="center">
                 <span class="link-type" @click="showHistory(item)"><i class="el-icon-s-grid" /></span>
               </div>
             </td>
@@ -62,15 +69,31 @@
       </table>
     </div>
 
+    <!-- 交易记录 -->
+    <el-dialog :title="buyRecordTitle" width="750px" :visible.sync="buyRecordOpen">
+      <buy-record :snapshotData="snapshotDataBR" />
+    </el-dialog>
+
+    <!-- 看病记录 -->
+    <el-dialog :title="treatRecordTitle" width="750px" :visible.sync="treatRecordOpen">
+      <treat-record :snapshotData="snapshotDataTR" />
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
   import {getList as getBudgetSnapshotData} from "@/api/fund/budgetSnapshot";
   import {getPercent,progressColors} from "@/utils/mulanbay";
+  import BuyRecord from './buyRecord';
+  import TreatRecord from './treatRecord';
 
 export default {
   name: "BudgetSnapshot",
+  components: {
+    'buy-record':BuyRecord,
+    'treat-record':TreatRecord
+  },
   props: {
     //父层带过来的值
     budgetData: {
@@ -79,6 +102,18 @@ export default {
   },
   data() {
     return {
+      //交易记录
+      buyRecordTitle:'',
+      buyRecordOpen:false,
+      snapshotDataBR:{
+        snapshotId:undefined
+      },
+      //看病记录
+      treatRecordTitle:'',
+      treatRecordOpen:false,
+      snapshotDataTR:{
+        snapshotId:undefined
+      },
       //快照数据
       snapshotList:[],
       //进度百分比颜色
@@ -107,6 +142,36 @@ export default {
     /** 展示历史 */
     showHistory(row){
       this.$router.push({name:'BudgetSnapshotHistory',query: {budgetId:row.id}})
+    },
+    /** 展示消费 */
+    showConsume(row){
+      switch(row.feeType){
+        case 'BUY_RECORD':
+          this.showBuyRecord(row);
+          break;
+        case 'TREAT_RECORD':
+          this.showTreatRecord(row);
+          break;
+        default:
+          this.msgAlert("无法查询相关记录");
+      }
+
+    },
+    /** 展示交易记录 */
+    showBuyRecord(row){
+      this.buyRecordTitle="["+row.name+"]"+row.bussKey+"交易记录";
+      this.buyRecordOpen = true;
+      this.snapshotDataBR = {
+        snapshotId: row.snapshotId
+      };
+    },
+    /** 展示看病记录 */
+    showTreatRecord(row){
+      this.treatRecordTitle="["+row.name+"]"+row.bussKey+"看病记录";
+      this.treatRecordOpen = true;
+      this.snapshotDataTR = {
+        snapshotId: row.snapshotId
+      };
     },
     /** 预算快照列表 */
     getSnapshotList(budgetLogId){

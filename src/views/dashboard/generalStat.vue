@@ -270,8 +270,8 @@
               <tbody>
                 <tr>
                   <td><div class="cell">锻炼时间</div></td>
-                  <td><div class="cell">{{ statData.totalSportExerciseCount }}</div></td>
-                  <td><div class="cell">{{ statData.totalSportExerciseHours }}小时</div></td>
+                  <td><div class="cell">{{ statLifeData.totalSportExerciseCount }}</div></td>
+                  <td><div class="cell">{{ statLifeData.totalSportExerciseHours }}小时</div></td>
                   <td>
                     <div class="cell">
                       <span class="link-type" @click="handleDispatch('SportExercise')"><i class="el-icon-s-promotion" /></span>
@@ -280,8 +280,8 @@
                 </tr>
                 <tr>
                   <td><div class="cell">音乐练习</div></td>
-                  <td><div class="cell">{{ statData.totalMusicPracticeCount }}</div></td>
-                  <td><div class="cell">{{ statData.totalMusicPracticeHours }}小时</div></td>
+                  <td><div class="cell">{{ statLifeData.totalMusicPracticeCount }}</div></td>
+                  <td><div class="cell">{{ statLifeData.totalMusicPracticeHours }}小时</div></td>
                   <td>
                     <div class="cell">
                       <span class="link-type" @click="handleDispatch('MusicPractice')"><i class="el-icon-s-promotion" /></span>
@@ -290,8 +290,8 @@
                 </tr>
                 <tr>
                   <td><div class="cell">阅读时间</div></td>
-                  <td><div class="cell">{{ statData.totalReadingCount }}</div></td>
-                  <td><div class="cell">{{ statData.totalReadingHours }}小时</div></td>
+                  <td><div class="cell">{{ statLifeData.totalReadingCount }}</div></td>
+                  <td><div class="cell">{{ statLifeData.totalReadingHours }}小时</div></td>
                   <td>
                     <div class="cell">
                       <span class="link-type" @click="handleDispatch('ReadingRecord')"><i class="el-icon-s-promotion" /></span>
@@ -309,7 +309,7 @@
 </template>
 
 <script>
-  import {generalStat} from "@/api/main";
+  import {generalStat,generalLifeStat } from "@/api/main";
   import {statWithTreat} from "@/api/consume/buyRecord";
   import {getPercent,progressColors} from "@/utils/mulanbay";
   import PieChart from '../chart/pieChart';
@@ -337,6 +337,7 @@ export default {
       queryParams:{},
       chartData:{},
       statData:{},
+      statLifeData:{},
       //进度百分比颜色
       customColors: progressColors
     };
@@ -367,6 +368,7 @@ export default {
       let para = this.addDateRange(this.queryParams, this.dateRange);
       this.chartStat(para);
       this.dataStat(para);
+      this.lifeDataStat(para);
     },
     // 数据统计
     dataStat(para){
@@ -393,12 +395,6 @@ export default {
             totalBuyCount: data.totalBuyCount,
             totalTreatAmount: data.totalTreatAmount,
             totalTreatCount: data.totalTreatCount,
-            totalSportExerciseHours: data.totalSportExerciseHours.toFixed(1),
-            totalSportExerciseCount: data.totalSportExerciseCount,
-            totalReadingHours: data.totalReadingHours.toFixed(1),
-            totalReadingCount: data.totalReadingCount,
-            totalMusicPracticeHours:data.totalMusicPracticeHours.toFixed(1),
-            totalMusicPracticeCount:data.totalMusicPracticeCount,
             monthConsumeBudgetRate:parseInt(vmonthConsumeBudgetRate.toFixed(0)),
             remainMoney:vremainMoney,
             dayMonthRate:parseInt(data.dayMonthRate.toFixed(0)),
@@ -408,6 +404,23 @@ export default {
             monthPassDays:data.monthPassDays,
             monthRemainConsume:monthRemainConsume,
             monthRCPerDay:monthRCPerDay
+          };
+        }
+      );
+    },
+    // 数据统计
+    lifeDataStat(para){
+      generalLifeStat(para).then(
+        response => {
+          this.statLifeData={};
+          let data = response;
+          this.statLifeData = {
+            totalSportExerciseHours: data.totalSportExerciseHours.toFixed(1),
+            totalSportExerciseCount: data.totalSportExerciseCount,
+            totalReadingHours: data.totalReadingHours.toFixed(1),
+            totalReadingCount: data.totalReadingCount,
+            totalMusicPracticeHours:data.totalMusicPracticeHours.toFixed(1),
+            totalMusicPracticeCount:data.totalMusicPracticeCount,
           };
         }
       );
