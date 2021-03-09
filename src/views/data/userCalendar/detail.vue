@@ -183,7 +183,7 @@
   import formCreate, { maker } from '@form-create/element-ui'
 
 export default {
-  name: "Detail",
+  name: "UserCalendarDetail",
   components: {
     Treeselect,
     formCreate:formCreate.$form()

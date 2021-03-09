@@ -271,7 +271,7 @@
   import BudgetLogDetail from './detail'
 
 export default {
-  name: "BudgetFlow",
+  name: "BudgetLog",
   components: {
     Treeselect,
     'budget-log-detail':BudgetLogDetail
@@ -388,7 +388,7 @@ export default {
         date = row.occurDate.substring(0,4);
       }
       //路由定向
-      this.$router.push({name:'BudgetLog/periodStat',query: {date:date}})
+      this.$router.push({name:'BudgetLogPeriodStat',query: {date:date}})
     },
     /** 账户变化统计 */
     handleAccountChange(bussKey){

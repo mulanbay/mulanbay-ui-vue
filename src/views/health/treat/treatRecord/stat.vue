@@ -106,7 +106,7 @@
   import PieChart from '../../../chart/doublePieChart'
 
 export default {
-  name: "Stat",
+  name: "TreatRecordStat",
   components: {
     'pie-chart':PieChart
   },

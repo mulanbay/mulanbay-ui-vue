@@ -103,7 +103,7 @@
 
 
 export default {
-  name: "TimeStat",
+  name: "MusicPracticeTimeStat",
   mixins: [resize],
   props: chartProps,
   mounted() {

@@ -70,7 +70,7 @@
   import CommonChart from '../../chart/commonChart'
 
 export default {
-  name: "DateStat",
+  name: "ReadingRecordDetailDateStat",
   components: {
     'common-chart':CommonChart
   },

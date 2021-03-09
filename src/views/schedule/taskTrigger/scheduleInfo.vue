@@ -44,7 +44,7 @@
   import {getScheduleInfo} from "@/api/schedule/taskTrigger";
 
 export default {
-  name: "ScheduleInfo",
+  name: "TaskTriggerScheduleInfo",
   data() {
     return {
       //列表数据

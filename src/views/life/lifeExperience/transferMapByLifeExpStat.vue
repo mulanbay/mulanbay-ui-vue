@@ -40,7 +40,7 @@
 
 
 export default {
-  name: "TransferMap",
+  name: "LifeExperienceTransferMapByLifeExpStat",
   mixins: [resize],
   props: {
     //父层带过来的账户信息值

@@ -52,7 +52,7 @@
 import {getUserNotifyRemind,addOrEditUserNotifyRemind} from "@/api/report/notify/userNotify";
 
 export default {
-  name: "Remind",
+  name: "UserNotifyRemind",
   props: {
     userNotifyData: {
       type: Object,

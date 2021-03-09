@@ -427,17 +427,17 @@ export default {
       //openWindow('accountFlow/analyse','账户分析',800,600);
       const id = (row ===null ? "" : row.id);
       //路由定向
-      this.$router.push({name:'AccountFlow/analyse',query: {id:id}})
+      this.$router.push({name:'AccountFlowAnalyse',query: {id:id}})
     },
     //账户统计
     handleStat() {
       //路由定向
-      this.$router.push({name:'Account/stat',query: {}})
+      this.$router.push({name:'AccountStat',query: {}})
     },
     //账户预测
     handleForecast() {
       //路由定向
-      this.$router.push({name:'Account/forecast',query: {}})
+      this.$router.push({name:'AccountForecast',query: {}})
     },
     //生成快照
     handleCreateSnapshot() {

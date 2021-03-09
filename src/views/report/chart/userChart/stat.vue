@@ -51,7 +51,7 @@
   import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 
 export default {
-  name: "Stat",
+  name: "UserChartStat",
   components: {
     Treeselect,
     'common-chart':CommonChart

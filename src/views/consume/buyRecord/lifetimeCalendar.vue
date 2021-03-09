@@ -47,7 +47,7 @@
   import {getDayByDate} from "@/utils/datetime";
 
 export default {
-  name: "LifetimeCalendar",
+  name: "BuyRecordLifetimeCalendar",
   props: {
       //父层带过来的信息值
       buyRecordData: {id:undefined}

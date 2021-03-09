@@ -89,7 +89,7 @@
   import {getNowDateString,getNowDateTimeString,getDayByDate,tillNowDays} from "@/utils/datetime";
 
 export default {
-  name: "DailyCalendar",
+  name: "UserCalendarDailyCalendar",
   data() {
     return {
       reverse:false,

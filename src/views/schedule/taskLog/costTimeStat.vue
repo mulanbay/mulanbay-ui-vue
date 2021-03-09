@@ -66,7 +66,7 @@
   import Treeselect from "@riophae/vue-treeselect";
   import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 export default {
-  name: "CostTimeStat",
+  name: "TaskLogCostTimeStat",
   components: {
     Treeselect,
     'common-chart':CommonChart

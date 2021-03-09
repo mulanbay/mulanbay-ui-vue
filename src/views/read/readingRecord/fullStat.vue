@@ -29,7 +29,7 @@
   import CommonChart from '../../chart/commonChart'
 
   export default {
-    name: "FullStat",
+    name: "ReadingRecordFullStat",
     components: {
       'common-chart':CommonChart
     },

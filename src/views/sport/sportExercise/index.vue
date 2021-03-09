@@ -544,7 +544,7 @@ export default {
     /** 身体不适分析 */
     showBodyAbnormalRecordAnalyse(){
       //路由定向
-      this.$router.push({name:'BodyAbnormalRecord/analyse',query: {name:'心脏',groupField:'ORGAN'}})
+      this.$router.push({name:'BodyAbnormalRecordAnalyse',query: {name:'心脏',groupField:'ORGAN'}})
     },
     /** 选择运动类型按钮操作 */
     handleSportTypeChange() {

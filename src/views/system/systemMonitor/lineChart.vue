@@ -10,6 +10,7 @@
   import resize from '../../dashboard/mixins/resize.js'
 
   export default {
+    name: "SystemMonitorLineChart",
     mixins: [resize],
     props: {
       className: {

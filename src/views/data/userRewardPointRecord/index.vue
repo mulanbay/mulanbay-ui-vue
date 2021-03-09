@@ -284,7 +284,7 @@ export default {
     /** 根据来统计 */
     handleSourceStat(){
       //路由定向
-      this.$router.push({name:'UserRewardPointRecord/pointsSourceStat',query: {}})
+      this.$router.push({name:'UserRewardPointRecordPointsSourceStat',query: {}})
     },
     /** 查询列表 */
     getList() {

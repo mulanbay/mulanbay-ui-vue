@@ -52,7 +52,7 @@
   import CommonChart from '../../../chart/commonChart'
 
 export default {
-  name: "Stat",
+  name: "TreatTestStat",
   components: {
     'common-chart':CommonChart
   },

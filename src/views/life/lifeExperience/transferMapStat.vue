@@ -90,7 +90,7 @@
 
 
 export default {
-  name: "TransferMapStat",
+  name: "LifeExperienceTransferMapStat",
   mixins: [resize],
   props: chartProps,
   mounted() {

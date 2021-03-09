@@ -76,7 +76,7 @@
   import {getDomainClassNamesTree} from "@/api/auth/systemFunction";
 
 export default {
-  name: "Detail",
+  name: "LifeArchivesDetail",
   props: {
       //父层带过来的信息值
       lifeArchivesData:{

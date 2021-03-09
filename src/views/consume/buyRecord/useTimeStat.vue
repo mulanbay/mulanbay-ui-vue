@@ -200,7 +200,7 @@
   import LifetimeCompare from '../goodsLifetimeCompare'
 
 export default {
-  name: "UseTimeStat",
+  name: "BuyRecordUseTimeStat",
   components: {
     'lifetime-compare':LifetimeCompare
   },

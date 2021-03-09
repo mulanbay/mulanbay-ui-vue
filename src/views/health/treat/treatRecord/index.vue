@@ -871,7 +871,7 @@ export default {
     /** 身体不适分析 */
     showBodyAbnormalRecordAnalyse(name,groupField){
       //路由定向
-      this.$router.push({name:'BodyAbnormalRecord/analyse',query: {name:name,groupField:groupField}})
+      this.$router.push({name:'BodyAbnormalRecordAnalyse',query: {name:name,groupField:groupField}})
     },
     /** 查询列表 */
     getList() {

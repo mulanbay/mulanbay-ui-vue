@@ -69,7 +69,7 @@
   import CommonChart from '../../../chart/commonChart'
 
 export default {
-  name: "DateStat",
+  name: "BodyBasicInfoDateStat",
   components: {
     'common-chart':CommonChart
   },

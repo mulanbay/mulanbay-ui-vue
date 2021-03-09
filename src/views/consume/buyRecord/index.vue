@@ -776,7 +776,7 @@ export default {
         id:this.form.id
       };
       //路由定向
-      this.$router.push({name:'OperationLog/logCompare',query: para});
+      this.$router.push({name:'OperationLogLogCompare',query: para});
       this.open=false;
     },
     /** 标签处理 start */

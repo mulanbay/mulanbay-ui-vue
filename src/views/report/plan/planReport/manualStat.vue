@@ -64,7 +64,7 @@
   import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 
 export default {
-  name: "ManualStat",
+  name: "PlanReportManualStat",
   components: {
     Treeselect
   },

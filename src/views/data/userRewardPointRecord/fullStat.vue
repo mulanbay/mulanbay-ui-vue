@@ -24,7 +24,7 @@
   import CommonChart from '../../chart/commonChart'
 
   export default {
-    name: "FullStat",
+    name: "UserRewardPointRecordFullStat",
     components: {
       'common-chart':CommonChart
     },

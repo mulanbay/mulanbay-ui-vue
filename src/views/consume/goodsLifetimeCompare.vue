@@ -25,7 +25,7 @@ import {formatDays,dateDiff} from "@/utils/datetime";
 import {getPercent} from "@/utils/mulanbay";
 
 export default {
-  name: "GoodsLifetimeCompare",
+  name: "BuyRecordGoodsLifetimeCompare",
   props: {
     //父层带过来的列表值
     buyRecordData: {id:undefined}

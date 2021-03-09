@@ -28,7 +28,7 @@
   import {getLastTaskLog,redo} from "@/api/schedule/taskLog";
 
 export default {
-  name: "LastExecuteInfo",
+  name: "TaskTriggerLastExecuteInfo",
   props: {
     //父层带过来的列表值
     triggerData: {

@@ -53,7 +53,7 @@
   import {deepClone} from "@/utils/index";
 
   export default {
-  name: "WordCloudStat",
+  name: "LifeExperienceWordCloudStat",
   data() {
     return {
       // 加载层信息

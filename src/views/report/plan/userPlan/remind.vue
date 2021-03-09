@@ -54,7 +54,7 @@
 import {getUserPlanRemind,addOrEditUserPlanRemind} from "@/api/report/plan/userPlan";
 
 export default {
-  name: "Remind",
+  name: "UserPlanRemind",
   props: {
     userPlanData: {
       type: Object,

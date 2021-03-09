@@ -147,7 +147,7 @@ import {fetchList,getUserPlanConfigValue,createUserPlanConfigValue,updateUserPla
 import {getUserPlan} from "@/api/report/plan/userPlan";
 
 export default {
-  name: "ConfigValue",
+  name: "UserPlanConfigValue",
   props: {
     //父层带过来的账户信息值
     userPlanData:{

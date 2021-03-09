@@ -65,7 +65,7 @@
 
 <script>
   export default {
-    name: "ChildrenStat",
+    name: "BudgetSnapshotChildrenStat",
     props: {
       statData: {
         type: Object

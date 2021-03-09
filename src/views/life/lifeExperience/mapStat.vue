@@ -96,7 +96,7 @@
   import resize from '../../dashboard/mixins/resize.js'
 
 export default {
-  name: "MapStat",
+  name: "LifeExperienceMapStat",
   mixins: [resize],
   props: chartProps,
   mounted() {

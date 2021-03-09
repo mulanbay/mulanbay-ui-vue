@@ -45,7 +45,7 @@
   import CommonChart from '../../chart/commonChart'
 
 export default {
-  name: "Stat",
+  name: "OperationLogTreeStat",
   components: {
     'common-chart':CommonChart
   },

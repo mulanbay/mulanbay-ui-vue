@@ -77,7 +77,7 @@
   import CommonChart from '../../chart/commonChart'
 
 export default {
-  name: "DateStat",
+  name: "SportExerciseDateStat",
   components: {
     'common-chart':CommonChart
   },

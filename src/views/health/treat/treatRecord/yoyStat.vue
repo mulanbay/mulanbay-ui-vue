@@ -113,7 +113,7 @@
   import CommonChart from '../../../chart/commonChart'
 
 export default {
-  name: "YoyStat",
+  name: "TreatRecordYoyStat",
   components: {
     'common-chart':CommonChart
   },

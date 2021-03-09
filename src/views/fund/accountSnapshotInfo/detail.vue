@@ -38,7 +38,7 @@
   import {createAccountSnapshotInfo} from "@/api/fund/account";
 
 export default {
-  name: "Detail",
+  name: "AccountSnapshotInfoDetail",
   props: {
       dialog_visible: Boolean
   },

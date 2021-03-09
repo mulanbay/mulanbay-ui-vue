@@ -89,7 +89,7 @@
   import CommonChart from '../../chart/commonChart'
 
 export default {
-  name: "YoyStat",
+  name: "MusicPracticeYoyStat",
   components: {
     'common-chart':CommonChart
   },

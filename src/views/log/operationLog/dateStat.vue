@@ -99,7 +99,7 @@
 
 
 export default {
-  name: "DateStat",
+  name: "OperationLogDateStat",
   components: {
     'common-chart':CommonChart
   },

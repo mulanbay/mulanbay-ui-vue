@@ -216,7 +216,7 @@ import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 import SourceDetail from '../../common/jsonTreeTable'
 
 export default {
-  name: "SystemionLog",
+  name: "SystemLog",
   components: {
     Treeselect,
     'source-detail':SourceDetail
@@ -285,7 +285,7 @@ export default {
     /** 日志分析 */
     handleAnalyseStat(){
       //路由定向
-      this.$router.push({name:'SystemLog/analyseStat',query: {}})
+      this.$router.push({name:'SystemLogAnalyseStat',query: {}})
     },
     /** 参数详情 */
     showParasDetail(row){

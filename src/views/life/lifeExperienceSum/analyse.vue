@@ -46,7 +46,7 @@
   import ShadowChart from '../../chart/shadowChart'
 
 export default {
-  name: "Analyse",
+  name: "LifeExperienceSumAnalyse",
   components: {
     'shadow-chart':ShadowChart,
     'pie-chart':PieChart

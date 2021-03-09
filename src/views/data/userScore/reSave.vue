@@ -33,7 +33,7 @@
 import {reSaveUserScore} from "@/api/data/userScore";
 
 export default {
-  name: "ReSave",
+  name: "UserScoreReSave",
   data() {
     return {
       //日期范围快速选择

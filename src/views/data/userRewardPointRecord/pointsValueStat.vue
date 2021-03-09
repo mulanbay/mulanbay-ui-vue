@@ -76,7 +76,7 @@
   import CommonChart from '../../chart/commonChart'
 
 export default {
-  name: "PointsValueStat",
+  name: "UserRewardPointRecordPointsValueStat",
   components: {
     'common-chart':CommonChart
   },

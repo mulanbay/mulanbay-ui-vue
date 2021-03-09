@@ -24,7 +24,7 @@
   import * as echarts from 'echarts';
   import resize from '../../dashboard/mixins/resize.js'
 export default {
-  name: "Analyse",
+  name: "UserScoreAnalyse",
   mixins: [resize],
   props: {
     //父层带过来的账户信息值

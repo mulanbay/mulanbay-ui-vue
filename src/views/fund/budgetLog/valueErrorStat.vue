@@ -50,7 +50,7 @@
   import CommonChart from '../../chart/commonChart'
 
   export default {
-    name: "ValueErrorStat",
+    name: "BudgetLogValueErrorStat",
     components: {
       'common-chart':CommonChart
     },

@@ -313,22 +313,22 @@ export default {
     /** 统计 */
     handleTreeStat(){
       //路由定向
-      this.$router.push({name:'OperationLog/treeStat',query: {}})
+      this.$router.push({name:'OperationLogTreeStat',query: {}})
     },
     /** 统计 */
     handleStat(){
       //路由定向
-      this.$router.push({name:'OperationLog/stat',query: {}})
+      this.$router.push({name:'OperationLogStat',query: {}})
     },
     /** 分时统计 */
     handleDateStat(){
       //路由定向
-      this.$router.push({name:'OperationLog/dateStat',query: {}})
+      this.$router.push({name:'OperationLogDateStat',query: {}})
     },
     /** 修改日志 */
     showLogCompare(row){
       //路由定向
-      this.$router.push({name:'OperationLog/logCompare',query: {operationLogId:row.id}})
+      this.$router.push({name:'OperationLogLogCompare',query: {operationLogId:row.id}})
     },
     /** 关联功能点 */
     handleSetFunctionId(){

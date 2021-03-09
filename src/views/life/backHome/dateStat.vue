@@ -54,7 +54,7 @@
   import CommonChart from '../../chart/commonChart'
 
 export default {
-  name: "BackHome",
+  name: "BackHomeDateStat",
   components: {
     'common-chart':CommonChart
   },

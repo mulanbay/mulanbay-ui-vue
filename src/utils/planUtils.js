@@ -75,7 +75,7 @@ export function getCompareYearString(year) {
  */
 export function dispatchCommonStat(beanName,router) {
   //路由定向
-  router.push({name:'UserPlan/commonStat',query: {beanName:beanName}})
+  router.push({name:'UserPlanCommonStat',query: {beanName:beanName}})
 }
 
 /**

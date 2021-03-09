@@ -31,7 +31,7 @@
   import {reStatPlanReport} from "@/api/report/plan/planReport";
 
 export default {
-  name: "ManualStat",
+  name: "PlanReportReStat",
   props: {
     planReportData: {
       type: Object,

@@ -107,7 +107,7 @@
   import CalendarStat from './calendarStat'
 
 export default {
-  name: "Calendar",
+  name: "TreatDrugCalendar",
   components: {
     'treat-drug-detail-detail':TreatDrugDetailDetail,
     'calendar-stat':CalendarStat

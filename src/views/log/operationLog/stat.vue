@@ -83,7 +83,7 @@
   import CommonChart from '../../chart/commonChart'
 
 export default {
-  name: "Stat",
+  name: "OperationLogStat",
   components: {
     'common-chart':CommonChart
   },

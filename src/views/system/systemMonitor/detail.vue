@@ -27,7 +27,7 @@
   import DiskInfo from './diskData'
 
 export default {
-  name: "TreeView",
+  name: "SystemMonitorDetail",
   components: {
     'mem-info':MemInfo,
     'cpu-info':CpuInfo,

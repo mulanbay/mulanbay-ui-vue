@@ -60,7 +60,7 @@
   import {parseJsonToTree} from "@/utils/mulanbay";
 
 export default {
-  name: "ScheduleDetail",
+  name: "TaskTriggerScheduleDetail",
   props: {
     //父层带过来的列表值
     triggerData: {

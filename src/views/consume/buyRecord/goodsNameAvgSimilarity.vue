@@ -129,7 +129,7 @@
   import SimiChart from '../../chart/simiChart'
 
 export default {
-  name: "GoodsNameAvgSimilarity",
+  name: "BuyRecordGoodsNameAvgSimilarity",
   components: {
     'simi-chart':SimiChart
   },

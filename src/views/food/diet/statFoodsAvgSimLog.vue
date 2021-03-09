@@ -50,7 +50,7 @@
   import CommonChart from '../../chart/commonChart'
 
 export default {
-  name: "StatFoodsAvgSimLog",
+  name: "DietStatFoodsAvgSimLog",
   components: {
     'common-chart':CommonChart
   },

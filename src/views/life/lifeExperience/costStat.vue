@@ -70,7 +70,7 @@
 
 
 export default {
-  name: "CostStat",
+  name: "LifeExperienceCostStat",
   mixins: [resize],
   props: {
     //父层带过来的账户信息值

@@ -97,7 +97,7 @@
   import DataList from '../../common/jsonTreeTable'
 
 export default {
-  name: "LogCompare",
+  name: "OperationLogLogCompare",
   components: {
     'db-list':DataList,
     'current-list':DataList,

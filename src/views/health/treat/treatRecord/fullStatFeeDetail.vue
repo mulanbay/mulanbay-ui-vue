@@ -69,7 +69,7 @@
   import PieChart from '../../../chart/doublePieChart'
 
 export default {
-  name: "FullStatFeeDetail",
+  name: "TreatRecordFullStatFeeDetail",
   components: {
     'pie-chart':PieChart
   },

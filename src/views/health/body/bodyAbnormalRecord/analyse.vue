@@ -201,7 +201,7 @@ import {copyObject,getQueryObject} from "@/utils/index";
 import {dateDiff,formatDays} from "@/utils/datetime";
 
 export default {
-  name: "Analyse",
+  name: "BodyAbnormalRecordAnalyse",
   data() {
     return {
       //表格高度，固定表头使用

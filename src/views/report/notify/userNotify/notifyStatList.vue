@@ -121,7 +121,7 @@
   import {getPercent} from "@/utils/planUtils";
 
 export default {
-  name: "NotifyStatList",
+  name: "UserNotifyNotifyStatList",
   data() {
     return {
       //大于类进度显示环颜色

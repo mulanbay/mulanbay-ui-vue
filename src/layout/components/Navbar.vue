@@ -24,7 +24,7 @@
 
         <el-tooltip content="计划统计" effect="dark" placement="bottom">
           <span class="right-menu-item hover-effect">
-            <svg-icon icon-class="plan" @click="handleDispatch('UserPlan/commonStat')"/>
+            <svg-icon icon-class="plan" @click="handleDispatch('UserPlanCommonStat')"/>
           </span>
         </el-tooltip>
 
@@ -38,7 +38,7 @@
 
         <el-tooltip content="我的日历" effect="dark" placement="bottom">
           <span class="right-menu-item hover-effect">
-            <svg-icon icon-class="calendar" @click="handleDispatch('UserCalendar/myCalendar')"/>
+            <svg-icon icon-class="calendar" @click="handleDispatch('UserCalendarMyCalendar')"/>
           </span>
         </el-tooltip>
 

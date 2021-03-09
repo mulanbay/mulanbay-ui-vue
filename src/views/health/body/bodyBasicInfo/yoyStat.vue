@@ -72,7 +72,7 @@
   import CommonChart from '../../../chart/commonChart'
 
 export default {
-  name: "YoyStat",
+  name: "BodyBasicInfoYoyStat",
   components: {
     'common-chart':CommonChart
   },

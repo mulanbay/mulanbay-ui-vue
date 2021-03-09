@@ -1086,7 +1086,7 @@ export default {
     /** 调度执行时间分析 */
     HandleExeCostTimeStat(row){
       //路由定向
-      this.$router.push({name:'TaskLog/costTimeStat',query: {taskTriggerId:row.id}})
+      this.$router.push({name:'TaskLogCostTimeStat',query: {taskTriggerId:row.id}})
     },
     /** 查询列表 */
     getList() {

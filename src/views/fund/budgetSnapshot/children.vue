@@ -60,7 +60,7 @@
   import CommonChart from '../../chart/commonChart'
 
 export default {
-  name: "Children",
+  name: "BudgetSnapshotChildren",
   components: {
     'children-stat':ChildrenStat,
     'common-chart':CommonChart

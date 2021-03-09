@@ -110,7 +110,7 @@
   import SimiChart from '../../chart/simiChart'
 
 export default {
-  name: "FoodsAvgSimilarity",
+  name: "DietFoodsAvgSimilarity",
   components: {
     'simi-chart':SimiChart
   },
@@ -180,7 +180,7 @@ export default {
     //多样性日志统计
     handleLogStat() {
       //路由定向
-      this.$router.push({name:'Diet/statFoodsAvgSimLog',query: {}})
+      this.$router.push({name:'DietStatFoodsAvgSimLog',query: {}})
     },
     // 打开加载层
     openLoading() {

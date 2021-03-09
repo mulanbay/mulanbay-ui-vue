@@ -151,7 +151,7 @@
   import CommonChart from '../../chart/commonChart'
 
 export default {
-  name: "DateStat",
+  name: "BuyRecordDateStat",
   components: {
     'common-chart':CommonChart
   },

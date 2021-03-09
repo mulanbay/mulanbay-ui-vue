@@ -87,7 +87,7 @@
   import CommonChart from '../../chart/commonChart'
 
 export default {
-  name: "DateStat",
+  name: "WorkOvertimeDateStat",
   components: {
     'common-chart':CommonChart
   },

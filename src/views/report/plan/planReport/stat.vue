@@ -140,7 +140,7 @@
   import PieChart from '../../../chart/doublePieChart'
 
 export default {
-  name: "Server",
+  name: "PlanReportStat",
   components: {
     Treeselect,
     'pie-chart':PieChart

@@ -68,7 +68,7 @@
   import CommonChart from '../../chart/commonChart'
 
 export default {
-  name: "Stat",
+  name: "MusicPracticeTuneStat",
   components: {
     'common-chart':CommonChart
   },

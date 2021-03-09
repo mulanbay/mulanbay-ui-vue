@@ -88,7 +88,7 @@
   import CommonChart from '../../chart/commonChart'
 
 export default {
-  name: "TimelineStat",
+  name: "BudgetTimelineStat",
   components: {
     'common-chart':CommonChart
   },

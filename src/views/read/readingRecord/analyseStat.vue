@@ -81,7 +81,7 @@
   import CommonChart from '../../chart/commonChart'
 
 export default {
-  name: "AnalyseStat",
+  name: "ReadingRecordAnalyseStat",
   components: {
     'common-chart':CommonChart
   },
@@ -139,7 +139,7 @@ export default {
     /** 旭日图操作 */
     handleFullQuery(){
       //路由定向
-      this.$router.push({name:'ReadingRecord/fullStat',query: {}})
+      this.$router.push({name:'ReadingRecordFullStat',query: {}})
     },
     /** 搜索按钮操作 */
     handleQuery() {

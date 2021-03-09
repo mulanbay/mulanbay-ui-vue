@@ -119,7 +119,7 @@ import {getBudgetAnalyse} from "@/api/fund/budget";
 import {getPercent} from "@/utils/mulanbay";
 
 export default {
-  name: "AnalyseDetail",
+  name: "BudgetAnalyseDetail",
   props: {
       //父层带过来的预算信息值
       budgetData: {

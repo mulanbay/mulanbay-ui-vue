@@ -66,7 +66,7 @@
   import CommonChart from '../../chart/commonChart'
 
 export default {
-  name: "Stat",
+  name: "DietTimeStat",
   components: {
     'common-chart':CommonChart
   },

@@ -63,7 +63,7 @@
   import CommonChart from '../../chart/commonChart'
   
 export default {
-  name: "Forecast",
+  name: "AccountForecast",
   components: {
     'common-chart':CommonChart
   },

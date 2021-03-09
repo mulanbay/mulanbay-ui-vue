@@ -70,7 +70,7 @@
   import CommonChart from '../../chart/commonChart'
 
 export default {
-  name: "Stat",
+  name: "BudgetStat",
   components: {
     'common-chart':CommonChart
   },

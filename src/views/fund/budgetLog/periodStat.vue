@@ -270,7 +270,7 @@
   import {copyObject,getQueryObject} from "@/utils/index";
 
 export default {
-  name: "BudgetLog/periodStat",
+  name: "BudgetLogPeriodStat",
   mixins: [resize],
   components: {
     'pie-chart':PieChart,

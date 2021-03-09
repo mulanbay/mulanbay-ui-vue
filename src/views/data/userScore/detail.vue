@@ -58,7 +58,7 @@
 <script>
 
 export default {
-  name: "Detail",
+  name: "UserScoreDetail",
   props: {
     //父层带过来的列表值
     userScoreData: {

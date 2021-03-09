@@ -38,7 +38,7 @@
   import CommonChart from '../../chart/commonChart'
 
 export default {
-  name: "Stat",
+  name: "SportMilestoneStat",
   components: {
     'common-chart':CommonChart
   },

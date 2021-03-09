@@ -69,7 +69,7 @@
   import resize from '../../dashboard/mixins/resize.js'
 
 export default {
-  name: "Analyse",
+  name: "AccountFlowAnalyse",
   mixins: [resize],
   props: {
     className: {

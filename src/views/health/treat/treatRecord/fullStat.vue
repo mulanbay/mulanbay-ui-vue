@@ -104,7 +104,7 @@ import {formatDays} from "@/utils/datetime";
 import FeeDetail from './fullStatFeeDetail'
 
 export default {
-  name: "FullStat",
+  name: "TreatRecordFullStat",
   components: {
     'fee-detail':FeeDetail
   },

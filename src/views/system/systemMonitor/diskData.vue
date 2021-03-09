@@ -36,7 +36,7 @@
 <script>
 
 export default {
-  name: "diskData",
+  name: "SystemMonitorDiskData",
   props: {
     //父层带过来的列表值
     diskData: {}

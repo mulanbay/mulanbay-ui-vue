@@ -237,7 +237,7 @@
   import NotifyStat from '../../notify/userNotify/stat'
 
 export default {
-  name: "CommonStat",
+  name: "UserPlanCommonStat",
   components: {
     Treeselect,
     'timeline-stat':TimelineStat,

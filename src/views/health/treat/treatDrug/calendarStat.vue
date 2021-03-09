@@ -27,7 +27,7 @@
 <script>
 
 export default {
-  name: "CalendarStat",
+  name: "TreatDrugCalendarStat",
   props: {
     statData: {
       type: Object

@@ -64,7 +64,7 @@
   import {getPercent,progressColors} from "@/utils/mulanbay";
 
 export default {
-  name: "Snapshot",
+  name: "BudgetSnapshot",
   props: {
     //父层带过来的值
     budgetData: {
@@ -96,7 +96,7 @@ export default {
     },
     /** 展示子类 */
     showChildren(row){
-      this.$router.push({name:'BudgetSnapshot/children',query: {snapshotId:row.snapshotId}})
+      this.$router.push({name:'BudgetSnapshotChildren',query: {snapshotId:row.snapshotId}})
     },
     /** 预算快照列表 */
     getSnapshotList(budgetLogId){

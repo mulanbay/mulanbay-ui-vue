@@ -151,7 +151,7 @@
   import CommonChart from '../../../chart/commonChart'
 
 export default {
-  name: "DateStat",
+  name: "TreatRecordAnalyseStat",
   components: {
     'common-chart':CommonChart
   },

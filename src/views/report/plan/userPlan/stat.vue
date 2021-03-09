@@ -45,7 +45,7 @@
   import GaugeChart from '../../../chart/gauge'
 
 export default {
-  name: "Stat",
+  name: "UserPlanStat",
   components: {
     Treeselect,
     'gauge-chart1':GaugeChart,

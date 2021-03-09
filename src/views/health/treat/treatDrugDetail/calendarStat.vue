@@ -52,7 +52,7 @@
   import resize from '../../../dashboard/mixins/resize.js'
 
 export default {
-  name: "CalendarStat",
+  name: "TreatDrugDetailCalendarStat",
   mixins: [resize],
   props: {
     //父层带过来的账户信息值

@@ -64,7 +64,7 @@
 import {getTreatOperationStat} from "@/api/health/treat/treatOperation";
 
 export default {
-  name: "Stat",
+  name: "TreatOperationStat",
   mounted() {
      //this.initChart();
   },

@@ -85,7 +85,7 @@
 import {getTreatDrugDetailStat} from "@/api/health/treat/treatDrugDetail";
 
 export default {
-  name: "Stat",
+  name: "TreatDrugDetailStat",
   props: {
     //父层带过来的信息值
     treatData: {

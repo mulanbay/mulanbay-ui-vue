@@ -26,7 +26,7 @@
   import {getNowDateString} from "@/utils/datetime";
 
 export default {
-  name: "RecentSchedules",
+  name: "TaskTriggerRecentSchedules",
   data() {
     return {
       reverse:false,

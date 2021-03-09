@@ -103,7 +103,7 @@
   import CommonChart from '../../chart/commonChart'
 
 export default {
-  name: "PriceAnalyse",
+  name: "DietPriceAnalyse",
   components: {
     'common-chart':CommonChart
   },

@@ -61,7 +61,7 @@
   import CommonChart from '../../chart/commonChart'
 
 export default {
-  name: "Compare",
+  name: "DietCompare",
   components: {
     'common-chart':CommonChart
   },

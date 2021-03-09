@@ -36,7 +36,7 @@
   import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 
 export default {
-  name: "Detail",
+  name: "BudgetLogDetail",
   components: { Treeselect },
   props: {
       //父层带过来的值(id:不为空表示为修改，budgetId不为空表示为新增)

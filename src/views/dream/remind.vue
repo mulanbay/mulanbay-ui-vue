@@ -59,7 +59,7 @@
 import {addOrEditDreamRemind,getDreamRemind} from "@/api/dream/dream";
 
 export default {
-  name: "Remind",
+  name: "DreamRemind",
   props: {
     dreamData: {
       type: Object,

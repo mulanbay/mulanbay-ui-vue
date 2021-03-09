@@ -49,7 +49,7 @@
   import {parseJsonToTree} from "@/utils/mulanbay";
 
 export default {
-  name: "CompareData",
+  name: "BuyRecordMatchLogCompareData",
   props: {
     //父层带过来的列表值
     logData: {

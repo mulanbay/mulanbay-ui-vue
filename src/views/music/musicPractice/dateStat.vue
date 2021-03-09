@@ -105,7 +105,7 @@
 
 
 export default {
-  name: "DateStat",
+  name: "MusicPracticeDateStat",
   components: {
     'common-chart':CommonChart
   },

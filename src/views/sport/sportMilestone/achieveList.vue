@@ -88,7 +88,7 @@
 import {getSportExerciseAchieveMilestones,getSportExerciseNextAchieveMilestone} from "@/api/sport/sportExercise";
 
 export default {
-  name: "AchieveList",
+  name: "SportMilestoneAchieveList",
   props: {
       //父层带过来的预算信息值
       sportExerciseData: {

@@ -22,7 +22,7 @@
   import {getNowDateTimeString} from "@/utils/datetime";
 
 export default {
-  name: "Detail",
+  name: "TreatDrugDetailDetail",
   props: {
       //父层带过来的信息值
       treatForDrugDetailData:{

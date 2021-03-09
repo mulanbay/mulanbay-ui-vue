@@ -84,7 +84,7 @@
   import CommonChart from '../../chart/commonChart'
 
 export default {
-  name: "CompareStat",
+  name: "MusicPracticeCompareStat",
   components: {
     'common-chart':CommonChart
   },

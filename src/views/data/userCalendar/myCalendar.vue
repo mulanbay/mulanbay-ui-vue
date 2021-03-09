@@ -168,7 +168,7 @@
     return start;
   };
   export default {
-    name: 'CalendarStat',
+    name: 'UserCalendarMyCalendar',
     components: {
       'calendar': Calendar,
       'user-calendar-detail':UserCalendarDetail,

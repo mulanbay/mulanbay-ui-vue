@@ -55,7 +55,7 @@
   import CommonChart from '../../chart/commonChart'
 
 export default {
-  name: "Stat",
+  name: "UserScoreStat",
   components: {
     'common-chart':CommonChart
   },

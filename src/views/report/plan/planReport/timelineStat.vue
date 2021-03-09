@@ -59,7 +59,7 @@
   import CommonChart from '../../../chart/commonChart'
 
 export default {
-  name: "TimelineStat",
+  name: "PlanReportTimelineStat",
   components: {
     Treeselect,
     'common-chart':CommonChart

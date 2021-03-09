@@ -30,7 +30,7 @@
   import CommonChart from '../../chart/commonChart'
 
 export default {
-  name: "TreeView",
+  name: "QaConfigTreeView",
   components: {
     'common-chart':CommonChart
   },

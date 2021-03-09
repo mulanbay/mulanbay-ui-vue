@@ -155,7 +155,7 @@ import {getSportTypeTree} from "@/api/sport/sportType";
 import {getSportExerciseMultiStat,getSportExerciseByMultiStat} from "@/api/sport/sportExercise";
 
 export default {
-  name: "MultiStat",
+  name: "SportExerciseMultiStat",
   props: {
       //父层带过来的预算信息值
       sportTypeData: {

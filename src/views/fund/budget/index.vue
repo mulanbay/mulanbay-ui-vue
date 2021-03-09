@@ -624,27 +624,27 @@ export default {
     //统计
     handleStat(){
       //路由定向
-      this.$router.push({name:'Budget/stat',query: {}})
+      this.$router.push({name:'BudgetStat',query: {}})
     },
     //时间线统计
     handleTimelineStat(){
       //路由定向
-      this.$router.push({name:'Budget/timelineStat',query: {}})
+      this.$router.push({name:'BudgetTimelineStat',query: {}})
     },
     //预算执行统计
     handleBudgetLogStat(){
       //路由定向
-      this.$router.push({name:'BudgetLog/stat',query: {}})
+      this.$router.push({name:'BudgetLogStat',query: {}})
     },
     //误差统计
     handleBudgetLogValueErrorStat(){
       //路由定向
-      this.$router.push({name:'BudgetLog/valueErrorStat',query: {}})
+      this.$router.push({name:'BudgetLogValueErrorStat',query: {}})
     },
     //预算日志
     handleBudgetPeriodStat(){
       //路由定向
-      this.$router.push({name:'BudgetLog/periodStat',query: {}})
+      this.$router.push({name:'BudgetLogPeriodStat',query: {}})
     },
     //预算分析
     handleBudgetAnalyse(){

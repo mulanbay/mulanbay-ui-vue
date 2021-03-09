@@ -143,7 +143,7 @@
   import {getBuyTypeTree} from "@/api/consume/buyType";
 
 export default {
-  name: "WordCloudsStat",
+  name: "BuyRecordWordCloudStat",
   data() {
     return {
       //查询条件更多属性 start

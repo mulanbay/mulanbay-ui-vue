@@ -97,7 +97,7 @@
   import {statDietWordCloud} from "@/api/food/diet";
 
 export default {
-  name: "StatWordClouds",
+  name: "DietStatWordClouds",
   data() {
     return {
       //查询条件更多属性 start

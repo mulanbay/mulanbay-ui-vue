@@ -83,7 +83,7 @@
   import CommonChart from '../../chart/commonChart'
 
 export default {
-  name: "PointsSourceStat",
+  name: "UserRewardPointRecordPointsSourceStat",
   components: {
     'common-chart':CommonChart
   },
@@ -145,7 +145,7 @@ export default {
     /** 旭日图操作 */
     handleFullQuery(){
       //路由定向
-      this.$router.push({name:'UserRewardPointRecord/fullStat',query: {}})
+      this.$router.push({name:'UserRewardPointRecordFullStat',query: {}})
     },
     // 打开加载层
     openLoading() {
