@@ -112,7 +112,7 @@
   import PanelGroup from './panelGroup'
 
 export default {
-  name: "Main",
+  name: "Finance",
   mixins: [resize],
   components: {
     'pie-chart':PieChart,
@@ -255,6 +255,10 @@ export default {
     formatPercent(row){
       let pp = getPercent(row.cpPaidAmount,row.amount);
       return parseInt(pp.toFixed(0));
+    },
+    /** 展示历史 */
+    showHistory(row){
+      this.$router.push({name:'BudgetSnapshotHistory',query: {budgetId:row.id}})
     },
     // 打开加载层
     openLoading() {
