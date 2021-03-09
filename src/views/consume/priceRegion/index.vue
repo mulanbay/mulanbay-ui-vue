@@ -89,12 +89,12 @@
       </el-table-column>
       <el-table-column label="价格下限" align="center" width="95">
         <template slot-scope="{row}">
-          <span>{{ formatMoneyWithSymbal(row.minPrice) }}</span>
+          <span>{{ formatMoney(row.minPrice) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="价格上限" align="center" width="95">
         <template slot-scope="{row}">
-          <span>{{ formatMoneyWithSymbal(row.maxPrice) }}</span>
+          <span>{{ formatMoney(row.maxPrice) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="显示顺序" align="center" width="95">

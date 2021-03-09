@@ -30,11 +30,11 @@
                   --
                 </span>
                 <span v-else>
-                  {{ formatMoneyWithSymbal(item.amount) }}
+                  {{ formatMoney(item.amount) }}
                 </span>
               </div>
             </td>
-            <td><div class="cell">{{ formatMoneyWithSymbal(item.cpPaidAmount) }}</div></td>
+            <td><div class="cell">{{ formatMoney(item.cpPaidAmount) }}</div></td>
             <td>
               <div class="cell">
                 <span v-if="item.hasChild==true">

@@ -18,7 +18,7 @@ import permission from './directive/permission'
 import './assets/icons' // icon
 import './permission' // permission control
 import { parseTime, resetForm, addDateRange, selectDictLabel, download,
-handleTree,commonStatusOptions,booleanOptions,formatMoneyWithSymbal,isObjectEmpty,loadingOptions} from "@/utils/mulanbay";
+handleTree,commonStatusOptions,booleanOptions,formatMoney,isObjectEmpty,loadingOptions} from "@/utils/mulanbay";
 import { getYearDateRange,getMonthDateRange,datePickerOptions,getFormatDate} from "@/utils/datetime";
 import Pagination from "@/components/Pagination";
 import {getEnumTree,getDictItemTree} from "@/api/common";
@@ -32,7 +32,7 @@ Vue.prototype.addDateRange = addDateRange
 Vue.prototype.selectDictLabel = selectDictLabel
 Vue.prototype.download = download
 Vue.prototype.handleTree = handleTree
-Vue.prototype.formatMoneyWithSymbal = formatMoneyWithSymbal
+Vue.prototype.formatMoney = formatMoney
 Vue.prototype.commonStatusOptions = commonStatusOptions
 Vue.prototype.booleanOptions = booleanOptions
 Vue.prototype.loadingOptions = loadingOptions

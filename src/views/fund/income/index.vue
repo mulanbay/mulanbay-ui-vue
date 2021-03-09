@@ -155,7 +155,7 @@
       </el-table-column>
       <el-table-column label="金额" align="center">
         <template slot-scope="{row}">
-          <span>{{ formatMoneyWithSymbal(row.amount) }}</span>
+          <span>{{ formatMoney(row.amount) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="详情" width="50">
@@ -450,9 +450,9 @@ export default {
         this.buyRecordDetailVisible=true;
         var brData  = new Array();
         brData.push({key:'购买时间',value :response.buyDate });
-        brData.push({key:'购买价格',value :this.formatMoneyWithSymbal(response.totalPrice) });
+        brData.push({key:'购买价格',value :this.formatMoney(response.totalPrice) });
         brData.push({key:'售出时间',value :response.deleteDate });
-        brData.push({key:'售出价格',value :this.formatMoneyWithSymbal(response.soldPrice) });
+        brData.push({key:'售出价格',value :this.formatMoney(response.soldPrice) });
         var dd = response.soldPrice*10/response.totalPrice;
         brData.push({key:'折旧率',value :(dd.toFixed(1)+'折')});
         this.keyValueListData =brData;

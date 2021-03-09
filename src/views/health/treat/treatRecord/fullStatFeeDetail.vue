@@ -32,27 +32,27 @@
                 </tr>
                 <tr>
                   <td><div class="cell">总挂号费</div></td>
-                  <td><div class="cell">{{ formatMoneyWithSymbal(statData.registeredFee) }}</div></td>
+                  <td><div class="cell">{{ formatMoney(statData.registeredFee) }}</div></td>
                 </tr>
                 <tr>
                   <td><div class="cell">总药费</div></td>
-                  <td><div class="cell">{{ formatMoneyWithSymbal(statData.drugFee) }}</div></td>
+                  <td><div class="cell">{{ formatMoney(statData.drugFee) }}</div></td>
                 </tr>
                 <tr>
                   <td><div class="cell">总手术费</div></td>
-                  <td><div class="cell">{{ formatMoneyWithSymbal(statData.operationFee) }}</div></td>
+                  <td><div class="cell">{{ formatMoney(statData.operationFee) }}</div></td>
                 </tr>
                 <tr>
                   <td><div class="cell">总医保支付费用</div></td>
-                  <td><div class="cell">{{ formatMoneyWithSymbal(statData.medicalInsurancePaidFee) }}</div></td>
+                  <td><div class="cell">{{ formatMoney(statData.medicalInsurancePaidFee) }}</div></td>
                 </tr>
                 <tr>
                   <td><div class="cell">总个人支付费用</div></td>
-                  <td><div class="cell">{{ formatMoneyWithSymbal(statData.personalPaidFee) }}</div></td>
+                  <td><div class="cell">{{ formatMoney(statData.personalPaidFee) }}</div></td>
                 </tr>
                 <tr>
                   <td><div class="cell">总费用</div></td>
-                  <td><div class="cell">{{ formatMoneyWithSymbal(statData.totalFee) }}</div></td>
+                  <td><div class="cell">{{ formatMoney(statData.totalFee) }}</div></td>
                 </tr>
               </tbody>
             </table>

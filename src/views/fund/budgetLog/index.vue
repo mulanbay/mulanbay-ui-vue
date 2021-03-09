@@ -98,12 +98,12 @@
       </el-table-column>
       <el-table-column label="预算金额" align="center" width="160">
         <template slot-scope="{row}">
-          <span>{{ formatMoneyWithSymbal(row.budgetAmount) }}</span>
+          <span>{{ formatMoney(row.budgetAmount) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="实际消费" align="center" width="160">
         <template slot-scope="{row}">
-          <span>{{ formatMoneyWithSymbal(row.ncAmount+row.bcAmount+row.trAmount) }}</span>
+          <span>{{ formatMoney(row.ncAmount+row.bcAmount+row.trAmount) }}</span>
           <span v-if="(row.ncAmount+row.bcAmount+row.trAmount)>row.budgetAmount">
            <el-tag type="danger" size="mini">超支</el-tag>
           </span>
@@ -112,23 +112,23 @@
       <el-table-column label="消费详情" align="center">
       <el-table-column label="实际普通消费" align="center" width="160">
         <template slot-scope="{row}">
-          <span>{{ formatMoneyWithSymbal(row.ncAmount) }}</span>
+          <span>{{ formatMoney(row.ncAmount) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="实际突发消费" align="center" width="160">
         <template slot-scope="{row}">
-          <span>{{ formatMoneyWithSymbal(row.bcAmount) }}</span>
+          <span>{{ formatMoney(row.bcAmount) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="实际看病花费" align="center" width="160">
         <template slot-scope="{row}">
-          <span>{{ formatMoneyWithSymbal(row.trAmount) }}</span>
+          <span>{{ formatMoney(row.trAmount) }}</span>
         </template>
       </el-table-column>
       </el-table-column>
       <el-table-column label="收入统计" align="center"  width="160">
         <template slot-scope="{row}">
-          <span>{{ formatMoneyWithSymbal(row.incomeAmount) }}</span>
+          <span>{{ formatMoney(row.incomeAmount) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="账户变化" align="center"  width="160">
@@ -136,7 +136,7 @@
           <span v-if="row.accountChangeAmount == null&&row.budget == null">
            <span class="link-type" @click="handleAccountChange(row.bussKey)"><i class="el-icon-s-promotion"></i></span>
           </span>
-          <span v-else>{{ formatMoneyWithSymbal(row.accountChangeAmount) }}</span>
+          <span v-else>{{ formatMoney(row.accountChangeAmount) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="重新统计" width="80"  align="center">
@@ -226,7 +226,7 @@
         </el-table-column>
         <el-table-column label="预算金额" prop="value" align="center">
           <template slot-scope="{row}">
-            <span>{{ formatMoneyWithSymbal(row.amount) }}</span>
+            <span>{{ formatMoney(row.amount) }}</span>
           </template>
         </el-table-column>
         <el-table-column label="类型" prop="value" align="center">
@@ -242,10 +242,10 @@
         <el-table-column label="支付金额" prop="value" align="center">
           <template slot-scope="{row}">
             <span v-if="row.cpPaidAmount>row.amount" style="color: red;">
-              {{ formatMoneyWithSymbal(row.cpPaidAmount) }}
+              {{ formatMoney(row.cpPaidAmount) }}
             </span>
             <span v-else>
-              {{ formatMoneyWithSymbal(row.cpPaidAmount) }}
+              {{ formatMoney(row.cpPaidAmount) }}
             </span>
           </template>
         </el-table-column>

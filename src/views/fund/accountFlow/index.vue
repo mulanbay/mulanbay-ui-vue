@@ -79,12 +79,12 @@
       </el-table-column>
       <el-table-column label="调整前" align="center" width="120">
         <template slot-scope="{row}">
-          <span>{{ formatMoneyWithSymbal(row.beforeAmount) }}</span>
+          <span>{{ formatMoney(row.beforeAmount) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="调整后" align="center" width="120">
         <template slot-scope="{row}">
-          <span>{{ formatMoneyWithSymbal(row.afterAmount) }}</span>
+          <span>{{ formatMoney(row.afterAmount) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="调整类型" align="center" width="95">

@@ -212,7 +212,7 @@
       </el-table-column>
       <el-table-column label="费用" width="120">
         <template slot-scope="{row}">
-          <span>{{ formatMoneyWithSymbal(row.totalFee) }}</span>
+          <span>{{ formatMoney(row.totalFee) }}</span>
           <span class="link-type" @click="showFeeDetail(row)"><i class="el-icon-s-grid" /></span>
         </template>
       </el-table-column>

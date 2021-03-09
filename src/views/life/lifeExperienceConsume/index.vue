@@ -78,7 +78,7 @@
       </el-table-column>
       <el-table-column label="花费" align="center">
         <template slot-scope="{row}">
-          <span>{{ formatMoneyWithSymbal(row.cost) }}</span>
+          <span>{{ formatMoney(row.cost) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="关联总的消费记录" width="160" align="center">

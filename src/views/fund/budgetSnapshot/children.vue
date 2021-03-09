@@ -21,12 +21,12 @@
       </el-table-column>
       <el-table-column label="预算金额" align="center" >
         <template slot-scope="{row}">
-          <span>{{ formatMoneyWithSymbal(row.amount)  }}</span>
+          <span>{{ formatMoney(row.amount)  }}</span>
         </template>
       </el-table-column>
       <el-table-column label="实际花费" align="center" >
         <template slot-scope="{row}">
-          <span>{{ formatMoneyWithSymbal(row.cpPaidAmount)  }}</span>
+          <span>{{ formatMoney(row.cpPaidAmount)  }}</span>
           <span v-if="row.rate>100">
            <el-tag type="danger" size="mini">超支</el-tag>
           </span>

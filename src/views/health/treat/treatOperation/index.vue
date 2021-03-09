@@ -165,7 +165,7 @@
       </el-table-column>
       <el-table-column label="费用">
         <template slot-scope="{row}">
-          <span>{{ formatMoneyWithSymbal(row.fee) }}</span>
+          <span>{{ formatMoney(row.fee) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="手术/检查日期" width="110" :show-overflow-tooltip="true">

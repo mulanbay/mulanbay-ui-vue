@@ -144,7 +144,7 @@
       </el-table-column>
       <el-table-column label="花费" align="center" width="120">
         <template slot-scope="{row}">
-          <span>{{ formatMoneyWithSymbal(row.cost) }}</span>
+          <span>{{ formatMoney(row.cost) }}</span>
           <span class="link-type" @click="handleCostStat(row)"><i class="el-icon-money" /></span>
         </template>
       </el-table-column>

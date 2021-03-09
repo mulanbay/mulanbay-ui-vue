@@ -227,12 +227,12 @@
       </el-table-column>
       <el-table-column label="单价" align="center" >
         <template slot-scope="{row}">
-          <span>{{ formatMoneyWithSymbal(row.unitPrice) }}</span>
+          <span>{{ formatMoney(row.unitPrice) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="总价" align="center">
         <template slot-scope="{row}">
-          <span>{{ formatMoneyWithSymbal(row.totalPrice) }}</span>
+          <span>{{ formatMoney(row.totalPrice) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="是否有效" align="center" width="100">

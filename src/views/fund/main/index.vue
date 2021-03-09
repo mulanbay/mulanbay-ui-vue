@@ -45,7 +45,7 @@
       </el-table-column>
       <el-table-column label="预算金额" align="center" width="150">
         <template slot-scope="{row}">
-          <span>{{ formatMoneyWithSymbal(row.amount) }}</span>
+          <span>{{ formatMoney(row.amount) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="周期类型" align="center" width="95">
@@ -241,11 +241,11 @@ export default {
       if(row.cpPaidAmount){
         var ca = (row.cpPaidAmount-row.amount).toFixed(2);
         if(ca>0){
-          return this.formatMoneyWithSymbal(row.cpPaidAmount)+'(+'+ca+')';
+          return this.formatMoney(row.cpPaidAmount)+'(+'+ca+')';
         }else if(ca<0){
-          return this.formatMoneyWithSymbal(row.cpPaidAmount)+'(-'+(0-ca)+')';
+          return this.formatMoney(row.cpPaidAmount)+'(-'+(0-ca)+')';
         }else{
-          return this.formatMoneyWithSymbal(row.cpPaidAmount);
+          return this.formatMoney(row.cpPaidAmount);
         }
       }else{
         return '--';

@@ -75,7 +75,7 @@
                 </tr>
                 <tr>
                   <td><div class="cell">总收入</div></td>
-                  <td><div class="cell">{{ formatMoneyWithSymbal(statData.totalIncome) }}</div></td>
+                  <td><div class="cell">{{ formatMoney(statData.totalIncome) }}</div></td>
                   <td>
                     <div class="cell">
                       <span class="link-type" @click="handleDispatch('Income')"><i class="el-icon-s-promotion" /></span>
@@ -84,7 +84,7 @@
                 </tr>
                 <tr>
                   <td><div class="cell">总共消费</div></td>
-                  <td><div class="cell">{{ formatMoneyWithSymbal(statData.totalConsumeAmount) }}</div></td>
+                  <td><div class="cell">{{ formatMoney(statData.totalConsumeAmount) }}</div></td>
                   <td>
                     <div class="cell">
                       <span class="link-type" @click="handleDispatch('BuyRecord')"><i class="el-icon-s-promotion" /></span>
@@ -93,7 +93,7 @@
                 </tr>
                 <tr>
                   <td><div class="cell">看病(自费)</div></td>
-                  <td><div class="cell">{{ formatMoneyWithSymbal(statData.totalTreatAmount) }}</div></td>
+                  <td><div class="cell">{{ formatMoney(statData.totalTreatAmount) }}</div></td>
                   <td>
                     <div class="cell">
                       <span class="link-type" @click="handleDispatch('TreatRecord')"><i class="el-icon-s-promotion" /></span>
@@ -102,7 +102,7 @@
                 </tr>
                 <tr>
                   <td><div class="cell">新增存款</div></td>
-                  <td><div class="cell">{{ formatMoneyWithSymbal(statData.remainMoney) }}</div></td>
+                  <td><div class="cell">{{ formatMoney(statData.remainMoney) }}</div></td>
                   <td>
                     <div class="cell">
                       <span class="link-type" @click="handleDispatch('Income')"><i class="el-icon-s-promotion" /></span>
@@ -118,7 +118,7 @@
                 </tr>
                 <tr>
                   <td><div class="cell">预算金额</div></td>
-                  <td><div class="cell">{{ formatMoneyWithSymbal(statData.yearBudget) }}</div></td>
+                  <td><div class="cell">{{ formatMoney(statData.yearBudget) }}</div></td>
                   <td>
                     <div class="cell">
                       <span class="link-type" @click="handleDispatch('Budget')"><i class="el-icon-s-promotion" /></span>
@@ -134,7 +134,7 @@
                 </tr>
                 <tr>
                   <td><div class="cell">预算金额</div></td>
-                  <td><div class="cell">{{ formatMoneyWithSymbal(statData.monthBudget) }}</div></td>
+                  <td><div class="cell">{{ formatMoney(statData.monthBudget) }}</div></td>
                   <td>
                     <div class="cell">
                       <span class="link-type" @click="handleDispatch('Budget')"><i class="el-icon-s-promotion" /></span>
@@ -143,7 +143,7 @@
                 </tr>
                 <tr>
                   <td><div class="cell">已经消费</div></td>
-                  <td><div class="cell">{{ formatMoneyWithSymbal(statData.monthConsumeAmount) }}</div></td>
+                  <td><div class="cell">{{ formatMoney(statData.monthConsumeAmount) }}</div></td>
                   <td>
                     <div class="cell">
                       <span class="link-type" @click="handleDispatch('BuyRecord')"><i class="el-icon-s-promotion" /></span>
@@ -178,7 +178,7 @@
                 </tr>
                 <tr>
                   <td><div class="cell">还可消费</div></td>
-                  <td><div class="cell">{{ formatMoneyWithSymbal(statData.monthRemainConsume) }}</div></td>
+                  <td><div class="cell">{{ formatMoney(statData.monthRemainConsume) }}</div></td>
                   <td>
                     <div class="cell">
                       <span class="link-type" @click="handleDispatch('BuyRecord')"><i class="el-icon-s-promotion" /></span>
@@ -187,7 +187,7 @@
                 </tr>
                 <tr>
                   <td><div class="cell">每天还可消费</div></td>
-                  <td><div class="cell">{{ formatMoneyWithSymbal(statData.monthRCPerDay) }}</div></td>
+                  <td><div class="cell">{{ formatMoney(statData.monthRCPerDay) }}</div></td>
                   <td>
                     <div class="cell">
                       <span class="link-type" @click="handleDispatch('BuyRecord')"><i class="el-icon-s-promotion" /></span>
@@ -219,7 +219,7 @@
                 <tr>
                   <td><div class="cell">消费信息</div></td>
                   <td><div class="cell">{{ statData.totalBuyCount }}</div></td>
-                  <td><div class="cell">{{ formatMoneyWithSymbal(statData.totalConsumeAmount) }}</div></td>
+                  <td><div class="cell">{{ formatMoney(statData.totalConsumeAmount) }}</div></td>
                   <td>
                     <div class="cell">
                       <span class="link-type" @click="handleDispatch('BuyRecord')"><i class="el-icon-s-promotion" /></span>
@@ -229,7 +229,7 @@
                 <tr>
                   <td><div class="cell">看病信息</div></td>
                   <td><div class="cell">{{ statData.totalTreatCount }}</div></td>
-                  <td><div class="cell">{{ formatMoneyWithSymbal(statData.totalTreatAmount) }}</div></td>
+                  <td><div class="cell">{{ formatMoney(statData.totalTreatAmount) }}</div></td>
                   <td>
                     <div class="cell">
                       <span class="link-type" @click="handleDispatch('TreatRecord')"><i class="el-icon-s-promotion" /></span>

@@ -75,7 +75,7 @@
                 </tr>
                 <tr>
                   <td><div class="cell">预算金额</div></td>
-                  <td><div class="cell">{{ formatMoneyWithSymbal(statData.budgetAmount) }}</div></td>
+                  <td><div class="cell">{{ formatMoney(statData.budgetAmount) }}</div></td>
                   <td>
                     <div class="cell">
                       <span class="link-type" @click="handleDispatch('Budget')"><i class="el-icon-s-promotion" /></span>
@@ -84,7 +84,7 @@
                 </tr>
                 <tr>
                   <td><div class="cell">普通消费</div></td>
-                  <td><div class="cell">{{ formatMoneyWithSymbal(statData.ncAmount) }}</div></td>
+                  <td><div class="cell">{{ formatMoney(statData.ncAmount) }}</div></td>
                   <td>
                     <div class="cell">
                       <span class="link-type" @click="handleDispatch('BuyRecord')"><i class="el-icon-s-promotion" /></span>
@@ -93,7 +93,7 @@
                 </tr>
                 <tr>
                   <td><div class="cell">突发消费</div></td>
-                  <td><div class="cell">{{ formatMoneyWithSymbal(statData.bcAmount) }}</div></td>
+                  <td><div class="cell">{{ formatMoney(statData.bcAmount) }}</div></td>
                   <td>
                     <div class="cell">
                       <span class="link-type" @click="handleDispatch('BuyRecord')"><i class="el-icon-s-promotion" /></span>
@@ -102,7 +102,7 @@
                 </tr>
                 <tr>
                   <td><div class="cell">看病(自费)</div></td>
-                  <td><div class="cell">{{ formatMoneyWithSymbal(statData.trAmount) }}</div></td>
+                  <td><div class="cell">{{ formatMoney(statData.trAmount) }}</div></td>
                   <td>
                     <div class="cell">
                       <span class="link-type" @click="handleDispatch('TreatRecord')"><i class="el-icon-s-promotion" /></span>
@@ -111,7 +111,7 @@
                 </tr>
                 <tr>
                   <td><div class="cell">收入统计</div></td>
-                  <td><div class="cell">{{ formatMoneyWithSymbal(statData.incomeAmount) }}</div></td>
+                  <td><div class="cell">{{ formatMoney(statData.incomeAmount) }}</div></td>
                   <td>
                     <div class="cell">
                       <span class="link-type" @click="handleDispatch('Income')"><i class="el-icon-s-promotion" /></span>
@@ -120,7 +120,7 @@
                 </tr>
                 <tr>
                   <td><div class="cell">总共消费</div></td>
-                  <td><div class="cell">{{ formatMoneyWithSymbal(statData.totalConsume) }}</div></td>
+                  <td><div class="cell">{{ formatMoney(statData.totalConsume) }}</div></td>
                   <td>
                     <div class="cell">
                       <span class="link-type" @click="handleDispatch('BuyRecord')"><i class="el-icon-s-promotion" /></span>
@@ -166,7 +166,7 @@
                   </td>
                   <td>
                     <div class="cell">
-                      {{ formatMoneyWithSymbal(statData.cb) }}
+                      {{ formatMoney(statData.cb) }}
                     </div>
                     <td>
                       <div class="cell">
@@ -190,7 +190,7 @@
                   </td>
                   <td>
                     <div class="cell">
-                      {{ formatMoneyWithSymbal(statData.ib) }}
+                      {{ formatMoney(statData.ib) }}
                     </div>
                     <td>
                       <div class="cell">
@@ -214,7 +214,7 @@
                       <span class="link-type" @click="msgAlert('提示','账户管理页面中的账户总值变化')"><i class="el-icon-question" /></span>
                     </div>
                   </td>
-                  <td><div class="cell">{{ formatMoneyWithSymbal(Math.abs(statData.accountChangeAmount)) }}</div></td>
+                  <td><div class="cell">{{ formatMoney(Math.abs(statData.accountChangeAmount)) }}</div></td>
                   <td>
                     <div class="cell">
                       <span class="link-type" @click="handleDispatch('Account')"><i class="el-icon-s-promotion" /></span>

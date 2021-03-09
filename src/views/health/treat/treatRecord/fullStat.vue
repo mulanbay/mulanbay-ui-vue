@@ -66,7 +66,7 @@
       </el-table-column>
       <el-table-column label="总共花费"  align="center" >
         <template slot-scope="{row}">
-          <span>{{ formatMoneyWithSymbal(row.totalFee) }}</span>
+          <span>{{ formatMoney(row.totalFee) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="统计" width="80" align="center">

@@ -192,7 +192,7 @@
       </el-table-column>
       <el-table-column label="价格" align="center">
         <template slot-scope="{row}">
-          <span>{{ formatMoneyWithSymbal(row.price) }}</span>
+          <span>{{ formatMoney(row.price) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="地点" align="center">

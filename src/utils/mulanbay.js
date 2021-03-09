@@ -139,7 +139,7 @@ export function handleTree(data, id, parentId, children, rootId) {
 }
 
 // 字符加上金钱前缀
-export function formatMoneyWithSymbal(pp) {
+export function formatMoney(pp) {
   if (pp == null) {
     return '';
   }

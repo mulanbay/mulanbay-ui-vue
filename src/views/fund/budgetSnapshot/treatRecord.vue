@@ -23,7 +23,7 @@
       </el-table-column>
       <el-table-column label="费用" width="120">
         <template slot-scope="{row}">
-          <span>{{ formatMoneyWithSymbal(row.totalFee) }}</span>
+          <span>{{ formatMoney(row.totalFee) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="医院" :show-overflow-tooltip="true">

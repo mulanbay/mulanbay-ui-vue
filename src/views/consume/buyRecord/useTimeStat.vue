@@ -150,12 +150,12 @@
       </el-table-column>
       <el-table-column label="买入价格" align="center" width="95">
         <template slot-scope="{row}">
-          <span>{{ formatMoneyWithSymbal(row.totalPrice) }}</span>
+          <span>{{ formatMoney(row.totalPrice) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="售出价格" align="center" width="95">
         <template slot-scope="{row}">
-          <span>{{ formatMoneyWithSymbal(row.soldPrice) }}</span>
+          <span>{{ formatMoney(row.soldPrice) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="折旧率" :show-overflow-tooltip="true"  align="center">

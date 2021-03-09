@@ -251,12 +251,12 @@
       </el-table-column>
       <el-table-column label="最小资金" align="center" width="160">
         <template slot-scope="{row}">
-          <span>{{ formatMoneyWithSymbal(row.minMoney) }}</span>
+          <span>{{ formatMoney(row.minMoney) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="最大资金" align="center" width="160">
         <template slot-scope="{row}">
-          <span>{{ formatMoneyWithSymbal(row.maxMoney) }}</span>
+          <span>{{ formatMoney(row.maxMoney) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="创建时间" align="center" width="180">

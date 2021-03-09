@@ -16,7 +16,7 @@
       </el-table-column>
       <el-table-column label="总价" align="center" width="95">
         <template slot-scope="{row}">
-          <span>{{ formatMoneyWithSymbal(row.totalPrice) }}</span>
+          <span>{{ formatMoney(row.totalPrice) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="购买日期" align="center" width="190">

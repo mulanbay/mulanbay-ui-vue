@@ -10,7 +10,7 @@
             预算总计
           </div>
           <span class="card-text">
-            {{ formatMoneyWithSymbal(statData.budgetAmount) }}
+            {{ formatMoney(statData.budgetAmount) }}
           </span>
         </div>
       </div>
@@ -25,7 +25,7 @@
             实际花费
           </div>
           <span class="card-text">
-            {{ formatMoneyWithSymbal(statData.cpPaidAmount) }}
+            {{ formatMoney(statData.cpPaidAmount) }}
           </span>
         </div>
       </div>
