@@ -19,26 +19,49 @@
       </el-form-item>
     </el-form>
 
-    <el-divider content-position="center">
-      <span class="table-title"><i class="el-icon-info"></i>{{ statTitle }}</span>
-    </el-divider>
-
     <el-row :gutter="32">
-      <el-col :xs="24" :sm="24" :lg="12">
-        <div class="chart-wrapper">
-          <gauge-chart1 :chartData="warningChartData"/>
-        </div>
-      </el-col>
-      <el-col :xs="24" :sm="24" :lg="12">
-        <div class="chart-wrapper">
-          <gauge-chart2 :chartData="alertChartData"/>
-        </div>
-      </el-col>
+      <el-card>
+        <el-col :span="24" class="card-box">
+          <div class="el-table el-table--enable-row-hover el-table--medium">
+            <table cellspacing="0" style="width: 100%;">
+              <tbody>
+                <tr>
+                  <td><div class="cell"><i class="el-icon-info"></i>统计值</div></td>
+                  <td>
+                    <div class="cell">
+                      <span class="table-title">{{ statTitle }}</span>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td><div class="cell"><i class="el-icon-info"></i>统计信息</div></td>
+                  <td>
+                    <div class="cell">
+                      <span class="table-title">{{ statContent }}</span>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </el-col>
+      </el-card>
+      
+      </br>
+      
+      <el-card>
+        <el-col :xs="24" :sm="24" :lg="12">
+          <div class="chart-wrapper">
+            <gauge-chart1 :chartData="warningChartData"/>
+          </div>
+        </el-col>
+        <el-col :xs="24" :sm="24" :lg="12">
+          <div class="chart-wrapper">
+            <gauge-chart2 :chartData="alertChartData"/>
+          </div>
+        </el-col>
+      </el-card>
     </el-row>
-
-    <div slot="footer" class="dialog-footer" align="center">
-      <span class="table-title">{{ statContent }}</span>
-    </div>
 
   </div>
 </template>
@@ -123,14 +146,14 @@ export default {
       getUserNotifyStat(this.queryParams).then(
         response => {
           if(response.userNotify.notifyConfig.resultType=='NAME_DATE'||response.userNotify.notifyConfig.resultType=='NAME_NUMBER'){
-            this.statContent ='统计数据：'+response.name+'，  '+response.compareValue+response.userNotify.notifyConfig.valueTypeName;
+            this.statContent =response.name+'，  '+response.compareValue+response.userNotify.notifyConfig.valueTypeName;
           }else{
             this.statContent='';
           }
           let rateWarningPercent = getPercent(response.compareValue,response.userNotify.warningValue);
           let warningData={};
           const unit = response.userNotify.notifyConfig.valueTypeName;
-          this.statTitle = '统计值:'+response.compareValue+unit;
+          this.statTitle = response.compareValue+unit;
           warningData.value = rateWarningPercent.toFixed(0);
           warningData.name = '';
           warningData.title='达到警告比例';
