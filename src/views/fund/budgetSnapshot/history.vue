@@ -34,8 +34,10 @@
       <common-chart :chartData="chartData"/>
     </div>
 
-    <el-divider></el-divider>
-
+    <el-divider content-position="center">
+      <span class="table-title"><i class="el-icon-info"></i>列表数据</span>
+    </el-divider>
+    
     <!--列表数据-->
     <el-table v-loading="loading" :data="snapshotList">
       <el-table-column type="selection" width="55" align="center" />

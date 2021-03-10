@@ -19,6 +19,10 @@
       </el-form-item>
     </el-form>
 
+    <el-divider content-position="center">
+      <span class="table-title"><i class="el-icon-info"></i>{{ statTitle }}</span>
+    </el-divider>
+
     <el-row :gutter="32">
       <el-col :xs="24" :sm="24" :lg="12">
         <div class="chart-wrapper">
@@ -33,7 +37,7 @@
     </el-row>
 
     <div slot="footer" class="dialog-footer" align="center">
-      <span style="color: red;">{{ statContent }}</span>
+      <span class="table-title">{{ statContent }}</span>
     </div>
 
   </div>
@@ -70,8 +74,9 @@ export default {
         id:undefined
       },
       userNotifyOptions:[],
+      statTitle:'',
       statContent:'',
-      relatedBeans:undefined
+      relatedBeans:undefined,
     };
   },
   created() {
@@ -124,18 +129,20 @@ export default {
           }
           let rateWarningPercent = getPercent(response.compareValue,response.userNotify.warningValue);
           let warningData={};
-          warningData.value = rateWarningPercent;
-          warningData.name = '达到比例';
+          const unit = response.userNotify.notifyConfig.valueTypeName;
+          this.statTitle = '统计值:'+response.compareValue+unit;
+          warningData.value = rateWarningPercent.toFixed(0);
+          warningData.name = '';
           warningData.title='达到警告比例';
-          warningData.subTitle='当前值:'+response.compareValue+",警告配置:"+response.userNotify.warningValue+',单位:'+response.userNotify.notifyConfig.valueTypeName;
+          warningData.subTitle="警告配置:"+response.userNotify.warningValue+unit;
           this.warningChartData = warningData;
 
           let rateAlertPercent = getPercent(response.compareValue,response.userNotify.alertValue);
           let alertData={};
-          alertData.value = rateAlertPercent;
-          alertData.name = '达到比例';
+          alertData.value = rateAlertPercent.toFixed(0);
+          alertData.name = '';
           alertData.title='达到报警比例';
-          alertData.subTitle='当前值:'+response.compareValue+",报警配置:"+response.userNotify.alertValue+',单位:'+response.userNotify.notifyConfig.valueTypeName;
+          alertData.subTitle="报警配置:"+response.userNotify.alertValue+unit;
           this.alertChartData = alertData;
         }
       );

@@ -112,7 +112,7 @@
                 </tr>
                 <tr>
                   <td colspan="3">
-                    <div class="cell" align="center" style="color: mediumpurple;">
+                    <div class="cell" align="center" style="color: royalblue;">
                       <i class="el-icon-info" />今年统计数据
                     </div>
                   </td>
@@ -128,7 +128,7 @@
                 </tr>
                 <tr>
                   <td colspan="3">
-                    <div class="cell" align="center" style="color: mediumpurple;">
+                    <div class="cell" align="center" style="color: royalblue;">
                       <i class="el-icon-info" />本月统计数据
                     </div>
                   </td>

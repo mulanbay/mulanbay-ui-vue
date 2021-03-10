@@ -26,8 +26,10 @@
     </el-row>
 
     <el-divider content-position="center">
-      <svg-icon icon-class="budget" class-name="card-panel-icon" />
-      预算列表
+      <span class="table-title">
+        <svg-icon icon-class="budget" />
+        预算列表
+      </span>
     </el-divider>
 
     <!--预算列表数据-->
@@ -38,7 +40,7 @@
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="名称" min-width="180px" :show-overflow-tooltip="true">
+      <el-table-column label="预算名称" min-width="180px" :show-overflow-tooltip="true">
         <template slot-scope="{row}">
           <span>{{ row.name }}</span>
         </template>
