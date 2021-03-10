@@ -17,7 +17,7 @@ import permission from './directive/permission'
 
 import './assets/icons' // icon
 import './permission' // permission control
-import { parseTime, resetForm, addDateRange, selectDictLabel, download,
+import { parseTime, resetForm, addDateRange, selectDictLabel, download,handleDispatch,
 handleTree,commonStatusOptions,booleanOptions,formatMoney,isObjectEmpty,loadingOptions} from "@/utils/mulanbay";
 import { getYearDateRange,getMonthDateRange,datePickerOptions,getFormatDate} from "@/utils/datetime";
 import Pagination from "@/components/Pagination";
@@ -41,6 +41,7 @@ Vue.prototype.isObjectEmpty = isObjectEmpty
 Vue.prototype.getYearDateRange = getYearDateRange
 Vue.prototype.getMonthDateRange = getMonthDateRange
 Vue.prototype.getFormatDate = getFormatDate
+Vue.prototype.handleDispatch = handleDispatch
 
 //当前登陆模式
 //Vue.prototype.familyMode = store.state.user.familyMode;

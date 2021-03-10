@@ -109,11 +109,6 @@ export default {
     this.handleUserScore();
   },
   methods: {
-    //跳转
-    handleDispatch(pathName){
-      //路由定向
-      this.$router.push({name:pathName,query: {}})
-    },
     //用户的积分统计
     handleUserRewardPointStat(){
       dailyStat({}).then(

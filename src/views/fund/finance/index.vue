@@ -25,10 +25,11 @@
 
     </el-row>
 
-    <el-divider content-position="center">
-      <span class="table-title">
-        <svg-icon icon-class="budget" />
+    <el-divider content-position="center" >
+      <span class="table-title" @click="handleDispatch('Budget')">
+        <svg-icon icon-class="budget"/>
         预算列表
+        <i class="el-icon-s-promotion" />
       </span>
     </el-divider>
 
@@ -91,11 +92,6 @@
           </span>
         </template>
       </el-table-column>
-      <el-table-column label="状态" align="center" width="100">
-        <template slot-scope="{row}">
-          <el-switch v-model="row.status" active-value="ENABLE" inactive-value="DISABLE" disabled></el-switch>
-        </template>
-      </el-table-column>
     </el-table>
 
   </div>
@@ -142,11 +138,6 @@ export default {
     this.getList();
   },
   methods: {
-    //跳转
-    handleDispatch(pathName){
-      //路由定向
-      this.$router.push({name:pathName,query: {}})
-    },
     /** 搜索按钮操作 */
     handleQuery() {
       this.getList();

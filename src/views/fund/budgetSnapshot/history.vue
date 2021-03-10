@@ -35,9 +35,13 @@
     </div>
 
     <el-divider content-position="center">
-      <span class="table-title"><i class="el-icon-info"></i>列表数据</span>
+      <span class="table-title" @click="handleDispatch('BudgetLogStat')">
+        <i class="el-icon-info"></i>
+        列表数据
+        <i class="el-icon-s-promotion" />
+      </span>
     </el-divider>
-    
+
     <!--列表数据-->
     <el-table v-loading="loading" :data="snapshotList">
       <el-table-column type="selection" width="55" align="center" />

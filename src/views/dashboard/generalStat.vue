@@ -350,11 +350,6 @@ export default {
     });
   },
   methods: {
-    //跳转
-    handleDispatch(pathName){
-      //路由定向
-      this.$router.push({name:pathName,query: {}})
-    },
     /** 搜索按钮操作 */
     handleQuery() {
       this.getList();

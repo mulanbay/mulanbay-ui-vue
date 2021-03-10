@@ -221,6 +221,13 @@ export function parseJsonToTree(jsonObj,prefix) {
   return datas;
 }
 
+//路由跳转
+export function handleDispatch(pathName){
+  let that = this;
+  //路由定向
+  that.$router.push({name:pathName,query: {}})
+}
+
 /**
  * 加载层
  */

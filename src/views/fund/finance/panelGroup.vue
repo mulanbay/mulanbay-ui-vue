@@ -35,7 +35,7 @@
       </div>
     </el-col>
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel" @click="handleDispatch('Budget')">
+      <div class="card-panel" @click="handleDispatch('Income')">
         <div class="card-panel-icon-wrapper icon-message">
           <svg-icon icon-class="income" class-name="card-panel-icon" />
         </div>
@@ -51,7 +51,7 @@
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
       <div class="card-panel" @click="handleDispatch('UserScore')">
         <div class="card-panel-icon-wrapper icon-shopping">
-          <svg-icon icon-class="score" class-name="card-panel-icon" />
+          <svg-icon icon-class="history" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description" align="right">
           <div class="card-panel-text">
@@ -90,11 +90,6 @@ export default {
     this.handleGeneralStat();
   },
   methods: {
-    //跳转
-    handleDispatch(pathName){
-      //路由定向
-      this.$router.push({name:pathName,query: {}})
-    },
     //总的概要统计(本月)
     handleGeneralStat(){
       let nowDate = new Date();
