@@ -10,6 +10,211 @@ export function createMapChart(option, myChart) {
 }
 
 /**
+ * 默认地图
+ * @param {Object} mapData
+ * @param {Object} myChart
+ */
+export function createDefaultMapChart(mapData,myChart,echarts) {
+  //基于模板：https://www.makeapie.com/editor.html?c=xi5eszo651
+  var mapName = mapData.mapName;
+  var data = mapData.dataList ;
+  var geoCoordMap = {};
+  /*获取地图数据*/
+  myChart.showLoading();
+  var mapFeatures = echarts.getMap(mapName).geoJson.features;
+  myChart.hideLoading();
+  mapFeatures.forEach(function(v) {
+    // 地区名称
+    var name = v.properties.name;
+    // 地区经纬度
+    geoCoordMap[name] = v.properties.cp;
+
+  });
+  var max = mapData.maxValue;
+  var min = 0;
+  var maxSize4Pin = 50,
+  minSize4Pin = 20;
+
+  var convertData = function(data) {
+    var res = [];
+    for (var i = 0; i < data.length; i++) {
+      var geoCoord = geoCoordMap[data[i].name];
+      if (geoCoord) {
+        res.push({
+          name: data[i].name,
+          value: geoCoord.concat(data[i].value),
+        });
+      }
+    }
+    return res;
+  };
+  let option = {
+    backgroundColor: '#404a59',
+    title: {
+      text: mapData.title,
+      subtext: mapData.subTitle,
+      x: 'center',
+      textStyle: {
+        color: '#ffffff',
+        fontFamily: '等线',
+        fontSize: 18
+      },
+      subtextStyle: {
+        color: '#e7e7e7',
+        fontSize: 15,
+        fontFamily: '等线'
+      }
+    },
+    tooltip: {
+      trigger: 'item',
+      formatter: function(params) {
+        if (params.data!=null&&params.data.days!=null) {
+          var toolTiphtml = params.data.name
+          + '<br>天数:' + params.data.days
+          + '<br>次数:' + params.data.counts
+          + '<br>花费:' + params.data.cost+'元'
+          return toolTiphtml;
+        }else{
+          return '';
+        }
+      }
+    },
+    visualMap: {
+      show: true,
+      min: min,
+      max: max,
+      left: 'left',
+      top: 'bottom',
+      text: ['高', '低'], // 文本，默认为数值文本
+      calculable: true,
+      seriesIndex: [1],
+      inRange: {
+        // color: ['#ffc0cb', '#800080'] // 红紫
+        color: ['#00467F', '#A5CC82'] ,// 蓝绿
+      }
+    },
+    geo: {
+      show: true,
+      map: mapName,
+      label: {
+        show: false,
+        emphasis: {
+          show: false,
+        }
+      },
+      roam: true,
+      itemStyle: {
+        areaColor: '#031525',
+        borderColor: '#3B5077',
+        emphasis: {
+          areaColor: '#2B91B7',
+        }
+      }
+    },
+    series: [{
+        name: '散点',
+        type: 'scatter',
+        coordinateSystem: 'geo',
+        data: convertData(data),
+        symbolSize: function(val) {
+          return val[2] / 10;
+        },
+        label: {
+          formatter: '{b}',
+          position: 'right',
+          show: true
+        },
+        emphasis: {
+          label:{
+            show: true
+          }
+        },
+        itemStyle: {
+          color: '#05C3F9'
+        }
+      },
+      {
+        type: 'map',
+        map: mapName,
+        geoIndex: 0,
+        aspectScale: 0.75, //长宽比
+        showLegendSymbol: false, // 存在legend时显示
+        label: {
+          show: true
+        },
+        emphasis: {
+          label:{
+            show: false,
+            color: '#fff'
+          },
+          areaColor: '#2B91B7'
+        },
+        roam: true,
+        itemStyle: {
+          areaColor: '#031525',
+          borderColor: '#3B5077'
+        },
+        animation: false,
+        data: data
+      },
+      {
+        name: '点',
+        type: 'scatter',
+        coordinateSystem: 'geo',
+        symbol: 'pin', //气泡
+
+        symbolSize: function(val) {
+          var a = (maxSize4Pin - minSize4Pin) / (max - min);
+          var b = minSize4Pin - a * min;
+          b = maxSize4Pin - a * max;
+          return a * val[2] + b;
+        },
+        label: {
+          formatter: '{@[2]}',
+          show: true,
+          color: '#fff',
+          fontSize: 9
+        },
+        itemStyle: {
+          color: '#F62157', //标志颜色
+        },
+        zlevel: 6,
+        data: convertData(data),
+      },
+      {
+        name: 'Top 5',
+        type: 'effectScatter',
+        coordinateSystem: 'geo',
+        data: convertData(data.sort(function(a, b) {
+          return b.value - a.value;
+        }).slice(0, 5)),
+        //定义圆圈大小
+        // symbolSize: function(val) {
+        //   return val[2] / 25;
+        // },
+        showEffectOn: 'render',
+        rippleEffect: {
+          brushType: 'stroke'
+        },
+        hoverAnimation: true,
+        label: {
+          formatter: '{b}',
+          position: 'right',
+          show: true
+        },
+        itemStyle: {
+          color: 'yellow',
+          shadowBlur: 10,
+          shadowColor: 'yellow'
+        },
+        zlevel: 1
+      },
+    ]
+  };
+  createMapChart(option, myChart);
+}
+
+/**
  * 单向地图
  * @param {Object} data
  * @param {Object} myChart

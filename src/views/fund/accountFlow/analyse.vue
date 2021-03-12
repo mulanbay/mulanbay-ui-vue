@@ -175,13 +175,23 @@ export default {
           let option = {
             title: {
               text: data.title,
-              subtext: data.subTitle
+              subtext: data.subTitle,
+              x: 'center'
             },
             tooltip: {
               trigger: 'axis'
             },
             legend: {
-              data: data.legendData
+              data: data.legendData,
+              orient: 'horizontal',
+              x: 'center',
+              y: 'bottom'
+            },
+            grid: {//四周的宽度
+              left: '2%',
+              right: '3%',
+              bottom: '5%',
+              containLabel: true
             },
             toolbox: {
               show: true,

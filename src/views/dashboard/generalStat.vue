@@ -211,38 +211,38 @@
               <thead>
                 <tr>
                   <th class="is-leaf"><div class="cell">名称</div></th>
-                  <th class="is-leaf"><div class="cell">次数</div></th>
-                  <th class="is-leaf"><div class="cell">金额</div></th>
-                  <th class="is-leaf" width="60px"><div class="cell">链接</div></th>
+                  <th class="is-leaf"><div class="cell" align="center">次数</div></th>
+                  <th class="is-leaf"><div class="cell" align="center">金额</div></th>
+                  <th class="is-leaf" width="60px"><div class="cell" align="center">链接</div></th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td><div class="cell">消费信息</div></td>
-                  <td><div class="cell">{{ statData.totalBuyCount }}</div></td>
-                  <td><div class="cell">{{ formatMoney(statData.totalConsumeAmount) }}</div></td>
+                  <td><div class="cell" align="center">{{ statData.totalBuyCount }}</div></td>
+                  <td><div class="cell" align="center">{{ formatMoney(statData.totalConsumeAmount) }}</div></td>
                   <td>
-                    <div class="cell">
+                    <div class="cell" align="center">
                       <span class="link-type" @click="handleDispatch('BuyRecord')"><i class="el-icon-s-promotion" /></span>
                     </div>
                   </td>
                 </tr>
                 <tr>
                   <td><div class="cell">看病信息</div></td>
-                  <td><div class="cell">{{ statData.totalTreatCount }}</div></td>
-                  <td><div class="cell">{{ formatMoney(statData.totalTreatAmount) }}</div></td>
+                  <td><div class="cell" align="center">{{ statData.totalTreatCount }}</div></td>
+                  <td><div class="cell" align="center">{{ formatMoney(statData.totalTreatAmount) }}</div></td>
                   <td>
-                    <div class="cell">
+                    <div class="cell" align="center">
                       <span class="link-type" @click="handleDispatch('TreatRecord')"><i class="el-icon-s-promotion" /></span>
                     </div>
                   </td>
                 </tr>
                 <tr>
                   <td><div class="cell">其他信息</div></td>
-                  <td><div class="cell">--</div></td>
-                  <td><div class="cell">--</div></td>
+                  <td><div class="cell" align="center">--</div></td>
+                  <td><div class="cell" align="center">--</div></td>
                   <td>
-                    <div class="cell">
+                    <div class="cell" align="center">
                       <span class="link-type" @click="handleDispatch('BuyRecord')"><i class="el-icon-s-promotion" /></span>
                     </div>
                   </td>
@@ -263,38 +263,38 @@
               <thead>
                 <tr>
                   <th class="is-leaf"><div class="cell">名称</div></th>
-                  <th class="is-leaf"><div class="cell">次数</div></th>
-                  <th class="is-leaf"><div class="cell">统计值</div></th>
-                  <th class="is-leaf" width="60px"><div class="cell">链接</div></th>
+                  <th class="is-leaf"><div class="cell" align="center">次数</div></th>
+                  <th class="is-leaf"><div class="cell" align="center">统计值</div></th>
+                  <th class="is-leaf" width="60px"><div class="cell" align="center">链接</div></th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td><div class="cell">锻炼时间</div></td>
-                  <td><div class="cell">{{ statLifeData.totalSportExerciseCount }}</div></td>
-                  <td><div class="cell">{{ statLifeData.totalSportExerciseHours }}小时</div></td>
+                  <td><div class="cell" align="center">{{ statLifeData.totalSportExerciseCount }}</div></td>
+                  <td><div class="cell" align="center">{{ statLifeData.totalSportExerciseHours }}小时</div></td>
                   <td>
-                    <div class="cell">
+                    <div class="cell" align="center">
                       <span class="link-type" @click="handleDispatch('SportExercise')"><i class="el-icon-s-promotion" /></span>
                     </div>
                   </td>
                 </tr>
                 <tr>
                   <td><div class="cell">音乐练习</div></td>
-                  <td><div class="cell">{{ statLifeData.totalMusicPracticeCount }}</div></td>
-                  <td><div class="cell">{{ statLifeData.totalMusicPracticeHours }}小时</div></td>
+                  <td><div class="cell" align="center">{{ statLifeData.totalMusicPracticeCount }}</div></td>
+                  <td><div class="cell" align="center">{{ statLifeData.totalMusicPracticeHours }}小时</div></td>
                   <td>
-                    <div class="cell">
+                    <div class="cell" align="center">
                       <span class="link-type" @click="handleDispatch('MusicPractice')"><i class="el-icon-s-promotion" /></span>
                     </div>
                   </td>
                 </tr>
                 <tr>
                   <td><div class="cell">阅读时间</div></td>
-                  <td><div class="cell">{{ statLifeData.totalReadingCount }}</div></td>
-                  <td><div class="cell">{{ statLifeData.totalReadingHours }}小时</div></td>
+                  <td><div class="cell" align="center">{{ statLifeData.totalReadingCount }}</div></td>
+                  <td><div class="cell" align="center">{{ statLifeData.totalReadingHours }}小时</div></td>
                   <td>
-                    <div class="cell">
+                    <div class="cell" align="center">
                       <span class="link-type" @click="handleDispatch('ReadingRecord')"><i class="el-icon-s-promotion" /></span>
                     </div>
                   </td>
