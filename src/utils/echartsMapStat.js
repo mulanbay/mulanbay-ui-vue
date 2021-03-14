@@ -569,18 +569,22 @@ export function createSingleTransferMapChart(data, myChart) {
     geo: {
       map: 'china',
       label: {
+        show: true,
         emphasis: {
-          show: false
+          show: true
         }
       },
       roam: true,
+      emphasis: {
+        itemStyle: {
+          areaColor: '#ffff7f'
+        }
+      },
       itemStyle: {
         normal: {
+          //地图的背景颜色
           areaColor: '#323c48',
-          borderColor: '#404a59'
-        },
-        emphasis: {
-          areaColor: '#2a333d'
+          borderColor: '#111'
         }
       }
     },
@@ -719,17 +723,23 @@ export function createDoubleTransferMapChart(data, myChart) {
     geo: {
       map: 'china',
       label: {
+        show: true,
         emphasis: {
-          show: false
+          show: true
         }
       },
       roam: true,
       emphasis: {
-        areaColor: '#2a333d'
+        itemStyle: {
+          areaColor: '#ffff7f'
+        }
       },
       itemStyle: {
-        areaColor: '#323c48',
-        borderColor: '#404a59'
+        normal: {
+          //地图的背景颜色
+          areaColor: '#323c48',
+          borderColor: '#111'
+        }
       }
     },
     series: series
