@@ -86,8 +86,8 @@
           type="primary"
           icon="el-icon-user"
           size="mini"
-          @click="handleTreeView"
-          v-hasPermi="['system:qaConfig:treeView']"
+          @click="handleStat"
+          v-hasPermi="['system:qaConfig:stat']"
         >拓扑结构</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -352,11 +352,6 @@
       </div>
     </el-dialog>
 
-    <!-- 拓扑结构 -->
-    <el-dialog :title="treeViewTitle" width="850px" :visible.sync="treeViewOpen"  append-to-body>
-      <tree-view />
-    </el-dialog>
-
     <!-- 智能客服 -->
     <el-dialog :title="csTitle" width="700px" :visible.sync="csOpen"  append-to-body>
       <custom-service />
@@ -371,14 +366,12 @@ import {appendTagToOptions} from "@/utils/tagUtils";
 
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
-import TreeView from './treeView'
 import CustomService from '../cs/customService'
 
 export default {
   name: "QaConfig",
   components: {
     Treeselect,
-    'tree-view':TreeView,
     'custom-service':CustomService
   },
   data() {
@@ -386,9 +379,6 @@ export default {
       //智能客服
       csTitle:'',
       csOpen:false,
-      //拓扑结构
-      treeViewTitle:'',
-      treeViewOpen:false,
       //标签属性 start
       keywordsTags: [],
       //已经保存过的商品标签
@@ -500,9 +490,9 @@ export default {
       });
     },
     /** 拓扑结构 */
-    handleTreeView(){
-      this.treeViewTitle='QA拓扑结构';
-      this.treeViewOpen=true;
+    handleStat(){
+      //路由定向
+      this.$router.push({name:'QaConfigStat',query: {}})
     },
     /** 智能客服 */
     handleCustomService(){

@@ -60,9 +60,9 @@ export function reloadCache() {
   })
 }
 
-export function getQaConfigTreeView(name) {
+export function getQaConfigStat(name) {
   return request({
-    url: '/qaConfig/treeView',
+    url: '/qaConfig/stat',
     method: 'get',
     params: { name }
   })

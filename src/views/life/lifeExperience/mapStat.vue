@@ -46,7 +46,7 @@
 
 <script>
   import {getLifeExperienceMapStat} from "@/api/life/lifeExperience";
-  import {createLocationMapChart,createNTLocationMapChart,createDefaultMapChart} from "@/utils/echartsMapStat";
+  import {createLocationMapChart,createNTLocationMapChart,createDefaultMapChart,createWorldMapChart} from "@/utils/echartsMapStat";
   import {chartProps} from "@/utils/echarts";
   import {deepClone} from "@/utils/index";
 
@@ -162,6 +162,8 @@
                 //数量过多则不显示tooltip，只是显示最高的几个
                 createLocationMapChart(response,this.chart);
               }
+            }else if(mapType=='WORLD'){
+              createWorldMapChart(response,this.chart,echarts);
             }else{
               createDefaultMapChart(response,this.chart,echarts);
             }
