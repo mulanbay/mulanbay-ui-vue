@@ -155,13 +155,7 @@
             }
             const mapType = this.queryParams.mapType;
             if(mapType=='LOCATION'||mapType=='LC_NAME'){
-              const n = response.dataList==null ? 0: response.dataList.length;
-              if(n<=20){
-                createNTLocationMapChart(response,this.chart);
-              }else{
-                //数量过多则不显示tooltip，只是显示最高的几个
-                createLocationMapChart(response,this.chart);
-              }
+              createLocationMapChart(response,this.chart);
             }else if(mapType=='WORLD'){
               createWorldMapChart(response,this.chart,echarts);
             }else{

@@ -767,7 +767,7 @@ export function convertSeriesData(data) {
  */
 export function createLocationMapChart(mapData, myChart) {
   let geoCoordMap = mapData.geoCoordMapData;
-
+  let data = mapData.dataList;
   let convertData = function(data) {
     let res = [];
     for (let i = 0; i < data.length; i++) {
@@ -780,6 +780,19 @@ export function createLocationMapChart(mapData, myChart) {
       }
     }
     return res;
+  };
+  const nn = data.length;
+  const min = mapData.min;
+  const max = mapData.max;
+  let mm =max-min;
+  //计算图标大小,取5-25之间的值
+  let caleSize = function(v) {
+    if(mm==0){
+      //都是一样的
+      return nn<=10? 15:10;
+    }
+    var s = (parseInt(v)-min)/mm*20+5;
+    return Math.round(s);
   };
   //最高的
   let topSize = 0;
@@ -797,9 +810,9 @@ export function createLocationMapChart(mapData, myChart) {
     backgroundColor: '#404a59',
     title: {
       text: mapData.title,
-      subtext: '----',
-      sublink: '----',
-      x: 'center',
+      subtext: '--',
+      sublink: '--',
+      left: 'center',
       textStyle: {
         color: '#fff'
       }
@@ -814,18 +827,7 @@ export function createLocationMapChart(mapData, myChart) {
       orient: 'vertical',
       y: 'bottom',
       x: 'right',
-      data: ['次数'],
-      textStyle: {
-        color: '#fff'
-      }
-    },
-    visualMap: {
-      min: 0,
-      max: mapData.max,
-      calculable: true,
-      inRange: {
-        color: ['#50a3ba', '#eac736', '#d94e5d']
-      },
+      data: [mapData.name],
       textStyle: {
         color: '#fff'
       }
@@ -841,7 +843,7 @@ export function createLocationMapChart(mapData, myChart) {
       roam: true,
       emphasis: {
         itemStyle: {
-          areaColor: '#ffff7f'
+          areaColor: '#ffffff'
         }
       },
       itemStyle: {
@@ -856,42 +858,35 @@ export function createLocationMapChart(mapData, myChart) {
         name: mapData.name,
         type: 'scatter',
         coordinateSystem: 'geo',
-        data: convertData(mapData.dataList),
-        symbolSize: 12,
+        data: convertData(data),
+        symbolSize: function(val) {
+          return caleSize(val[2]);
+        },
         label: {
           normal: {
+            formatter: '{b}',
+            position: 'right',
             show: false
           },
           emphasis: {
-            show: false
+            show: true
           }
         },
         itemStyle: {
-          emphasis: {
-            borderColor: '#fff',
-            borderWidth: 1
+          normal: {
+            color: '#ddb926'
           }
         }
       },
       {
-        name: 'Top ' + topSize,
+        name: 'Top '+topSize,
         type: 'effectScatter',
         coordinateSystem: 'geo',
-        data: convertData(mapData.dataList.sort(function(a, b) {
+        data: convertData(data.sort(function(a, b) {
           return b.value - a.value;
-        }).slice(0, topSize)),
+        }).slice(0, 6)),
         symbolSize: function(val) {
-          let v = val[2] / 10;
-          if (v <= 5) {
-            return 5;
-          } else if (v <= 10) {
-            return 10;
-          } else {
-            return v;
-          }
-        },
-        encode: {
-          value: 2
+          return caleSize(val[2]);
         },
         showEffectOn: 'render',
         rippleEffect: {
@@ -899,122 +894,22 @@ export function createLocationMapChart(mapData, myChart) {
         },
         hoverAnimation: true,
         label: {
-          formatter: '{b}',
-          position: 'right',
-          show: true
+          normal: {
+            formatter: '{b}',
+            position: 'right',
+            show: true
+          }
         },
         itemStyle: {
-          color: 'purple',
-          shadowBlur: 10,
-          shadowColor: '#333'
+          normal: {
+            color: '#f4e925',
+            shadowBlur: 10,
+            shadowColor: '#333'
+          }
         },
         zlevel: 1
       }
     ]
-  };
-  createMapChart(option, myChart);
-}
-
-/**
- * 基于地点的地图统计（没有最高Top的显示）
- * @param {Object} mapData
- * @param {Object} myChart
- */
-export function createNTLocationMapChart(mapData, myChart) {
-  let geoCoordMap = mapData.geoCoordMapData;
-
-  let convertData = function(data) {
-    let res = [];
-    for (let i = 0; i < data.length; i++) {
-      let geoCoord = geoCoordMap[data[i].name];
-      if (geoCoord) {
-        res.push({
-          name: data[i].name,
-          value: geoCoord.concat(data[i].value)
-        });
-      }
-    }
-    return res;
-  };
-  let option = {
-    backgroundColor: '#404a59',
-    title: {
-      text: mapData.title,
-      subtext: '----',
-      sublink: '----',
-      x: 'center',
-      textStyle: {
-        color: '#fff'
-      }
-    },
-    tooltip: {
-      trigger: 'item',
-      formatter: function(params) {
-        return params.name + ' : ' + params.value[2] + mapData.unit;
-      }
-    },
-    legend: {
-      orient: 'vertical',
-      y: 'bottom',
-      x: 'right',
-      data: ['次数'],
-      textStyle: {
-        color: '#fff'
-      }
-    },
-    visualMap: {
-      min: 0,
-      max: mapData.max,
-      calculable: true,
-      inRange: {
-        color: ['#50a3ba', '#eac736', '#d94e5d']
-      },
-      textStyle: {
-        color: '#fff'
-      }
-    },
-    geo: {
-      map: 'china',
-      label: {
-        show: true,
-        emphasis: {
-          show: true
-        }
-      },
-      roam: true,
-      emphasis: {
-        itemStyle: {
-          areaColor: '#ffff7f'
-        }
-      },
-      itemStyle: {
-        normal: {
-          //地图的背景颜色
-          areaColor: '#323c48',
-          borderColor: '#111'
-        }
-      }
-    },
-    series: [{
-      name: mapData.name,
-      type: 'scatter',
-      coordinateSystem: 'geo',
-      data: convertData(mapData.dataList),
-      symbolSize: 12,
-      label: {
-        show: true,
-        position: 'top',
-        formatter: function(params) {
-          return params.name;
-        }
-      },
-      itemStyle: {
-        emphasis: {
-          borderColor: '#fff',
-          borderWidth: 1
-        }
-      }
-    }]
   };
   createMapChart(option, myChart);
 }
