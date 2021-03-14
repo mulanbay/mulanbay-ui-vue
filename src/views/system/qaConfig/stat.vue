@@ -90,16 +90,16 @@
               this.chart = echarts.init(document.getElementById(this.id));
             }
             this.chart.resize();
-            var resData = [];
-            resData.push(response);
-            let option = this.createChartOption(resData);
+            let option = this.createChartOption(response);
             createChart(option, this.chart);
             this.loading.close();
           }
         );
       },
       /**
+       * 关系图
        * 参考：http://makeapie.com/editor.html?c=xO6bpzhc_c
+       * 另一个版本：https://www.makeapie.com/editor.html?c=x8cCUQhaF
        * @param {Object} resData
        */
       createChartOption(resData) {
@@ -145,7 +145,7 @@
           }
         ];
 
-        var listData = resData;
+        var listData = resData.dataList;
         var list = [];
         var links = [];
         var legend = [];

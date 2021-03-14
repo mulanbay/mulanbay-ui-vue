@@ -102,7 +102,7 @@
         // 查询参数
         queryParams: {
           mapType: 'CHINA',
-          statType: 'DAYS'
+          statType: 'COUNT'
         }
       };
     },

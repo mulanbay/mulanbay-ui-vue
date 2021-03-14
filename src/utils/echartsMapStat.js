@@ -90,7 +90,7 @@ export function createDefaultMapChart(mapData, myChart, echarts) {
       seriesIndex: [1],
       inRange: {
         // color: ['#ffc0cb', '#800080'] // 红紫
-        color: ['#00467F', '#A5CC82'], // 蓝绿
+        color: ['#00557f', '#00246d'], // 蓝绿
       }
     },
     geo: {
@@ -99,15 +99,20 @@ export function createDefaultMapChart(mapData, myChart, echarts) {
       label: {
         show: false,
         emphasis: {
-          show: false,
+          show: true
         }
       },
       roam: true,
+      emphasis: {
+        itemStyle: {
+          areaColor: '#ffff7f'
+        }
+      },
       itemStyle: {
-        areaColor: '#031525',
-        borderColor: '#3B5077',
-        emphasis: {
-          areaColor: '#2B91B7',
+        normal: {
+          //地图的背景颜色
+          areaColor: '#bcbcbc',
+          borderColor: '#111'
         }
       }
     },
@@ -220,7 +225,7 @@ export function createDefaultMapChart(mapData, myChart, echarts) {
  * @param {Object} myChart
  */
 export function createWorldMapChart(mapData, myChart, echarts) {
-  // 飞线颜色  
+  // 飞线颜色
   var flyLineColor = "yellow";
   //线条颜色
   var lineColor = "rgba(31,20,252,1)";
@@ -818,17 +823,22 @@ export function createLocationMapChart(mapData, myChart) {
     geo: {
       map: 'china',
       label: {
+        show: true,
         emphasis: {
-          show: false
+          show: true
+        }
+      },
+      roam: true,
+      emphasis: {
+        itemStyle: {
+          areaColor: '#ffff7f'
         }
       },
       itemStyle: {
         normal: {
+          //地图的背景颜色
           areaColor: '#323c48',
           borderColor: '#111'
-        },
-        emphasis: {
-          areaColor: '#2a333d'
         }
       }
     },
@@ -956,17 +966,22 @@ export function createNTLocationMapChart(mapData, myChart) {
     geo: {
       map: 'china',
       label: {
+        show: true,
         emphasis: {
-          show: false
+          show: true
+        }
+      },
+      roam: true,
+      emphasis: {
+        itemStyle: {
+          areaColor: '#ffff7f'
         }
       },
       itemStyle: {
         normal: {
+          //地图的背景颜色
           areaColor: '#323c48',
           borderColor: '#111'
-        },
-        emphasis: {
-          areaColor: '#2a333d'
         }
       }
     },

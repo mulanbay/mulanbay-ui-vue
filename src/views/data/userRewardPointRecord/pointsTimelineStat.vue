@@ -138,11 +138,17 @@ export default {
       getUserRewardPointRecordTimelineStat(this.addDateRange(this.queryParams, this.dateRange)).then(
         response => {
           //组装chart数据
-          if(this.queryParams.dateGroupType=='DAYCALENDAR'){
-            response.chartType='COMPARE_CALANDER';
-          }else{
-            response.chartType='MIX_LINE_BAR';
+          switch(this.queryParams.dateGroupType){
+            case 'DAYCALENDAR':
+              response.chartType='COMPARE_CALANDER';
+              break;
+            case '':
+              response.chartType='LINE';
+              break; 
+            default:
+              response.chartType='MIX_LINE_BAR';
           }
+          
           this.chartData = response;
           this.loading.close();
         }

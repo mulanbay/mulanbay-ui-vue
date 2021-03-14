@@ -84,7 +84,7 @@
       <el-col :span="1.5">
         <el-button
           type="primary"
-          icon="el-icon-user"
+          icon="el-icon-data-line"
           size="mini"
           @click="handleStat"
           v-hasPermi="['system:qaConfig:stat']"
