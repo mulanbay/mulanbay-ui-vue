@@ -164,7 +164,7 @@
         <el-row>
           <el-col :span="10">
             <el-form-item label="抵达城市" prop="arriveCity">
-             <el-input v-model="form.arriveCity" placeholder="请输入城市" @blur="getArriveCityCityLocation" />
+             <el-input v-model="form.arriveCity" placeholder="请输入城市" @blur="getArriveCityLocation" />
             </el-form-item>
           </el-col>
           <el-col :span="14">
@@ -195,9 +195,14 @@
               </el-date-picker>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+          <el-col :span="6">
             <el-form-item label="地图统计" prop="mapStat">
               <el-switch v-model="form.mapStat"></el-switch>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="国际线路" prop="international">
+              <el-switch v-model="form.international"></el-switch>
             </el-form-item>
           </el-col>
         </el-row>
@@ -281,8 +286,8 @@
 </template>
 
 <script>
-  import {fetchList,getLifeExperienceDetail,createLifeExperienceDetail,updateLifeExperienceDetail,deleteLifeExperienceDetail,getCountryLocation} from "@/api/life/lifeExperienceDetail";
-  import {getCityLocationByLocation} from "@/api/life/cityLocation";
+  import {fetchList,getLifeExperienceDetail,createLifeExperienceDetail,
+  updateLifeExperienceDetail,deleteLifeExperienceDetail,getCountryLocation,getCityLocation} from "@/api/life/lifeExperienceDetail";
   import {getAllProvince,getCityList,getDistrictList} from "@/api/common";
   import LifeExperienceConsumeList from '../lifeExperienceConsume/index'
   import LocationSelect from '../lifeExperience/locationSelect'
@@ -355,12 +360,12 @@ export default {
         country: [
           { required: true, message: "国家不能为空", trigger: "blur" }
         ],
-        provinceId: [
-          { required: true, message: "省份不能为空", trigger: "blur" }
-        ],
-        cityId: [
-          { required: true, message: "城市不能为空", trigger: "blur" }
-        ],
+        // provinceId: [
+        //   { required: true, message: "省份不能为空", trigger: "blur" }
+        // ],
+        // cityId: [
+        //   { required: true, message: "城市不能为空", trigger: "blur" }
+        // ],
         occurDate: [
           { required: true, message: "出发日期不能为空", trigger: "blur" }
         ],
@@ -377,7 +382,10 @@ export default {
           { required: true, message: "抵达城市地理坐标不能为空", trigger: "blur" }
         ],
         mapStat: [
-          { required: true, message: "加入地图统计不能为空", trigger: "blur" }
+          { required: true, message: "请选择是否加入地图统计", trigger: "blur" }
+        ],
+        international: [
+          { required: true, message: "请选择是否国际线路", trigger: "blur" }
         ]
       }
     };
@@ -426,26 +434,29 @@ export default {
     },
     /** 自动获取出发城市的地理位置 */
     getStartCityLocation(){
-      getCityLocationByLocation(this.form.startCity).then(
+      getCityLocation(this.form.startCity).then(
         response => {
           if(response!=null){
-            this.form.scLocation=response.lon+','+response.lat;
+            this.form.scLocation=response;
           }
         }
       );
     },
     /** 自动获取抵达城市的地理位置 */
-    getArriveCityCityLocation(){
-      getCityLocationByLocation(this.form.arriveCity).then(
+    getArriveCityLocation(){
+      getCityLocation(this.form.arriveCity).then(
         response => {
           if(response!=null){
-            this.form.acLocation=response.lon+','+response.lat;
+            this.form.acLocation=response;
           }
         }
       );
     },
     /** 自动获取国家的地理位置 */
     getCountryLocation(){
+      if(this.form.country!='中国'){
+        this.form.international = true;
+      }
       getCountryLocation(this.form.country).then(
         response => {
           if(response!=null){
@@ -523,6 +534,7 @@ export default {
         id: undefined,
         country: '中国',
         mapStat:true,
+        international:false,
         scLocation:undefined,
         acLocation:undefined,
         countryLocation:undefined

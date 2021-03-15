@@ -81,13 +81,13 @@
 
 <script>
   import {getLifeExperienceStartCityTree,getLifeExperienceTransferMapStat} from "@/api/life/lifeExperience";
-  import {createSingleTransferMapChart,createDoubleTransferMapChart} from "@/utils/echartsMapStat";
+  import {createSingleTransferMapChart,createDoubleTransferMapChart,createWorldTransferMapChart} from "@/utils/echartsMapStat";
   import {chartProps} from "@/utils/echarts";
   import {deepClone} from "@/utils/index";
-
+  import '@/components/echarts/map/china'
+  import '@/components/echarts/map/world'
   import * as echarts from 'echarts';
   import resize from '../../dashboard/mixins/resize.js'
-
 
 export default {
   name: "LifeExperienceTransferMapStat",
@@ -120,6 +120,10 @@ export default {
         {
           id: 'TRANSFER_DOUBLE',
           text: '双向'
+        },
+        {
+          id: 'WORLD',
+          text: '世界'
         }
       ],
       //日期范围快速选择
@@ -172,10 +176,15 @@ export default {
           if(this.chart==null){
             this.chart = echarts.init(document.getElementById(this.id));
           }
-          if(this.queryParams.mapType=='TRANSFER_DOUBLE'){
-            createDoubleTransferMapChart(response,this.chart);
-          }else{
-            createSingleTransferMapChart(response,this.chart);
+          switch(this.queryParams.mapType){
+            case 'TRANSFER_DOUBLE':
+              createDoubleTransferMapChart(response,this.chart);
+              break;
+            case 'TRANSFER_SINGLE':
+              createSingleTransferMapChart(response,this.chart);
+              break;
+            default:
+              createWorldTransferMapChart(response,this.chart);
           }
           this.loading.close();
         }

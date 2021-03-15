@@ -49,3 +49,11 @@ export function getCountryLocation(country) {
     params: { country }
   })
 }
+
+export function getCityLocation(city) {
+  return request({
+    url: '/lifeExperienceDetail/getCityLocation',
+    method: 'get',
+    params: { city }
+  })
+}
