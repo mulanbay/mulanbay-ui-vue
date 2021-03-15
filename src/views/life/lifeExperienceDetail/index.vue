@@ -157,7 +157,7 @@
           <el-col :span="14">
             <el-form-item label="地理坐标" prop="scLocation">
              <el-input v-model="form.scLocation" placeholder="" style="width: 195px;"/>
-             <el-button type="query" icon="el-icon-search" size="mini" @click="handleMapLocation('startCity')" >选择</el-button>
+             <el-button type="query" icon="el-icon-search" size="mini" @click="handleStartCityML" >选择</el-button>
             </el-form-item>
           </el-col>
         </el-row>
@@ -170,21 +170,34 @@
           <el-col :span="14">
             <el-form-item label="地理坐标" prop="acLocation">
              <el-input v-model="form.acLocation" placeholder="" style="width: 195px;"/>
-             <el-button type="query" icon="el-icon-search" size="mini" @click="handleMapLocation('arriveCity')" >选择</el-button>
+             <el-button type="query" icon="el-icon-search" size="mini" @click="handleArriveCityML" >选择</el-button>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="10">
+            <el-form-item label="所在国家" prop="country">
+             <el-input v-model="form.country" placeholder="请输入国家" @blur="getCountryLocation" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="14">
+            <el-form-item label="地理坐标" prop="countryLocation">
+             <el-input v-model="form.countryLocation" placeholder="" style="width: 195px;"/>
+             <el-button type="query" icon="el-icon-search" size="mini" @click="handleCountryML" >选择</el-button>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="所在国家" prop="country">
-             <el-input v-model="form.country" placeholder="请输入国家" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
             <el-form-item label="出发日期" prop="occurDate">
               <el-date-picker type="date" v-model="form.occurDate" format="yyyy-MM-dd" value-format="yyyy-MM-dd"
                         :style="{width: '225px'}" placeholder="请选择时间" clearable >
               </el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="地图统计" prop="mapStat">
+              <el-switch v-model="form.mapStat"></el-switch>
             </el-form-item>
           </el-col>
         </el-row>
@@ -239,13 +252,6 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="12">
-            <el-form-item label="地图统计" prop="mapStat">
-              <el-switch v-model="form.mapStat"></el-switch>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
           <el-col :span="24">
             <el-form-item label="备注信息" prop="remark">
               <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"></el-input>
@@ -268,50 +274,24 @@
 
     <!-- 位置的地理位置选择页面 -->
     <el-dialog :title="mapLocTitle" width="850px" :visible.sync="mapLocOpen"  append-to-body>
-      <el-input v-model="addressKeyword" placeholder="请输入地址来直接查找相关位置"></el-input>
-      <baidu-map class="bmView" ak="M34ic6nt1BNTfxK0wEiZnPWzEt6Xfgqe" :scroll-wheel-zoom="true" :center="centerLocation" @click="getLocationPoint" :zoom="15">
-        <bm-city-list anchor="BMAP_ANCHOR_TOP_LEFT"></bm-city-list>
-        <bm-view style="width: 100%; height:500px; flex: 1"></bm-view>
-        <bm-marker :position="currentLocation" :dragging="true" animation="BMAP_ANIMATION_BOUNCE">
-          <bm-label :content="currentName" :labelStyle="{color: 'red', fontSize : '24px'}" :offset="{width: -35, height: 30}"/>
-        </bm-marker>
-        <bm-local-search :keyword="addressKeyword" :auto-viewport="true" style="display: none"></bm-local-search>
-      </baidu-map>
-        <el-row>
-          <el-col :span="11">
-            <el-input v-model="address"/>
-          </el-col>
-          <el-col :span="11">
-              <el-input v-model="geoPoint"/>
-          </el-col>
-          <el-col :span="2">
-              <el-button type="success" icon="el-icon-check" size="mini" @click="confirmLocationPoint" >确定</el-button>
-          </el-col>
-        </el-row>
-
+      <location-select :locationData="locationData" @closeMe="mapLocOpen=false" @confirmLocation="confirmLocation"/>
     </el-dialog>
 
   </div>
 </template>
 
 <script>
-import {fetchList,getLifeExperienceDetail,createLifeExperienceDetail,updateLifeExperienceDetail,deleteLifeExperienceDetail} from "@/api/life/lifeExperienceDetail";
-import {getCityLocationByLocation} from "@/api/life/cityLocation";
-import {getAllProvince,getCityList,getDistrictList} from "@/api/common";
-import LifeExperienceConsumeList from '../lifeExperienceConsume/index'
-import {BaiduMap,BmNavigation,BmView,BmCityList,BmMarker,BmLabel} from 'vue-baidu-map'
-import BmLocalSearch from 'vue-baidu-map/components/search/LocalSearch.vue'
+  import {fetchList,getLifeExperienceDetail,createLifeExperienceDetail,updateLifeExperienceDetail,deleteLifeExperienceDetail,getCountryLocation} from "@/api/life/lifeExperienceDetail";
+  import {getCityLocationByLocation} from "@/api/life/cityLocation";
+  import {getAllProvince,getCityList,getDistrictList} from "@/api/common";
+  import LifeExperienceConsumeList from '../lifeExperienceConsume/index'
+  import LocationSelect from '../lifeExperience/locationSelect'
 
 export default {
   name: "LifeExperienceDetail",
   components: {
-    BaiduMap,
-    BmView,
-    BmCityList,
-    BmLocalSearch,
-    BmMarker,
-    BmLabel,
-    'life-experience-consume-list':LifeExperienceConsumeList
+    'life-experience-consume-list':LifeExperienceConsumeList,
+    'location-select':LocationSelect
   },
   props: {
     //父层带过来的账户信息值
@@ -331,15 +311,11 @@ export default {
       //地理位置选择
       mapLocTitle:'',
       mapLocOpen:false,
-      addressKeyword:undefined,
-      //中心位置
-      centerLocation:'杭州',
-      //当前位置
-      currentLocation:'杭州',
-      currentName:'',
-      address:undefined,
-      geoPoint:undefined,
       locationField:'startCity',
+      locationData: {
+        name: undefined,
+        location: undefined
+      },
       // 遮罩层
       loading: true,
       // 选中数组
@@ -468,58 +444,60 @@ export default {
         }
       );
     },
-    /** 地理位置选择 */
-    handleMapLocation(field){
+    /** 自动获取国家的地理位置 */
+    getCountryLocation(){
+      getCountryLocation(this.form.country).then(
+        response => {
+          if(response!=null){
+            this.form.countryLocation=response;
+          }
+        }
+      );
+    },
+    /** 开始城市地理位置选择 */
+    handleStartCityML(){
       this.mapLocTitle ="地理位置选择";
       this.mapLocOpen=true;
-      this.locationField=field;
-      this.address=undefined;
-      this.geoPoint=undefined;
-      if(this.locationField=='startCity'){
-        this.addressKeyword = this.form.startCity;
-        if(this.form.scLocation==null){
-          this.centerLocation=this.form.startCity;
-        }else{
-          let geo = this.form.scLocation.split('');
-          this.centerLocation={lng: geo[0], lat: geo[1]};
-          this.currentLocation={lng: geo[0], lat: geo[1]};
-          this.geoPoint =this.form.scLocation;
-        }
-        this.currentName = '当前位置：'+this.form.startCity;
-      }else{
-        this.addressKeyword = this.form.arriveCity;
-        if(this.form.acLocation==null){
-          this.centerLocation=this.form.arriveCity;
-        }else{
-          let geo = this.form.acLocation.split('');
-          this.centerLocation={lng: geo[0], lat: geo[1]};
-          this.currentLocation={lng: geo[0], lat: geo[1]};
-          this.geoPoint =this.form.acLocation;
-        }
-        this.currentName = '当前位置：'+this.form.arriveCity;
+      this.locationField='startCity';
+      this.locationData={
+        name:this.form.startCity,
+        location:this.form.scLocation
       }
     },
-    /** 获取坐标 */
-    getLocationPoint(e){
-      let lng = e.point.lng;
-      let lat = e.point.lat;
-      this.geoPoint = lng+','+lat;
-      //用所定位的经纬度查找所在地省市街道等信息
-      let point = new BMap.Point(e.point.lng, e.point.lat);
-      let gc = new BMap.Geocoder();
-      let _this = this;
-      gc.getLocation(point, function (rs) {
-          let addComp = rs.addressComponents;
-          //地址信息
-          _this.address = rs.address;
-      });
+    /** 抵达城市地理位置选择 */
+    handleArriveCityML(){
+      this.mapLocTitle ="地理位置选择";
+      this.mapLocOpen=true;
+      this.locationField='arriveCity';
+      this.locationData={
+        name:this.form.arriveCity,
+        location:this.form.acLocation
+      }
+    },
+    /** 国家地理位置选择 */
+    handleCountryML(){
+      this.mapLocTitle ="地理位置选择";
+      this.mapLocOpen=true;
+      this.locationField='country';
+      this.locationData={
+        name:this.form.country,
+        location:this.form.countryLocation
+      }
     },
     /** 确认坐标 */
-    confirmLocationPoint(){
-      if(this.locationField=='startCity'){
-        this.form.scLocation = this.geoPoint;
-      }else{
-        this.form.acLocation = this.geoPoint;
+    confirmLocation(data){
+      switch(this.locationField){
+        case 'startCity':
+          this.form.scLocation = data.location;
+          break;
+        case 'arriveCity':
+          this.form.acLocation = data.location;
+          break;
+        case 'country':
+          this.form.countryLocation = data.location;
+          break;
+        default:
+          this.msgError('无法确定编辑信息');
       }
       this.mapLocOpen=false;
     },
@@ -543,10 +521,11 @@ export default {
     reset() {
       this.form = {
         id: undefined,
-        country: 'China',
+        country: '中国',
         mapStat:true,
         scLocation:undefined,
-        acLocation:undefined
+        acLocation:undefined,
+        countryLocation:undefined
       };
       this.resetForm("form");
     },

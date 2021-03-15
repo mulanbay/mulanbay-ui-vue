@@ -41,3 +41,11 @@ export function deleteLifeExperienceDetail(ids) {
     data
   })
 }
+
+export function getCountryLocation(country) {
+  return request({
+    url: '/lifeExperienceDetail/getCountryLocation',
+    method: 'get',
+    params: { country }
+  })
+}

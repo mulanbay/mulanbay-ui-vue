@@ -10,12 +10,12 @@ export function createMapChart(option, myChart) {
 }
 
 /**
- * 默认地图
+ * 默认地图(中国)
+ * 基于模板：https://www.makeapie.com/editor.html?c=xi5eszo651
  * @param {Object} mapData
  * @param {Object} myChart
  */
 export function createDefaultMapChart(mapData, myChart, echarts) {
-  //基于模板：https://www.makeapie.com/editor.html?c=xi5eszo651
   var mapName = mapData.mapName;
   var data = mapData.dataList;
   var geoCoordMap = {};
@@ -219,6 +219,7 @@ export function createDefaultMapChart(mapData, myChart, echarts) {
 
 /**
  * 世界地图
+ * 基于模板:https://www.makeapie.com/editor.html?c=xN8H0jI0xN
  * @param {Object} mapData
  * @param {Object} myChart
  */
@@ -233,48 +234,12 @@ export function createWorldMapChart(mapData, myChart, echarts) {
   var ScatterColor = "yellow"
   // 地图默认状态填充色
   var mapAreaColor = "#06265c"
-
   //字体颜色
   var textColor = "#fff";
+  const unit = mapData.unit == null ? '' : mapData.unit;
 
-
-  var geoCoordMap = {
-    上海: [121.4648, 31.2891],
-    尼日利亚: [-4.388361, 11.186148],
-    美国洛杉矶: [-118.24311, 34.052713],
-    香港邦泰: [114.195466, 22.282751],
-    美国芝加哥: [-87.801833, 41.870975],
-    加纳库马西: [-4.62829, 7.72415],
-    英国曼彻斯特: [-1.657222, 51.886863],
-    德国汉堡: [10.01959, 54.38474],
-    哈萨克斯坦阿拉木图: [45.326912, 41.101891],
-    俄罗斯伊尔库茨克: [89.116876, 67.757906],
-    巴西: [-48.678945, -10.493623],
-    埃及达米埃塔: [31.815593, 31.418032],
-    西班牙巴塞罗纳: [2.175129, 41.385064],
-    柬埔寨金边: [104.88659, 11.545469],
-    意大利米兰: [9.189948, 45.46623],
-    乌拉圭蒙得维的亚: [-56.162231, -34.901113],
-    莫桑比克马普托: [32.608571, -25.893473],
-    阿尔及利亚阿尔及尔: [3.054275, 36.753027],
-    阿联酋迪拜: [55.269441, 25.204514],
-    匈牙利布达佩斯: [17.108519, 48.179162],
-    澳大利亚悉尼: [150.993137, -33.675509],
-    美国加州: [-121.910642, 41.38028],
-    澳大利亚墨尔本: [144.999416, -37.781726],
-    墨西哥: [-99.094092, 19.365711],
-    加拿大温哥华: [-123.023921, 49.311753]
-  };
-  var BJData = [
-    [{
-      name: "尼日利亚",
-      value: 9100
-    }],
-    [{
-      name: "美国洛杉矶",
-      value: 2370
-    }]
-  ];
+  var geoCoordMap = mapData.geoCoordMapData;
+  var BJData = mapData.dataList;
   var convertData = function(data) {
     var res = [];
     for (var i = 0; i < data.length; i++) {
@@ -296,11 +261,8 @@ export function createWorldMapChart(mapData, myChart, echarts) {
   };
 
   var series = [];
-  [
-    ["", BJData]
-  ].forEach(function(item, i) {
+  [["", BJData]].forEach(function(item, i) {
     series.push(
-
       {
         type: "effectScatter",
         coordinateSystem: "geo",
@@ -312,41 +274,36 @@ export function createWorldMapChart(mapData, myChart, echarts) {
           scale: 4 //波纹圆环最大限制，值越大波纹越大
         },
         label: {
-          normal: {
-            show: true,
-            position: "right", //显示位置
-            offset: [8, 0], //偏移设置
-            formatter: "{b}", //圆环显示文字
-            color: textColor,
-            fontSize: 10,
-            lineHeight: 14,
-            borderWidth: 1,
-            backgroundColor: "#061a4c",
-            borderColor: "#97b5f0",
-            padding: 3,
-          },
-          emphasis: {
-            show: true
-          }
+          show: true,
+          position: "right", //显示位置
+          offset: [8, 0], //偏移设置
+          formatter: "{b}", //圆环显示文字
+          color: textColor,
+          fontSize: 10,
+          lineHeight: 14,
+          borderWidth: 1,
+          backgroundColor: "#061a4c",
+          borderColor: "#97b5f0",
+          padding: 3
+        },
+        emphasis: {
+          show: true
         },
         symbol: "circle",
         symbolSize: 12,
         itemStyle: {
-          normal: {
-            show: true,
-            "color": ScatterColor,
-            "shadowBlur": 10,
-            "shadowColor": ScatterColor
-          }
+          show: true,
+          "color": ScatterColor,
+          "shadowBlur": 10,
+          "shadowColor": ScatterColor
         },
         data: item[1].map(function(dataItem) {
           return {
-            name: dataItem[0].name,
-            value: geoCoordMap[dataItem[0].name].concat([dataItem[0].value])
+            name: dataItem.name,
+            value: geoCoordMap[dataItem.name].concat([dataItem.value])
           };
         })
       },
-
       // 高亮显示中国
       {
         type: 'map',
@@ -354,22 +311,15 @@ export function createWorldMapChart(mapData, myChart, echarts) {
         layoutCenter: ["50%", "50%"], //地图位置
         layoutSize: "180%",
         label: {
-          normal: {
-            show: false,
-          },
-          emphasis: {
-            show: false,
-          }
+          show: false
         },
-
         itemStyle: {
-          normal: {
-            areaColor: mapAreaColor,
-            borderColor: '#8F98A6'
-          },
-          emphasis: {
-            areaColor: lightColor
-          }
+          areaColor: mapAreaColor,
+          borderColor: '#8F98A6'
+        },
+        emphasis: {
+          color: lightColor,
+          show: true
         },
         map: 'world', //使用
         data: [{
@@ -391,7 +341,7 @@ export function createWorldMapChart(mapData, myChart, echarts) {
     },
     tooltip: {
       trigger: "item",
-      backgroundColor: "#1540a1",
+      backgroundColor: "#74aeae",
       borderColor: "#FFFFCC",
       showDelay: 0,
       hideDelay: 0,
@@ -402,34 +352,31 @@ export function createWorldMapChart(mapData, myChart, echarts) {
         //根据业务自己拓展要显示的内容
         var res = "";
         var name = params.name;
-        var value = params.value[params.seriesIndex + 1];
+        var value = params.value[params.seriesIndex + 2];
+        var ds = value==undefined ? '--':value+unit;
         res =
           "<span style='color:#fff;'>" +
           name +
           "</span><br/>数据：" +
-          value;
+          ds;
         return res;
       }
     },
     geo: {
       show: false,
       map: "world",
-      label: {
-        emphasis: {
-          show: false
-        }
+      emphasis: {
+        show: false
       },
       roam: true, //是否允许缩放
       layoutCenter: ["50%", "50%"], //地图位置
       layoutSize: "180%",
       itemStyle: {
-        normal: {
-          areaColor: mapAreaColor,
-          borderColor: '#8F98A6'
-        },
-        emphasis: {
-          areaColor: '#2a333d'
-        }
+        areaColor: mapAreaColor,
+        borderColor: '#8F98A6'
+      },
+      emphasis: {
+        areaColor: '#2a333d'
       }
     },
     series: series

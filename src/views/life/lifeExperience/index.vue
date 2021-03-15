@@ -341,27 +341,7 @@
 
     <!-- 位置的地理位置选择页面 -->
     <el-dialog :title="mapLocTitle" width="850px" :visible.sync="mapLocOpen"  append-to-body>
-      <el-input v-model="addressKeyword" placeholder="请输入地址来直接查找相关位置"></el-input>
-      <baidu-map class="bmView" ak="M34ic6nt1BNTfxK0wEiZnPWzEt6Xfgqe" :scroll-wheel-zoom="true" :center="centerLocation" @click="getLocationPoint" :zoom="15">
-        <bm-city-list anchor="BMAP_ANCHOR_TOP_LEFT"></bm-city-list>
-        <bm-view style="width: 100%; height:500px; flex: 1"></bm-view>
-        <bm-marker :position="currentLocation" :dragging="true" animation="BMAP_ANIMATION_BOUNCE">
-          <bm-label :content="currentName" :labelStyle="{color: 'red', fontSize : '24px'}" :offset="{width: -35, height: 30}"/>
-        </bm-marker>
-        <bm-local-search :keyword="addressKeyword" :auto-viewport="true" style="display: none"></bm-local-search>
-      </baidu-map>
-        <el-row>
-          <el-col :span="11">
-            <el-input v-model="address"/>
-          </el-col>
-          <el-col :span="11">
-              <el-input v-model="geoPoint"/>
-          </el-col>
-          <el-col :span="2">
-              <el-button type="success" icon="el-icon-check" size="mini" @click="confirmLocationPoint" >确定</el-button>
-          </el-col>
-        </el-row>
-
+      <location-select :locationData="locationData" @closeMe="mapLocOpen=false" @confirmLocation="confirmLocation"/>
     </el-dialog>
 
   </div>
@@ -377,22 +357,15 @@
   import LifeExperienceDetailList from '../lifeExperienceDetail/index'
   import {dispatchCommonStat} from "@/utils/planUtils";
   import LifeArchivesDetail from '../../life/lifeArchives/detail'
-  import {BaiduMap,BmNavigation,BmView,BmCityList,BmMarker,BmLabel} from 'vue-baidu-map'
-  import BmLocalSearch from 'vue-baidu-map/components/search/LocalSearch.vue'
-
+  import LocationSelect from './locationSelect'
 export default {
   name: "LifeExperience",
   components: {
-    BaiduMap,
-    BmView,
-    BmCityList,
-    BmLocalSearch,
-    BmMarker,
-    BmLabel,
     'life-experience-cost-stat':LifeExperienceCostStat,
     'life-experience-transfer-map-stat':LifeExperienceTransferMapStat,
     'life-experience-detail-list':LifeExperienceDetailList,
-    'life-archives-detail':LifeArchivesDetail
+    'life-archives-detail':LifeArchivesDetail,
+    'location-select':LocationSelect
   },
   data() {
     return {
@@ -427,14 +400,10 @@ export default {
       //地理位置选择
       mapLocTitle:'',
       mapLocOpen:false,
-      addressKeyword:undefined,
-      //中心位置
-      centerLocation:'杭州',
-      //当前位置
-      currentLocation:'杭州',
-      currentName:'',
-      address:undefined,
-      geoPoint:undefined,
+      locationData: {
+        name: undefined,
+        location: undefined
+      },
       // 遮罩层
       loading: true,
       // 选中数组
@@ -510,37 +479,14 @@ export default {
       }
       this.mapLocTitle ="地理位置选择";
       this.mapLocOpen=true;
-      this.address=undefined;
-      this.geoPoint=undefined;
-      this.addressKeyword = this.form.lcName;
-      if(this.form.location==null){
-        this.centerLocation=this.form.lcName;
-      }else{
-        let geo = this.form.location.split('');
-        this.centerLocation={lng: geo[0], lat: geo[1]};
-        this.currentLocation={lng: geo[0], lat: geo[1]};
-        this.geoPoint =this.form.location;
+      this.locationData={
+        name:this.form.lcName,
+        location:this.form.location
       }
-      this.currentName = '当前位置：'+this.form.lcName;
-    },
-    /** 获取坐标 */
-    getLocationPoint(e){
-      let lng = e.point.lng;
-      let lat = e.point.lat;
-      this.geoPoint = lng+','+lat;
-      //用所定位的经纬度查找所在地省市街道等信息
-      let point = new BMap.Point(e.point.lng, e.point.lat);
-      let gc = new BMap.Geocoder();
-      let _this = this;
-      gc.getLocation(point, function (rs) {
-          let addComp = rs.addressComponents;
-          //地址信息
-          _this.address = rs.address;
-      });
     },
     /** 确认坐标 */
-    confirmLocationPoint(){
-      this.form.location = this.geoPoint;
+    confirmLocation(data){
+      this.form.location = data.location;
       this.mapLocOpen=false;
     },
     /** 同步档案 */
