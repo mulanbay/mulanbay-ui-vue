@@ -2230,7 +2230,7 @@ export function createWorldCloudChart(chartData, myChart) {
       // 单词之间的间隔大小
       gridSize: 5,
       // 最小字体和最大字体
-      sizeRange: [24, 100],
+      sizeRange: [24, 128],
       // 字体旋转角度的范围
       rotationRange: [-45, 0, 45, 90],
       //shape:'star',

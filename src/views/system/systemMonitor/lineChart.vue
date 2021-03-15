@@ -132,6 +132,7 @@
           series: [{
               name: this.chartData.ydata[0].name,
               type: 'line',
+              smooth: true,
               areaStyle: {},
               lineStyle: {
                 width: 1
@@ -145,6 +146,7 @@
               name: this.chartData.ydata[1].name,
               type: 'line',
               yAxisIndex: 1,
+              smooth: true,
               areaStyle: {},
               lineStyle: {
                 width: 1
