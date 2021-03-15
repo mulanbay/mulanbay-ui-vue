@@ -39,23 +39,29 @@
       </el-form-item>
     </el-form>
 
-  <!--图表数据-->
-    <div id="container"
-					style="min-width: 400px; height: 100%; margin: 0 auto">
-          <img :src="codeUrl" height="100%" width="100%"/>
-    </div>
-  </div>
+    <!--图表数据-->
+    <div :id="id" :class="className" :style="{height:height,width:width,margin:0 }" />
 
+  </div>
 </template>
 
 <script>
   import {getLifeExperienceWouldCloudStat} from "@/api/life/lifeExperience";
   import {deepClone} from "@/utils/index";
+  import * as echarts from 'echarts';
+  import resize from '../../dashboard/mixins/resize.js'
+  import {chartProps,createWorldCloudChart} from "@/utils/echarts";
+  import "echarts-wordcloud/dist/echarts-wordcloud";
+  import "echarts-wordcloud/dist/echarts-wordcloud.min";
 
-  export default {
+export default {
   name: "LifeExperienceWordCloudStat",
+  mixins: [resize],
+  props: chartProps,
   data() {
     return {
+      //图表数据
+      chart: null,
       // 加载层信息
       loading: [],
       //加载层配置
@@ -103,7 +109,11 @@
       }
       getLifeExperienceWouldCloudStat(acQueryParams).then(
         response => {
-          this.codeUrl = "data:image/gif;base64," + response;
+          //组装chart数据
+          if (this.chart == null) {
+            this.chart = echarts.init(document.getElementById(this.id));
+          }
+          createWorldCloudChart(response,this.chart);
           this.loading.close();
         }
       );

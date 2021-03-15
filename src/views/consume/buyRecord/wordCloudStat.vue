@@ -128,11 +128,9 @@
       </el-form-item>
     </el-form>
 
-  <!--图表数据-->
-    <div id="container"
-					style="min-width: 400px; height: 100%; margin: 0 auto">
-          <img :src="codeUrl" height="100%" width="100%"/>
-    </div>
+    <!--图表数据-->
+    <div :id="id" :class="className" :style="{height:height,width:width,margin:0 }" />
+    
   </div>
 
 </template>
@@ -141,9 +139,16 @@
   import {getBuyRecordKeywordsTree,getBuyRecordWordCloudStat} from "@/api/consume/buyRecord";
   import {getGoodsTypeTree} from "@/api/consume/goodsType";
   import {getBuyTypeTree} from "@/api/consume/buyType";
-
+  import * as echarts from 'echarts';
+  import resize from '../../dashboard/mixins/resize.js'
+  import {chartProps,createWorldCloudChart} from "@/utils/echarts";
+  import "echarts-wordcloud/dist/echarts-wordcloud";
+  import "echarts-wordcloud/dist/echarts-wordcloud.min";
+  
 export default {
   name: "BuyRecordWordCloudStat",
+  mixins: [resize],
+  props: chartProps,
   data() {
     return {
       //查询条件更多属性 start
@@ -154,8 +159,8 @@ export default {
       loading: [],
       //加载层配置
       loadingOptions:this.loadingOptions,
-      // 词云图片
-      codeUrl: "",
+      //图表数据
+      chart: null,
       //商品类型(搜索和表单是同一个)
       goodsTypeOptions:[],
       //搜索条件的商品子类型
@@ -252,7 +257,11 @@ export default {
       this.openLoading();
       getBuyRecordWordCloudStat(this.addDateRange(this.queryParams, this.dateRange)).then(
         response => {
-          this.codeUrl = "data:image/gif;base64," + response;
+          //组装chart数据
+          if (this.chart == null) {
+            this.chart = echarts.init(document.getElementById(this.id));
+          }
+          createWorldCloudChart(response,this.chart);
           this.loading.close();
         }
       );

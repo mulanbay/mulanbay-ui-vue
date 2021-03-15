@@ -42,16 +42,14 @@
          placeholder="请选择配置" />
       </el-form-item>
       <el-form-item>
-        <el-button type="stat" icon="el-icon-search" size="mini" @click="handleQuery" v-hasPermi="['consume:buyRecord:wordCloudStat']">统计</el-button>
+        <el-button type="stat" icon="el-icon-s-data" size="mini" @click="handleQuery" v-hasPermi="['consume:buyRecord:wordCloudStat']">统计</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
 
-  <!--图表数据-->
-    <div id="container"
-					style="min-width: 400px; height: 100%; margin: 0 auto">
-          <img :src="codeUrl" height="100%" width="100%"/>
-    </div>
+    <!--图表数据-->
+    <div :id="id" :class="className" :style="{height:height,width:width,margin:0 }" />
+
   </div>
 
 </template>
@@ -61,8 +59,16 @@
   import {getUserBehaviorTypeTree} from "@/api/behavior/userBehaviorConfig";
   import Treeselect from "@riophae/vue-treeselect";
   import "@riophae/vue-treeselect/dist/vue-treeselect.css";
+  import * as echarts from 'echarts';
+  import resize from '../../dashboard/mixins/resize.js'
+  import {chartProps,createWorldCloudChart} from "@/utils/echarts";
+  import "echarts-wordcloud/dist/echarts-wordcloud";
+  import "echarts-wordcloud/dist/echarts-wordcloud.min";
+
 export default {
   name: "WordCloudStat",
+  mixins: [resize],
+  props: chartProps,
   components: {
     Treeselect
   },
@@ -72,8 +78,8 @@ export default {
       loading: [],
       //加载层配置
       loadingOptions:this.loadingOptions,
-      // 词云图片
-      codeUrl: "",
+      //图表数据
+      chart: null,
       behaviorTypeOptions:[],
       configIdsOptions:[],
       //日期范围快速选择
@@ -125,7 +131,11 @@ export default {
       }
       getUserOperationConfigWordCloudStat(acQueryParams).then(
         response => {
-          this.codeUrl = "data:image/gif;base64," + response;
+          //组装chart数据
+          if (this.chart == null) {
+            this.chart = echarts.init(document.getElementById(this.id));
+          }
+          createWorldCloudChart(response,this.chart);
           this.loading.close();
         }
       );

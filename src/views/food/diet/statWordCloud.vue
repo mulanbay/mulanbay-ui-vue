@@ -84,20 +84,25 @@
       </el-form-item>
     </el-form>
 
-  <!--图表数据-->
-    <div id="container"
-					style="min-width: 400px; height: 100%; margin: 0 auto">
-          <img :src="codeUrl" height="100%" width="100%"/>
-    </div>
+    <!--图表数据-->
+    <div :id="id" :class="className" :style="{height:height,width:width,margin:0 }" />
+
   </div>
 
 </template>
 
 <script>
   import {statDietWordCloud} from "@/api/food/diet";
+  import * as echarts from 'echarts';
+  import resize from '../../dashboard/mixins/resize.js'
+  import {chartProps,createWorldCloudChart} from "@/utils/echarts";
+  import "echarts-wordcloud/dist/echarts-wordcloud";
+  import "echarts-wordcloud/dist/echarts-wordcloud.min";
 
 export default {
   name: "DietStatWordClouds",
+  mixins: [resize],
+  props: chartProps,
   data() {
     return {
       //查询条件更多属性 start
@@ -108,8 +113,8 @@ export default {
       loading: [],
       //加载层配置
       loadingOptions:this.loadingOptions,
-      // 词云图片
-      codeUrl: "",
+      //图表数据
+      chart: null,
       foodTypeOptions:[],
       dietTypeOptions:[],
       dietSourceOptions:[],
@@ -133,13 +138,13 @@ export default {
       this.fieldOptions = response;
     });
     this.wordCloudStat();
-    this.getEnumTree('FoodType','FIELD',false).then(response => {
+    this.getEnumTree('FoodType','ORDINAL',false).then(response => {
       this.foodTypeOptions = response;
     });
-    this.getEnumTree('DietType','FIELD',false).then(response => {
+    this.getEnumTree('DietType','ORDINAL',false).then(response => {
       this.dietTypeOptions = response;
     });
-    this.getEnumTree('DietSource','FIELD',false).then(response => {
+    this.getEnumTree('DietSource','ORDINAL',false).then(response => {
       this.dietSourceOptions = response;
     });
   },
@@ -172,7 +177,11 @@ export default {
       this.openLoading();
       statDietWordCloud(this.addDateRange(this.queryParams, this.dateRange)).then(
         response => {
-          this.codeUrl = "data:image/gif;base64," + response;
+          //组装chart数据
+          if (this.chart == null) {
+            this.chart = echarts.init(document.getElementById(this.id));
+          }
+          createWorldCloudChart(response,this.chart);
           this.loading.close();
         }
       );

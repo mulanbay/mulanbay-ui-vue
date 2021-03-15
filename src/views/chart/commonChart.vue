@@ -6,11 +6,13 @@
 
 <script>
   import * as echarts from 'echarts';
-  import {chartProps,createChart,createMixLineBarChart,createPieChart,createBarChart,createCalanderHeatMapChart,createGaugeChart,
+  import {chartProps,createChart,createMixLineBarChart,createPieChart,
+  createBarChart,createCalanderHeatMapChart,createGaugeChart,
   createTreeMapChart,createRadarChart,createCalanderChart,createLineChart,
   createScatterChart,createShadowChart,createDoublePieChart,
   createCompareCalanderChart,createCalanderPieChart,
-  createPolarBarChart,createTreeChart,createSunburstChart,createStaHorBarChart,createStackedAreaChart} from "@/utils/echarts";
+  createPolarBarChart,createTreeChart,createSunburstChart,createStaHorBarChart,
+  createStackedAreaChart} from "@/utils/echarts";
   import {deepClone} from "@/utils/index";
   import resize from '../dashboard/mixins/resize.js'
 
