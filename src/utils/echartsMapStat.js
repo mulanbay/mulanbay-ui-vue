@@ -97,10 +97,10 @@ export function createDefaultMapChart(mapData, myChart, echarts) {
       show: true,
       map: mapName,
       label: {
-        show: false,
-        emphasis: {
-          show: true
-        }
+        show: false
+      },
+      emphasis: {
+        show: true
       },
       roam: true,
       emphasis: {
@@ -109,11 +109,9 @@ export function createDefaultMapChart(mapData, myChart, echarts) {
         }
       },
       itemStyle: {
-        normal: {
-          //地图的背景颜色
-          areaColor: '#bcbcbc',
-          borderColor: '#111'
-        }
+        //地图的背景颜色
+        areaColor: '#bcbcbc',
+        borderColor: '#111'
       }
     },
     series: [{
@@ -863,19 +861,15 @@ export function createLocationMapChart(mapData, myChart) {
           return caleSize(val[2]);
         },
         label: {
-          normal: {
-            formatter: '{b}',
-            position: 'right',
-            show: false
-          },
-          emphasis: {
-            show: true
-          }
+          formatter: '{b}',
+          position: 'right',
+          show: false
+        },
+        emphasis: {
+          show: true
         },
         itemStyle: {
-          normal: {
-            color: '#ddb926'
-          }
+          color: '#ddb926'
         }
       },
       {
@@ -894,18 +888,15 @@ export function createLocationMapChart(mapData, myChart) {
         },
         hoverAnimation: true,
         label: {
-          normal: {
-            formatter: '{b}',
-            position: 'right',
-            show: true
-          }
+          formatter: '{b}',
+          position: 'right',
+          color: '#f4e925',
+          show: true
         },
         itemStyle: {
-          normal: {
-            color: '#f4e925',
-            shadowBlur: 10,
-            shadowColor: '#333'
-          }
+          color: '#f4e925',
+          shadowBlur: 10,
+          shadowColor: '#333'
         },
         zlevel: 1
       }
