@@ -129,7 +129,7 @@ export default {
       //日期范围快速选择
       datePickerOptions:this.datePickerOptions,
       // 日期范围
-      dateRange: this.getYearDateRange(0),
+      dateRange: [],
       // 查询参数
       queryParams: {
         mapType:'TRANSFER_SINGLE'

@@ -395,7 +395,7 @@ export function createWorldTransferMapChart(mapData, myChart) {
   // 飞线颜色
   var flyLineColor = "yellow";
   //线条颜色
-  var lineColor = "rgba(31,20,252,1)";
+  var lineColor = "rgba(142, 0, 0, 1.0)";
   //高亮地图填充色
   var lightColor = "red";
   // 散点图默认颜色
