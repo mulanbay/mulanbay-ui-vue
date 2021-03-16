@@ -72,6 +72,7 @@
           response => {
             //组装chart数据
             response.chartType='SUNBURST';
+            response.height=(document.body.clientHeight - 180).toString() + 'px';
             this.chartData = response;
             this.loading.close();
           }
