@@ -65,7 +65,7 @@ export default {
     },
     id: {
       type: String,
-      default: 'chart'
+      default: 'chartCs'
     },
     width: {
       type: String,

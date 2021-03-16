@@ -52,7 +52,7 @@ export default {
     },
     id: {
       type: String,
-      default: 'chart'
+      default: 'chartTs'
     },
     width: {
       type: String,
