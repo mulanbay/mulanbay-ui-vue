@@ -2228,12 +2228,13 @@ export function createWorldCloudChart(chartData, myChart) {
       //设置为true可以使单词部分在画布之外绘制, 允许绘制大于画布大小的单词
       drawOutOfBound: false,
       // 单词之间的间隔大小
-      gridSize: 5,
+      gridSize: 20,
       // 最小字体和最大字体
       sizeRange: [24, 128],
       // 字体旋转角度的范围
-      rotationRange: [-45, 0, 45, 90],
-      //shape:'star',
+      //rotationRange: [-45, 0, 45, 90],
+      rotationRange: [0, 0],
+      shape: 'circle',
       // 词云的形状，可选值有
       // cardioid心形,diamond菱形,square正方形,triangle-forward指向右边的三角形,triangle-upright正三角形
       // triangle三角形，pentagon五角形，star五角星形，
