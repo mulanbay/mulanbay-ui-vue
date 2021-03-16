@@ -2003,6 +2003,7 @@ export function createShadowChart(data, myChart) {
 
 /**
  * 旭日图
+ * 模板：https://www.makeapie.com/editor.html?c=xHKho7CKFj
  * @param {Object} chartData
  * @param {Object} myChart
  */
@@ -2012,9 +2013,9 @@ export function createSunburstChart(chartData, myChart) {
     '#64b5f6',
     '#ce93d8',
     '#ff8a65',
-    '#9fa8da',
     '#e57373',
     '#f06292',
+    '#9fa8da',
     '#ba68c8',
     '#9575cd'
   ];
