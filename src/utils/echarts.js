@@ -2007,32 +2007,37 @@ export function createShadowChart(data, myChart) {
  * @param {Object} myChart
  */
 export function createSunburstChart(chartData, myChart) {
-  let colors = ['#FFAE57', '#FF7853', '#EA5151', '#CC3F57', '#9A2555', '#9B2655'];
-  let bgColor = '#2E2733';
-  let itemStyle = new Array();
-  const n = colors.length;
-  for (let i = 0; i < n; i++) {
-    itemStyle.push({
-      color: colors[i]
-    });
-  }
+  var colors = [
+    '#7986cb',
+    '#64b5f6',
+    '#ce93d8',
+    '#ff8a65',
+    '#9fa8da',
+    '#e57373',
+    '#f06292',
+    '#ba68c8',
+    '#9575cd'
+  ];
   let data = chartData.dataList;
-  for (let j = 0; j < data.length; ++j) {
-    data[j].itemStyle = {
-      color: colors[j + 1]
-    };
-    let level1 = data[j].children;
-    for (let i = 0; i < level1.length; ++i) {
-      let block = level1[i].children;
-      let bookScore = [];
-      let bookScoreId;
-      for (let star = 0; star < block.length; ++star) {
-        let starScore = block[star].name;
-        if (starScore > 5) {
-          starScore = 5;
+  for (var j = 0; j < data.length; ++j) {
+    var level1 = data[j].children;
+    for (var i = 0; i < level1.length; ++i) {
+      var block = level1[i].children;
+      var bookScore = [];
+      var bookScoreId;
+      for (var star = 0; star < block.length; ++star) {
+        bookScoreId = 0;
+        let currName = Number(block[star].name);
+        var val = Number(currName);
+        var vv = val % 7;
+        var style;
+        if(vv<=7){
+          bookScoreId = vv;
+          style = {color:colors[vv]};
+        }else{
+          bookScoreId = 0;
+          style = {color:colors[5]};
         }
-        let style = itemStyle[starScore];
-        bookScoreId = starScore;
         block[star].label = {
           color: style.color,
           downplay: {
@@ -2044,13 +2049,19 @@ export function createSunburstChart(chartData, myChart) {
             opacity: 1,
             color: style.color
           };
-          block[star].children.forEach(function(book) {
+          let children = block[star].children;
+          for (let index = 0; index < children.length; index++) {
+            const book = children[index];
             book.value = 1;
             book.itemStyle = style;
+
             book.label = {
               color: style.color
             };
-            let value = bookScoreId;
+            var value = 1;
+            if (bookScoreId === 0 || bookScoreId === 3) {
+              value = 5;
+            }
             if (bookScore[bookScoreId]) {
               bookScore[bookScoreId].value += value;
             } else {
@@ -2059,17 +2070,16 @@ export function createSunburstChart(chartData, myChart) {
                 value: value
               };
             }
-          });
+          }
         }
-        block[star].name = starScore + '☆';
       }
-      level1[i].itemStyle = {
-        color: data[j].itemStyle.color
-      };
+      // level1[i].itemStyle = {
+      //   color: data[j].itemStyle.color
+      // };
     }
   }
   let option = {
-    backgroundColor: bgColor,
+    //backgroundColor: bgColor,
     color: colors,
     series: [{
       type: 'sunburst',
@@ -2083,53 +2093,72 @@ export function createSunburstChart(chartData, myChart) {
         }
       },
       label: {
-        rotate: 'radial',
-        color: bgColor
+        rotate: 'radial'
+        //color: bgColor
       },
       itemStyle: {
-        borderColor: bgColor,
+        //borderColor: bgColor,
         borderWidth: 2
       },
-      levels: [{}, {
-        r0: 0,
-        r: 40,
-        label: {
-          rotate: 0
-        }
-      }, {
-        r0: 40,
-        r: 105
-      }, {
-        r0: 115,
-        r: 140,
-        itemStyle: {
-          shadowBlur: 2,
-          shadowColor: colors[2],
-          color: 'transparent'
-        },
-        label: {
-          rotate: 'tangential',
-          fontSize: 10,
-          color: colors[0]
-        }
-      }, {
-        r0: 140,
-        r: 145,
-        itemStyle: {
-          shadowBlur: 80,
-          shadowColor: colors[0]
-        },
-        label: {
-          position: 'outside',
-          textShadowBlur: 5,
-          textShadowColor: '#333',
-        },
-        downplay: {
+      levels: [{},
+        {
+          r0: 0,
+          r: '38%',
           label: {
-            opacity: 0.5
+            rotate: 0,
+            fontSize: 18,
+            color: '#212121'
+            //fontWeight:600
+          }
+        },
+        {
+          r0: '30%',
+          r: '61%',
+          itemStyle: {
+            //shadowBlur: 2,
+            //shadowColor: colors[2],
+            // color: 'transparent'
+          },
+          label: {
+            // rotate: 'tangential',
+            fontSize: 12,
+            color: '#212121'
+          }
+        },
+        {
+          r0: '62%',
+          r: '67%',
+          itemStyle: {
+            //shadowBlur: 2,
+            //shadowColor: colors[2],
+            color: 'transparent'
+          },
+          label: {
+            rotate: 'tangential',
+            fontSize: 12,
+            color: colors[0]
+          }
+        },
+        {
+          r0: '68%',
+          r: '70%',
+          itemStyle: {
+            //shadowBlur: 80,
+            //shadowColor: colors[5]
+          },
+          label: {
+            position: 'outside',
+            //textShadowBlur: 5,
+            //textShadowColor: '#333',
+            fontSize: 16
+          },
+          downplay: {
+            label: {
+              opacity: 0.5
+            }
           }
         }
-      }]
+      ]
     }]
   };
   createChart(option, myChart);
