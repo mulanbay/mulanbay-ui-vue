@@ -33,7 +33,7 @@
 
 <script>
   import {getLifeExperienceTree,getLifeExperienceTransferMapByLifeExpStat} from "@/api/life/lifeExperience";
-  import {createDoubleTransferMapChart} from "@/utils/echartsMapStat";
+  import {createChinaTransferMapChart} from "@/utils/echartsMapStat";
   import * as echarts from 'echarts';
   import '@/components/echarts/map/china'
   import resize from '../../dashboard/mixins/resize.js'
@@ -132,7 +132,7 @@ export default {
           if(this.chart==null){
             this.chart = echarts.init(document.getElementById(this.id));
           }
-          createDoubleTransferMapChart(response,this.chart);
+          createChinaTransferMapChart(response,this.chart);
           this.loading.close();
         }
       );

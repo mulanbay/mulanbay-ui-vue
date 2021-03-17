@@ -15,23 +15,6 @@
           :picker-options="datePickerOptions"
         ></el-date-picker>
       </el-form-item>
-      <el-form-item label="出发城市" prop="startCity">
-        <el-select
-          v-model="queryParams.startCity"
-          placeholder="出发城市"
-          clearable
-          size="small"
-          style="width: 120px"
-          @change="handleQuery"
-        >
-          <el-option
-            v-for="dict in startCityOptions"
-            :key="dict.id"
-            :label="dict.text"
-            :value="dict.id"
-          />
-        </el-select>
-      </el-form-item>
       <el-form-item label="类型" prop="types">
         <el-select
           v-model="queryParams.types"
@@ -55,6 +38,7 @@
           v-model="queryParams.mapType"
           placeholder="图表类型"
           clearable
+          @change="handleQuery"
           size="small"
           style="width: 120px"
         >
@@ -80,8 +64,8 @@
 </template>
 
 <script>
-  import {getLifeExperienceStartCityTree,getLifeExperienceTransferMapStat} from "@/api/life/lifeExperience";
-  import {createSingleTransferMapChart,createDoubleTransferMapChart,createWorldTransferMapChart} from "@/utils/echartsMapStat";
+  import {getLifeExperienceTransferMapStat} from "@/api/life/lifeExperience";
+  import {createChinaTransferMapChart,createWorldTransferMapChart} from "@/utils/echartsMapStat";
   import {chartProps} from "@/utils/echarts";
   import {deepClone} from "@/utils/index";
   import '@/components/echarts/map/china'
@@ -110,16 +94,11 @@ export default {
       //加载层配置
       loadingOptions:this.loadingOptions,
       chart: null,
-      startCityOptions:[],
       typesOptions:[],
       mapTypeOptions:[
         {
-          id: 'TRANSFER_SINGLE',
-          text: '单向'
-        },
-        {
-          id: 'TRANSFER_DOUBLE',
-          text: '双向'
+          id: 'CHINA',
+          text: '中国'
         },
         {
           id: 'WORLD',
@@ -132,12 +111,11 @@ export default {
       dateRange: [],
       // 查询参数
       queryParams: {
-        mapType:'TRANSFER_SINGLE'
+        mapType:'CHINA'
       }
     };
   },
   created() {
-    this.getLifeExperienceStartCityTreeselect();
     this.initChart();
     this.getEnumTree('ExperienceType','FIELD',false).then(response => {
       this.typesOptions = response;
@@ -147,12 +125,6 @@ export default {
     // 打开加载层
     openLoading() {
       this.loading = this.$loading(this.loadingOptions);
-    },
-    /** 查询出发城市下拉树结构 */
-    getLifeExperienceStartCityTreeselect() {
-      getLifeExperienceStartCityTree(false).then(response => {
-        this.startCityOptions = response;
-      });
     },
     /** 搜索按钮操作 */
     handleQuery() {
@@ -177,11 +149,8 @@ export default {
             this.chart = echarts.init(document.getElementById(this.id));
           }
           switch(this.queryParams.mapType){
-            case 'TRANSFER_DOUBLE':
-              createDoubleTransferMapChart(response,this.chart);
-              break;
-            case 'TRANSFER_SINGLE':
-              createSingleTransferMapChart(response,this.chart);
+            case 'CHINA':
+              createChinaTransferMapChart(response,this.chart);
               break;
             default:
               createWorldTransferMapChart(response,this.chart);

@@ -1,3 +1,8 @@
+const colorList = ['#284554', '#61a0a8', '#d48265', '#c23531', '#8B0A50', '#91c7ae', '#749f83',
+  '#ca8622', '#bda29a', '#6e7074', '#546570',
+  '#080808', '#800000', '#006400', '#191970'
+];
+
 /**
  * 生成图形
  * @param {Object} option
@@ -385,8 +390,165 @@ export function createWorldMapChart(mapData, myChart, echarts) {
   createMapChart(option, myChart);
 }
 
+export function randomColor() {
+  return 'rgb(' + [
+    Math.round(Math.random() * 255),
+    Math.round(Math.random() * 255),
+    Math.round(Math.random() * 255)
+  ].join(',') + ')';
+}
 /**
- * 世界地图
+ * 中国迁移地图
+ * 基于模板:https://www.makeapie.com/editor.html?c=xBkrP1lbqG
+ * @param {Object} mapData
+ * @param {Object} myChart
+ */
+export function createChinaTransferMapChart(mapData, myChart) {
+  const unit = mapData.unit == null ? '' : mapData.unit;
+  var geoCoordMap = mapData.geoCoordMapData;
+  var planePath =
+    'path://M1705.06,1318.313v-89.254l-319.9-221.799l0.073-208.063c0.521-84.662-26.629-121.796-63.961-121.491c-37.332-0.305-64.482,36.829-63.961,121.491l0.073,208.063l-319.9,221.799v89.254l330.343-157.288l12.238,241.308l-134.449,92.931l0.531,42.034l175.125-42.917l175.125,42.917l0.531-42.034l-134.449-92.931l12.238-241.308L1705.06,1318.313z';
+  var convertData = function(data) {
+    var res = [];
+    for (var i = 0; i < data.length; i++) {
+      var dataItem = data[i];
+      var fromCoord = geoCoordMap[dataItem[0].name];
+      var toCoord = geoCoordMap[dataItem[1].name];
+      if (fromCoord && toCoord) {
+        res.push({
+          fromName: dataItem[0].name,
+          toName: dataItem[1].name,
+          coords: [fromCoord, toCoord],
+          value: dataItem[1].value
+        });
+      }
+    }
+    return res;
+  };
+
+  var series = [];
+  for (let i = 0; i < mapData.detailDataList.length; i++) {
+    var item = mapData.detailDataList[i];
+    var seColor = randomColor();
+    var seName = item.name;
+    series.push({
+      name: seName,
+      type: 'lines',
+      zlevel: 1,
+      effect: {
+        show: true,
+        period: 6,
+        trailLength: 0.7,
+        color: '#fff',
+        symbolSize: 3
+      },
+      lineStyle: {
+        color: seColor,
+        width: 0,
+        curveness: 0.2
+      },
+      data: convertData(item.dataList)
+    }, {
+      name: seName,
+      type: 'lines',
+      zlevel: 2,
+      symbol: ['none', 'arrow'],
+      symbolSize: 10,
+      effect: {
+        show: true,
+        period: 6,
+        trailLength: 0,
+        symbol: planePath,
+        symbolSize: 15
+      },
+      lineStyle: {
+        color: seColor,
+        width: 1,
+        opacity: 0.6,
+        curveness: 0.2
+      },
+      data: convertData(item.dataList)
+    }, {
+      name: seName,
+      type: 'effectScatter',
+      coordinateSystem: 'geo',
+      zlevel: 2,
+      rippleEffect: {
+        brushType: 'stroke'
+      },
+      label: {
+        show: true,
+        position: 'right',
+        formatter: '{b}',
+        color: seColor,//字体颜色
+      },
+      symbolSize: function(val) {
+        return 10;
+      },
+      data: item.dataList.map(function(dataItem) {
+        return {
+          name: dataItem[1].name,
+          value: geoCoordMap[dataItem[1].name].concat([dataItem[1].value])
+        };
+      })
+    });
+  }
+
+  let option = {
+    backgroundColor: '#404a59',
+    title: {
+      text: mapData.title,
+      subtext: mapData.subTitle,
+      left: 'center',
+      textStyle: {
+        color: '#fff'
+      }
+    },
+    tooltip: {
+      trigger: 'item',
+      formatter: function(params, ticket, callback) {
+        //console.log(params)
+        if (params.seriesType == "effectScatter") {
+          return params.seriesName+":" + params.data.name + " " + params.data.value[2]+unit;
+        } else if (params.seriesType == "lines") {
+          return params.seriesName+"线路: "+params.data.fromName + ">" + params.data.toName + "<br />" + params.data.value+unit;
+        } else {
+          return params.name;
+        }
+      }
+    },
+    legend: {
+      orient: 'vertical',
+      top: 'bottom',
+      left: 'right',
+      data: mapData.legendData,
+      textStyle: {
+        color: '#fff'
+      },
+      selectedMode: 'multiple',
+    },
+    geo: {
+      map: 'china',
+      emphasis: {
+        show: true,
+        color: '#fff'
+      },
+      roam: true,
+      itemStyle: {
+        areaColor: '#323c48',
+        borderColor: '#404a59'
+      },
+      emphasis: {
+        areaColor: '#2a333d'
+      }
+    },
+    series: series
+  };
+  createMapChart(option, myChart);
+}
+
+/**
+ * 世界迁移地图
  * 基于模板:https://www.makeapie.com/editor.html?c=xN8H0jI0xN
  * @param {Object} mapData
  * @param {Object} myChart
@@ -429,7 +591,9 @@ export function createWorldTransferMapChart(mapData, myChart) {
   };
 
   var series = [];
-  [[centerCity, BJData]].forEach(function(item, i) {
+  [
+    [centerCity, BJData]
+  ].forEach(function(item, i) {
     series.push({
         "type": "lines",
         "zlevel": 3,
@@ -669,328 +833,6 @@ export function createWorldTransferMapChart(mapData, myChart) {
     series: series
   };
   createMapChart(option, myChart);
-}
-
-/**
- * 单向地图
- * @param {Object} data
- * @param {Object} myChart
- */
-export function createSingleTransferMapChart(data, myChart) {
-  let geoCoordMap = data.geoCoordMapData;
-  let planePath =
-    'path://M1705.06,1318.313v-89.254l-319.9-221.799l0.073-208.063c0.521-84.662-26.629-121.796-63.961-121.491c-37.332-0.305-64.482,36.829-63.961,121.491l0.073,208.063l-319.9,221.799v89.254l330.343-157.288l12.238,241.308l-134.449,92.931l0.531,42.034l175.125-42.917l175.125,42.917l0.531-42.034l-134.449-92.931l12.238-241.308L1705.06,1318.313z';
-  let convertData = function(data) {
-    let res = [];
-    for (let i = 0; i < data.length; i++) {
-      let dataItem = data[i];
-      let fromCoord = geoCoordMap[dataItem[0].name];
-      let toCoord = geoCoordMap[dataItem[1].name];
-      if (fromCoord && toCoord) {
-        res.push({
-          fromName: dataItem[0].name,
-          toName: dataItem[1].name,
-          coords: [fromCoord, toCoord]
-        });
-      }
-    }
-    return res;
-  };
-
-  let color = ['#a6c84c', '#ffa022', '#46bee9'];
-  let series = [];
-  for (let i = 0; i < data.statData.length; i++) {
-    let srData = convertSeriesData(data.statData[i]);
-    //alert(JSON.stringify(srData));
-    series.push({
-      name: data.legendData[i],
-      type: 'lines',
-      zlevel: 1,
-      effect: {
-        show: true,
-        period: 6,
-        trailLength: 0.7,
-        color: '#fff',
-        symbolSize: 3
-      },
-      lineStyle: {
-        normal: {
-          color: color[i],
-          width: 0,
-          curveness: 0.2
-        }
-      },
-      data: convertData(srData)
-    }, {
-      name: data.legendData[i],
-      type: 'lines',
-      zlevel: 2,
-      symbol: ['none', 'arrow'],
-      symbolSize: 10,
-      effect: {
-        show: true,
-        period: 6,
-        trailLength: 0,
-        symbol: planePath,
-        symbolSize: 15
-      },
-      lineStyle: {
-        normal: {
-          color: color[i],
-          width: 1,
-          opacity: 0.6,
-          curveness: 0.2
-        }
-      },
-      data: convertData(srData)
-    }, {
-      name: data.legendData[i],
-      type: 'effectScatter',
-      coordinateSystem: 'geo',
-      zlevel: 2,
-      rippleEffect: {
-        brushType: 'stroke'
-      },
-      label: {
-        normal: {
-          show: true,
-          position: 'right',
-          formatter: '{b}'
-        }
-      },
-      //定义圆圈的大小
-      //                    symbolSize: function (val) {
-      //                        return val[2] *20;
-      //                    },
-      itemStyle: {
-        normal: {
-          color: color[i]
-        }
-      },
-      data: srData.map(function(dataItem) {
-        return {
-          name: dataItem[1].name,
-          value: geoCoordMap[dataItem[1].name].concat([dataItem[1].value])
-        };
-      })
-    });
-  }
-  let option = {
-    backgroundColor: '#404a59',
-    title: {
-      text: data.title,
-      subtext: data.subTitle,
-      left: 'center',
-      textStyle: {
-        color: '#fff'
-      }
-    },
-    tooltip: {
-      trigger: 'item'
-    },
-    legend: {
-      orient: 'vertical',
-      top: 'bottom',
-      left: 'right',
-      data: data.legendData,
-      textStyle: {
-        color: '#fff'
-      },
-      selectedMode: 'single'
-    },
-    geo: {
-      map: 'china',
-      label: {
-        show: true,
-        emphasis: {
-          show: true
-        }
-      },
-      roam: true,
-      emphasis: {
-        itemStyle: {
-          areaColor: '#ffff7f'
-        }
-      },
-      itemStyle: {
-        normal: {
-          //地图的背景颜色
-          areaColor: '#323c48',
-          borderColor: '#111'
-        }
-      }
-    },
-    series: series
-  };
-  createMapChart(option, myChart);
-}
-
-
-/**
- * 双向地图
- * @param {Object} data
- * @param {Object} myChart
- */
-export function createDoubleTransferMapChart(data, myChart) {
-  let geoCoordMap = data.geoCoordMapData;
-  let BJData = convertSeriesData(data.statData);
-  let planePath =
-    'path://M1705.06,1318.313v-89.254l-319.9-221.799l0.073-208.063c0.521-84.662-26.629-121.796-63.961-121.491c-37.332-0.305-64.482,36.829-63.961,121.491l0.073,208.063l-319.9,221.799v89.254l330.343-157.288l12.238,241.308l-134.449,92.931l0.531,42.034l175.125-42.917l175.125,42.917l0.531-42.034l-134.449-92.931l12.238-241.308L1705.06,1318.313z';
-
-  let convertData = function(data) {
-    let res = [];
-    for (let i = 0; i < data.length; i++) {
-      let dataItem = data[i];
-      let fromCoord = geoCoordMap[dataItem[0].name];
-      let toCoord = geoCoordMap[dataItem[1].name];
-      if (fromCoord && toCoord) {
-        res.push({
-          fromName: dataItem[0].name,
-          toName: dataItem[1].name,
-          coords: [fromCoord, toCoord]
-        });
-      }
-    }
-    return res;
-  };
-
-  let color = ['#a6c84c', '#ffa022', '#46bee9'];
-  let serieName = '旅行';
-  let series = [];
-  [
-    [serieName, BJData]
-  ].forEach(function(item, i) {
-    series.push({
-      name: serieName,
-      type: 'lines',
-      zlevel: 1,
-      effect: {
-        show: true,
-        period: 6,
-        trailLength: 0.7,
-        color: '#fff',
-        symbolSize: 3
-      },
-      lineStyle: {
-        color: color[i],
-        width: 0,
-        curveness: 0.2
-      },
-      data: convertData(item[1])
-    }, {
-      name: serieName,
-      type: 'lines',
-      zlevel: 2,
-      effect: {
-        show: true,
-        period: 6,
-        trailLength: 0,
-        //symbol: planePath,
-        symbolSize: 5
-      },
-      lineStyle: {
-        color: color[i],
-        width: 1,
-        opacity: 0.4,
-        curveness: 0.2
-      },
-      data: convertData(item[1])
-    }, {
-      name: serieName,
-      type: 'effectScatter',
-      coordinateSystem: 'geo',
-      zlevel: 2,
-      rippleEffect: {
-        brushType: 'stroke'
-      },
-      label: {
-        show: true,
-        position: 'right',
-        formatter: '{b}'
-      },
-      itemStyle: {
-        color: color[i]
-      },
-      data: item[1].map(function(dataItem) {
-        return {
-          name: dataItem[1].name,
-          value: geoCoordMap[dataItem[1].name].concat([dataItem[1].value])
-        };
-      })
-    });
-  });
-  let option = {
-    backgroundColor: '#404a59',
-    title: {
-      text: data.title,
-      subtext: data.subTitle,
-      left: 'center',
-      textStyle: {
-        color: '#fff'
-      }
-    },
-    tooltip: {
-      trigger: 'item'
-    },
-    toolbox: {
-      show: true,
-      feature: {
-        dataView: {
-          show: true,
-          readOnly: false
-        },
-        restore: {},
-        saveAsImage: {}
-      }
-    },
-    legend: {
-      orient: 'vertical',
-      top: 'bottom',
-      left: 'right',
-      data: [],
-      textStyle: {
-        color: '#fff'
-      },
-      selectedMode: 'single'
-    },
-    geo: {
-      map: 'china',
-      label: {
-        show: true,
-        emphasis: {
-          show: true
-        }
-      },
-      roam: true,
-      emphasis: {
-        itemStyle: {
-          areaColor: '#ffff7f'
-        }
-      },
-      itemStyle: {
-        normal: {
-          //地图的背景颜色
-          areaColor: '#323c48',
-          borderColor: '#111'
-        }
-      }
-    },
-    series: series
-  };
-  createMapChart(option, myChart);
-}
-
-export function convertSeriesData(data) {
-  let res = [];
-  for (let i = 0; i < data.length; i++) {
-    res.push([{
-      name: data[i].startCity
-    }, {
-      name: data[i].arriveCity,
-      value: data[i].totalCount
-    }]);
-  }
-  return res;
 }
 
 /**
