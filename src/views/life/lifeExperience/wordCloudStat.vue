@@ -23,10 +23,26 @@
           multiple
           collapse-tags
           size="small"
-          style="width: 240px"
+          style="width: 120px"
         >
           <el-option
             v-for="dict in typesOptions"
+            :key="dict.id"
+            :label="dict.text"
+            :value="dict.id"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="统计字段" prop="field">
+        <el-select
+          v-model="queryParams.field"
+          placeholder="统计字段"
+          size="small"
+          style="width: 120px"
+          @change="handleQuery"
+        >
+          <el-option
+            v-for="dict in fieldOptions"
             :key="dict.id"
             :label="dict.text"
             :value="dict.id"
@@ -66,8 +82,8 @@ export default {
       loading: [],
       //加载层配置
       loadingOptions:this.loadingOptions,
-      // 词云图片
-      codeUrl: "",
+      //统计字段
+      fieldOptions:[],
       typesOptions:[],
       //日期范围快速选择
       datePickerOptions:this.datePickerOptions,
@@ -75,8 +91,9 @@ export default {
       dateRange: this.getYearDateRange(0),
       // 查询参数
       queryParams: {
-        picWidth:screen.width-250,
-        picHeight:screen.height-300
+        // picWidth:screen.width-250,
+        // picHeight:screen.height-300
+        field:'tags'
       }
     };
   },
@@ -84,6 +101,9 @@ export default {
     this.wordCloudStat();
     this.getEnumTree('ExperienceType','FIELD',false).then(response => {
       this.typesOptions = response;
+    });
+    this.getDictItemTree('LIFE_EXPERIENCE_WORDCLOUD_FIELD',false).then(response => {
+      this.fieldOptions = response;
     });
   },
   methods: {
