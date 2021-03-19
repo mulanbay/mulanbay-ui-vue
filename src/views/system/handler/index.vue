@@ -66,21 +66,21 @@
       <el-table-column label="发送命令" align="center" width="80">
         <template slot-scope="{row}">
           <span class="link-type" @click="handleCmd(row)">
-            <i class="el-icon-s-tools" />
+            <svg-icon icon-class="command" class-name="card-panel-icon" />
           </span>
         </template>
       </el-table-column>
       <el-table-column label="自检" align="center" width="80">
         <template slot-scope="{row}">
           <span class="link-type" @click="handleCheck(row)">
-            <i class="el-icon-s-tools" />
+            <svg-icon icon-class="check" class-name="card-panel-icon" />
           </span>
         </template>
       </el-table-column>
       <el-table-column label="重新加载" align="center" width="80">
         <template slot-scope="{row}">
           <span class="link-type" @click="handleReload(row)">
-            <i class="el-icon-s-tools" />
+            <i class="el-icon-refresh-right" />
           </span>
         </template>
       </el-table-column>

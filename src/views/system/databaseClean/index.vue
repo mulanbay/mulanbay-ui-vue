@@ -87,7 +87,7 @@
           <span class="link-type" @click="handleUpdate(row)">{{ row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="表名" min-width="150px">
+      <el-table-column label="表名" min-width="150px" :show-overflow-tooltip="true">
         <template slot-scope="{row}">
           <span class="link-type" @click="handleCounts(row)">{{ row.tableName }}</span>
         </template>
