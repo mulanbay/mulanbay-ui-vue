@@ -310,7 +310,11 @@ export default {
       }else if(this.form.period=='MONTHLY'){
         this.periodValueOptions = new Array();
         for(let i=1;i<=31;i++){
-          this.periodValueOptions.push({id:i+'',text:i+'号'});
+          var text =i+'号';
+          if(i<10){
+            text ='_'+i+'号';
+          }
+          this.periodValueOptions.push({id:i+'',text:text});
         }
       }else{
         this.periodValueOptions=[];
