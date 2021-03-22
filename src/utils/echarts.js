@@ -71,13 +71,18 @@ export function createChart(option, myChart) {
 export function createBarChart(data, myChart) {
   const unit = data.unit == null ? '' : data.unit;
   //是否显示折线上的图标
-  let showItemStyle = data.showItemStyle == null ? true : data.showItemStyle;
+  let showItemStyle = true;
   //显示最大最小值
-  let showMarkPoint = data.showMarkPoint == null ? true : data.showMarkPoint;
+  let showMarkPoint = true;
   //显示平均值
-  let showMarkLine = data.showMarkLine == null ? false : data.showMarkLine;
+  let showMarkLine = false;
   //显示右上角的菜单
-  let showToolbox = data.showToolbox == null ? true : data.showToolbox;
+  let showToolbox = true;
+  const ln = data.xdata.length;
+  //根据x轴长度动态显示
+  if(ln>20){
+    showItemStyle = false;
+  }
   let showLegend = data.showLegend == null ? true : data.showLegend;
   let markPoint = {};
   if (showMarkPoint == true) {
@@ -109,10 +114,11 @@ export function createBarChart(data, myChart) {
       type: 'bar',
       stack: data.ydata[i].stack,
       data: data.ydata[i].data,
-      itemStyle: {
-        show: showItemStyle,
-        borderColor: '#fff',
-        borderWidth: 1
+      label: {
+        show: showItemStyle, //开启显示
+        position: 'top', //在上方显示
+        color: 'black',//数值样式
+        fontSize: 16
       },
       markPoint: markPoint,
       markLine: markLine
@@ -204,13 +210,18 @@ export function createBarChart(data, myChart) {
 export function createLineChart(data, myChart) {
   const unit = data.unit == null ? '' : data.unit;
   //是否显示折线上的图标
-  let showItemStyle = data.showItemStyle == null ? true : data.showItemStyle;
+  let showItemStyle = true;
   //显示最大最小值
-  let showMarkPoint = data.showMarkPoint == null ? true : data.showMarkPoint;
+  let showMarkPoint = true;
   //显示平均值
-  let showMarkLine = data.showMarkLine == null ? false : data.showMarkLine;
+  let showMarkLine = false;
   //显示右上角的菜单
-  let showToolbox = data.showToolbox == null ? true : data.showToolbox;
+  let showToolbox = true;
+  const ln = data.xdata.length;
+  //根据x轴长度动态显示
+  if(ln>20){
+    showItemStyle = false;
+  }
   let showLegend = data.showLegend == null ? true : data.showLegend;
   let smooth = data.smooth == null ? false : data.smooth;
   let markPoint = {};
@@ -248,19 +259,15 @@ export function createLineChart(data, myChart) {
         show: true,
         readOnly: false
       },
-      itemStyle: {
-        show: showItemStyle,
-        borderColor: '#fff',
-        borderWidth: 1
+      label: {
+        show: showItemStyle, //开启显示
+        position: 'top', //在上方显示
+        color: 'black',//数值样式
+        fontSize: 16
       },
       data: data.ydata[i].data,
       markPoint: markPoint,
-      markLine: markLine,
-      label: {
-        //是否显示数值
-        show: false,
-        position: 'top'
-      }
+      markLine: markLine
     };
     series.push(serie);
   }
@@ -409,13 +416,18 @@ export function createMixLineBarChart(data, myChart) {
     return;
   }
   //是否显示折线上的图标
-  let showItemStyle = data.showItemStyle == null ? true : data.showItemStyle;
+  let showItemStyle = true;
   //显示最大最小值
-  let showMarkPoint = data.showMarkPoint == null ? true : data.showMarkPoint;
+  let showMarkPoint = true;
   //显示平均值
-  let showMarkLine = data.showMarkLine == null ? false : data.showMarkLine;
+  let showMarkLine = false;
   //显示右上角的菜单
-  let showToolbox = data.showToolbox == null ? true : data.showToolbox;
+  let showToolbox = true;
+  const ln = data.xdata.length;
+  //根据x轴长度动态显示
+  if(ln>20){
+    showItemStyle = false;
+  }
   let showLegend = data.showLegend == null ? true : data.showLegend;
   let smooth = data.smooth == null ? false : data.smooth;
   let markPoint = {};
@@ -440,10 +452,6 @@ export function createMixLineBarChart(data, myChart) {
         name: '平均值'
       }]
     };
-  };
-  const itemStyle = {
-    borderColor: '#fff',
-    borderWidth: 1
   };
   let ya0Name = '';
   let ya0Unit = '';
@@ -470,7 +478,12 @@ export function createMixLineBarChart(data, myChart) {
       type: type,
       smooth: smooth,
       yAxisIndex: yAxisIndex,
-      itemStyle: itemStyle,
+      label: {
+        show: showItemStyle, //开启显示
+        position: 'top', //在上方显示
+        color: 'black',//数值样式
+        fontSize: 16
+      },
       markPoint: markPoint,
       markLine: markLine,
       data: cd.data
