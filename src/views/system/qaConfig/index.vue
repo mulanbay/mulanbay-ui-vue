@@ -106,7 +106,7 @@
       v-loading="loading"
       :data="qaConfigList"
       row-key="id"
-      ref="functionTable"
+      ref="qaConfigTable"
       lazy
       :load="loadChildren"
       :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
@@ -386,6 +386,8 @@ export default {
       //智能客服
       csTitle:'',
       csOpen:false,
+      //旧的父id
+      oldPid:undefined,
       //标签属性 start
       keywordsTags: [],
       //已经保存过的商品标签
@@ -562,6 +564,30 @@ export default {
       this.single = selection.length!=1
       this.multiple = !selection.length
     },
+    /** 刷新节点 */
+    refreshRow(pid){
+      if(pid==null||pid==0){
+        //第一级菜单，刷新整个列表
+        this.getList();
+        return;
+      }
+      if(pid!==this.oldPid){
+        //先刷新原来的节点,否则会导致重复key，因为该节点在新老父节点里都存在
+        this.refreshRowData(this.oldPid);
+      }
+      this.refreshRowData(pid);
+    },
+    /** 刷新节点 */
+    refreshRowData(pid){
+      const para = {
+        parentId:pid
+      }
+      fetchList(para).then(
+        response => {
+          this.$set(this.$refs.qaConfigTable.store.states.lazyTreeNodeMap, pid, response.rows);
+        }
+      );
+    },
     /** 新增按钮操作 */
     handleCreate(row) {
       this.reset();
@@ -588,6 +614,8 @@ export default {
         }
         this.open = true;
         this.title = "修改";
+        //设置oldPid
+        this.oldPid = this.form.parentId;
       });
     },
     /** 提交按钮 */
@@ -603,13 +631,13 @@ export default {
             updateQaConfig(this.form).then(response => {
               this.msgSuccess("修改成功");
               this.open = false;
-              this.getList();
+              this.refreshRow(this.form.parentId);
             });
           } else {
             createQaConfig(this.form).then(response => {
               this.msgSuccess("新增成功");
               this.open = false;
-              this.getList();
+              this.refreshRow(this.form.parentId);
             });
           }
         }
