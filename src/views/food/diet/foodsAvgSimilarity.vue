@@ -91,7 +91,7 @@
         <el-button type="stat" icon="el-icon-s-data" size="mini" @click="handleQuery" v-hasPermi="['food:diet:foodsAvgSimilarity']">统计</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
         <el-button type="primary" icon="el-icon-more" size="mini" @click="handleMoreCdn">{{cdnTitle}}</el-button>
-        <el-button type="stat" icon="el-icon-s-data" size="mini" @click="handleLogStat" v-hasPermi="['food:diet:statFoodsAvgSimLog']">历史</el-button>
+        <el-button type="stat" icon="el-icon-s-data" size="mini" @click="handleDispatch('DietStatFoodsAvgSimLog')" v-hasPermi="['food:diet:statFoodsAvgSimLog']">历史</el-button>
         <span class="link-type" @click="msgAlert('提示','值越大说明重复度越高，食物多样性越低。反之，说明食物多样性越多。')"><i class="el-icon-question" /></span>
 
       </el-form-item>
@@ -176,11 +176,6 @@ export default {
         this.moreCdn=true;
         this.cdnTitle='取消';
       }
-    },
-    //多样性日志统计
-    handleLogStat() {
-      //路由定向
-      this.$router.push({name:'DietStatFoodsAvgSimLog',query: {}})
     },
     // 打开加载层
     openLoading() {

@@ -61,7 +61,7 @@
       <el-form-item>
         <el-button type="query" icon="el-icon-search" size="mini" @click="handleQuery" v-hasPermi="['data:userRewardPointRecord:query']">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-        <el-button type="stat" icon="el-icon-s-data" size="mini" @click="handleSourceStat" v-hasPermi="['data:userRewardPointRecord:pointsSourceStat']">来源统计</el-button>
+        <el-button type="stat" icon="el-icon-s-data" size="mini" @click="handleDispatch('UserRewardPointRecordPointsSourceStat')" v-hasPermi="['data:userRewardPointRecord:pointsSourceStat']">来源统计</el-button>
         <el-button type="primary" icon="el-icon-more" size="mini" @click="handleMoreCdn">{{cdnTitle}}</el-button>
       </el-form-item>
     </el-form>
@@ -280,11 +280,6 @@ export default {
           }
         }
       );
-    },
-    /** 根据来统计 */
-    handleSourceStat(){
-      //路由定向
-      this.$router.push({name:'UserRewardPointRecordPointsSourceStat',query: {}})
     },
     /** 查询列表 */
     getList() {

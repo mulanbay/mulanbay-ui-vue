@@ -35,7 +35,7 @@
       <el-form-item>
         <el-button type="stat" icon="el-icon-s-data" size="mini" @click="handleQuery" v-hasPermi="['data:userRewardPointRecord:pointsTimelineStat']">统计</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-        <el-button type="stat" icon="el-icon-s-data" size="mini" @click="handleFullQuery" v-hasPermi="['data:userRewardPointRecord:fullStat']">旭日图</el-button>
+        <el-button type="stat" icon="el-icon-s-data" size="mini" @click="handleDispatch('UserRewardPointRecordFullStat')" v-hasPermi="['data:userRewardPointRecord:fullStat']">旭日图</el-button>
       </el-form-item>
     </el-form>
 
@@ -115,11 +115,6 @@ export default {
 
   },
   methods: {
-    /** 旭日图操作 */
-    handleFullQuery(){
-      //路由定向
-      this.$router.push({name:'UserRewardPointRecordFullStat',query: {}})
-    },
     // 打开加载层
     openLoading() {
       this.loading = this.$loading(this.loadingOptions);

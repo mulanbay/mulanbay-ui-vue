@@ -68,7 +68,7 @@
       </div>
       <div>
         <div class="lnb-calendars-item" align="center">
-          <el-button type="success" icon="el-icon-s-grid" size="medium" style="width: 160px;" round @click="showListView">列表</el-button>
+          <el-button type="success" icon="el-icon-s-grid" size="medium" style="width: 160px;" round @click="handleDispatch('UserCalendar')">列表</el-button>
         </div>
       </div>
       <div>
@@ -254,11 +254,6 @@
         let options = this.$refs.tuiCal.options;
         options.month.workweek = !options.month.workweek;
         options.week.workweek = !options.week.workweek;
-      },
-      //切换到列表模式
-      showListView(){
-        //路由定向
-        this.$router.push({name:'UserCalendar',query: {}})
       },
       //获取列表
       getScheduleList() {

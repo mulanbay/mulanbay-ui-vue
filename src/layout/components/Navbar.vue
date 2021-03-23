@@ -164,11 +164,6 @@ export default {
     // })
   },
   methods: {
-    //路由跳转
-    handleDispatch(name) {
-      //路由定向
-      this.$router.push({name:name,query: {}})
-    },
     /** 跳转到个人中心 */
     dispatchProfile(){
       this.$router.push({path:'/user/profile'});

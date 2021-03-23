@@ -2,7 +2,7 @@
   <div class="app-container">
     <div class="block">
       <div align="right">
-        <span class="link-type" @click="handleDispatch"><i class="el-icon-more" />更多</span>
+        <span class="link-type" @click="handleDispatch('UserNotify')"><i class="el-icon-more" />更多</span>
       </div>
       <el-carousel v-loading="loading" height="295px">
         <el-carousel-item v-for="item in notifyData" :key="item.id">
@@ -68,11 +68,6 @@ export default {
     this.getStatList();
   },
   methods: {
-    //跳转
-    handleDispatch(){
-      //路由定向
-      this.$router.push({name:'UserNotify',query: {}})
-    },
     getStatList(){
       const para ={
         showInIndex:true,

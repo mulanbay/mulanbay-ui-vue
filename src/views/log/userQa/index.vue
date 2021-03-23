@@ -28,7 +28,7 @@
       <el-form-item>
         <el-button type="query" icon="el-icon-search" size="mini" @click="handleQuery" v-hasPermi="['log:userQa:query']">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-        <el-button type="primary" icon="el-icon-more" size="mini" @click="handleMoreCdn">{{cdnTitle}}</el-button>
+        <el-button type="query" icon="el-icon-menu" size="mini" @click="handleDispatch('UserQaStatWordCloud')" v-hasPermi="['log:userQa:statWordCloud']">词云</el-button>
       </el-form-item>
     </el-form>
 
