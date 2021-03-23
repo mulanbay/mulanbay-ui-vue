@@ -100,7 +100,7 @@
   import "echarts-wordcloud/dist/echarts-wordcloud.min";
 
 export default {
-  name: "DietStatWordClouds",
+  name: "DietStatWordCloud",
   mixins: [resize],
   props: chartProps,
   data() {

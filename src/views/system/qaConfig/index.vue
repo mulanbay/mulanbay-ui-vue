@@ -102,14 +102,21 @@
     </el-row>
 
     <!--列表数据-->
-    <el-table v-loading="loading" :data="qaConfigList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="ID" prop="id" sortable="custom" align="center" width="80">
+    <el-table
+      v-loading="loading"
+      :data="qaConfigList"
+      row-key="id"
+      ref="functionTable"
+      lazy
+      :load="loadChildren"
+      :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
+    >
+      <el-table-column label="ID" prop="id" sortable="custom" align="center" width="120">
         <template slot-scope="{row}">
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="名称" min-width="160px">
+      <el-table-column label="名称" min-width="240px" :show-overflow-tooltip="true">
         <template slot-scope="{row}">
           <span class="link-type" @click="handleUpdate(row)">{{ row.name }}</span>
         </template>
@@ -119,7 +126,7 @@
           <span>{{ row.resultTypeName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="代码" align="center" width="120">
+      <el-table-column label="代码" align="center" width="120" :show-overflow-tooltip="true">
         <template slot-scope="{row}">
           <span>{{ row.handleCode }}</span>
         </template>
@@ -159,7 +166,7 @@
           <span>{{ row.createdTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" fixed="right" width="150" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" fixed="right" width="210" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -171,6 +178,13 @@
           <el-button
             size="mini"
             type="text"
+            icon="el-icon-plus"
+            @click="handleCreate(scope.row)"
+            v-hasPermi="['system:qaConfig:create']"
+          >新增</el-button>
+          <el-button
+            size="mini"
+            type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['system:qaConfig:delete']"
@@ -178,15 +192,6 @@
         </template>
       </el-table-column>
     </el-table>
-
-
-    <pagination
-      v-show="total>0"
-      :total="total"
-      :page.sync="queryParams.page"
-      :limit.sync="queryParams.pageSize"
-      @pagination="getList"
-    />
 
     <!-- 添加或修改对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="640px" append-to-body customClass="customDialogCss">
@@ -274,7 +279,7 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="24">
+          <el-col :span="24"  v-if="form.resultType == 'REFER'">
             <el-form-item label="跳转QA" prop="referQaId">
              <treeselect
               v-model="form.referQaId"
@@ -284,7 +289,9 @@
               :show-count="true"
               :searchable="true"
               placeholder="请选择跳转QA" />
+              <!--
               <span class="link-type" @click="msgAlert('提示','返回类型为跳转回复时必填')"><i class="el-icon-question" /></span>
+              -->
             </el-form-item>
           </el-col>
         </el-row>
@@ -407,7 +414,7 @@ export default {
       commonStatusOptions:this.commonStatusOptions,
       // 查询参数
       queryParams: {
-        page: 1,
+        page: 0,
         pageSize: 10,
         name: undefined,
         status: undefined
@@ -499,6 +506,18 @@ export default {
       this.csTitle='智能客服';
       this.csOpen=true;
     },
+    //加载子节点
+    loadChildren(tree, treeNode, resolve){
+      //this.loading = true;
+      const para = {
+        parentId:tree.id
+      }
+      fetchList(para).then(
+        response => {
+          resolve(response.rows);
+        }
+      );
+    },
     /** 查询列表 */
     getList() {
       this.loading = true;
@@ -544,11 +563,16 @@ export default {
       this.multiple = !selection.length
     },
     /** 新增按钮操作 */
-    handleCreate() {
+    handleCreate(row) {
       this.reset();
       this.initOptions();
       this.open = true;
       this.title = "添加";
+      if (row != null && row.id) {
+        this.form.parentId = row.id;
+      } else {
+        this.form.parentId = null;
+      }
     },
     /** 修改按钮操作 */
     handleUpdate(row) {

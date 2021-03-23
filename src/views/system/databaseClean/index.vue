@@ -104,8 +104,8 @@
       </el-table-column>
       <el-table-column label="含附加条件" align="center" width="120">
         <template slot-scope="{row}">
-           <span v-if="row.extraCondition==null" style="color: red;">
-            <i class="el-icon-error" />
+           <span v-if="row.extraCondition==null">
+            <i class="el-icon-error" style="color: red;"/>
            </span>
            <span v-else>
              <i class="el-icon-success" style="color: green;"/>
