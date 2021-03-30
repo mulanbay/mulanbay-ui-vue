@@ -85,9 +85,10 @@
         <el-button type="primary" icon="el-icon-more" size="mini" @click="handleMoreCdn">{{cdnTitle}}</el-button>
         <el-button type="query" icon="el-icon-s-tools" size="mini" @click="handleSetFunctionId" v-hasPermi="['log:operationLog:setFunctionId']">关联功能点</el-button>
         <el-button type="query" icon="el-icon-s-tools" size="mini" @click="setIdValue" v-hasPermi="['log:operationLog:setIdValue']">设置主键值</el-button>
-        <el-button type="stat" icon="el-icon-s-data" size="mini" @click="handleTreeStat" v-hasPermi="['log:operationLog:treeStat']">树形统计</el-button>
-        <el-button type="stat" icon="el-icon-s-data" size="mini" @click="handleStat" v-hasPermi="['log:operationLog:stat']">分页统计</el-button>
-        <el-button type="stat" icon="el-icon-s-data" size="mini" @click="handleDateStat" v-hasPermi="['log:operationLog:dateStat']">分时统计</el-button>
+        <el-button type="stat" icon="el-icon-s-data" size="mini" @click="handleDispatch('OperationLogTreeStat')" v-hasPermi="['log:operationLog:treeStat']">树形统计</el-button>
+        <el-button type="stat" icon="el-icon-s-data" size="mini" @click="handleDispatch('OperationLogStat')" v-hasPermi="['log:operationLog:stat']">分页统计</el-button>
+        <el-button type="stat" icon="el-icon-s-data" size="mini" @click="handleDispatch('OperationLogDateStat')" v-hasPermi="['log:operationLog:dateStat']">分时统计</el-button>
+        <el-button type="stat" icon="el-icon-s-data" size="mini" @click="handleDispatch('OperationLogFlow')" v-hasPermi="['log:operationLog:flow']">日志流水</el-button>
 
       </el-form-item>
     </el-form>
@@ -309,21 +310,6 @@ export default {
         this.moreCdn=true;
         this.cdnTitle='取消';
       }
-    },
-    /** 统计 */
-    handleTreeStat(){
-      //路由定向
-      this.$router.push({name:'OperationLogTreeStat',query: {}})
-    },
-    /** 统计 */
-    handleStat(){
-      //路由定向
-      this.$router.push({name:'OperationLogStat',query: {}})
-    },
-    /** 分时统计 */
-    handleDateStat(){
-      //路由定向
-      this.$router.push({name:'OperationLogDateStat',query: {}})
     },
     /** 修改日志 */
     showLogCompare(row){

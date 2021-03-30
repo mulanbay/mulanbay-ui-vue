@@ -24,6 +24,14 @@ export function getBeanDetail(id) {
   })
 }
 
+export function getDetail(id) {
+  return request({
+    url: '/operationLog/get',
+    method: 'get',
+    params: { id }
+  })
+}
+
 export function setOperationLogFunctionId(needReSet) {
   return request({
     url: '/operationLog/setFunctionId',
@@ -82,6 +90,14 @@ export function getNearstCompareData(query) {
 export function getEditLogData(query) {
   return request({
     url: '/operationLog/getEditLogData',
+    method: 'get',
+    params: query
+  })
+}
+
+export function flow(query) {
+  return request({
+    url: '/operationLog/flow',
     method: 'get',
     params: query
   })

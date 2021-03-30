@@ -28,6 +28,7 @@
         <el-button type="query" icon="el-icon-search" size="mini" @click="loadEditData" v-hasPermi="['dream:query']">搜索</el-button>
         <el-button type="query" icon="el-icon-d-arrow-left" size="mini" @click="handleFetch('EARLY')" v-hasPermi="['log:operationLog:getNearstCompareData']">往前</el-button>
         <el-button type="query" icon="el-icon-d-arrow-right" size="mini" @click="handleFetch('LATER')" v-hasPermi="['log:operationLog:getNearstCompareData']">往后</el-button>
+        <el-button type="query" icon="el-icon-s-operation" size="mini" @click="showFlow" v-hasPermi="['log:operationLog:flow']">流水日志</el-button>
       </el-form-item>
     </el-form>
 
@@ -146,6 +147,12 @@ export default {
       getDomainClassNamesTree().then(response => {
         this.beanNameOptions = response;
       });
+    },
+    /** 流水日志 */
+    showFlow(){
+      //路由定向
+      this.$router.push({name:'OperationLogFlow',
+      query: {beanName:this.queryParams.beanName,idValue:this.beanId}})
     },
     /** 搜索按钮操作 */
     handleQuery() {
