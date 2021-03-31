@@ -43,23 +43,111 @@
     <el-row>
       <el-col :span="8" class="card-box">
         <el-card>
-          <div class="chart-wrapper">
-            <i class="el-icon-info" />{{dbInfo}}
-          </div>
+          <el-collapse v-model="activeNames">
+            <el-collapse-item name="1">
+              <template slot="title">
+               <i class="header-icon el-icon-info"></i>数据库最新数据
+              </template>
+            </el-collapse-item>
+          </el-collapse>
         </el-card>
       </el-col>
       <el-col :span="8" class="card-box"  align="left">
         <el-card>
-          <div class="chart-wrapper">
-            <i class="el-icon-info" />{{currentInfo}}
-          </div>
+          <el-collapse v-model="activeNames">
+            <el-collapse-item name="1">
+              <template slot="title">
+               <i class="header-icon el-icon-info"></i>{{currentInfo.funcName}}
+              </template>
+              <div class="el-table el-table--enable-row-hover el-table--medium">
+                <table cellspacing="0" style="width: 100%;">
+                  <tbody>
+                    <tr>
+                      <td><div class="cell">操作编号</div></td>
+                      <td>
+                        <div class="cell">
+                          <span>{{ currentInfo.id}}</span>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><div class="cell">操作用户</div></td>
+                      <td>
+                        <div class="cell">
+                          <span>{{ currentInfo.userName+'  (ID:'+currentInfo.userId +')'}}</span>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><div class="cell">操作时间</div></td>
+                      <td>
+                        <div class="cell">
+                          <span>{{ currentInfo.occurTime}}</span>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><div class="cell">请求IP</div></td>
+                      <td>
+                        <div class="cell">
+                          <span>{{ currentInfo.ipAddress}}</span>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </el-collapse-item>
+          </el-collapse>
         </el-card>
       </el-col>
       <el-col :span="8" class="card-box" align="left">
         <el-card v-loading="loading">
-          <div class="chart-wrapper">
-            <i class="el-icon-info" />{{compareInfo}}
-          </div>
+          <el-collapse v-model="activeNames">
+            <el-collapse-item name="1">
+              <template slot="title">
+               <i class="header-icon el-icon-info"></i>{{compareInfo.funcName}}
+              </template>
+              <div class="el-table el-table--enable-row-hover el-table--medium">
+                <table cellspacing="0" style="width: 100%;">
+                  <tbody>
+                    <tr>
+                      <td><div class="cell">操作编号</div></td>
+                      <td>
+                        <div class="cell">
+                          <span>{{ compareInfo.id}}</span>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><div class="cell">操作用户</div></td>
+                      <td>
+                        <div class="cell">
+                          <span>{{ compareInfo.userName+'  (ID:'+compareInfo.userId +')'}}</span>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><div class="cell">操作时间</div></td>
+                      <td>
+                        <div class="cell">
+                          <span>{{ compareInfo.occurTime}}</span>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><div class="cell">请求IP</div></td>
+                      <td>
+                        <div class="cell">
+                          <span>{{ compareInfo.ipAddress}}</span>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </el-collapse-item>
+          </el-collapse>
         </el-card>
       </el-col>
     </el-row>
@@ -109,6 +197,7 @@ export default {
   },
   data() {
     return {
+      activeNames: ['0'],
       cdLoading:false,
       loading:false,
       //被操作对象的主键
@@ -117,9 +206,9 @@ export default {
       dbData:[],
       currentData:[],
       compareData:[],
-      dbInfo:'数据库最新快照',
-      currentInfo:'',
-      compareInfo:'',
+      dbInfo:{},
+      currentInfo:{},
+      compareInfo:{},
       // 查询参数
       queryParams: {
         currentCompareId:undefined,
@@ -205,6 +294,7 @@ export default {
           //设置初始比较值
           this.queryParams.currentCompareId = response.currentData.id;
           this.currentInfo=this.genOperInfo(response.currentData);
+          this.compareInfo=this.genOperInfo(response.compareData);
         }
       );
     },
@@ -244,11 +334,17 @@ export default {
     //操作描述
     genOperInfo(log){
       if(log==null){
-        return null;
+        return {};
       }else{
-        return '操作人:'+log.userName
-            +',时间:'+log.occurStartTime
-            +',操作:'+log.systemFunction.name+',操作ID:'+log.id;
+        const info={
+          id:log.id,
+          userId:log.userId,
+          userName:log.userName,
+          funcName:log.systemFunction.name,
+          occurTime:log.occurEndTime,
+          ipAddress:log.ipAddress
+        }
+        return info;
       }
     }
   }

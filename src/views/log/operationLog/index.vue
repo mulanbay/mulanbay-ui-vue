@@ -149,17 +149,12 @@
            <span v-else>--</span>
         </template>
       </el-table-column>
-      <el-table-column label="请求开始时间" align="center" width="180">
+      <el-table-column label="请求时间" align="center" width="180">
         <template slot-scope="{row}">
           <span>{{ row.occurStartTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="请求结束时间" align="center" width="180">
-        <template slot-scope="{row}">
-          <span>{{ row.occurEndTime }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="请求处理时间" align="center" width="160">
+      <el-table-column label="处理时间" align="center" width="120">
         <template slot-scope="{row}">
           <span v-if="row.handleDuration>=1000" style="color: red;">
            {{ (row.handleDuration/1000).toFixed(1) }}秒
