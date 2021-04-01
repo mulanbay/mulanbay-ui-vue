@@ -55,49 +55,26 @@
     </el-form>
 
   <!--图表数据-->
-  <div :id="id" :class="className" :style="{height:height,width:width,margin:0 }" />
+  <div>
+    <common-chart :chartData="chartData"/>
   </div>
 
+</div>
 </template>
 
 <script>
   import {getAccountTree} from "@/api/fund/account";
   import {getAccountFlowAnalyse} from "@/api/fund/accountFlow";
-  import {chartProps,createChart} from "@/utils/echarts";
   import {getQueryObject} from "@/utils/index";
-  import * as echarts from 'echarts';
-  import resize from '../../dashboard/mixins/resize.js'
+  import CommonChart from '../../chart/commonChart'
 
 export default {
   name: "AccountFlowAnalyse",
-  mixins: [resize],
-  props: {
-    className: {
-      type: String,
-      default: 'chart'
-    },
-    id: {
-      type: String,
-      default: 'chart'
-    },
-    width: {
-      type: String,
-      default: '100%'
-    },
-    height: {
-      type: String,
-      default: (document.body.clientHeight - 200).toString() + 'px'
-    },
+  components: {
+    'common-chart':CommonChart
   },
   mounted() {
      //this.initChart();
-  },
-  beforeDestroy() {
-    if (!this.chart) {
-        return
-    }
-    this.chart.dispose()
-    this.chart = null;
   },
   data() {
     return {
@@ -105,7 +82,8 @@ export default {
       loading: [],
       //加载层配置
       loadingOptions:this.loadingOptions,
-      chart: null,
+      //图表数据
+      chartData:{},
       //账户列表
       accountOptions:[],
       //数据方式
@@ -168,85 +146,8 @@ export default {
       getAccountFlowAnalyse(this.addDateRange(this.queryParams, this.dateRange)).then(
         response => {
           //组装chart数据
-          if(this.chart==null){
-            this.chart = echarts.init(document.getElementById(this.id));
-          }
-          let data = response;
-          let option = {
-            title: {
-              text: data.title,
-              subtext: data.subTitle,
-              x: 'center'
-            },
-            tooltip: {
-              trigger: 'axis'
-            },
-            legend: {
-              data: data.legendData,
-              orient: 'horizontal',
-              x: 'center',
-              y: 'bottom'
-            },
-            grid: {//四周的宽度
-              left: '2%',
-              right: '3%',
-              bottom: '5%',
-              containLabel: true
-            },
-            toolbox: {
-              show: true,
-              feature: {
-                dataZoom: {
-                  yAxisIndex: 'none'
-                },
-                dataView: {readOnly: false},
-                magicType: {type: ['line', 'bar']},
-                restore: {},
-                saveAsImage: {}
-              }
-            },
-            xAxis: {
-              type: 'category',
-              boundaryGap: false,
-              data: data.xdata
-            },
-            yAxis: {
-              type: 'value',
-              axisLabel: {
-                formatter: '{value} '+data.unit
-              }
-            },
-            series: [
-              {
-                name: data.legendData[0],
-                type: 'line',
-                data: data.ydata[0].data,
-                markPoint: {
-                  data: [
-                      {type: 'max', name: '最大值'},
-                      {type: 'min', name: '最小值'}
-                  ]
-                }
-              },
-              {
-                name: data.legendData[1],
-                type: 'line',
-                data: data.ydata[1].data,
-                markPoint: {
-                  data: [
-                      {type: 'max', name: '最大值'},
-                      {type: 'min', name: '最小值'}
-                  ]
-                },
-                markLine: {
-                  data: [
-                      {type: 'average', name: '平均值'}
-                  ]
-                }
-              }
-            ]
-          };
-          createChart(option,this.chart);
+          response.chartType='MIX_LINE_BAR';
+          this.chartData = response;
           this.loading.close();
         }
       );
