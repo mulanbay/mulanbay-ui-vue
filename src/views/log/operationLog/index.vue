@@ -88,7 +88,7 @@
         <el-button type="stat" icon="el-icon-s-data" size="mini" @click="handleDispatch('OperationLogTreeStat')" v-hasPermi="['log:operationLog:treeStat']">树形统计</el-button>
         <el-button type="stat" icon="el-icon-s-data" size="mini" @click="handleDispatch('OperationLogStat')" v-hasPermi="['log:operationLog:stat']">分页统计</el-button>
         <el-button type="stat" icon="el-icon-s-data" size="mini" @click="handleDispatch('OperationLogDateStat')" v-hasPermi="['log:operationLog:dateStat']">分时统计</el-button>
-        <el-button type="stat" icon="el-icon-s-data" size="mini" @click="handleDispatch('OperationLogFlow')" v-hasPermi="['log:operationLog:flow']">日志流水</el-button>
+        <el-button type="query" icon="el-icon-s-operation" size="mini" @click="handleDispatch('OperationLogFlow')" v-hasPermi="['log:operationLog:flow']">日志流水</el-button>
 
       </el-form-item>
     </el-form>
