@@ -83,15 +83,29 @@
         <el-button type="query" icon="el-icon-search" size="mini" @click="handleQuery" v-hasPermi="['log:operationLog:query']">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
         <el-button type="primary" icon="el-icon-more" size="mini" @click="handleMoreCdn">{{cdnTitle}}</el-button>
-        <el-button type="query" icon="el-icon-s-tools" size="mini" @click="handleSetFunctionId" v-hasPermi="['log:operationLog:setFunctionId']">关联功能点</el-button>
-        <el-button type="query" icon="el-icon-s-tools" size="mini" @click="setIdValue" v-hasPermi="['log:operationLog:setIdValue']">设置主键值</el-button>
-        <el-button type="stat" icon="el-icon-s-data" size="mini" @click="handleDispatch('OperationLogTreeStat')" v-hasPermi="['log:operationLog:treeStat']">树形统计</el-button>
-        <el-button type="stat" icon="el-icon-s-data" size="mini" @click="handleDispatch('OperationLogStat')" v-hasPermi="['log:operationLog:stat']">分页统计</el-button>
-        <el-button type="stat" icon="el-icon-s-data" size="mini" @click="handleDispatch('OperationLogDateStat')" v-hasPermi="['log:operationLog:dateStat']">分时统计</el-button>
-        <el-button type="query" icon="el-icon-s-operation" size="mini" @click="handleDispatch('OperationLogFlow')" v-hasPermi="['log:operationLog:flow']">日志流水</el-button>
-
       </el-form-item>
     </el-form>
+
+    <el-row :gutter="10" class="mb8">
+      <el-col :span="1.5">
+        <el-button type="query" icon="el-icon-s-tools" size="mini" @click="handleSetFunctionId" v-hasPermi="['log:operationLog:setFunctionId']">关联功能点</el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button type="query" icon="el-icon-s-tools" size="mini" @click="setIdValue" v-hasPermi="['log:operationLog:setIdValue']">设置主键值</el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button type="stat" icon="el-icon-s-data" size="mini" @click="handleDispatch('OperationLogTreeStat')" v-hasPermi="['log:operationLog:treeStat']">树形统计</el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button type="stat" icon="el-icon-s-data" size="mini" @click="handleDispatch('OperationLogStat')" v-hasPermi="['log:operationLog:stat']">分页统计</el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button type="stat" icon="el-icon-s-data" size="mini" @click="handleDispatch('OperationLogDateStat')" v-hasPermi="['log:operationLog:dateStat']">分时统计</el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button type="query" icon="el-icon-s-operation" size="mini" @click="handleDispatch('OperationLogFlow')" v-hasPermi="['log:operationLog:flow']">日志流水</el-button>
+      </el-col>
+    </el-row>
 
     <!--列表数据-->
     <el-table v-loading="loading" :data="operationLogList" @selection-change="handleSelectionChange">
