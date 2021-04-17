@@ -91,7 +91,7 @@
       <el-col :span="1.5">
         <el-button
           type="primary"
-          icon="el-icon-s-tools"
+          icon="el-icon-thumb"
           size="mini"
           @click="handleManualNew"
           v-hasPermi="['schedule:taskTrigger:manualNew']"
@@ -100,7 +100,7 @@
       <el-col :span="1.5">
         <el-button
           type="primary"
-          icon="el-icon-s-tools"
+          icon="el-icon-refresh"
           size="mini"
           @click="handleRefreshSchedule"
           v-hasPermi="['schedule:taskTrigger:refreshSchedule']"
@@ -118,7 +118,7 @@
       <el-col :span="1.5">
         <el-button
           type="primary"
-          icon="el-icon-info"
+          icon="el-icon-timer"
           size="mini"
           @click="handleRecentSchedules"
           v-hasPermi="['schedule:taskTrigger:recentSchedules']"
@@ -479,7 +479,7 @@
           <el-col :span="24">
             <el-form-item label="调度参数" prop="triggerParas">
              <el-input v-model="form.triggerParas" style="width: 495px;" disabled placeholder="" />
-             <el-button type="query" icon="el-icon-search" size="mini" @click="handleParasEdit" v-hasPermi="['schedule:taskTrigger:query']">编辑</el-button>
+             <el-button type="query" icon="el-icon-edit" size="mini" @click="handleParasEdit" v-hasPermi="['schedule:taskTrigger:query']">编辑</el-button>
             </el-form-item>
           </el-col>
         </el-row>
@@ -487,7 +487,7 @@
           <el-col :span="24">
             <el-form-item label="执行时间段" prop="execTimePeriods">
              <el-input v-model="form.execTimePeriods" style="width: 495px;" disabled placeholder="" />
-             <el-button type="query" icon="el-icon-search" size="mini" @click="handleExecTimeEdit" v-hasPermi="['schedule:taskTrigger:query']">编辑</el-button>
+             <el-button type="query" icon="el-icon-edit" size="mini" @click="handleExecTimeEdit" v-hasPermi="['schedule:taskTrigger:query']">编辑</el-button>
             </el-form-item>
           </el-col>
         </el-row>
