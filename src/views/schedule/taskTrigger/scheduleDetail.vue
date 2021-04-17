@@ -4,51 +4,77 @@
     <!--调度比较数据-->
     <el-row>
       <el-col :span="24" align="center" style="font-weight:bold;font-size: 16px;color:#6495ED;">
-        <i class="el-icon-user-solid" />调度信息：{{ scheduleInfo }}<br><br>
+        <div class="el-table el-table--enable-row-hover el-table--medium">
+          <table cellspacing="0" style="width: 100%;">
+            <tbody>
+              <tr>
+                <td><div class="cell"><i class="el-icon-info"></i>加入调度器时间</div></td>
+                <td>
+                  <div class="cell">
+                    <span class="table-title">{{ scheduleInfo.addToScheduleTime }}</span>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><div class="cell"><i class="el-icon-info"></i>调度状态</div></td>
+                <td>
+                  <div class="cell">
+                    <span class="table-title">{{ scheduleInfo.statusInfo }}</span>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </el-col>
     </el-row>
     <el-row>
-      <el-col :span="12" align="center" style="font-weight:bold;font-size: 14px;color:	#778899;" >
-        <i class="el-icon-info" />数据库中最新内容
-      </el-col>
-      <el-col :span="12"  align="center" style="font-weight:bold;font-size: 14px;color:	#778899;">
-        <i class="el-icon-info" />调度服务器中内容
-      </el-col>
+      <!--数据-->
+      <div style="padding: 0px 20px 0px 20px;">
+        <el-steps>
+          <el-step title="数据库中数据" status="finish" icon="el-icon-edit"></el-step>
+          <el-step title="调度服务器中数据" status="finish" icon="el-icon-upload"></el-step>
+        </el-steps>
+      </div>
     </el-row>
     <el-row>
       <el-col :span="12">
-        <el-table
-          :data="dbData"
-          row-key="id"
-          :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
-          <el-table-column label="字段" align="center">
-            <template slot-scope="{row}">
-              <span>{{ row.id }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="值"  :show-overflow-tooltip="true">
-            <template slot-scope="{row}">
-              <span>{{ row.text }}</span>
-            </template>
-          </el-table-column>
-        </el-table>
+        <el-card>
+          <el-table
+            :data="dbData"
+            row-key="id"
+            :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
+            <el-table-column label="字段" align="center">
+              <template slot-scope="{row}">
+                <span>{{ row.id }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="值"  :show-overflow-tooltip="true">
+              <template slot-scope="{row}">
+                <span>{{ row.text }}</span>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-card>
       </el-col>
       <el-col :span="12">
-        <el-table
-          :data="scheduleData"
-          row-key="id"
-          :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
-          <el-table-column label="字段" align="center">
-            <template slot-scope="{row}">
-              <span>{{ row.id }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="值"  :show-overflow-tooltip="true">
-            <template slot-scope="{row}">
-              <span>{{ row.text }}</span>
-            </template>
-          </el-table-column>
-        </el-table>
+        <el-card>
+          <el-table
+            :data="scheduleData"
+            row-key="id"
+            :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
+            <el-table-column label="字段" align="center">
+              <template slot-scope="{row}">
+                <span>{{ row.id }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="值"  :show-overflow-tooltip="true">
+              <template slot-scope="{row}">
+                <span>{{ row.text }}</span>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-card>
       </el-col>
     </el-row>
 
@@ -73,7 +99,7 @@ export default {
         children: "children",
         label: "text"
       },
-      scheduleInfo:'',
+      scheduleInfo:{},
       //数据库里面的数据
       dbData:[],
       //调度服务器里的数据
@@ -97,13 +123,16 @@ export default {
         this.dbData = parseJsonToTree(response.dbInfo);
         //console.log(JSON.stringify(this.dbData));
         this.scheduleData = parseJsonToTree(response.scheduleInfo);
-        let ss ='加入调度器时间:'+response.addToScheduleTime+",当前状态:";
+        let ss ='';
         if(response.isExecuting!=null&&response.isExecuting==true){
           ss+='正在运行中';
         }else{
           ss+='未运行';
         }
-        this.scheduleInfo = ss;
+        this.scheduleInfo = {
+          addToScheduleTime:response.addToScheduleTime,
+          statusInfo:ss
+        };
       });
     }
   }
