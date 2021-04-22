@@ -498,6 +498,7 @@
               <el-switch
                 v-model="showSold">
               </el-switch>
+              <span class="link-type" @click="msgAlert('提示','选填，比如某件衣服2019-01-01买的，在2019-10-10扔掉，此处可以填写2019-10-10。为了计算商品的使用寿命')"><i class="el-icon-question" /></span>
             </el-form-item>
           </el-col>
         </el-row>
