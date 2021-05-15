@@ -631,7 +631,7 @@ export default {
     /** 进度 */
     formatPercent(row){
       let pp = getPercent(row.cpPaidAmount,row.amount);
-      return parseInt(pp.toFixed(0));
+      return pp==null ? 0:parseInt(pp.toFixed(0));
     },
     //统计
     handleStat(){
