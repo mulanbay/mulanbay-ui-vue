@@ -169,7 +169,7 @@ export default {
       queryParams: {
         page: 1,
         pageSize: 10,
-        sortType:'asc'
+        sortType:'desc'
       },
       // 总条数
       total: 0,
@@ -250,6 +250,9 @@ export default {
     handleTillNow(row){
       let days = tillNowDays(null,row.date);
       let ss = formatDays(0-days);
+      if(days>0){
+        ss+='('+days+'天)';
+      }
       this.msgAlert('距离现在',ss);
     },
     /** 查询列表 */
