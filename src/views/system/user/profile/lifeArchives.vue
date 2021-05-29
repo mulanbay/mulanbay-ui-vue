@@ -250,8 +250,8 @@ export default {
     handleTillNow(row){
       let days = tillNowDays(null,row.date);
       let ss = formatDays(0-days);
-      if(days!=0){
-        ss+='('+days+'天)';
+      if(days<-30){
+        ss+='('+(0-days).toFixed(0)+'天)';
       }
       this.msgAlert('距离现在',ss);
     },
