@@ -226,14 +226,17 @@
         </el-form-item>
         <el-form-item label="锻炼值" prop="kilometres">
           <el-input-number v-model="form.kilometres" controls-position="right" :min="0" :controls="true" :precision="2"/>
-          <span>{{ sportTypeUnit }}</span>
+          {{ sportTypeUnit }}
+          <span class="link-type" @click="msgAlert('提示','达到该里程碑需要锻炼值大于等于该值。')"><i class="el-icon-question" /></span>
         </el-form-item>
         <el-form-item label="锻炼时长" prop="minutes">
           <el-input-number v-model="form.minutes" controls-position="right" :min="0" :controls="true" :precision="0"/>
           分钟
+          <span class="link-type" @click="msgAlert('提示','时长如果大于等于0，那么达到该里程碑需要锻炼时长小于等于该值。')"><i class="el-icon-question" /></span>
         </el-form-item>
         <el-form-item label="顺序" prop="orderIndex">
           <el-input-number v-model="form.orderIndex" controls-position="right" :min="0" :controls="true" :precision="0"/>
+          <span class="link-type" @click="msgAlert('提示','对于某一个里程碑，排序号需要连续，从1开始。')"><i class="el-icon-question" /></span>
         </el-form-item>
         <el-form-item label="备注">
           <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"></el-input>
