@@ -235,7 +235,7 @@
           <span class="link-type" @click="msgAlert('提示','时长如果大于等于0，那么达到该里程碑需要锻炼时长小于等于该值。')"><i class="el-icon-question" /></span>
         </el-form-item>
         <el-form-item label="顺序" prop="orderIndex">
-          <el-input-number v-model="form.orderIndex" controls-position="right" :min="0" :controls="true" :precision="0"/>
+          <el-input-number v-model="form.orderIndex" controls-position="right" :min="0" :controls="true" :precision="0" disabled="true"/>
           <span class="link-type" @click="msgAlert('提示','对于某一个里程碑，排序号需要连续，从1开始。')"><i class="el-icon-question" /></span>
         </el-form-item>
         <el-form-item label="备注">
@@ -317,9 +317,6 @@ export default {
         ],
         minutes: [
           { required: true, message: "锻炼时长不能为空", trigger: "blur" }
-        ],
-        orderIndex: [
-          { required: true, message: "排序号不能为空", trigger: "blur" }
         ],
         sportTypeId: [
           { required: true, message: "运动类型不能为空", trigger: "blur" }
