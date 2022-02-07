@@ -531,13 +531,13 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="药品费用" prop="drugFee">
-              <el-input-number v-model="form.drugFee" :style="{width: '90%'}" placeholder="单位:元" controls-position="right" :min="0" :controls="false" :precision="2"/>
+              <el-input-number v-model="form.drugFee" :style="{width: '90%'}" placeholder="单位:元" controls-position="right" :min="0" :controls="false" :precision="2" :disabled="feeReadOnly"/>
               元
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="手术/治疗费用" prop="operationFee">
-              <el-input-number v-model="form.operationFee" :style="{width: '90%'}" placeholder="单位:元" controls-position="right" :min="0" :controls="false" :precision="2"/>
+              <el-input-number v-model="form.operationFee" :style="{width: '90%'}" placeholder="单位:元" controls-position="right" :min="0" :controls="false" :precision="2" :disabled="feeReadOnly"/>
               元
             </el-form-item>
           </el-col>
@@ -545,13 +545,13 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="挂号费用" prop="registeredFee">
-              <el-input-number v-model="form.registeredFee" :style="{width: '90%'}" placeholder="单位:元" controls-position="right" :min="0" :controls="false" :precision="2"/>
+              <el-input-number v-model="form.registeredFee" :style="{width: '90%'}" placeholder="单位:元" controls-position="right" :min="0" :controls="false" :precision="2" :disabled="feeReadOnly"/>
               元
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="其他费用" prop="otherFee">
-              <el-input-number v-model="form.otherFee" :style="{width: '90%'}" placeholder="单位:元" controls-position="right" :min="0" :controls="false" :precision="2"/>
+              <el-input-number v-model="form.otherFee" :style="{width: '90%'}" placeholder="单位:元" controls-position="right" :min="0" :controls="false" :precision="2" :disabled="feeReadOnly"/>
               元
             </el-form-item>
           </el-col>
@@ -563,13 +563,13 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="个人支付" prop="personalPaidFee">
-              <el-input-number v-model="form.personalPaidFee" @change="calTotalFee" :style="{width: '90%'}" placeholder="单位:元" controls-position="right" :min="0" :controls="false" :precision="2"/>
+              <el-input-number v-model="form.personalPaidFee" @change="calTotalFee" :style="{width: '90%'}" placeholder="单位:元" controls-position="right" :min="0" :controls="false" :precision="2" :disabled="feeReadOnly"/>
               元
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="医保花费" prop="medicalInsurancePaidFee">
-              <el-input-number v-model="form.medicalInsurancePaidFee" @change="calTotalFee" :style="{width: '90%'}" placeholder="单位:元" controls-position="right" :min="0" :controls="false" :precision="2"/>
+              <el-input-number v-model="form.medicalInsurancePaidFee" @change="calTotalFee" :style="{width: '90%'}" placeholder="单位:元" controls-position="right" :min="0" :controls="false" :precision="2" :disabled="feeReadOnly"/>
               元
             </el-form-item>
           </el-col>
@@ -577,7 +577,7 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="总共花费" prop="totalFee">
-              <el-input-number v-model="form.totalFee" :style="{width: '90%'}" placeholder="单位:元" controls-position="right" :min="0" :controls="false" :precision="2"/>
+              <el-input-number v-model="form.totalFee" :style="{width: '90%'}" placeholder="单位:元" controls-position="right" :min="0" :controls="false" :precision="2" :disabled="feeReadOnly"/>
               元
             </el-form-item>
           </el-col>
@@ -679,6 +679,8 @@ export default {
       chooseTag:undefined,
       // 表单参数
       form: {},
+      //费用是否只读
+      feeReadOnly:false,
       defaultProps: {
         children: "children",
         label: "label"
@@ -732,6 +734,7 @@ export default {
     /** 费用信息 */
     showFee(){
       this.feeOpen=true;
+      this.feeReadOnly = false;
     },
     closeFee(){
       this.feeOpen=false;
@@ -744,6 +747,7 @@ export default {
     showFeeDetail(row){
       this.feeOpen=true;
       this.form = row;
+      this.feeReadOnly = true;
     },
     /** 同步档案 */
     handleLifeArchives(){
