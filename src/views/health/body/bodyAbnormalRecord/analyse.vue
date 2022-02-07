@@ -126,7 +126,12 @@
         <el-table-column label="最近一次看病是否有病" align="center"  width="110">
           <template slot-scope="{row}">
             <span v-if="row.treatRecordStat.maxTreatRecord!=null">
-             <el-switch v-model="row.treatRecordStat.maxTreatRecord.isSick" disabled=""></el-switch>
+              <span v-if="row.treatRecordStat.maxTreatRecord.isSick==true" style="color: red;">
+               是
+              </span>
+              <span v-else style="color: green;">
+               否
+              </span>
             </span>
             <span v-else>--</span>
           </template>
@@ -172,7 +177,12 @@
         <el-table-column label="最早一次看病是否有病" align="center" width="110">
           <template slot-scope="{row}">
             <span v-if="row.treatRecordStat.minTreatRecord!=null">
-             <el-switch v-model="row.treatRecordStat.minTreatRecord.isSick" disabled=""></el-switch>
+              <span v-if="row.treatRecordStat.minTreatRecord.isSick==true" style="color: red;">
+               是
+              </span>
+              <span v-else style="color: green;">
+               否
+              </span>
             </span>
             <span v-else>--</span>
           </template>

@@ -202,7 +202,12 @@
       </el-table-column>
       <el-table-column label="是否有病" align="center" width="100">
         <template slot-scope="{row}">
-          <el-switch v-model="row.isSick" disabled=""></el-switch>
+          <span v-if="row.isSick==true" style="color: red;">
+           是
+          </span>
+          <span v-else style="color: green;">
+           否
+          </span>
         </template>
       </el-table-column>
       <el-table-column label="看病日期" width="110" :show-overflow-tooltip="true">

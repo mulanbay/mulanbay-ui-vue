@@ -237,7 +237,12 @@
       </el-table-column>
       <el-table-column label="是否有效" align="center" width="100">
         <template slot-scope="{row}">
-          <el-switch v-model="row.available" disabled=""></el-switch>
+          <span v-if="row.available==true" style="color: green;">
+           <i class="el-icon-success" />
+          </span>
+          <span v-else style="color: red;">
+           <i class="el-icon-error" />
+          </span>
         </template>
       </el-table-column>
       <el-table-column label="提醒" align="center" width="100">
