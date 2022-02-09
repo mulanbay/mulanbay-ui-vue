@@ -514,7 +514,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="时间偏移量" prop="offsetDays">
-              <el-input-number v-model="form.offsetDays" placeholder="" controls-position="right" :min="0" :controls="false" :precision="0" />
+              <el-input-number v-model="form.offsetDays" placeholder="" controls-position="right" :controls="false" :precision="0" />
               天
             </el-form-item>
           </el-col>
