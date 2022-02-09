@@ -121,6 +121,9 @@
           />
         </el-select>
       </el-form-item>
+      <el-form-item label="忽略短语" prop="ignoreShort">
+        <el-switch v-model="queryParams.ignoreShort"  @change="handleQuery"></el-switch>
+      </el-form-item>
       <el-form-item>
         <el-button type="stat" icon="el-icon-s-data" size="mini" @click="handleQuery" v-hasPermi="['consume:buyRecord:wordCloudStat']">统计</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -181,6 +184,7 @@ export default {
       queryParams: {
         name: undefined,
         field:'goodsName',
+        ignoreShort:true,
         picWidth:screen.width-250,
         picHeight:screen.height-300
       }
