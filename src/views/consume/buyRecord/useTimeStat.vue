@@ -138,7 +138,7 @@
           <span>{{ row.deleteDate }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="使用时长" :show-overflow-tooltip="true" width="95">
+      <el-table-column label="使用时长" :show-overflow-tooltip="true" width="120">
         <template slot-scope="{row}">
           <span :style="{'color':getDaysColor(row.days)}">{{ formatUseDuration(row) }}</span>
         </template>
@@ -168,9 +168,11 @@
           <span>{{ formatDailyCost(row) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="是否二手" align="center" width="100">
+      <el-table-column label="二手" align="center" width="60">
         <template slot-scope="{row}">
-          <el-switch v-model="row.secondhand"  disabled></el-switch>
+          <span v-if="row.secondhand==true" style="color: green;">
+           <i class="el-icon-success" />
+          </span>
         </template>
       </el-table-column>
     </el-table>

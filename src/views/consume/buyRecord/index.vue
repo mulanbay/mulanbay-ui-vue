@@ -300,9 +300,11 @@
           <span>{{ row.consumeDate }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="二手" align="center" width="100">
+      <el-table-column label="二手" align="center" width="60">
         <template slot-scope="{row}">
-          <el-switch v-model="row.secondhand" disabled ></el-switch>
+          <span v-if="row.secondhand==true" style="color: green;">
+           <i class="el-icon-success" />
+          </span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" fixed="right" width="150" class-name="small-padding fixed-width">

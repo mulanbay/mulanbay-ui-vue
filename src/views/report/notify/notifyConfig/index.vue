@@ -144,7 +144,9 @@
       </el-table-column>
       <el-table-column label="绑定用户" align="center" width="95">
         <template slot-scope="{row}">
-          <el-switch v-model="row.userBand" disabled=""></el-switch>
+          <span v-if="row.userField!=null" style="color: green;">
+           <i class="el-icon-success" />
+          </span>
         </template>
       </el-table-column>
       <el-table-column label="创建时间" align="center"  width="180">
