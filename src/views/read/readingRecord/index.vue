@@ -290,6 +290,7 @@
                 clearable
                 size="medium"
                 style="width: 220px"
+                @change="handleBookCategoryChange"
               >
                 <el-option
                   v-for="dict in bookCategoryOptions"
@@ -556,6 +557,10 @@ export default {
       getBookCategoryTree(false).then(response => {
         this.bookCategoryOptions = response;
       });
+    },
+    /** 图书分类变化 */
+    handleBookCategoryChange(){
+      this.$forceUpdate();
     },
     /** 明细列表 */
     handleDetailList(row){

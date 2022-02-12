@@ -219,6 +219,7 @@
                clearable
                size="small"
                style="width: 240px"
+               @change="handleMusicInstrumentChange"
              >
                <el-option
                  v-for="dict in musicInstrumentOptions"
@@ -557,6 +558,10 @@ export default {
       getMusicInstrumentTree(false).then(response => {
         this.musicInstrumentOptions = response;
       });
+    },
+    /** 乐器变化 */
+    handleMusicInstrumentChange(){
+      this.$forceUpdate();
     },
     /** 查询曲子下拉树结构 */
     getMusicPracticeTuneTreeselect() {
