@@ -101,7 +101,7 @@
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="公司" align="center" width="120">
+      <el-table-column label="公司" align="center">
         <template slot-scope="{row}">
           <span>{{ row.company.name }}</span>
         </template>
@@ -165,6 +165,7 @@
             clearable
             size="medium"
             :style="{width: '100%'}"
+            @change="handleCompanyChange"
           >
             <el-option
               v-for="dict in companyOptions"
@@ -282,6 +283,10 @@ export default {
       getCompanyTree(false).then(response => {
         this.companyOptions = response;
       });
+    },
+    /** 公司变化 */
+    handleCompanyChange(){
+      this.$forceUpdate();
     },
     formatWorkDays(days){
       return formatDays(days);
