@@ -363,7 +363,7 @@
         <el-row v-if="form.id == null&&form.tmpPlanConfigId != null" >
           <el-col :span="24">
             <el-form-item label="附加选项" prop="copyItems">
-              <el-checkbox v-model="form.copyItems">同时复制配置项</el-checkbox>
+              <el-checkbox v-model="form.copyItems" @change="changeCopyItems()">同时复制配置项</el-checkbox>
               <span class="link-type" @click="msgAlert('提示','勾选则新增时同时复制模板的配置项列表')"><i class="el-icon-question" /></span>
             </el-form-item>
           </el-col>
@@ -513,6 +513,10 @@ export default {
         this.form.tmpPlanConfigId=newVal;
         this.form.copyItems=true;
       });
+    },
+    /** 配置项选择状态修改 */
+    changeCopyItems(){
+      this.$forceUpdate();
     },
     /** 查询搜索条件中的模板下拉树结构 */
     getPlanConfigOptionsTreeselect() {
