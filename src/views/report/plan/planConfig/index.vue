@@ -360,6 +360,14 @@
             </el-form-item>
           </el-col>
         </el-row>
+        <el-row v-if="form.id == null&&form.tmpPlanConfigId != null" >
+          <el-col :span="24">
+            <el-form-item label="附加选项" prop="copyItems">
+              <el-checkbox v-model="form.copyItems">同时复制配置项</el-checkbox>
+              <span class="link-type" @click="msgAlert('提示','勾选则新增时同时复制模板的配置项列表')"><i class="el-icon-question" /></span>
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -503,6 +511,7 @@ export default {
         this.form = response;
         //不重新设置会导致树形选择框不显示
         this.form.tmpPlanConfigId=newVal;
+        this.form.copyItems=true;
       });
     },
     /** 查询搜索条件中的模板下拉树结构 */
@@ -563,7 +572,9 @@ export default {
         level:3,
         rewardPoint:0,
         orderIndex :1,
-        url:undefined
+        url:undefined,
+        tmpPlanConfigId:undefined,
+        copyItems:true
       };
       this.resetForm("form");
     },
