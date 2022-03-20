@@ -692,7 +692,7 @@ export default {
       getSystemFunction(id).then(response => {
         this.form = response;
         this.open = true;
-        this.title = "修改";
+        this.title = "修改(ID:"+id+")";
         //设置oldPid
         this.oldPid = this.form.parentId;
       });
