@@ -527,7 +527,7 @@
     <el-dialog title="费用信息" width="700px" :visible.sync="feeOpen">
       <el-form ref="form" :model="form" :rules="rules" label-width="120px">
         <el-card>
-          <div slot="header" align="center"><span>分项费用明细</span></div>
+          <div slot="header" align="center"><span>分项费用明细(原始费用)</span></div>
         <el-row>
           <el-col :span="12">
             <el-form-item label="药品费用" prop="drugFee">
@@ -562,22 +562,22 @@
           <div slot="header" align="center"><span>支付详情</span></div>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="个人支付" prop="personalPaidFee">
-              <el-input-number v-model="form.personalPaidFee" @change="calTotalFee" :style="{width: '90%'}" placeholder="单位:元" controls-position="right" :min="0" :controls="false" :precision="2" :disabled="feeReadOnly"/>
+            <el-form-item label="总共花费" prop="totalFee">
+              <el-input-number v-model="form.totalFee" @change="calMIPFee"  :style="{width: '90%'}" placeholder="单位:元" controls-position="right" :min="0" :controls="false" :precision="2" :disabled="feeReadOnly"/>
               元
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="医保花费" prop="medicalInsurancePaidFee">
-              <el-input-number v-model="form.medicalInsurancePaidFee" @change="calTotalFee" :style="{width: '90%'}" placeholder="单位:元" controls-position="right" :min="0" :controls="false" :precision="2" :disabled="feeReadOnly"/>
+            <el-form-item label="个人支付" prop="personalPaidFee">
+              <el-input-number v-model="form.personalPaidFee" @change="calMIPFee" :style="{width: '90%'}" placeholder="单位:元" controls-position="right" :min="0" :controls="false" :precision="2" :disabled="feeReadOnly"/>
               元
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="总共花费" prop="totalFee">
-              <el-input-number v-model="form.totalFee" :style="{width: '90%'}" placeholder="单位:元" controls-position="right" :min="0" :controls="false" :precision="2" :disabled="feeReadOnly"/>
+            <el-form-item label="医保花费" prop="medicalInsurancePaidFee">
+              <el-input-number v-model="form.medicalInsurancePaidFee" :style="{width: '90%'}" placeholder="单位:元" controls-position="right" :min="0" :controls="false" :precision="2" :disabled="feeReadOnly"/>
               元
             </el-form-item>
           </el-col>
@@ -739,9 +739,9 @@ export default {
     closeFee(){
       this.feeOpen=false;
     },
-    /** 计算总费用 */
-    calTotalFee(){
-      this.form.totalFee=this.form.personalPaidFee+this.form.medicalInsurancePaidFee;
+    /** 计算医保费用 */
+    calMIPFee(){
+      this.form.medicalInsurancePaidFee=this.form.totalFee-this.form.personalPaidFee;
     },
     /** 显示费用详情 */
     showFeeDetail(row){
