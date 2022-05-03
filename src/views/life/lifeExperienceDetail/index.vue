@@ -533,11 +533,11 @@ export default {
       this.form = {
         id: undefined,
         country: '中国',
+        countryLocation: '116.266206,41.034901',
         mapStat:true,
         international:false,
         scLocation:undefined,
-        acLocation:undefined,
-        countryLocation:undefined
+        acLocation:undefined
       };
       this.resetForm("form");
     },
