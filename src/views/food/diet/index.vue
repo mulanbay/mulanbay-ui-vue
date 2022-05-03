@@ -546,9 +546,6 @@ export default {
         dietSource: [
           { required: true, message: "来源不能为空", trigger: "blur" }
         ],
-        foods: [
-          { required: true, message: "食物不能为空", trigger: "blur" }
-        ],
         foodType: [
           { required: true, message: "食物类型不能为空", trigger: "blur" }
         ],
