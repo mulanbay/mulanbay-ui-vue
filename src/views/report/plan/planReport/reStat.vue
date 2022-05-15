@@ -2,20 +2,22 @@
   <div class="app-container">
     <el-form ref="form" :model="form" :rules="rules" label-width="150px">
       <el-form-item label="数据比对规则" prop="reStatCompareType">
-        <el-radio-group v-model="form.reStatCompareType">
-          <el-radio label="ORIGINAL">原始数据&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</el-radio>
-          <el-radio label="ORIGINAL_LATEST">当年最新数据</el-radio>
-          <el-radio label="LATEST">目前最新数据</el-radio>
-          <el-radio label="SPECIFY">手动指定年份</el-radio>
-        </el-radio-group>
+        <el-select v-model="form.reStatCompareType" style="width: 240px" placeholder="请选择">
+          <el-option
+            v-for="dict in reStatCompareTypeOptions"
+            :key="dict.id"
+            :label="dict.text"
+            :value="dict.id"
+          />
+        </el-select>
       </el-form-item>
-      <el-form-item v-if="form.reStatCompareType == 'SPECIFY'" label="数据参考年份" prop="year">
+      <el-form-item v-if="form.reStatCompareType == 'SPECIFY'" label="数据参考年份"  prop="year">
         <el-date-picker
           v-model="form.year"
           type="year"
           format="yyyy"
           value-format="yyyy"
-          style="width: 180px"
+          style="width: 240px"
           placeholder="选择年">
         </el-date-picker>
       </el-form-item>
@@ -41,6 +43,24 @@ export default {
   data() {
     return {
       form:{},
+      reStatCompareTypeOptions:[
+        {
+          id: 'ORIGINAL',
+          text: '原始数据'
+        },
+        {
+          id: 'ORIGINAL_LATEST',
+          text: '当年最新数据'
+        },
+        {
+          id: 'LATEST',
+          text: '目前最新数据'
+        },
+        {
+          id: 'SPECIFY',
+          text: '手动指定年份'
+        }
+      ],
       rules:{
         reStatCompareType: [
           { required: true, message: "数据比对规则不能为空", trigger: "blur" }
