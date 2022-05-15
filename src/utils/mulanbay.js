@@ -146,6 +146,14 @@ export function formatMoney(pp) {
   return '￥' + pp.toFixed(2);
 }
 
+// 浮点类型格式化
+export function formatFloat(pp,n) {
+  if (pp == null) {
+    return '--';
+  }
+  return pp.toFixed(n);
+}
+
 // 判断是否为空
 export function isObjectEmpty(o) {
   if (o === undefined || o === null || o === '') {

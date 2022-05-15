@@ -153,6 +153,7 @@
 <script>
 import {getSportTypeTree} from "@/api/sport/sportType";
 import {getSportExerciseMultiStat,getSportExerciseByMultiStat} from "@/api/sport/sportExercise";
+import {formatFloat} from "@/utils/mulanbay";
 
 export default {
   name: "SportExerciseMultiStat",
@@ -210,6 +211,9 @@ export default {
     getSportTypeTreeselect() {
       getSportTypeTree(false).then(response => {
         this.sportTypeOptions = response;
+        if(this.sportTypeOptions.length>0){
+          this.queryParams.sportTypeId = this.sportTypeOptions[0].id+'';
+        }
       });
     },
     /** 查询详情 */
@@ -220,6 +224,10 @@ export default {
         sportTypeId:this.queryParams.sportTypeId
       }
       getSportExerciseByMultiStat(para).then(response => {
+        if(response==null){
+          this.msgAlert('没有相关数据');
+          return;
+        }
         this.form = response;
         this.form.sportTypeName = response.sportType.name;
         this.sportTypeUnit = response.sportType.unit;
@@ -248,49 +256,49 @@ export default {
           groupType:'KILOMETRES',
           maxValue:response.maxKilometres,
           minValue:response.minKilometres,
-          avgValue:response.avgKilometres.toFixed(2)};
+          avgValue:formatFloat(response.avgKilometres,2)};
           this.dataList.push(kilometresRow);
           let minutesRow = {name:'锻炼时间(分钟)',
           groupType:'MINUTES',
           maxValue:response.maxMinutes,
           minValue:response.minMinutes,
-          avgValue:response.avgMinutes.toFixed(2)};
+          avgValue:formatFloat(response.avgMinutes,2)};
           this.dataList.push(minutesRow);
           let speedRow = {name:'平均速度(公里/小时)',
           groupType:'SPEED',
           maxValue:response.maxSpeed,
           minValue:response.minSpeed,
-          avgValue:response.avgSpeed.toFixed(2)};
+          avgValue:formatFloat(response.avgSpeed,2)};
           this.dataList.push(speedRow);
           let maxSpeedRow = {name:'最佳速度(公里/小时)',
           groupType:'MAXSPEED',
           maxValue:response.maxMaxSpeed,
           minValue:response.minMaxSpeed,
-          avgValue:response.avgMaxSpeed.toFixed(2)};
+          avgValue:formatFloat(response.avgMaxSpeed,2)};
           this.dataList.push(maxSpeedRow);
           let paceRow = {name:'平均配速(分钟/公里)',
           groupType:'PACE',
           maxValue:response.maxPace,
           minValue:response.minPace,
-          avgValue:response.avgPace.toFixed(2)};
+          avgValue:formatFloat(response.avgPace,2)};
           this.dataList.push(paceRow);
           let maxPaceRow = {name:'最佳配速(分钟/公里)',
           groupType:'MAXPACE',
           maxValue:response.maxMaxPace,
           minValue:response.minMaxPace,
-          avgValue:response.avgMaxPace.toFixed(2)};
+          avgValue:formatFloat(response.avgMaxPace,2)};
           this.dataList.push(maxPaceRow);
           let maxHeartRateRow = {name:'最高心率(次/分钟)',
           groupType:'MAXHEARTRATE',
           maxValue:response.maxMaxHeartRate,
           minValue:response.minMaxHeartRate,
-          avgValue:response.avgMaxHeartRate.toFixed(2)};
+          avgValue:formatFloat(response.avgMaxHeartRate,2)};
           this.dataList.push(maxHeartRateRow);
           let averageHeartRateRow = {name:'平均心率(次/分钟)',
           groupType:'AVERAGEHEART',
           maxValue:response.maxAverageHeartRate,
           minValue:response.minAverageHeartRate,
-          avgValue:response.avgAverageHeartRate.toFixed(2)};
+          avgValue:formatFloat(response.avgAverageHeartRate,2)};
           this.dataList.push(averageHeartRateRow);
           this.loading=false;
         }

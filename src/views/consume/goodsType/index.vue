@@ -40,7 +40,7 @@
       :data="goodsTypeList"
       row-key="id"
       :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
-      <el-table-column label="ID" prop="id" sortable="custom" align="center" width="80">
+      <el-table-column label="ID" prop="id" sortable="custom" align="center">
         <template slot-scope="{row}">
           <span>{{ row.id }}</span>
         </template>
