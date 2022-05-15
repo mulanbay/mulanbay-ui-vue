@@ -119,15 +119,15 @@
     <!-- 添加或修改购买来源对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="上级分类" prop="parentId">
+          <treeselect v-model="form.parentId" :style="{width: '95%'}" :options="parentGoodsTypeOptions" :disable-branch-nodes="false" :show-count="true" placeholder="请选择上级分类" />
+        </el-form-item>
         <el-form-item label="类型名称" prop="name">
           <el-input v-model="form.name" :style="{width: '95%'}" placeholder="请输入名称" />
         </el-form-item>
         <el-form-item label="行为名称" prop="behaviorName">
           <el-input v-model="form.behaviorName" :style="{width: '95%'}"/>
           <span class="link-type" @click="msgAlert('提示','用户行为分析使用，默认与名称相同')"><i class="el-icon-question" /></span>
-        </el-form-item>
-        <el-form-item label="上级分类" prop="parentId">
-          <treeselect v-model="form.parentId" :style="{width: '95%'}" :options="parentGoodsTypeOptions" :disable-branch-nodes="false" :show-count="true" placeholder="请选择上级分类" />
         </el-form-item>
         <el-form-item label="显示顺序" prop="orderIndex">
           <el-input-number v-model="form.orderIndex" controls-position="right" :min="0" :controls="true" :precision="0"/>
