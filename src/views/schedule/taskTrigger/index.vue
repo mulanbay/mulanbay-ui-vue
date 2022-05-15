@@ -942,6 +942,10 @@ export default {
       this.manualNewForm.sync = false;
       getTaskTriggerTree(false).then(response => {
         this.taskTriggerOptions = response;
+        let id = this.getSelectId();
+        if(id!=null){
+          this.manualNewForm.taskTriggerId = id+'';
+        }
       });
     },
     submitManualNew(){
@@ -964,6 +968,10 @@ export default {
       this.refreshScheduleOpen=true;
       getTaskTriggerTree(false).then(response => {
         this.taskTriggerOptions = response;
+        let id = this.getSelectId();
+        if(id!=null){
+          this.refreshScheduleForm.taskTriggerId = id+'';
+        }
       });
     },
     submitRefreshSchedule(){
@@ -1072,6 +1080,15 @@ export default {
     },
     closeLastExeInfo(){
       this.leiOpen=false;
+    },
+    /** 获取当前选择的ID */
+    getSelectId(){
+      let id = null;
+      if(this.ids!=null&&this.ids.length>0){
+        //取第一个
+        id = this.ids[0];
+      }
+      return id;
     },
     /** 调度器信息 */
     handleScheduleInfo(){
