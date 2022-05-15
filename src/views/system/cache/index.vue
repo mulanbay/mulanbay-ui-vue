@@ -155,7 +155,7 @@ export default {
     },
     // 打开加载层
     openLoading() {
-      this.loading = this.$loading(this.loadingOptions);
+      //this.loading = this.$loading(this.loadingOptions);
     }
   }
 };
