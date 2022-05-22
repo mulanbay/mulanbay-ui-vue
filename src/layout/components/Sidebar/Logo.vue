@@ -26,7 +26,7 @@ export default {
   },
   data() {
     return {
-      title: '木兰湾管理系统',
+      title: '木兰湾',
       logo: logoImg
     }
   }

@@ -1,7 +1,7 @@
 {
   "name": "mulanbay",
   "version": "3.0.0",
-  "description": "木兰湾管理系统",
+  "description": "木兰湾",
   "author": "牧羊人",
   "scripts": {
     "test:unit": "jest --clearCache && vue-cli-service test:unit",

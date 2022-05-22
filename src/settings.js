@@ -1,5 +1,5 @@
 module.exports = {
-  title: '木兰湾管理系统',
+  title: '木兰湾',
 
   /**
    * 是否系统布局配置
