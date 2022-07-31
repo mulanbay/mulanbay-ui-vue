@@ -5,7 +5,7 @@
        <treeselect
         v-model="queryParams.id"
         @input="handleQuery"
-        style="width: 450px"
+        style="width: 380px"
         :options="userNotifyOptions"
         :disable-branch-nodes="true"
         :show-count="true"
@@ -16,10 +16,11 @@
       <el-form-item>
         <el-button type="stat" icon="el-icon-s-data" size="mini" @click="handleQuery" v-hasPermi="['report:notify:userNotify:stat']">统计</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+        <el-button type="primary" icon="el-icon-refresh" size="mini" @click="refreshStat(queryParams.id)"  v-hasPermi="['report:notify:userNotify:deleteCache']">刷新</el-button>
       </el-form-item>
     </el-form>
 
-    <el-row :gutter="32">
+    <el-row :gutter="32" v-loading="loading" >
       <el-card>
         <el-col :span="24" class="card-box">
           <div class="el-table el-table--enable-row-hover el-table--medium">
@@ -46,9 +47,9 @@
           </div>
         </el-col>
       </el-card>
-      
+
       </br>
-      
+
       <el-card>
         <el-col :xs="24" :sm="24" :lg="12">
           <div class="chart-wrapper">
@@ -68,6 +69,8 @@
 
 <script>
   import {getUserNotifyStat,getUserNotifyTree} from "@/api/report/notify/userNotify";
+  import {deleteCache} from "@/api/report/notify/notifyStat";
+
   import {deepClone} from "@/utils/index";
   import {getPercent} from "@/utils/mulanbay";
 
@@ -90,6 +93,8 @@ export default {
   },
   data() {
     return {
+      // 遮罩层
+      loading: false,
       warningChartData:{},
       alertChartData:{},
       // 查询参数
@@ -115,6 +120,15 @@ export default {
     }
   },
   methods: {
+    /** 刷新单个 */
+    refreshStat(userNotifyId){
+      let para ={
+        userNotifyId: userNotifyId
+      };
+      deleteCache(para);
+      this.msgSuccess("刷新成功");
+      this.handleQuery();
+    },
     /** 处理父类发起的数据 */
     handleReceiveData(data){
       this.relatedBeans = data.relatedBeans;
@@ -135,6 +149,7 @@ export default {
       if(this.isObjectEmpty(id)){
         return;
       }
+      this.loading = true;
       this.initChart();
     },
     /** 重置按钮操作 */
@@ -167,6 +182,7 @@ export default {
           alertData.title='达到报警比例';
           alertData.subTitle="报警配置:"+response.userNotify.alertValue+unit;
           this.alertChartData = alertData;
+          this.loading = false;
         }
       );
     }

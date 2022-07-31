@@ -14,6 +14,7 @@
       <el-form-item>
         <el-button type="stat" icon="el-icon-s-data" size="mini" @click="handleQuery" v-hasPermi="['report:notify:userNotify:notifyStat']">统计</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+        <el-button type="primary" icon="el-icon-refresh" size="mini" @click="resetStat"  v-hasPermi="['report:notify:userNotify:deleteCache']">强制刷新</el-button>
       </el-form-item>
     </el-form>
 
@@ -93,8 +94,11 @@
                     <td align="center"><div class="cell"><i class="el-icon-info"></i>警告比例</div></td>
                     <td align="center"><div class="cell"><i class="el-icon-info"></i>报警比例</div></td>
                   </tr>
-                  <tr>
-                    <td align="center"></td>
+                  <tr align="center">
+                    <td align="center" colspan="2">
+                      </br>
+                      <el-button type="primary" icon="el-icon-refresh" size="mini" @click="refreshStat(item.userNotify.id)"  v-hasPermi="['report:notify:userNotify:deleteCache']">刷新</el-button>
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -117,7 +121,7 @@
 </template>
 
 <script>
-  import {fetchList} from "@/api/report/notify/notifyStat";
+  import {fetchList,deleteCache} from "@/api/report/notify/notifyStat";
   import {getPercent} from "@/utils/planUtils";
 
 export default {
@@ -163,6 +167,28 @@ export default {
     handleDispatch(name) {
       //路由定向
       this.$router.push({name:name,query: {}})
+    },
+    /** 强制刷新 */
+    resetStat(){
+      this.$confirm('强制刷新会删除所有的统计缓存，从而进行实时统计，速度会有点慢，是否确定要刷新?', "警告", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        }).then(function() {
+          return deleteCache({});
+        }).then(() => {
+          this.getList();
+          this.msgSuccess("刷新成功");
+        }).catch(function() {});
+    },
+    /** 刷新单个 */
+    refreshStat(userNotifyId){
+      let para ={
+        userNotifyId: userNotifyId
+      };
+      deleteCache(para);
+      this.msgSuccess("刷新成功");
+      this.getList();
     },
     /** 格式化名称，计算各数值 */
     formatName(row){

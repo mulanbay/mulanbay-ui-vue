@@ -7,3 +7,11 @@ export function fetchList(query) {
     params: query
   })
 }
+
+export function deleteCache(data) {
+  return request({
+    url: '/notifyStat/deleteCache',
+    method: 'post',
+    data
+  })
+}
