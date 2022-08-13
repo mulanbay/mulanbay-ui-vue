@@ -222,19 +222,19 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="8">
-            <el-form-item label="警告值" prop="warningValue">
+          <el-col :span="9">
+            <el-form-item :label="'警告值('+notifyTypeName+')'" label-width="120px" prop="warningValue">
               <el-input-number v-model="form.warningValue" style="width: 153px" controls-position="right" :min="0" :controls="true" :precision="0"/>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
-            <el-form-item label="报警值" prop="alertValue">
+          <el-col :span="9">
+            <el-form-item :label="'报警值('+notifyTypeName+')'" label-width="120px" prop="alertValue">
               <el-input-number v-model="form.alertValue" style="width: 153px" controls-position="right" :min="0" :controls="true" :precision="0"/>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
-            <el-form-item label="单位" prop="unit">
-              <el-input v-model="form.unit" style="width: 110px"  placeholder="请输入标题" />
+          <el-col :span="6">
+            <el-form-item label="单位" prop="unit" label-width="65px">
+              <el-input v-model="form.unit" style="width: 80px"  placeholder="请输入单位" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -373,6 +373,7 @@ export default {
       },
       //表单对象
       fApi:{},
+      notifyTypeName: '',
       // formCreate属性end
       rules: {
         notifyConfigId: [
@@ -452,6 +453,7 @@ export default {
         this.form.calendarTitle= response.calendarTitle;
         this.form.title= response.title;
         this.form.unit = response.valueTypeName;
+        this.notifyTypeName = response.notifyTypeName;
       });
     },
     /** 获取值配置列表列表 */
@@ -506,7 +508,8 @@ export default {
         orderIndex :1,
         showInIndex:true,
         title:undefined,
-        calendarTitle:undefined
+        calendarTitle:undefined,
+        unit:undefined
       };
       this.resetForm("form");
     },
