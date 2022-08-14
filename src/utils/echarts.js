@@ -1176,6 +1176,247 @@ export function createCalanderHeatMapChart(data, myChart, echarts) {
   createChart(option, myChart);
 }
 
+//将hex表示方式转换为rgb表示方式(这里返回rgb数组模式)
+function colorRgb(sColor) {
+    let reg = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
+    sColor = sColor.toLowerCase();
+    if (sColor && reg.test(sColor)) {
+        if (sColor.length === 4) {
+            let sColorNew = "#";
+            for (let i = 1; i < 4; i += 1) {
+                sColorNew += sColor.slice(i, i + 1).concat(sColor.slice(i, i + 1));
+            }
+            sColor = sColorNew;
+        }
+        //处理六位的颜色值
+        let sColorChange = [];
+        for (let i = 1; i < 7; i += 2) {
+            sColorChange.push(parseInt("0x" + sColor.slice(i, i + 2)));
+        }
+        return sColorChange;
+    } else {
+        return sColor;
+    }
+};
+
+//渐变色算法例子
+function colorHex(rgb) {
+    let _this = rgb;
+    let reg = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
+    if (/^(rgb|RGB)/.test(_this)) {
+        let aColor = _this.replace(/(?:\(|\)|rgb|RGB)*/g, "").split(",");
+        let strHex = "#";
+        for (let i = 0; i < aColor.length; i++) {
+            let hex = Number(aColor[i]).toString(16);
+            hex = hex < 10 ? 0 + '' + hex : hex;// 保证每个rgb的值为2位
+            if (hex === "0") {
+                hex += hex;
+            }
+            strHex += hex;
+        }
+        if (strHex.length !== 7) {
+            strHex = _this;
+        }
+        return strHex;
+    } else if (reg.test(_this)) {
+        let aNum = _this.replace(/#/, "").split("");
+        if (aNum.length === 6) {
+            return _this;
+        } else if (aNum.length === 3) {
+            let numHex = "#";
+            for (let i = 0; i < aNum.length; i += 1) {
+                numHex += (aNum[i] + aNum[i]);
+            }
+            return numHex;
+        }
+    } else {
+        return _this;
+    }
+};
+
+//渐变颜色
+export function getGradualColor(v,step,maxValue,startColor,endColor) {
+  let startRGB = colorRgb(startColor);//转换为rgb数组模式
+  let startR = startRGB[0];
+  let startG = startRGB[1];
+  let startB = startRGB[2];
+
+  let endRGB = colorRgb(endColor);
+  let endR = endRGB[0];
+  let endG = endRGB[1];
+  let endB = endRGB[2];
+
+  let sR = (endR - startR) / step;//总差值
+  let sG = (endG - startG) / step;
+  let sB = (endB - startB) / step;
+
+  let i = v * step / maxValue;
+
+  //计算hex值
+  let hex = colorHex('rgb('+ parseInt((sR * i + startR))+ ',' + parseInt((sG * i + startG))+ ',' +
+      parseInt((sB * i + startB)) + ')');
+  return hex;
+}
+
+
+/**
+ * 热点图
+ * @param {Object} data
+ * @param {Object} myChart
+ */
+export function createHeatMapChart(data, myChart, echarts) {
+  let showLabel = data.showLabel ==null ? true : data.showLabel;
+  let showXLabel = data.xdata.length >31 ? false : true;
+  let step = (data.maxValue - data.minValue)/5;
+  function setColors(val, index) {
+    let obj = {};
+    let color = getGradualColor(val,step,data.maxValue,"#15B1F4","#D1621D");;
+    if (color != null) {
+      obj = {
+        normal: {
+          color: color,
+        }
+      }
+    }
+    return obj;
+  };
+  let seriesData = new Array();
+  for (let i = 0; i < data.series.length; i++) {
+    let sd = data.series[i];
+    let serieDetails = new Array();
+    for (let j = 0; j < sd.data.length; j++){
+      let elv = sd.data[j];
+      let itemStyle = setColors(elv[2], j);
+      let obj = {};
+      obj.itemStyle = itemStyle;
+      obj.value = elv;
+      serieDetails.push(obj);
+    }
+    let serie = {
+      name: sd.name,
+      type: 'heatmap',
+      data: serieDetails,
+      label: {
+        show: showLabel,
+        textStyle: {
+          color: "#fff"
+        }
+      },
+      emphasis: {
+        itemStyle: {
+          shadowBlur: 10,
+          shadowColor: 'rgba(0, 0, 0, 0.5)'
+        }
+      }
+    };
+    seriesData.push(serie);
+  }
+  let option = {
+    title: {
+      text: data.title,
+      subtext: data.subTitle,
+      x: 'center',
+      y: 'top',
+      textStyle: {
+        color: "#fff"
+      },
+      textAlign: 'center',
+      left: 'center',
+      top: '2%'
+    },
+    tooltip: {
+      position: 'top',
+      backgroundColor: 'rgba(42, 47, 53, 0.9)',
+      borderColor: '#ffffff',
+      textStyle: {
+        color: "#fff"
+      },
+      axisPointer: {
+        lineStyle: {
+          color: '#fff'
+        }
+      },
+      //trigger: 'axis',
+      formatter: function(params) {
+        //console.log(params)
+        return (
+          params.seriesName +':<br/>'+params.name+': ' +
+          params.value[2] + params.value[3]
+        );
+      }
+    },
+    grid: {
+      left: '2%',
+      right: '6%',
+      bottom: '0%',
+      top: '8%',
+      containLabel: true
+    },
+    xAxis: [{
+      show: false,
+      type: '',
+      data: data.xdata,
+      splitArea: {
+        show: true
+      },
+      axisLabel: {
+        show: true,
+        textStyle: {
+          color: '#fff',
+        },
+      },
+    }, {
+      type: 'category',
+      data: data.xdata,
+      splitArea: {
+        show: true
+      },
+      axisLabel: {
+        show: showXLabel,
+        textStyle: {
+          color: '#fff',
+        },
+        interval: 0,
+        rotate: 0
+      },
+    }],
+    yAxis: {
+      type: 'category',
+      data: data.ydata,
+      splitArea: {
+        show: true
+      },
+      axisLabel: {
+        show: true,
+        textStyle: {
+          color: '#fff',
+        },
+        interval: 0,
+        // rotate: 15
+      },
+    },
+    visualMap: {
+      min: data.minValue,
+      max: data.maxValue,
+      calculable: true,
+      orient: 'vertical',
+      left: 'right',
+      top: 'center',
+      textStyle: {
+        color: "#fff"
+      },
+      // bottom: '15%',
+      //自定义热力图颜色
+      inRange: {
+        color: ['#15B1F4', '#16c573', '#d18a17', '#ffac1d', '#D1621D']
+      },
+    },
+    series: seriesData
+  };
+
+  createChart(option, myChart);
+}
+
 /**
  * 散点图
  * @param {Object} data

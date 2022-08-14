@@ -110,7 +110,7 @@
           <el-switch v-model="row.status" disabled active-value="ENABLE" inactive-value="DISABLE" @change="handleStatusChange(row)"></el-switch>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" fixed="right" width="210" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" fixed="right" width="250" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -126,6 +126,13 @@
             @click="handleCreate(scope.row)"
             v-hasPermi="['auth:systemFunction:create']"
           >新增</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-plus"
+            @click="handleCreateAsTemplate(scope.row)"
+            v-hasPermi="['auth:systemFunction:create']"
+          >模板</el-button>
           <el-button
             size="mini"
             type="text"
@@ -683,6 +690,22 @@ export default {
       } else {
         this.form.parentId = 0;
       }
+    },
+    /** 以模板新增按钮操作 */
+    handleCreateAsTemplate(row){
+      this.getParentSystemFunctionTreeselect();
+      this.reset();
+      this.open = true;
+      this.title = "添加";
+      if (row != null && row.id) {
+        this.form.parentId = row.parentId;
+      } else {
+        this.form.parentId = 0;
+      }
+      getSystemFunction(row.id).then(response => {
+        this.form = response;
+        this.form.id =undefined;
+      });
     },
     /** 修改按钮操作 */
     handleUpdate(row) {

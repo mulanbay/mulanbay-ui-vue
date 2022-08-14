@@ -67,6 +67,14 @@ export function getMusicPracticeDateStat(query) {
   })
 }
 
+export function getMusicPracticeOverallStat(query) {
+  return request({
+    url: '/musicPractice/overallStat',
+    method: 'get',
+    params: query
+  })
+}
+
 export function getMusicPracticeTimeStat(query) {
   return request({
     url: '/musicPractice/timeStat',

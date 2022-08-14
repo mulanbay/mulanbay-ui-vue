@@ -37,7 +37,7 @@
           placeholder="统计分类"
           clearable
           size="small"
-          style="width: 240px"
+          style="width: 120px"
         >
           <el-option
             v-for="dict in dateGroupTypeOptions"
@@ -53,7 +53,7 @@
           placeholder="图表类型"
           clearable
           size="small"
-          style="width: 240px"
+          style="width: 120px"
         >
           <el-option
             v-for="dict in chartTypeOptions"
@@ -69,7 +69,7 @@
           placeholder="排序方式"
           clearable
           size="small"
-          style="width: 240px"
+          style="width: 120px"
         >
           <el-option
             v-for="dict in chartOrderTypeOptions"

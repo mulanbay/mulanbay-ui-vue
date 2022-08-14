@@ -318,6 +318,13 @@ export const datePickerOptions = {
       picker.$emit('pick', [yd[0], yd[1]]);
     }
   },{
+    text: '最近十年',
+    onClick(picker) {
+      const s_year = getYear(-10);
+      const e_year = getYear(0);
+      picker.$emit('pick', [s_year+'-01-01', e_year+'-12-31']);
+    }
+  },{
     text: '最近一周',
     onClick(picker) {
       const end = new Date();

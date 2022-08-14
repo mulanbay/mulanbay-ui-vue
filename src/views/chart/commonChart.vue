@@ -7,7 +7,7 @@
 <script>
   import * as echarts from 'echarts';
   import {chartProps,createChart,createMixLineBarChart,createPieChart,
-  createBarChart,createCalanderHeatMapChart,createGaugeChart,
+  createBarChart,createCalanderHeatMapChart,createHeatMapChart,createGaugeChart,
   createTreeMapChart,createRadarChart,createCalanderChart,createLineChart,
   createScatterChart,createShadowChart,createDoublePieChart,
   createCompareCalanderChart,createCalanderPieChart,
@@ -113,6 +113,9 @@ export default {
           break;
         case 'CALANDER_HEAT_MAP':
           createCalanderHeatMapChart(newChartData,this.chart,echarts);
+          break;
+        case 'HEAT_MAP':
+          createHeatMapChart(newChartData,this.chart,echarts);
           break;
         case 'RADAR':
           createRadarChart(newChartData,this.chart);

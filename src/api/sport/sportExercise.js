@@ -91,6 +91,14 @@ export function getSportExerciseDateStat(query) {
   })
 }
 
+export function getSportExerciseOverallStat(query) {
+  return request({
+    url: '/sportExercise/overallStat',
+    method: 'get',
+    params: query
+  })
+}
+
 export function getSportExerciseYoyStat(query) {
   return request({
     url: '/sportExercise/yoyStat',

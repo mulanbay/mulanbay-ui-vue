@@ -80,6 +80,14 @@ export function getTreatRecordDateStat(query) {
   })
 }
 
+export function getTreatRecordOverallStat(query) {
+  return request({
+    url: '/treatRecord/overallStat',
+    method: 'get',
+    params: query
+  })
+}
+
 export function getTreatRecordAnalyseStat(query) {
   return request({
     url: '/treatRecord/analyseStat',

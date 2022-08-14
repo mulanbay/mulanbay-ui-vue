@@ -15,58 +15,16 @@
           :picker-options="datePickerOptions"
         ></el-date-picker>
       </el-form-item>
-      <el-form-item label="疾病标签" prop="tags">
+      <el-form-item label="统计分类" prop="dateGroupType">
         <el-select
-          v-model="queryParams.tags"
-          placeholder="疾病标签"
-          clearable
-          size="small"
-          style="width: 240px"
-        >
-          <el-option
-            v-for="dict in tagsOptions"
-            :key="dict.id"
-            :label="dict.text"
-            :value="dict.id"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="名称查询" prop="name">
-        <el-input
-          v-model="queryParams.name"
-          placeholder="请输入名称"
-          clearable
-          size="small"
-          style="width: 240px"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="图表类型" prop="chartType">
-        <el-select
-          v-model="queryParams.chartType"
-          placeholder=""
+          v-model="queryParams.dateGroupType"
+          placeholder="统计分类"
           clearable
           size="small"
           style="width: 120px"
         >
           <el-option
-            v-for="dict in chartTypeOptions"
-            :key="dict.id"
-            :label="dict.text"
-            :value="dict.id"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="看病类型" prop="treatType">
-        <el-select
-          v-model="queryParams.treatType"
-          placeholder=""
-          clearable
-          size="small"
-          style="width: 120px"
-        >
-          <el-option
-            v-for="dict in treatTypeOptions"
+            v-for="dict in dateGroupTypeOptions"
             :key="dict.id"
             :label="dict.text"
             :value="dict.id"
@@ -104,6 +62,7 @@
         </el-select>
         <el-select
           v-model="queryParams.feeField"
+          v-if="queryParams.groupType=='TOTALPRICE'"
           placeholder="统计字段"
           clearable
           size="small"
@@ -117,29 +76,14 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="是否有病" prop="sick">
-        <el-select
-          v-model="queryParams.sick"
-          placeholder="是否有病"
-          clearable
-          size="small"
-          style="width: 100px"
-        >
-          <el-option
-            v-for="dict in booleanOptions"
-            :key="dict.id"
-            :label="dict.text"
-            :value="dict.id"
-          />
-        </el-select>
-      </el-form-item>
       <el-form-item>
-        <el-button type="stat" icon="el-icon-s-data" size="mini" @click="handleQuery" v-hasPermi="['sport:sportExercise:dateStat']">统计</el-button>
+        <el-button type="stat" icon="el-icon-s-data" size="mini" @click="handleQuery" v-hasPermi="['health:treat:treatRecord:overallStat']">统计</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
+
     <!--图表数据-->
-    <div>
+    <div style="background-color: #183B64;">
       <common-chart :chartData="chartData"/>
     </div>
 
@@ -147,11 +91,11 @@
 </template>
 
 <script>
-  import {getTreatCategoryTree,getTreatRecordAnalyseStat,getTreatRecordTagsTree} from "@/api/health/treat/treatRecord";
+  import {getTreatRecordOverallStat} from "@/api/health/treat/treatRecord";
   import CommonChart from '../../../chart/commonChart'
 
 export default {
-  name: "TreatRecordAnalyseStat",
+  name: "TreatRecordOverallStat",
   components: {
     'common-chart':CommonChart
   },
@@ -164,39 +108,31 @@ export default {
       loadingOptions: this.loadingOptions,
       //图表数据
       chartData:{},
-      //费用类型
-      feeFieldOptions:[],
+      //统计分类
+      dateGroupTypeOptions:[],
       //统计分类
       groupFieldOptions:[],
       groupTypeOptions:[],
-      chartTypeOptions:[
-        {
-          id: 'PIE',
-          text: '饼图'
-        },
-        {
-          id: 'MIX_LINE_BAR',
-          text: '柱状图'
-        }
-      ],
-      booleanOptions:this.booleanOptions,
-      //疾病标签
-      tagsOptions:[],
-      treatTypeOptions:[],
+      //费用类型
+      feeFieldOptions:[],
       //日期范围快速选择
       datePickerOptions:this.datePickerOptions,
       // 日期范围
       dateRange: this.getYearDateRange(0),
       // 查询参数
       queryParams: {
+        dateGroupType:'MONTH',
         groupField:'diagnosed_disease',
         groupType:'COUNT',
-        feeField:'total_fee',
-        chartType:'PIE'
+        feeField:'total_fee'
       }
     };
   },
   created() {
+    //加载查询条件和表单的
+    this.getDictItemTree('CHART_OVERALL_GROUP',false).then(response => {
+      this.dateGroupTypeOptions = response;
+    });
     this.getDictItemTree('TREAT_ANALYSE_GROUP_FIELD',false).then(response => {
       this.groupFieldOptions = response;
     });
@@ -206,19 +142,9 @@ export default {
     this.getDictItemTree('TREAT_ANALYSE_GROUP_TYPE',false).then(response => {
       this.groupTypeOptions = response;
     });
-    this.getEnumTree('TreatType','ORDINAL',false).then(response => {
-      this.treatTypeOptions = response;
-    });
     this.initChart();
-    this.getTreatRecordTagsTreeselect();
   },
   methods: {
-    /** 查询疾病标签下拉树结构 */
-    getTreatRecordTagsTreeselect() {
-      getTreatRecordTagsTree(false).then(response => {
-        this.tagsOptions = response;
-      });
-    },
     /** 搜索按钮操作 */
     handleQuery() {
       this.initChart();
@@ -234,11 +160,11 @@ export default {
     },
     initChart() {
       this.openLoading();
-      getTreatRecordAnalyseStat(this.addDateRange(this.queryParams, this.dateRange)).then(
+      getTreatRecordOverallStat(this.addDateRange(this.queryParams, this.dateRange)).then(
         response => {
           //组装chart数据
-          const chartType = this.queryParams.chartType;
-          response.chartType=chartType;
+          const dateGroupType = this.queryParams.dateGroupType;
+          response.chartType = 'HEAT_MAP';
           this.chartData = response;
           this.loading.close();
         }
