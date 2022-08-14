@@ -494,6 +494,9 @@ export function createMixLineBarChart(data, myChart) {
     title: {
       text: data.title,
       subtext: data.subTitle,
+      subtextStyle: {
+        color: '#33004d'
+      },
       x: 'center',
       y: 'top',
       textAlign: 'left'
@@ -913,6 +916,9 @@ export function createCalanderChart(data, myChart) {
       left: 'center',
       textStyle: {
         color: '#fff'
+      },
+      subtextStyle: {
+        color: '#f1f178'
       }
     },
     tooltip: {
@@ -928,7 +934,13 @@ export function createCalanderChart(data, myChart) {
       }
     },
     calendar: [{
-      top: 80,
+      top: 100,
+      left: 0,
+      right: 0,
+      cellSize: ['auto', 35],
+      itemStyle: {
+        borderWidth: 0.5
+      },
       left: 'center',
       range: data.rangeFirst,
       splitLine: {
@@ -951,7 +963,13 @@ export function createCalanderChart(data, myChart) {
         borderColor: '#111'
       }
     }, {
-      top: 260,
+      top: 400,
+      left: 0,
+      right: 0,
+      cellSize: ['auto', 30],
+      itemStyle: {
+        borderWidth: 0.5
+      },
       left: 'center',
       range: data.rangeSecond,
       splitLine: {
@@ -985,8 +1003,9 @@ export function createCalanderChart(data, myChart) {
  * @param {Object} myChart
  */
 export function createCalanderPieChart(data, myChart, echarts) {
-  let cellSize = [65, 65];
-  let pieRadius = 25;
+  let cellSize = [cellSizeValue, cellSizeValue];
+  let cellSizeValue = data.cellSize ==null ? 100:data.cellSize;
+  let pieRadius = data.pieRadius ==null ? 45:data.pieRadius;
   let app = {};
   let seriesData = data.seriesData;
   let scatterData = data.scatterData;
@@ -1025,7 +1044,7 @@ export function createCalanderPieChart(data, myChart, echarts) {
     title: {
       show: true,
       top: 'auto',
-      bottom: '45',
+      bottom: 'auto',
       text: data.title,
       subtext: data.subTitle,
       x: 'center',
@@ -1035,10 +1054,11 @@ export function createCalanderPieChart(data, myChart, echarts) {
     tooltip: {},
     legend: {
       data: data.legendData,
-      bottom: 10
+      bottom:'10',
+      top: '25'
     },
     calendar: {
-      top: 40,
+      top: 100,
       left: 'center',
       orient: 'vertical',
       cellSize: cellSize,

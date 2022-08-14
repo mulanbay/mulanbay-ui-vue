@@ -148,6 +148,8 @@ export default {
           if(dateGroupType=='YEAR'){
             createCalanderChart(response,this.chart);
           }else{
+            response.cellSize = 70;
+            response.pieRadius = 35;
             createCalanderPieChart(response,this.chart,echarts);
           }
           this.loading.close();
