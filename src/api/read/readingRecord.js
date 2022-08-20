@@ -58,6 +58,14 @@ export function getReadingRecordDateStat(query) {
   })
 }
 
+export function getReadingRecordOverallStat(query) {
+  return request({
+    url: '/readingRecord/overallStat',
+    method: 'get',
+    params: query
+  })
+}
+
 
 export function getReadingRecordAnalyseStat(query) {
   return request({

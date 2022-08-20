@@ -1268,9 +1268,12 @@ export function createHeatMapChart(data, myChart, echarts) {
   let showLabel = data.showLabel ==null ? true : data.showLabel;
   let showXLabel = data.xdata.length >31 ? false : true;
   let step = (data.maxValue - data.minValue)/5;
+  if(step<=0){
+    step=1;
+  }
   function setColors(val, index) {
     let obj = {};
-    let color = getGradualColor(val,step,data.maxValue,"#15B1F4","#D1621D");;
+    let color = getGradualColor(val,step,data.maxValue,"#15B1F4","#D1621D");
     if (color != null) {
       obj = {
         normal: {
