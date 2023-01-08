@@ -87,8 +87,8 @@
                 v-hasPermi="['life:lifeArchives:getSource']"  v-if="item.sourceId!=null">
                 原始信息
               </el-button>
-              <el-button size="mini" type="text" style="float: right; padding: 3px 0" icon="el-icon-time" @click="handleTillNow(item)">
-                距今?
+              <el-button size="mini" type="text" style="float: right; padding: 3px 0 ;color: green;" icon="el-icon-time" @click="handleTillNow(item)">
+                {{item.tillNow}}
               </el-button>
             </div>
             <div>
@@ -248,12 +248,16 @@ export default {
     },
     /** 距今时间按钮 */
     handleTillNow(row){
+      this.msgAlert('距离现在',this.getTillNow(row));
+    },
+    /** 获取距今时间 */
+    getTillNow(row){
       let days = tillNowDays(null,row.date);
       let ss = formatDays(0-days);
       if(days<-30){
         ss+='('+(0-days).toFixed(0)+'天)';
       }
-      this.msgAlert('距离现在',ss);
+      return ss;
     },
     /** 查询列表 */
     getList() {
@@ -280,6 +284,7 @@ export default {
               d.dayDesc = years+'岁';
             }
             d.type='primary';
+            d.tillNow = this.getTillNow(d);
             this.lifeArchivesList.push(d);
           }
           this.total = response.total;
