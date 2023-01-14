@@ -587,6 +587,7 @@ export default {
         var brData  = new Array();
         brData.push({key:'总次数',value :response.totalCount+'次' });
         brData.push({key:'总时长',value :(response.totalMinutes/60).toFixed(0)+'小时' });
+        brData.push({key:'一万小时',value :(response.totalMinutes/60/10000*100).toFixed(0)+'%' });
         this.keyValueListData =brData;
       });
     },

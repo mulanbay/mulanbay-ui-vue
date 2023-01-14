@@ -105,12 +105,12 @@
           </span>
         </template>
       </el-table-column>
-      <el-table-column label="时辰">
+      <el-table-column label="时辰" align="center" >
         <template slot-scope="{row}">
           <span>{{ getHourInfo(row.recordDate) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="采集时间" min-width="180px">
+      <el-table-column label="采集时间" align="center" min-width="180px">
         <template slot-scope="{row}">
           <span>{{ row.recordDate }}</span>
         </template>

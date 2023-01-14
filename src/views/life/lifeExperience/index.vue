@@ -122,7 +122,7 @@
           <span class="link-type" @click="handleUpdate(row)">{{ row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="旅行地图">
+      <el-table-column label="旅行地图" align="center" >
         <template slot-scope="{row}">
           <span class="link-type" @click="handleTransferMapStat(row)"><i class="el-icon-map-location" /></span>
         </template>

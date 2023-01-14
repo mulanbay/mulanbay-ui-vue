@@ -41,7 +41,18 @@
       </el-table-column>
       <el-table-column label="疾病" align="center" :show-overflow-tooltip="true">
         <template slot-scope="{row}">
-          <span>{{ row.tags }}</span>
+          <span v-if="row.totalCount<3" style="color: green;">
+           {{ row.tags }}
+          </span>
+          <span v-else-if="row.totalCount<=5" style="color: purple;">
+           {{ row.tags }}
+          </span>
+          <span v-else-if="row.totalCount<=10" style="color: yellowgreen;">
+           {{ row.tags }}
+          </span>
+          <span v-else style="color: red;">
+           {{ row.tags }}
+          </span>
         </template>
       </el-table-column>
       <el-table-column label="看病总次数" width="160"  align="center" >

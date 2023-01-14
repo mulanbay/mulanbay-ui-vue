@@ -59,7 +59,18 @@
       </el-table-column>
       <el-table-column label="名称"  fixed="left" min-width="120px" :show-overflow-tooltip="true">
         <template slot-scope="{row}">
-          <span>{{ formatName(row) }}</span>
+          <span v-if="row.totalCount<3" style="color: green;">
+           {{ formatName(row) }}
+          </span>
+          <span v-else-if="row.totalCount<=5" style="color: purple;">
+           {{ formatName(row) }}
+          </span>
+          <span v-else-if="row.totalCount<=10" style="color: yellowgreen;">
+           {{ formatName(row) }}
+          </span>
+          <span v-else style="color: red;">
+           {{ formatName(row) }}
+          </span>
         </template>
       </el-table-column>
       <el-table-column label="统计" align="center">

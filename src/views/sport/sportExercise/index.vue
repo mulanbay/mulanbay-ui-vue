@@ -157,7 +157,7 @@
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="运动类型" min-width="120px">
+      <el-table-column label="运动类型" align="center" min-width="120px">
         <template slot-scope="{row}">
           <span class="link-type" @click="handleUpdate(row)">{{ row.sportType.name }}</span>
         </template>
@@ -165,6 +165,11 @@
       <el-table-column label="锻炼时间" align="center" width="180">
         <template slot-scope="{row}">
           <span>{{ row.exerciseDate }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="时辰" align="center" width="50">
+        <template slot-scope="{row}">
+          <span>{{ getHourInfo(row.exerciseDate) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="锻炼信息" align="center">
@@ -403,6 +408,7 @@ import MultiStat from './multiStat'
 import AchieveMilestone from '../sportMilestone/achieveList'
 import {dispatchCommonStat} from "@/utils/planUtils";
 import LifeArchivesDetail from '../../life/lifeArchives/detail'
+import {getHourDesc} from "@/utils/datetime";
 
 export default {
   name: "SportExercise",
@@ -568,6 +574,10 @@ export default {
           this.loading = false;
         }
       );
+    },
+    /** 时辰信息 */
+    getHourInfo(recordDate) {
+      return getHourDesc(recordDate);
     },
     /** 数据统计 */
     handleMultiStat(){
