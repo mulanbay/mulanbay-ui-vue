@@ -125,6 +125,9 @@
           <span v-if="row.keywords != null">
            <el-tag type="success">{{ row.keywords | keywordsTagFilter }}</el-tag>
           </span>
+          <span v-if="row.secondhand==true" style="color: green;">
+           <el-tag type="warning">二手</el-tag>
+          </span>
           <span class="link-type">{{ formatGoodsName(row) }}</span>
         </template>
       </el-table-column>
@@ -166,13 +169,6 @@
       <el-table-column label="每天花费" :show-overflow-tooltip="true">
         <template slot-scope="{row}">
           <span>{{ formatDailyCost(row) }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="二手" align="center" width="60">
-        <template slot-scope="{row}">
-          <span v-if="row.secondhand==true" style="color: green;">
-           <i class="el-icon-success" />
-          </span>
         </template>
       </el-table-column>
     </el-table>

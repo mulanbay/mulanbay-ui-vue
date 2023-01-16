@@ -73,7 +73,12 @@
         <template slot-scope="{row}">
           <span>{{ formartName(row) }}</span>
           <span v-if="row.budget == null">
-           <el-tag type="success" size="mini">{{ row.periodName }}</el-tag>
+            <span v-if="row.period == 'YEARLY'">
+              <el-tag type="danger" size="mini">{{ row.periodName }}</el-tag>
+            </span>
+           <span v-else>
+             <el-tag type="success" size="mini">{{ row.periodName }}</el-tag>
+           </span>
            <span class="link-type" @click="handlePeriodStat(row)"><i class="el-icon-info"></i></span>
           </span>
         </template>
@@ -107,6 +112,11 @@
           <span v-if="(row.ncAmount+row.bcAmount+row.trAmount)>row.budgetAmount">
            <el-tag type="danger" size="mini">超支</el-tag>
           </span>
+        </template>
+      </el-table-column>
+      <el-table-column label="预算/实际" align="center" width="80">
+        <template slot-scope="{row}">
+          <span>{{ ((row.ncAmount+row.bcAmount+row.trAmount)/row.budgetAmount*100).toFixed(0)+'%' }}</span>
         </template>
       </el-table-column>
       <el-table-column label="消费详情" align="center">

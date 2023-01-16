@@ -236,6 +236,9 @@
           <span v-if="row.keywords != null">
            ★
           </span>
+          <span v-if="row.secondhand==true" style="color: green;">
+           <el-tag type="warning">二手</el-tag>
+          </span>
           <span class="link-type" @click="handleUpdate(row)">{{ row.goodsName }}</span>
         </template>
       </el-table-column>
@@ -290,7 +293,7 @@
           <span>{{ row.amount }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="价格" align="center" width="95">
+      <el-table-column label="单价" align="center" width="95">
         <template slot-scope="{row}">
           <span>{{ formatMoney(row.price) }}</span>
         </template>
@@ -298,13 +301,6 @@
       <el-table-column label="消费日期" align="center" width="180">
         <template slot-scope="{row}">
           <span>{{ row.consumeDate }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="二手" align="center" width="60">
-        <template slot-scope="{row}">
-          <span v-if="row.secondhand==true" style="color: green;">
-           <i class="el-icon-success" />
-          </span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" fixed="right" width="150" class-name="small-padding fixed-width">

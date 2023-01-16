@@ -99,7 +99,7 @@
           <span>{{ row.tuneTypeName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="练习日期" align="center" width="100">
+      <el-table-column label="练习日期" align="center" width="120">
         <template slot-scope="{row}">
           <span>{{ row.musicPractice.practiceDate }}</span>
         </template>

@@ -90,7 +90,8 @@ export default {
       beanNameOptions:[],
       // 表单参数
       form: {
-        id:undefined
+        id:undefined,
+        remark: undefined
       },
       // 表单校验
       rules: {
