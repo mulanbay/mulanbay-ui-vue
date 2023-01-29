@@ -92,7 +92,7 @@
           <span class="link-type" @click="handleDetailList(row)"><i class="el-icon-s-grid" /></span>
         </template>
       </el-table-column>
-      <el-table-column label="代码" align="center" >
+      <el-table-column label="代码" align="center" width="250" :show-overflow-tooltip="true">
         <template slot-scope="{row}">
           <span>{{ row.code }}</span>
         </template>

@@ -101,7 +101,7 @@
           <span>{{ row.code }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="配置值" width="200" min-width="200px" :show-overflow-tooltip="true">
+      <el-table-column label="配置值" align="center" width="200" min-width="200px" :show-overflow-tooltip="true">
         <template slot-scope="{row}">
           <span>{{ row.configValue }}</span>
         </template>

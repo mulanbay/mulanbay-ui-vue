@@ -175,10 +175,10 @@
     <!-- 添加或修改对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="120px">
-        <el-form-item label="等级" prop="level">
+        <el-form-item label="用户等级" prop="level">
           <el-input-number v-model="form.level" style="width: 340px;" controls-position="right" :min="0" :controls="true" :precision="0"/>
         </el-form-item>
-        <el-form-item label="名称" prop="name">
+        <el-form-item label="等级名称" prop="name">
           <el-input v-model="form.name" placeholder="请输入名称" />
         </el-form-item>
         <el-form-item label="最低积分" prop="points">

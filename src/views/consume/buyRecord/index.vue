@@ -372,7 +372,7 @@
             <el-form-item label="消费类型">
               <el-select
                 v-model="form.consumeType"
-                size="medium"
+                :style="{width: '100%'}"
                 placeholder="请选择">
                 <el-option
                   v-for="dict in consumeTypeOptions"

@@ -60,13 +60,13 @@
           <span>{{ row.path }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="文件夹" align="center" width="80">
+      <el-table-column label="类型" align="center" width="80">
         <template slot-scope="{row}">
-           <span v-if="row.directory==true" style="color:green ;">
-            <i class="el-icon-success" />
+           <span v-if="row.directory==true">
+            <el-tag type="success">文件夹</el-tag>
            </span>
-           <span v-else style="color:red ;">
-             <i class="el-icon-error" />
+           <span v-else>
+             <el-tag type="warning">文件</el-tag>
            </span>
         </template>
       </el-table-column>
