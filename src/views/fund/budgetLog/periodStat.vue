@@ -61,9 +61,9 @@
             <table cellspacing="0" style="width: 100%;">
               <thead>
                 <tr>
-                  <th class="is-leaf"><div class="cell">名称</div></th>
-                  <th class="is-leaf"><div class="cell">统计值</div></th>
-                  <th class="is-leaf" width="60px"><div class="cell">链接</div></th>
+                  <td class="el-table__cell is-leaf"><div class="cell">名称</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell">统计值</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell">链接</div></td>
                 </tr>
               </thead>
               <tbody>
@@ -75,54 +75,54 @@
                   </td>
                 </tr>
                 <tr>
-                  <td><div class="cell">预算金额</div></td>
-                  <td><div class="cell">{{ formatMoney(statData.budgetAmount) }}</div></td>
-                  <td>
+                  <td class="el-table__cell is-leaf"><div class="cell">预算金额</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell">{{ formatMoney(statData.budgetAmount) }}</div></td>
+                  <td class="el-table__cell is-leaf">
                     <div class="cell">
                       <span class="link-type" @click="handleDispatch('Budget')"><i class="el-icon-s-promotion" /></span>
                     </div>
                   </td>
                 </tr>
                 <tr>
-                  <td><div class="cell">普通消费</div></td>
-                  <td><div class="cell">{{ formatMoney(statData.ncAmount) }}</div></td>
-                  <td>
+                  <td class="el-table__cell is-leaf"><div class="cell">普通消费</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell">{{ formatMoney(statData.ncAmount) }}</div></td>
+                  <td class="el-table__cell is-leaf">
                     <div class="cell">
                       <span class="link-type" @click="handleDispatch('BuyRecord')"><i class="el-icon-s-promotion" /></span>
                     </div>
                   </td>
                 </tr>
                 <tr>
-                  <td><div class="cell">突发消费</div></td>
-                  <td><div class="cell">{{ formatMoney(statData.bcAmount) }}</div></td>
-                  <td>
+                  <td class="el-table__cell is-leaf"><div class="cell">突发消费</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell">{{ formatMoney(statData.bcAmount) }}</div></td>
+                  <td class="el-table__cell is-leaf">
                     <div class="cell">
                       <span class="link-type" @click="handleDispatch('BuyRecord')"><i class="el-icon-s-promotion" /></span>
                     </div>
                   </td>
                 </tr>
                 <tr>
-                  <td><div class="cell">看病(自费)</div></td>
-                  <td><div class="cell">{{ formatMoney(statData.trAmount) }}</div></td>
-                  <td>
+                  <td class="el-table__cell is-leaf"><div class="cell">看病(自费)</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell">{{ formatMoney(statData.trAmount) }}</div></td>
+                  <td class="el-table__cell is-leaf">
                     <div class="cell">
                       <span class="link-type" @click="handleDispatch('TreatRecord')"><i class="el-icon-s-promotion" /></span>
                     </div>
                   </td>
                 </tr>
                 <tr>
-                  <td><div class="cell">收入统计</div></td>
-                  <td><div class="cell">{{ formatMoney(statData.incomeAmount) }}</div></td>
-                  <td>
+                  <td class="el-table__cell is-leaf"><div class="cell">收入统计</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell">{{ formatMoney(statData.incomeAmount) }}</div></td>
+                  <td class="el-table__cell is-leaf">
                     <div class="cell">
                       <span class="link-type" @click="handleDispatch('Income')"><i class="el-icon-s-promotion" /></span>
                     </div>
                   </td>
                 </tr>
                 <tr>
-                  <td><div class="cell">总共消费</div></td>
-                  <td><div class="cell">{{ formatMoney(statData.totalConsume) }}</div></td>
-                  <td>
+                  <td class="el-table__cell is-leaf"><div class="cell">总共消费</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell">{{ formatMoney(statData.totalConsume) }}</div></td>
+                  <td class="el-table__cell is-leaf">
                     <div class="cell">
                       <span class="link-type" @click="handleDispatch('BuyRecord')"><i class="el-icon-s-promotion" /></span>
                     </div>
@@ -136,16 +136,16 @@
                   </td>
                 </tr>
                 <tr>
-                  <td>
+                  <td class="el-table__cell is-leaf">
                     <div class="cell">
                       预算/消费比例
                     </div>
                   </td>
-                  <td>
+                  <td class="el-table__cell is-leaf">
                     <div class="cell">
                       <el-progress :percentage="statData.monthConsumeBudgetRate" :color="customColors"></el-progress>
                     </div>
-                    <td>
+                    <td class="el-table__cell is-leaf">
                       <div class="cell">
                         <span class="link-type" @click="handleDispatch('BuyRecord')"><i class="el-icon-s-promotion" /></span>
                       </div>
@@ -153,7 +153,7 @@
                   </td>
                 </tr>
                 <tr>
-                  <td>
+                  <td class="el-table__cell is-leaf">
                     <div class="cell">
                       <span v-if="statData.totalConsume>statData.budgetAmount" style="color: red;">
                        超出预算
@@ -165,11 +165,11 @@
                       </span>
                     </div>
                   </td>
-                  <td>
+                  <td class="el-table__cell is-leaf">
                     <div class="cell">
                       {{ formatMoney(statData.cb) }}
                     </div>
-                    <td>
+                    <td class="el-table__cell is-leaf">
                       <div class="cell">
                         <span class="link-type" @click="handleDispatch('BuyRecord')"><i class="el-icon-s-promotion" /></span>
                       </div>
@@ -177,7 +177,7 @@
                   </td>
                 </tr>
                 <tr>
-                  <td>
+                  <td class="el-table__cell is-leaf">
                     <div class="cell">
                       <span v-if="statData.totalConsume>statData.incomeAmount" style="color: red;">
                        存款减少
@@ -189,11 +189,11 @@
                       </span>
                     </div>
                   </td>
-                  <td>
+                  <td class="el-table__cell is-leaf">
                     <div class="cell">
                       {{ formatMoney(statData.ib) }}
                     </div>
-                    <td>
+                    <td class="el-table__cell is-leaf">
                       <div class="cell">
                         <span class="link-type" @click="handleDispatch('Income')"><i class="el-icon-s-promotion" /></span>
                       </div>
@@ -201,7 +201,7 @@
                   </td>
                 </tr>
                 <tr>
-                  <td>
+                  <td class="el-table__cell is-leaf">
                     <div class="cell">
                       <span v-if="statData.accountChangeAmount==null">
                         账户变化
@@ -215,25 +215,25 @@
                       <span class="link-type" @click="msgAlert('提示','账户管理页面中的账户总值变化')"><i class="el-icon-question" /></span>
                     </div>
                   </td>
-                  <td><div class="cell">{{ formatMoney(Math.abs(statData.accountChangeAmount)) }}</div></td>
-                  <td>
+                  <td class="el-table__cell is-leaf"><div class="cell">{{ formatMoney(Math.abs(statData.accountChangeAmount)) }}</div></td>
+                  <td class="el-table__cell is-leaf">
                     <div class="cell">
                       <span class="link-type" @click="handleDispatch('Account')"><i class="el-icon-s-promotion" /></span>
                     </div>
                   </td>
                 </tr>
                 <tr>
-                  <td>
+                  <td class="el-table__cell is-leaf">
                     <div class="cell">
                       账户/存款差率
                       <span class="link-type" @click="msgAlert('提示','差率=(账户变化值-存款变化值)/存款变化值，代表着账户里的银行卡余额变化和系统的消费、收入统计数据之间的差值，数字越小说明越精确')"><i class="el-icon-question" /></span>
                     </div>
                   </td>
-                  <td>
+                  <td class="el-table__cell is-leaf">
                     <div class="cell">
                       {{ statData.aiv }}
                     </div>
-                    <td>
+                    <td class="el-table__cell is-leaf">
                       <div class="cell">
                         <span class="link-type" @click="handleDispatch('BudgetLog/valueErrorStat')"><i class="el-icon-s-promotion" /></span>
                       </div>
@@ -421,7 +421,7 @@ export default {
         response => {
           //组装chart数据
           response.chartType='PIE';
-          response.height = '630px';
+          response.height = '590px';
           this.chartData = response;
           this.loading.close();
         }
@@ -435,7 +435,7 @@ export default {
         response => {
           //组装chart数据
           response.chartType='PIE';
-          response.height = '630px';
+          response.height = '590px';
           this.chartData = response;
           this.loading.close();
         }

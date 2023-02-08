@@ -4,27 +4,27 @@
       <table cellspacing="0" style="width: 100%;">
         <thead>
           <tr>
-            <th class="is-leaf"><div class="cell">ID</div></th>
-            <th class="is-leaf"><div class="cell">名称</div></th>
-            <th class="is-leaf"><div class="cell">类型</div></th>
-            <th class="is-leaf"><div class="cell">周期</div></th>
-            <th class="is-leaf"><div class="cell">预算金额</div></th>
-            <th class="is-leaf"><div class="cell">实际花费</div></th>
-            <th class="is-leaf"><div class="cell">比例</div></th>
-            <th class="is-leaf"><div class="cell" align="center">数据来源</div></th>
-            <th class="is-leaf"><div class="cell" align="center">详情</div></th>
-            <th class="is-leaf"><div class="cell" align="center">明细</div></th>
-            <th class="is-leaf"><div class="cell" align="center">历史</div></th>
-            <th class="is-leaf"><div class="cell">支付时间</div></th>
+            <td class="el-table__cell is-leaf"><div class="cell">ID</div></td>
+            <td class="el-table__cell is-leaf"><div class="cell">名称</div></td>
+            <td class="el-table__cell is-leaf"><div class="cell">类型</div></td>
+            <td class="el-table__cell is-leaf"><div class="cell">周期</div></td>
+            <td class="el-table__cell is-leaf"><div class="cell">预算金额</div></td>
+            <td class="el-table__cell is-leaf"><div class="cell">实际花费</div></td>
+            <td class="el-table__cell is-leaf"><div class="cell">比例</div></td>
+            <td class="el-table__cell is-leaf"><div class="cell" align="center">数据来源</div></td>
+            <td class="el-table__cell is-leaf"><div class="cell" align="center">详情</div></td>
+            <td class="el-table__cell is-leaf"><div class="cell" align="center">明细</div></td>
+            <td class="el-table__cell is-leaf"><div class="cell" align="center">历史</div></td>
+            <td class="el-table__cell is-leaf"><div class="cell">支付时间</div></td>
           </tr>
         </thead>
         <tbody v-for="item in snapshotList">
           <tr>
-            <td><div class="cell">{{ item.id }}</div></td>
-            <td><div class="cell">{{ item.name }}</div></td>
-            <td><div class="cell">{{ item.typeName }}</div></td>
-            <td><div class="cell">{{ item.periodName }}</div></td>
-            <td>
+            <td class="el-table__cell is-leaf"><div class="cell">{{ item.id }}</div></td>
+            <td class="el-table__cell is-leaf"><div class="cell">{{ item.name }}</div></td>
+            <td class="el-table__cell is-leaf"><div class="cell">{{ item.typeName }}</div></td>
+            <td class="el-table__cell is-leaf"><div class="cell">{{ item.periodName }}</div></td>
+            <td class="el-table__cell is-leaf">
               <div class="cell">
                 <span v-if="item.hasChild==true">
                   --
@@ -34,8 +34,8 @@
                 </span>
               </div>
             </td>
-            <td><div class="cell">{{ formatMoney(item.cpPaidAmount) }}</div></td>
-            <td>
+            <td class="el-table__cell is-leaf"><div class="cell">{{ formatMoney(item.cpPaidAmount) }}</div></td>
+            <td class="el-table__cell is-leaf">
               <div class="cell">
                 <span v-if="item.hasChild==true">
                   --
@@ -45,25 +45,25 @@
                 </span>
               </div>
             </td>
-            <td><div class="cell" align="center">{{ item.sourceName }}</div></td>
-            <td>
+            <td class="el-table__cell is-leaf"><div class="cell" align="center">{{ item.sourceName }}</div></td>
+            <td class="el-table__cell is-leaf">
               <div class="cell" align="center">
                 <span class="link-type" @click="showChildren(item)" v-if="item.hasChild==true"><i class="el-icon-s-grid" /></span>
                 <span v-else>--</span>
               </div>
             </td>
-            <td>
+            <td class="el-table__cell is-leaf">
               <div class="cell" align="center">
                 <span class="link-type" @click="showConsume(item)"  v-if="item.feeType!=null"><i class="el-icon-s-grid" /></span>
                 <span v-else>--</span>
               </div>
             </td>
-            <td>
+            <td class="el-table__cell is-leaf">
               <div class="cell" align="center">
                 <span class="link-type" @click="showHistory(item)"><i class="el-icon-s-grid" /></span>
               </div>
             </td>
-            <td><div class="cell">{{ item.cpPaidTime }}</div></td>
+            <td class="el-table__cell is-leaf"><div class="cell">{{ item.cpPaidTime }}</div></td>
           </tr>
         </tbody>
       </table>

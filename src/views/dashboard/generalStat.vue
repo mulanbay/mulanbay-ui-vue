@@ -61,9 +61,9 @@
             <table cellspacing="0" style="width: 100%;">
               <thead>
                 <tr>
-                  <th class="is-leaf"><div class="cell">名称</div></th>
-                  <th class="is-leaf"><div class="cell">统计值</div></th>
-                  <th class="is-leaf" width="60px"><div class="cell">链接</div></th>
+                  <td class="el-table__cell is-leaf"><div class="cell">名称</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell">统计值</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell">链接</div></td>
                 </tr>
               </thead>
               <tbody>
@@ -75,36 +75,36 @@
                   </td>
                 </tr>
                 <tr>
-                  <td><div class="cell">总收入</div></td>
-                  <td><div class="cell">{{ formatMoney(statData.totalIncome) }}</div></td>
-                  <td>
+                  <td class="el-table__cell is-leaf"><div class="cell">总收入</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell">{{ formatMoney(statData.totalIncome) }}</div></td>
+                  <td class="el-table__cell is-leaf">
                     <div class="cell">
                       <span class="link-type" @click="handleDispatch('Income')"><i class="el-icon-s-promotion" /></span>
                     </div>
                   </td>
                 </tr>
                 <tr>
-                  <td><div class="cell">总共消费</div></td>
-                  <td><div class="cell">{{ formatMoney(statData.totalConsumeAmount) }}</div></td>
-                  <td>
+                  <td class="el-table__cell is-leaf"><div class="cell">总共消费</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell">{{ formatMoney(statData.totalConsumeAmount) }}</div></td>
+                  <td class="el-table__cell is-leaf">
                     <div class="cell">
                       <span class="link-type" @click="handleDispatch('BuyRecord')"><i class="el-icon-s-promotion" /></span>
                     </div>
                   </td>
                 </tr>
                 <tr>
-                  <td><div class="cell">看病(自费)</div></td>
-                  <td><div class="cell">{{ formatMoney(statData.totalTreatAmount) }}</div></td>
-                  <td>
+                  <td class="el-table__cell is-leaf"><div class="cell">看病(自费)</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell">{{ formatMoney(statData.totalTreatAmount) }}</div></td>
+                  <td class="el-table__cell is-leaf">
                     <div class="cell">
                       <span class="link-type" @click="handleDispatch('TreatRecord')"><i class="el-icon-s-promotion" /></span>
                     </div>
                   </td>
                 </tr>
                 <tr>
-                  <td><div class="cell">新增存款</div></td>
-                  <td><div class="cell">{{ formatMoney(statData.remainMoney) }}</div></td>
-                  <td>
+                  <td class="el-table__cell is-leaf"><div class="cell">新增存款</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell">{{ formatMoney(statData.remainMoney) }}</div></td>
+                  <td class="el-table__cell is-leaf">
                     <div class="cell">
                       <span class="link-type" @click="handleDispatch('Income')"><i class="el-icon-s-promotion" /></span>
                     </div>
@@ -118,9 +118,9 @@
                   </td>
                 </tr>
                 <tr>
-                  <td><div class="cell">预算金额</div></td>
-                  <td><div class="cell">{{ formatMoney(statData.yearBudget) }}</div></td>
-                  <td>
+                  <td class="el-table__cell is-leaf"><div class="cell">预算金额</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell">{{ formatMoney(statData.yearBudget) }}</div></td>
+                  <td class="el-table__cell is-leaf">
                     <div class="cell">
                       <span class="link-type" @click="handleDispatch('Budget')"><i class="el-icon-s-promotion" /></span>
                     </div>
@@ -134,62 +134,62 @@
                   </td>
                 </tr>
                 <tr>
-                  <td><div class="cell">预算金额</div></td>
-                  <td><div class="cell">{{ formatMoney(statData.monthBudget) }}</div></td>
-                  <td>
+                  <td class="el-table__cell is-leaf"><div class="cell">预算金额</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell">{{ formatMoney(statData.monthBudget) }}</div></td>
+                  <td class="el-table__cell is-leaf">
                     <div class="cell">
                       <span class="link-type" @click="handleDispatch('Budget')"><i class="el-icon-s-promotion" /></span>
                     </div>
                   </td>
                 </tr>
                 <tr>
-                  <td><div class="cell">已经消费</div></td>
-                  <td><div class="cell">{{ formatMoney(statData.monthConsumeAmount) }}</div></td>
-                  <td>
+                  <td class="el-table__cell is-leaf"><div class="cell">已经消费</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell">{{ formatMoney(statData.monthConsumeAmount) }}</div></td>
+                  <td class="el-table__cell is-leaf">
                     <div class="cell">
                       <span class="link-type" @click="handleDispatch('BuyRecord')"><i class="el-icon-s-promotion" /></span>
                     </div>
                   </td>
                 </tr>
                 <tr>
-                  <td><div class="cell">已经过去</div></td>
-                  <td>
+                  <td class="el-table__cell is-leaf"><div class="cell">已经过去</div></td>
+                  <td class="el-table__cell is-leaf">
                     <div class="cell">
                       <el-progress :percentage="statData.dayMonthRate" :color="customColors"></el-progress>
                     </div>
                   </td>
-                  <td>
+                  <td class="el-table__cell is-leaf">
                     <div class="cell">
                       {{statData.monthPassDays+'天'}}
                     </div>
                   </td>
                 </tr>
                 <tr>
-                  <td><div class="cell">消费/预算比例</div></td>
-                  <td>
+                  <td class="el-table__cell is-leaf"><div class="cell">消费/预算比例</div></td>
+                  <td class="el-table__cell is-leaf">
                     <div class="cell">
                       <el-progress :percentage="statData.monthConsumeBudgetRate" :color="customColors"></el-progress>
                     </div>
                   </td>
-                  <td>
+                  <td class="el-table__cell is-leaf">
                     <div class="cell">
                       <span class="link-type" @click="handleDispatch('BuyRecord')"><i class="el-icon-s-promotion" /></span>
                     </div>
                   </td>
                 </tr>
                 <tr>
-                  <td><div class="cell">还可消费</div></td>
-                  <td><div class="cell">{{ formatMoney(statData.monthRemainConsume) }}</div></td>
-                  <td>
+                  <td class="el-table__cell is-leaf"><div class="cell">还可消费</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell">{{ formatMoney(statData.monthRemainConsume) }}</div></td>
+                  <td class="el-table__cell is-leaf">
                     <div class="cell">
                       <span class="link-type" @click="handleDispatch('BuyRecord')"><i class="el-icon-s-promotion" /></span>
                     </div>
                   </td>
                 </tr>
                 <tr>
-                  <td><div class="cell">每天还可消费</div></td>
-                  <td><div class="cell">{{ formatMoney(statData.monthRCPerDay) }}</div></td>
-                  <td>
+                  <td class="el-table__cell is-leaf"><div class="cell">每天还可消费</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell">{{ formatMoney(statData.monthRCPerDay) }}</div></td>
+                  <td class="el-table__cell is-leaf">
                     <div class="cell">
                       <span class="link-type" @click="handleDispatch('BuyRecord')"><i class="el-icon-s-promotion" /></span>
                     </div>
@@ -210,38 +210,38 @@
             <table cellspacing="0" style="width: 100%;">
               <thead>
                 <tr>
-                  <th class="is-leaf"><div class="cell">名称</div></th>
-                  <th class="is-leaf"><div class="cell" align="center">次数</div></th>
-                  <th class="is-leaf"><div class="cell" align="center">金额</div></th>
-                  <th class="is-leaf" width="60px"><div class="cell" align="center">链接</div></th>
+                  <td class="el-table__cell is-leaf"><div class="cell">名称</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell" align="center">次数</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell" align="center">统计值</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell" align="center">链接</div></td>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td><div class="cell">消费信息</div></td>
-                  <td><div class="cell" align="center">{{ statData.totalBuyCount }}</div></td>
-                  <td><div class="cell" align="center">{{ formatMoney(statData.totalConsumeAmount) }}</div></td>
-                  <td>
+                  <td class="el-table__cell is-leaf"><div class="cell">消费信息</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell" align="center">{{ statData.totalBuyCount }}</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell" align="center">{{ formatMoney(statData.totalConsumeAmount) }}</div></td>
+                  <td class="el-table__cell is-leaf">
                     <div class="cell" align="center">
                       <span class="link-type" @click="handleDispatch('BuyRecord')"><i class="el-icon-s-promotion" /></span>
                     </div>
                   </td>
                 </tr>
                 <tr>
-                  <td><div class="cell">看病信息</div></td>
-                  <td><div class="cell" align="center">{{ statData.totalTreatCount }}</div></td>
-                  <td><div class="cell" align="center">{{ formatMoney(statData.totalTreatAmount) }}</div></td>
-                  <td>
+                  <td class="el-table__cell is-leaf"><div class="cell">看病信息</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell" align="center">{{ statData.totalTreatCount }}</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell" align="center">{{ formatMoney(statData.totalTreatAmount) }}</div></td>
+                  <td class="el-table__cell is-leaf">
                     <div class="cell" align="center">
                       <span class="link-type" @click="handleDispatch('TreatRecord')"><i class="el-icon-s-promotion" /></span>
                     </div>
                   </td>
                 </tr>
                 <tr>
-                  <td><div class="cell">其他信息</div></td>
-                  <td><div class="cell" align="center">--</div></td>
-                  <td><div class="cell" align="center">--</div></td>
-                  <td>
+                  <td class="el-table__cell is-leaf"><div class="cell">其他信息</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell" align="center">--</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell" align="center">--</div></td>
+                  <td class="el-table__cell is-leaf">
                     <div class="cell" align="center">
                       <span class="link-type" @click="handleDispatch('BuyRecord')"><i class="el-icon-s-promotion" /></span>
                     </div>
@@ -262,38 +262,38 @@
             <table cellspacing="0" style="width: 100%;">
               <thead>
                 <tr>
-                  <th class="is-leaf"><div class="cell">名称</div></th>
-                  <th class="is-leaf"><div class="cell" align="center">次数</div></th>
-                  <th class="is-leaf"><div class="cell" align="center">统计值</div></th>
-                  <th class="is-leaf" width="60px"><div class="cell" align="center">链接</div></th>
+                  <td class="el-table__cell is-leaf"><div class="cell">名称</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell" align="center">次数</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell" align="center">统计值</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell" align="center">链接</div></td>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td><div class="cell">锻炼时间</div></td>
-                  <td><div class="cell" align="center">{{ statLifeData.totalSportExerciseCount }}</div></td>
-                  <td><div class="cell" align="center">{{ statLifeData.totalSportExerciseHours }}小时</div></td>
-                  <td>
+                  <td class="el-table__cell is-leaf"><div class="cell">锻炼时间</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell" align="center">{{ statLifeData.totalSportExerciseCount }}</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell" align="center">{{ statLifeData.totalSportExerciseHours }}小时</div></td>
+                  <td class="el-table__cell is-leaf">
                     <div class="cell" align="center">
                       <span class="link-type" @click="handleDispatch('SportExercise')"><i class="el-icon-s-promotion" /></span>
                     </div>
                   </td>
                 </tr>
                 <tr>
-                  <td><div class="cell">音乐练习</div></td>
-                  <td><div class="cell" align="center">{{ statLifeData.totalMusicPracticeCount }}</div></td>
-                  <td><div class="cell" align="center">{{ statLifeData.totalMusicPracticeHours }}小时</div></td>
-                  <td>
+                  <td class="el-table__cell is-leaf"><div class="cell">音乐练习</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell" align="center">{{ statLifeData.totalMusicPracticeCount }}</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell" align="center">{{ statLifeData.totalMusicPracticeHours }}小时</div></td>
+                  <td class="el-table__cell is-leaf">
                     <div class="cell" align="center">
                       <span class="link-type" @click="handleDispatch('MusicPractice')"><i class="el-icon-s-promotion" /></span>
                     </div>
                   </td>
                 </tr>
                 <tr>
-                  <td><div class="cell">阅读时间</div></td>
-                  <td><div class="cell" align="center">{{ statLifeData.totalReadingCount }}</div></td>
-                  <td><div class="cell" align="center">{{ statLifeData.totalReadingHours }}小时</div></td>
-                  <td>
+                  <td class="el-table__cell is-leaf"><div class="cell">阅读时间</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell" align="center">{{ statLifeData.totalReadingCount }}</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell" align="center">{{ statLifeData.totalReadingHours }}小时</div></td>
+                  <td class="el-table__cell is-leaf">
                     <div class="cell" align="center">
                       <span class="link-type" @click="handleDispatch('ReadingRecord')"><i class="el-icon-s-promotion" /></span>
                     </div>
@@ -427,7 +427,7 @@ export default {
       statWithTreat(para).then(
         response => {
           //组装chart数据
-          response.height = '700px';
+          response.height = '645px';
           this.chartData = response;
           this.loading.close();
         }
