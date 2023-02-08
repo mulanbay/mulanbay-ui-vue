@@ -180,7 +180,19 @@ export function encodeJsonString(ss) {
 		return ss;
 	}
 }
-
+/**
+ * 字符省略显示
+ * @param {Object} value
+ * @param {Object} len
+ */
+export function ellipsis(value, len) {
+  //console.log(value+","+len);
+  if (!value) return ''
+  if (value.length > len) {
+    return value.slice(0, len) + '...'
+  }
+  return value
+}
 /**
  * 字符串转换为json数据
  * @param {Object} ss

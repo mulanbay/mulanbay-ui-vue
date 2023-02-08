@@ -23,49 +23,61 @@
         <el-col :span="12" class="card-box">
           <el-card>
             <el-col :span="12">
-              <div class="el-table el-table--enable-row-hover el-table--medium">
-              <table cellspacing="0" style="width: 100%;">
-                <tbody>
-                  <tr>
-                    <td><div class="cell">提醒名称</div></td>
-                    <td>
-                      <div class="cell">
-                      {{ formatName(item) }}
-                      <span class="link-type" @click="handleDispatch(item.userNotify.notifyConfig.url)"><i class="el-icon-s-promotion" /></span>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td><div class="cell">统计值</div></td>
-                    <td>
-                      <div class="cell">
-                        <span v-if="item.overAlertValue>0" style="color:red ;">
-                         {{ item.content }}
-                        </span>
-                        <span v-else-if="item.overWarningValue>0" style="color:BlueViolet ;">
-                         {{ item.content }}
-                        </span>
-                        <span v-else style="color:#2E8B57 ;">
-                          {{ item.content }}
-                          <i class="el-icon-success" />
-                        </span>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td><div class="cell">警告值</div></td>
-                    <td><div class="cell">{{ item.userNotify.warningValue+item.userNotify.unit }}</div></td>
-                  </tr>
-                  <tr>
-                    <td><div class="cell">报警值</div></td>
-                    <td><div class="cell">{{ item.userNotify.alertValue+item.userNotify.unit }}</div></td>
-                  </tr>
-                  <tr>
-                    <td><div class="cell">比较类型</div></td>
-                    <td><div class="cell">{{ item.userNotify.notifyConfig.notifyTypeName }}</div></td>
-                  </tr>
-                </tbody>
-              </table>
+              <div >
+                <el-descriptions class="margin-top" :column="1" :size="size" border labelStyle="width: 100px">
+                  <el-descriptions-item>
+                    <template slot="label">
+                      <i class="el-icon-info"></i>
+                      提醒名称
+                    </template>
+                    <div class="cell">
+                      <el-tooltip class="item" effect="dark" :content="item.userNotify.title" placement="top">
+                         <el-button size="mini" round plain type="success">
+                           {{ formatTitle(item.userNotify.title) }}
+                         </el-button>
+                      </el-tooltip>
+                    </div>
+                  </el-descriptions-item>
+                  <el-descriptions-item>
+                    <template slot="label">
+                      <i class="el-icon-s-data"></i>
+                      统计值
+                    </template>
+                    <div class="cell">
+                      <span v-if="item.overAlertValue>0" style="color:red ;">
+                       {{ item.content }}
+                      </span>
+                      <span v-else-if="item.overWarningValue>0" style="color:BlueViolet ;">
+                       {{ item.content }}
+                      </span>
+                      <span v-else style="color:#2E8B57 ;">
+                        {{ item.content }}
+                        <i class="el-icon-success" />
+                      </span>
+                    </div>
+                  </el-descriptions-item>
+                  <el-descriptions-item>
+                    <template slot="label">
+                      <i class="el-icon-warning"></i>
+                      警告值
+                    </template>
+                    <div class="cell">{{ item.userNotify.warningValue+item.userNotify.unit }}</div>
+                  </el-descriptions-item>
+                  <el-descriptions-item>
+                    <template slot="label">
+                      <i class="el-icon-star-on"></i>
+                      报警值
+                    </template>
+                    <div class="cell">{{ item.userNotify.alertValue+item.userNotify.unit }}</div>
+                  </el-descriptions-item>
+                  <el-descriptions-item>
+                    <template slot="label">
+                      <i class="el-icon-d-caret"></i>
+                      比较类型
+                    </template>
+                    <div class="cell">{{ item.userNotify.notifyConfig.notifyTypeName }}</div>
+                  </el-descriptions-item>
+              </el-descriptions>
               </div>
             </el-col>
             <el-col :span="12">
@@ -98,6 +110,7 @@
                     <td align="center" colspan="2">
                       </br>
                       <el-button type="primary" icon="el-icon-refresh" size="mini" @click="refreshStat(item.userNotify.id)"  v-hasPermi="['report:notify:userNotify:deleteCache']">刷新</el-button>
+                      <el-button type="primary" icon="el-icon-s-promotion" size="mini" @click="handleDispatch(item.userNotify.notifyConfig.url)"  v-hasPermi="['report:notify:userNotify:deleteCache']">详情</el-button>
                     </td>
                   </tr>
                 </tbody>
@@ -123,6 +136,7 @@
 <script>
   import {fetchList,deleteCache} from "@/api/report/notify/notifyStat";
   import {getPercent} from "@/utils/planUtils";
+  import {ellipsis} from "@/utils/mulanbay";
 
 export default {
   name: "UserNotifyNotifyStatList",
@@ -190,11 +204,10 @@ export default {
       this.msgSuccess("刷新成功");
       this.getList();
     },
-    /** 格式化名称，计算各数值 */
-    formatName(row){
-      row.wr = getPercent(row.compareValue,row.userNotify.warningValue);
-      row.ar = getPercent(row.compareValue,row.userNotify.alertValue);
-      return row.userNotify.title;
+    /** 省略显示 */
+    formatTitle(title){
+      let s = ellipsis(title,8);
+      return s;
     },
     /** 查询列表 */
     getList() {
@@ -210,6 +223,8 @@ export default {
             if(dd.userNotify.notifyConfig.resultType=='NAME_DATE'||dd.userNotify.notifyConfig.resultType=='NAME_NUMBER'){
               dd.content=dd.name+dd.compareValue+dd.userNotify.unit;
             }
+            dd.wr = getPercent(dd.compareValue,dd.userNotify.warningValue);
+            dd.ar = getPercent(dd.compareValue,dd.userNotify.alertValue);
             list.push(dd);
           }
           this.notifyStatList = list;

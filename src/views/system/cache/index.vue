@@ -29,44 +29,96 @@
 
       <el-col :span="24" class="card-box">
         <el-card>
-          <div slot="header">
-            <span>统计信息</span>
-          </div>
-          <div class="el-table el-table--enable-row-hover el-table--medium">
-            <table cellspacing="0" style="width: 100%;">
-              <tbody>
-                <tr>
-                  <td><div class="cell">Redis版本</div></td>
-                  <td><div class="cell" v-if="cache.info">{{ cache.info.redis_version }}</div></td>
-                  <td><div class="cell">运行模式</div></td>
-                  <td><div class="cell" v-if="cache.info">{{ cache.info.redis_mode == "standalone" ? "单机" : "集群" }}</div></td>
-                  <td><div class="cell">端口</div></td>
-                  <td><div class="cell" v-if="cache.info">{{ cache.info.tcp_port }}</div></td>
-                  <td><div class="cell">客户端数</div></td>
-                  <td><div class="cell" v-if="cache.info">{{ cache.info.connected_clients }}</div></td>
-                </tr>
-                <tr>
-                  <td><div class="cell">运行时间(天)</div></td>
-                  <td><div class="cell" v-if="cache.info">{{ cache.info.uptime_in_days }}</div></td>
-                  <td><div class="cell">使用内存</div></td>
-                  <td><div class="cell" v-if="cache.info">{{ cache.info.used_memory_human }}</div></td>
-                  <td><div class="cell">使用CPU</div></td>
-                  <td><div class="cell" v-if="cache.info">{{ parseFloat(cache.info.used_cpu_user_children).toFixed(2) }}</div></td>
-                  <td><div class="cell">内存配置</div></td>
-                  <td><div class="cell" v-if="cache.info">{{ cache.info.maxmemory_human }}</div></td>
-                </tr>
-                <tr>
-                  <td><div class="cell">AOF是否开启</div></td>
-                  <td><div class="cell" v-if="cache.info">{{ cache.info.aof_enabled == "0" ? "否" : "是" }}</div></td>
-                  <td><div class="cell">RDB是否成功</div></td>
-                  <td><div class="cell" v-if="cache.info">{{ cache.info.rdb_last_bgsave_status }}</div></td>
-                  <td><div class="cell">Key数量</div></td>
-                  <td><div class="cell" v-if="cache.dbSize">{{ cache.dbSize }} </div></td>
-                  <td><div class="cell">网络入口/出口</div></td>
-                  <td><div class="cell" v-if="cache.info">{{ cache.info.instantaneous_input_kbps }}kps/{{cache.info.instantaneous_output_kbps}}kps</div></td>
-                </tr>
-              </tbody>
-            </table>
+          <div >
+            <el-descriptions class="margin-top" title="统计信息" :column="4" :size="size" border>
+                <template slot="extra">
+                  <el-button type="query" icon="el-icon-info" size="mini" @click="handleMoreDetail" v-hasPermi="['system:systemMonitor:query']">更多</el-button>
+                </template>
+                <el-descriptions-item>
+                  <template slot="label">
+                    <i class="el-icon-user"></i>
+                    Redis版本
+                  </template>
+                  <div class="cell" v-if="cache.info">{{ cache.info.redis_version }}</div>
+                </el-descriptions-item>
+                <el-descriptions-item>
+                  <template slot="label">
+                    <i class="el-icon-mobile-phone"></i>
+                    运行模式
+                  </template>
+                  <div class="cell" v-if="cache.info">{{ cache.info.redis_mode == "standalone" ? "单机" : "集群" }}</div>
+                </el-descriptions-item>
+                <el-descriptions-item>
+                  <template slot="label">
+                    <i class="el-icon-location-outline"></i>
+                    端口
+                  </template>
+                  <div class="cell" v-if="cache.info">{{ cache.info.tcp_port }}</div>
+                </el-descriptions-item>
+                <el-descriptions-item>
+                  <template slot="label">
+                    <i class="el-icon-tickets"></i>
+                    客户端数
+                  </template>
+                  <el-tag size="small"><div class="cell" v-if="cache.info">{{ cache.info.connected_clients }}</div></el-tag>
+                </el-descriptions-item>
+                <el-descriptions-item>
+                  <template slot="label">
+                    <i class="el-icon-user"></i>
+                    运行时间(天)
+                  </template>
+                  <div class="cell" v-if="cache.info">{{ cache.info.uptime_in_days }}</div>
+                </el-descriptions-item>
+                <el-descriptions-item>
+                  <template slot="label">
+                    <i class="el-icon-user"></i>
+                    使用内存
+                  </template>
+                  <div class="cell" v-if="cache.info">{{ cache.info.used_memory_human }}</div>
+                </el-descriptions-item>
+                <el-descriptions-item>
+                  <template slot="label">
+                    <i class="el-icon-user"></i>
+                    使用CPU
+                  </template>
+                  <div class="cell" v-if="cache.info">{{ parseFloat(cache.info.used_cpu_user_children).toFixed(2) }}</div>
+                </el-descriptions-item>
+                <el-descriptions-item>
+                  <template slot="label">
+                    <i class="el-icon-user"></i>
+                    内存配置
+                  </template>
+                  <div class="cell" v-if="cache.info">{{ cache.info.maxmemory_human }}</div>
+                </el-descriptions-item>
+                <el-descriptions-item>
+                  <template slot="label">
+                    <i class="el-icon-user"></i>
+                    AOF是否开启
+                  </template>
+                  <div class="cell" v-if="cache.info">{{ cache.info.aof_enabled == "0" ? "否" : "是" }}</div>
+                </el-descriptions-item>
+                <el-descriptions-item>
+                  <template slot="label">
+                    <i class="el-icon-user"></i>
+                    RDB是否成功
+                  </template>
+                  <div class="cell" v-if="cache.info">{{ cache.info.rdb_last_bgsave_status }}</div>
+                </el-descriptions-item>
+                <el-descriptions-item>
+                  <template slot="label">
+                    <i class="el-icon-user"></i>
+                    Key数量
+                  </template>
+                  <div class="cell" v-if="cache.dbSize">{{ cache.dbSize }} </div>
+                </el-descriptions-item>
+                <el-descriptions-item>
+                  <template slot="label">
+                    <i class="el-icon-user"></i>
+                    网络入口/出口
+                  </template>
+                  <div class="cell" v-if="cache.info">{{ cache.info.instantaneous_input_kbps }}kps/{{cache.info.instantaneous_output_kbps}}kps</div>
+                </el-descriptions-item>
+              </el-descriptions>
           </div>
         </el-card>
       </el-col>

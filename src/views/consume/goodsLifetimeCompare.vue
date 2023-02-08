@@ -21,7 +21,7 @@
 <script>
 import {aiMatch} from "@/api/consume/goodsLifetime";
 import {getBuyRecord} from "@/api/consume/buyRecord";
-import {formatDays,dateDiff,getNowDateTimeString,tillNowDays} from "@/utils/datetime";
+import {formatDays,dateDiff} from "@/utils/datetime";
 import {getPercent} from "@/utils/mulanbay";
 
 export default {
@@ -55,14 +55,12 @@ export default {
       });
     },
     compareBuyRecord(data){
-      let days = tillNowDays(null,data.buyDate);
-      this.dataList.push({key:'距离现在',value:formatDays(0-days)});
       if(data.deleteDate==null){
-        data.days = dateDiff(data.buyDate,getNowDateTimeString());
+        data.days = dateDiff(data.buyDate,new Date());
       }else{
         data.days = dateDiff(data.buyDate,data.deleteDate);
-        this.dataList.push({key:'实际使用时长',value:formatDays(data.days)});
       }
+      this.dataList.push({key:'实际使用时长',value:formatDays(data.days)});
       aiMatch(data.goodsName).then(response => {
         if(response!=null){
           this.dataList.push({key:'匹配商品分类',value:response.name});

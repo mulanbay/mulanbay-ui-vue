@@ -73,7 +73,7 @@
       </div>
       <div>
         <div class="lnb-calendars-item" align="center">
-          <el-button type="danger" icon="el-icon-timer" size="medium" style="width: 160px;" round @click="handleDaily">每日</el-button>
+          <el-button type="success" icon="el-icon-timer" size="medium" style="width: 160px;" round @click="handleDaily">每日</el-button>
         </div>
       </div>
     </div>

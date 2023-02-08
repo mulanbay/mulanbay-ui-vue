@@ -52,7 +52,7 @@
       </el-row>
       <el-row>
         <el-col :span="20">
-          <el-form-item label="日历模板" prop="calendarConfigId">
+          <el-form-item label="绑定日历模板" prop="calendarConfigId">
            <treeselect
             v-model="form.calendarConfigId"
             @input="loadTemplate"
@@ -151,14 +151,14 @@
       </el-row>
       <el-row>
         <el-col :span="24">
-          <el-form-item label="日历地点">
+          <el-form-item label="地点">
             <el-input v-model="form.location" placeholder="" />
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
         <el-col :span="24">
-          <el-form-item label="日历备注">
+          <el-form-item label="备注">
             <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"></el-input>
           </el-form-item>
         </el-col>

@@ -23,27 +23,23 @@
     <el-row :gutter="32" v-loading="loading" >
       <el-card>
         <el-col :span="24" class="card-box">
-          <div class="el-table el-table--enable-row-hover el-table--medium">
-            <table cellspacing="0" style="width: 100%;">
-              <tbody>
-                <tr>
-                  <td><div class="cell"><i class="el-icon-info"></i>统计值</div></td>
-                  <td>
-                    <div class="cell">
-                      <span class="table-title">{{ statTitle }}</span>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td><div class="cell"><i class="el-icon-info"></i>统计信息</div></td>
-                  <td>
-                    <div class="cell">
-                      <span class="table-title">{{ statContent }}</span>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+          <div>
+            <el-descriptions class="margin-top" :column="1" :size="size" border labelStyle="width: 100px">
+              <el-descriptions-item>
+                <template slot="label">
+                  <i class="el-icon-star-on"></i>
+                  统计值
+                </template>
+                <div class="cell">{{ statTitle }}</div>
+              </el-descriptions-item>
+              <el-descriptions-item>
+                <template slot="label">
+                  <i class="el-icon-star-on"></i>
+                  统计信息
+                </template>
+                <div class="cell">{{ statContent }}</div>
+              </el-descriptions-item>
+            </el-descriptions>
           </div>
         </el-col>
       </el-card>
