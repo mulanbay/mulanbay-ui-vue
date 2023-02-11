@@ -75,12 +75,15 @@ Vue.prototype.msgInfo = function (msg) {
 }
 
 /**
- * 弹出提示
+ * 弹出提示,支持html
  * @param {Object} title
  * @param {Object} msg
  */
 Vue.prototype.msgAlert = function (title,msg) {
-  this.$alert(msg, title, {
+  let cc = '<div style="white-space: pre-line;max-height: 400px;overflow: auto;" >'+
+          msg+
+          '</div>';
+  this.$alert(cc, title, {
     confirmButtonText: '确定',
     //支持html，比如换行符之类
     dangerouslyUseHTMLString:true,
