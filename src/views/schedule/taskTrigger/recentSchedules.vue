@@ -7,7 +7,24 @@
         <el-timeline-item :timestamp="item.timestamp" :type="item.type" placement="top">
           <el-card class="box-card">
             <div>
-              <p>{{item.content}}</p>
+              <el-descriptions class="margin-top" :column="1" :size="size" border >
+                <el-descriptions-item>
+                  <template slot="label" >
+                    <i class="el-icon-warning"></i>
+                    调度名称
+                  </template>
+                  <div class="cell" align="center">{{ item.content }}</div>
+                </el-descriptions-item>
+                <el-descriptions-item>
+                  <template slot="label" >
+                    <i class="el-icon-date"></i>
+                    剩余时间
+                  </template>
+                  <div class="cell">
+                    <el-statistic ref="statistic" format="HH:mm:ss:SSS" :value="item.nextExecuteTime" title="距离现在" time-indices > </el-statistic>
+                  </div>
+                </el-descriptions-item>
+              </el-descriptions>
             </div>
           </el-card>
         </el-timeline-item>
@@ -55,9 +72,11 @@ export default {
           if(datas[i].nextExecuteTime.substr(0,10)!=now){
             timestamp+='(明天)';
           }
+          let net = (datas[i].nextExecuteTime==null ? datas[i].firstExecuteTime : datas[i].nextExecuteTime);
           let row = {
             content:datas[i].name,
             timestamp:timestamp,
+            nextExecuteTime: (new Date(net.replace(/-/,"/"))),
             type: 'primary'
           };
           this.dataList.push(row);

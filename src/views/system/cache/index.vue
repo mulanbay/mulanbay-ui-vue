@@ -65,9 +65,9 @@
                 <el-descriptions-item>
                   <template slot="label">
                     <i class="el-icon-user"></i>
-                    运行时间(天)
+                    运行时间
                   </template>
-                  <div class="cell" v-if="cache.info">{{ cache.info.uptime_in_days }}</div>
+                  <div class="cell" v-if="cache.info">{{ cache.info.uptime_in_days }}天</div>
                 </el-descriptions-item>
                 <el-descriptions-item>
                   <template slot="label">

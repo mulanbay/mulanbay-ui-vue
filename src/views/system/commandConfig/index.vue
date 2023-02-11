@@ -60,7 +60,7 @@
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="命令名称" align="center" >
+      <el-table-column label="命令名称"  :show-overflow-tooltip="true">
         <template slot-scope="{row}">
           <span>{{ row.name }}</span>
         </template>
@@ -103,7 +103,7 @@
           <el-switch v-model="row.status" active-value="ENABLE"  disabled></el-switch>
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" align="center" width="160">
+      <el-table-column label="创建时间" align="center" width="180">
         <template slot-scope="{row}">
           <span>{{ row.createdTime }}</span>
         </template>
