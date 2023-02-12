@@ -21,38 +21,38 @@
             <table cellspacing="0" style="width: 100%;">
               <thead>
                 <tr>
-                  <th class="is-leaf"><div class="cell">字段</div></th>
-                  <th class="is-leaf"><div class="cell">统计值</div></th>
+                  <td class="el-table__cell is-leaf"><div class="cell">字段</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell">统计值</div></td>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td><div class="cell">总次数</div></td>
-                  <td><div class="cell">{{ statData.totalCount }}次</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell">总次数</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell">{{ statData.totalCount }}次</div></td>
                 </tr>
                 <tr>
-                  <td><div class="cell">总挂号费</div></td>
-                  <td><div class="cell">{{ formatMoney(statData.registeredFee) }}</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell">总挂号费</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell">{{ formatMoney(statData.registeredFee) }}</div></td>
                 </tr>
                 <tr>
-                  <td><div class="cell">总药费</div></td>
-                  <td><div class="cell">{{ formatMoney(statData.drugFee) }}</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell">总药费</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell">{{ formatMoney(statData.drugFee) }}</div></td>
                 </tr>
                 <tr>
-                  <td><div class="cell">总手术费</div></td>
-                  <td><div class="cell">{{ formatMoney(statData.operationFee) }}</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell">总手术费</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell">{{ formatMoney(statData.operationFee) }}</div></td>
                 </tr>
                 <tr>
-                  <td><div class="cell">总医保支付费用</div></td>
-                  <td><div class="cell">{{ formatMoney(statData.medicalInsurancePaidFee) }}</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell">总医保支付费用</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell">{{ formatMoney(statData.medicalInsurancePaidFee) }}</div></td>
                 </tr>
                 <tr>
-                  <td><div class="cell">总个人支付费用</div></td>
-                  <td><div class="cell">{{ formatMoney(statData.personalPaidFee) }}</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell">总个人支付费用</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell">{{ formatMoney(statData.personalPaidFee) }}</div></td>
                 </tr>
                 <tr>
-                  <td><div class="cell">总费用</div></td>
-                  <td><div class="cell">{{ formatMoney(statData.totalFee) }}</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell">总费用</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell">{{ formatMoney(statData.totalFee) }}</div></td>
                 </tr>
               </tbody>
             </table>

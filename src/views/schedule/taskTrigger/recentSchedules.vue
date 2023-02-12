@@ -21,7 +21,7 @@
                     剩余时间
                   </template>
                   <div class="cell">
-                    <el-statistic ref="statistic" format="HH:mm:ss:SSS" :value="item.nextExecuteTime" title="距离现在" time-indices > </el-statistic>
+                    <el-statistic ref="statistic" format="HH:mm:ss" :value="item.nextExecuteTime" title="距离现在" time-indices > </el-statistic>
                   </div>
                 </el-descriptions-item>
               </el-descriptions>

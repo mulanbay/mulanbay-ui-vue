@@ -221,7 +221,7 @@ export default {
                 dt.type='danger';
                 unTakes++;
               }else{
-                dt.occurTimeStr = dt.occurTime.substr(11,5);
+                dt.occurTimeStr = dt.occurTime.substr(11,5)+'服用★';
                 dt.type='primary';
                 takes++;
               }
