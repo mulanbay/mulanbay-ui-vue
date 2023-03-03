@@ -157,7 +157,7 @@
           <el-col :span="14">
             <el-form-item label="地理坐标" prop="scLocation">
              <el-input v-model="form.scLocation" placeholder="" style="width: 195px;"/>
-             <el-button type="query" icon="el-icon-search" size="mini" @click="handleStartCityML" >选择</el-button>
+             <el-button type="query" icon="el-icon-check" size="mini" @click="handleStartCityML" >选择</el-button>
             </el-form-item>
           </el-col>
         </el-row>
@@ -170,7 +170,7 @@
           <el-col :span="14">
             <el-form-item label="地理坐标" prop="acLocation">
              <el-input v-model="form.acLocation" placeholder="" style="width: 195px;"/>
-             <el-button type="query" icon="el-icon-search" size="mini" @click="handleArriveCityML" >选择</el-button>
+             <el-button type="query" icon="el-icon-check" size="mini" @click="handleArriveCityML" >选择</el-button>
             </el-form-item>
           </el-col>
         </el-row>
@@ -183,7 +183,7 @@
           <el-col :span="14">
             <el-form-item label="地理坐标" prop="countryLocation">
              <el-input v-model="form.countryLocation" placeholder="" style="width: 195px;"/>
-             <el-button type="query" icon="el-icon-search" size="mini" @click="handleCountryML" >选择</el-button>
+             <el-button type="query" icon="el-icon-check" size="mini" @click="handleCountryML" >选择</el-button>
             </el-form-item>
           </el-col>
         </el-row>

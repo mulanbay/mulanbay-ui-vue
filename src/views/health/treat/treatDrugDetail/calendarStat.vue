@@ -149,7 +149,7 @@ export default {
             createCalanderChart(response,this.chart);
           }else{
             response.cellSize = 70;
-            response.pieRadius = 35;
+            response.pieRadius = 15;
             createCalanderPieChart(response,this.chart,echarts);
           }
           this.loading.close();

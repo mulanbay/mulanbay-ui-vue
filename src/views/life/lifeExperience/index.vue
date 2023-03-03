@@ -148,12 +148,12 @@
           <span class="link-type" @click="handleCostStat(row)"><i class="el-icon-money" /></span>
         </template>
       </el-table-column>
-      <el-table-column label="开始日期" align="center" width="100">
+      <el-table-column label="开始日期" align="center" width="120">
         <template slot-scope="{row}">
           <span>{{ row.startDate }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="结束日期" align="center" width="100">
+      <el-table-column label="结束日期" align="center" width="120">
         <template slot-scope="{row}">
           <span>{{ row.endDate }}</span>
         </template>
@@ -206,7 +206,7 @@
           <el-col :span="14">
             <el-form-item label="地理坐标" prop="location">
              <el-input v-model="form.location" placeholder="" style="width: 170px;"/>
-             <el-button type="query" icon="el-icon-search" size="mini" @click="handleMapLocation()" >选择</el-button>
+             <el-button type="query" icon="el-icon-check" size="mini" @click="handleMapLocation()" >选择</el-button>
             </el-form-item>
           </el-col>
         </el-row>

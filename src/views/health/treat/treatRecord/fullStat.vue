@@ -75,11 +75,18 @@
           <span>{{ formatTotalDays(row) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="总共花费"  align="center" >
+      <el-table-column label="总费用"  align="center" >
         <template slot-scope="{row}">
           <span>{{ formatMoney(row.totalFee) }}</span>
         </template>
       </el-table-column>
+      <!--
+      <el-table-column label="个人支付"  align="center" >
+        <template slot-scope="{row}">
+          <span>{{ formatMoney(row.personalPaidFee) }}</span>
+        </template>
+      </el-table-column>
+      -->
       <el-table-column label="统计" width="80" align="center">
         <template slot-scope="{row}">
           <span class="link-type" @click="handleFeeDetail(row)"><i class="el-icon-s-data"/></i></span>

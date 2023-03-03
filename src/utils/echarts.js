@@ -1005,7 +1005,7 @@ export function createCalanderChart(data, myChart) {
 export function createCalanderPieChart(data, myChart, echarts) {
   let cellSize = [cellSizeValue, cellSizeValue];
   let cellSizeValue = data.cellSize ==null ? 100:data.cellSize;
-  let pieRadius = data.pieRadius ==null ? 45:data.pieRadius;
+  let pieRadius = data.pieRadius ==null ? 30:data.pieRadius;
   let app = {};
   let seriesData = data.seriesData;
   let scatterData = data.scatterData;

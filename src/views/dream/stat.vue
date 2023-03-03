@@ -62,7 +62,7 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="stat" icon="el-icon-search" size="mini" @click="handleQuery" v-hasPermi="['dream:stat']">统计</el-button>
+        <el-button type="stat" icon="el-icon-s-data" size="mini" @click="handleQuery" v-hasPermi="['dream:stat']">统计</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
@@ -85,7 +85,7 @@ export default {
     'common-chart':CommonChart
   },
   mounted() {
-     //this.initChart();
+     this.initChart();
   },
   data() {
     return {
@@ -139,7 +139,7 @@ export default {
     this.getDictItemTree('DREAM_DATE_STAT_TYPE',false).then(response => {
       this.dateQueryTypeOptions = response;
     });
-    this.initChart();
+    //this.initChart();
   },
   methods: {
     // 打开加载层
