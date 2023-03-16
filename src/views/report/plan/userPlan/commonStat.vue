@@ -483,7 +483,14 @@ export default {
     getPlanReportList(){
       fetchPlanReportList(this.addDateRange(this.queryParams, this.dateRange)).then(
         response => {
-          this.planReportList = response.rows;
+          let list = new Array();
+          const n = response.rows.length;
+          for(let i=0;i<n;i++){
+            let dd = response.rows[i];
+            dd.fullTitle = this.formatName(dd);
+            list.push(dd);
+          }
+          this.planReportList = list;
           this.total = response.total;
           this.loading = false;
         }

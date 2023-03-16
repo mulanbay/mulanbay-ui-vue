@@ -92,7 +92,29 @@
               </el-button>
             </div>
             <div>
-              <p>{{item.content}}</p>
+              <el-descriptions class="margin-top" :column="1" :size="size" border labelStyle="width: 100px">
+                <el-descriptions-item>
+                  <template slot="label">
+                    <i class="el-icon-info"></i>
+                    档案内容
+                  </template>
+                  <div class="cell">{{ item.content }}</div>
+                </el-descriptions-item>
+                <el-descriptions-item>
+                  <template slot="label">
+                    <i class="el-icon-info"></i>
+                    距离现在
+                  </template>
+                  <div class="cell">{{ item.tillNow }}</div>
+                </el-descriptions-item>
+                <el-descriptions-item>
+                  <template slot="label">
+                    <i class="el-icon-info"></i>
+                    上条间隔
+                  </template>
+                  <div class="cell">{{ item.gapDaysDesc }}</div>
+                </el-descriptions-item>
+              </el-descriptions>
             </div>
           </el-card>
         </el-timeline-item>
@@ -285,6 +307,13 @@ export default {
             }
             d.type='primary';
             d.tillNow = this.getTillNow(d);
+            //计算档案间的间隔
+            if(n>1&&i<n-1){
+              let previousData = datas[i+1];
+              let gapDays = dateDiff(previousData.date,d.date);
+              let gapDaysDesc = formatDays(gapDays);
+              d.gapDaysDesc = gapDaysDesc +'(-->'+previousData.title+')';
+            }
             this.lifeArchivesList.push(d);
           }
           this.total = response.total;
