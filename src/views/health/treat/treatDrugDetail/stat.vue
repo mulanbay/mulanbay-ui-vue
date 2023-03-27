@@ -66,12 +66,12 @@
           <span>{{ formatStar(row) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="第一次用药时间" align="center" width="160px">
+      <el-table-column label="第一次用药时间" align="center" width="170px">
         <template slot-scope="{row}">
           <span>{{ row.minTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="最后一次用药时间" align="center" width="160px">
+      <el-table-column label="最后一次用药时间" align="center" width="170px">
         <template slot-scope="{row}">
           <span>{{ row.maxTime }}</span>
         </template>

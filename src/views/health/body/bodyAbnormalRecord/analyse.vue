@@ -112,18 +112,18 @@
              <span style="color:red">--</span>
             </span>
             <span v-else-if="row.maxDays>=180">
-             <span style="color:red">{{ row.maxDaysStr }}</span>
+             <span style="color:red">{{ row.maxDaysStr }}天</span>
             </span>
             <span v-else-if="row.maxDays>=90">
-             <span style="color:#c71585">{{ row.maxDaysStr }}</span>
+             <span style="color:#c71585">{{ row.maxDaysStr }}天</span>
             </span>
             <span v-else-if="row.maxDays>=30">
-             <span style="color:purple">{{ row.maxDaysStr }}</span>
+             <span style="color:purple">{{ row.maxDaysStr }}天</span>
             </span>
             <span v-else-if="row.maxDays>=10">
-             <span style="color:green">{{ row.maxDaysStr }}</span>
+             <span style="color:green">{{ row.maxDaysStr }}天</span>
             </span>
-            <span v-else>{{ row.maxDays }}</span>
+            <span v-else>{{ row.maxDays }}天</span>
           </template>
         </el-table-column>
         <el-table-column label="最近一次看病确诊疾病" align="center" width="110">
@@ -163,18 +163,18 @@
              <span style="color:red">--</span>
             </span>
             <span v-else-if="row.minDays>=180">
-             <span style="color:red">{{ row.minDaysStr }}</span>
+             <span style="color:red">{{ row.minDaysStr }}天</span>
             </span>
             <span v-else-if="row.minDays>=90">
-             <span style="color:#c71585">{{ row.minDaysStr }}</span>
+             <span style="color:#c71585">{{ row.minDaysStr }}天</span>
             </span>
             <span v-else-if="row.minDays>=30">
-             <span style="color:purple">{{ row.minDaysStr }}</span>
+             <span style="color:purple">{{ row.minDaysStr }}天</span>
             </span>
             <span v-else-if="row.minDays>=10">
-             <span style="color:green">{{ row.minDaysStr }}</span>
+             <span style="color:green">{{ row.minDaysStr }}天</span>
             </span>
-            <span v-else>{{ row.minDays }}</span>
+            <span v-else>{{ row.minDays }}天</span>
           </template>
         </el-table-column>
         <el-table-column label="最早一次看病确诊疾病" align="center" width="110">
