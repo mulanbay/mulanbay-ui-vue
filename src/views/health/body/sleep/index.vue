@@ -83,7 +83,7 @@
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="睡眠日" align="center" width="100">
+      <el-table-column label="睡眠日" align="center" width="120">
         <template slot-scope="{row}">
           <span class="link-type" @click="handleUpdate(row)">{{ row.sleepDate }}</span>
         </template>
