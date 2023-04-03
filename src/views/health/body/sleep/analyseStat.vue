@@ -47,6 +47,22 @@
           />
         </el-select>
       </el-form-item>
+      <el-form-item label="Y图表类型" prop="chartType">
+        <el-select
+          v-model="queryParams.chartType"
+          placeholder="图表类型"
+          size="small"
+          style="width: 120px"
+          @change="changeChartType"
+        >
+          <el-option
+            v-for="dict in chartTypeOptions"
+            :key="dict.id"
+            :label="dict.text"
+            :value="dict.id"
+          />
+        </el-select>
+      </el-form-item>
       <el-form-item>
         <el-button type="stat" icon="el-icon-s-data" size="mini" @click="handleQuery" v-hasPermi="['health:body:sleep:analyseStat']">统计</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -88,8 +104,20 @@ export default {
       // 查询参数
       queryParams: {
         xgroupType:'DAY',
-        ygroupType:'DURATION'
-      }
+        ygroupType:'DURATION',
+        chartType: 'SCATTER'
+      },
+      //图表类型
+      chartTypeOptions:[
+        {
+          id: 'SCATTER',
+          text: '散点图'
+        },
+        {
+          id: 'PIE',
+          text: '饼图'
+        }
+      ]
     };
   },
   created() {
@@ -102,6 +130,10 @@ export default {
     this.initChart();
   },
   methods: {
+    /** 修改图标类型 */
+    changeChartType(newVal){
+      this.handleQuery();
+    },
     /** 搜索按钮操作 */
     handleQuery() {
       this.initChart();
@@ -120,7 +152,8 @@ export default {
       getSleepAnalyseStat(this.addDateRange(this.queryParams, this.dateRange)).then(
         response => {
           //组装chart数据
-          response.chartType='SCATTER';
+          const chartType = this.queryParams.chartType;
+          response.chartType=chartType;
           response.dateGroup=this.queryParams.xgroupType;
           this.chartData = response;
           this.loading.close();

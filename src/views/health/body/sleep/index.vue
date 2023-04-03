@@ -106,10 +106,17 @@
           </span>
         </template>
       </el-table-column>
-      <el-table-column label="醒来时间" align="center" width="100">
+      <el-table-column label="首次醒来时间" align="center" width="100">
         <template slot-scope="{row}">
-          <span v-if="row.wakeUpTime!=null">
-          {{ row.wakeUpTime.substr(11,5) }}
+          <span v-if="row.firstWakeUpTime!=null">
+          {{ row.firstWakeUpTime.substr(11,5) }}
+          </span>
+        </template>
+      </el-table-column>
+      <el-table-column label="最后醒来时间" align="center" width="100">
+        <template slot-scope="{row}">
+          <span v-if="row.lastWakeUpTime!=null">
+          {{ row.lastWakeUpTime.substr(11,5) }}
           </span>
         </template>
       </el-table-column>
@@ -139,12 +146,12 @@
           <el-rate v-model="row.quality" disabled show-text></el-rate>
         </template>
       </el-table-column>
-      <el-table-column label="浅睡时长" align="center">
+      <el-table-column label="浅睡时长" align="center" width="120">
         <template slot-scope="{row}">
           <span>{{ formatSleepTimes(row.lightSleep) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="深睡时长" align="center">
+      <el-table-column label="深睡时长" align="center" width="120">
         <template slot-scope="{row}">
           <span>{{ formatSleepTimes(row.deepSleep) }}</span>
         </template>
@@ -184,8 +191,8 @@
     />
 
     <!-- 添加或修改对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="680px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="90px">
+    <el-dialog :title="title" :visible.sync="open" width="700px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="120px">
         <el-row>
           <el-col :span="12">
             <el-form-item label="睡觉时间" prop="sleepTime">
@@ -204,17 +211,39 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="醒来时间" prop="wakeUpTime">
-              <el-date-picker type="datetime" v-model="form.wakeUpTime" format="yyyy-MM-dd HH:mm:ss" value-format="yyyy-MM-dd HH:mm:ss"
+            <el-form-item label="首次醒来时间" prop="firstWakeUpTime">
+              <el-date-picker type="datetime" v-model="form.firstWakeUpTime" format="yyyy-MM-dd HH:mm:ss" value-format="yyyy-MM-dd HH:mm:ss"
                         :style="{width: '100%'}" placeholder="请选择时间" clearable >
               </el-date-picker>
             </el-form-item>
           </el-col>
           <el-col :span="12">
+            <el-form-item label="最后醒来时间" prop="lastWakeUpTime">
+              <el-date-picker type="datetime" v-model="form.lastWakeUpTime" format="yyyy-MM-dd HH:mm:ss" value-format="yyyy-MM-dd HH:mm:ss"
+                        :style="{width: '100%'}" placeholder="请选择时间" clearable >
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
             <el-form-item label="醒来次数" prop="wakeUpCount">
-             <el-input-number v-model="form.wakeUpCount" placeholder="次" controls-position="right" :min="0" :controls="false" :precision="0"  :style="{width: '200px'}"/>
+             <el-input-number v-model="form.wakeUpCount" placeholder="次" controls-position="right" :min="0" :controls="false" :precision="0"  :style="{width: '180px'}"/>
              次
             </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="睡眠质量" prop="quality">
+              <el-rate
+                v-model="form.quality"
+                show-score
+                :max="5"
+                text-color="#ff9900"
+                score-template="{value}">
+              </el-rate>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
           </el-col>
         </el-row>
         <el-row>
@@ -229,21 +258,6 @@
               <el-input-number v-model="form.deepSleep" :style="{width: '80%'}" controls-position="right" :min="0" :controls="true" :precision="0"/>
               分钟
             </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="睡眠质量" prop="quality">
-              <el-rate
-                v-model="form.quality"
-                show-score
-                :max="5"
-                text-color="#ff9900"
-                score-template="{value}">
-              </el-rate>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
           </el-col>
         </el-row>
         <el-row>
@@ -331,10 +345,10 @@ export default {
     },
     /** 起床时长 */
     formatGetUpTimes(row){
-      if(row.getUpTime==null||row.wakeUpTime==null){
+      if(row.getUpTime==null||row.lastWakeUpTime==null){
         return null;
       }
-      let minutes = minuteDiff(row.wakeUpTime,row.getUpTime).toFixed(0);
+      let minutes = minuteDiff(row.lastWakeUpTime,row.getUpTime).toFixed(0);
       return formatSeconds(minutes*60);
     },
     /** 睡眠时长 */
