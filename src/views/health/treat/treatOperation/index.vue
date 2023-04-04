@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true">
-      <el-form-item v-if="moreCdn==true" label="手术名称" prop="name">
+      <el-form-item label="手术名称" prop="name">
         <el-input
           v-model="queryParams.name"
           placeholder="请输入名称"
@@ -27,7 +27,7 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="名称检索" prop="keywords">
+      <el-form-item v-if="moreCdn==true" label="名称检索" prop="keywords">
           <el-input
             v-model="queryParams.keywords"
             placeholder="请输入名称"
@@ -485,6 +485,7 @@ export default {
     handleReceiveData(data){
       if(data!=null){
         this.queryParams.treatRecordId=this.treatRecordData.id;
+        this.queryParams.tags=this.treatRecordData.tags;
         this.createDisable= false;
       }
       this.getList();
