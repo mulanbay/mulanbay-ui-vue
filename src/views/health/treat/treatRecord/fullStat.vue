@@ -39,7 +39,7 @@
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="疾病" align="center" width="160" :show-overflow-tooltip="true">
+      <el-table-column label="疾病标签" align="center" width="160" :show-overflow-tooltip="true">
         <template slot-scope="{row}">
           <span v-if="row.totalCount<=3" style="color: green;">
           </span>
