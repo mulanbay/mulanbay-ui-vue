@@ -41,23 +41,23 @@
       </el-table-column>
       <el-table-column label="疾病标签" align="center" width="160" :show-overflow-tooltip="true">
         <template slot-scope="{row}">
-          <span v-if="row.totalCount<=3" style="color: green;">
-          </span>
-          <span v-else-if="row.totalCount<=5" style="color: purple;">
-           <i class="el-icon-info"></i>
-          </span>
-          <span v-else-if="row.totalCount<=10" style="color: brown;">
-           <i class="el-icon-warning"></i>
-          </span>
-          <span v-else style="color: red;">
-           <i class="el-icon-error"></i>
-          </span>
           {{ row.tags }}
         </template>
       </el-table-column>
       <el-table-column label="看病总次数" width="120" align="center" >
         <template slot-scope="{row}">
-          <span>{{ row.totalCount }}</span>
+          <span v-if="row.totalCount<=3" style="color: green;">
+            {{ row.totalCount }}
+          </span>
+          <span v-else-if="row.totalCount<=5" style="color: purple;">
+           {{ row.totalCount }}
+          </span>
+          <span v-else-if="row.totalCount<=10" style="color: brown;">
+           {{ row.totalCount }}
+          </span>
+          <span v-else style="color: red;">
+           {{ row.totalCount }}
+          </span>
         </template>
       </el-table-column>
       <el-table-column label="初次看病时间" width="180" align="center">
@@ -70,9 +70,14 @@
           <span>{{ row.maxTreatDate }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="时长" width="110" :show-overflow-tooltip="true"  align="center">
+      <el-table-column label="看病总时长" width="110" :show-overflow-tooltip="true"  align="center">
         <template slot-scope="{row}">
           <span>{{ formatTotalDays(row) }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="距离现在" width="110" :show-overflow-tooltip="true"  align="center">
+        <template slot-scope="{row}">
+          <span>{{ formatTillNow(row) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="总费用"  align="center" width="120" >
@@ -197,10 +202,17 @@ export default {
     this.getList();
   },
   methods: {
-    /** 商品名称 */
+    /** 计算总天数 */
     formatTotalDays(row) {
       const max = new Date(Date.parse(row.maxTreatDate.replace(/-/g,"/")));
       const min = new Date(Date.parse(row.minTreatDate.replace(/-/g,"/")));
+      let r = (parseInt(max - min)) / (1000*24*3600);
+      return formatDays(r);
+    },
+    /** 计算距离现在 */
+    formatTillNow(row) {
+      const max = new Date();
+      const min = new Date(Date.parse(row.maxTreatDate.replace(/-/g,"/")));
       let r = (parseInt(max - min)) / (1000*24*3600);
       return formatDays(r);
     },
