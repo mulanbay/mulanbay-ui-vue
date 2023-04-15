@@ -145,7 +145,7 @@
       <el-table-column label="药品名" width="250" :show-overflow-tooltip="true">
         <template slot-scope="{row}">
           <span v-if="row.active == true">
-           <el-tag type="danger">用药中</el-tag>
+           <el-tag type="success">用药中</el-tag>
           </span>
           <span class="link-type" @click="handleUpdate(row)">{{ row.name }}</span>
         </template>
@@ -167,7 +167,7 @@
       <el-table-column label="频率" align="center" width="100">
         <template slot-scope="{row}">
           <span>{{ row.perDay+'天' }}</span>
-          <el-tag type="danger">{{ row.perTimes }}</el-tag>
+          <el-tag type="">{{ row.perTimes }}</el-tag>
           次
         </template>
       </el-table-column>
@@ -175,7 +175,7 @@
         <template slot-scope="{row}">
           <span v-if="null !=row.eu">
            每次
-           <el-tag type="danger">{{ row.ec }}</el-tag>
+           <el-tag type="">{{ row.ec }}</el-tag>
            {{ row.eu }}
           </span>
         </template>
@@ -339,7 +339,19 @@
             </el-col>
             <el-col :span="12">
               <el-form-item label="药品单位" prop="unit" >
-                <el-input v-model="form.unit" :style="{width: '100%'}" placeholder="请输入单位" />
+                <el-select
+                  v-model="form.unit"
+                  filterable
+                  allow-create
+                  default-first-option
+                  :style="{width: '100%'}">
+                  <el-option
+                    v-for="dict in unitOptions"
+                    :key="dict.id"
+                    :label="dict.text"
+                    :value="dict.id"
+                  />
+                </el-select>
               </el-form-item>
             </el-col>
           </el-row>
@@ -606,6 +618,8 @@ export default {
       useWayOptions:[],
       //用药单位
       euOptions:[],
+      //药品的单位
+      unitOptions:[],
       loading:false,
       // 表单参数
       form: {
@@ -686,6 +700,9 @@ export default {
       });
       this.getDictItemTree('DRUG_EU',false).then(response => {
         this.euOptions = response;
+      });
+      this.getDictItemTree('DRUG_UNIT',false).then(response => {
+        this.unitOptions = response;
       });
 
     },
