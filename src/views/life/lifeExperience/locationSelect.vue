@@ -4,7 +4,7 @@
     <baidu-map class="bmView" ak="M34ic6nt1BNTfxK0wEiZnPWzEt6Xfgqe" :scroll-wheel-zoom="true" :center="centerLocation"
       @click="getLocationPoint" :zoom="15">
       <bm-city-list anchor="BMAP_ANCHOR_TOP_LEFT"></bm-city-list>
-      <bm-view style="width: 100%; height:500px; flex: 1"></bm-view>
+      <bm-view style="width: 100%; height:450px; flex: 1"></bm-view>
       <bm-marker :position="currentLocation" :dragging="true" animation="BMAP_ANIMATION_BOUNCE">
         <bm-label :content="currentName" :labelStyle="{color: 'red', fontSize : '24px'}"
           :offset="{width: -35, height: 30}" />
