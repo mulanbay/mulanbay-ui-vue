@@ -141,7 +141,7 @@
           <span>{{ formatMoney(row.incomeAmount) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="账户变化" align="center"  width="160">
+      <el-table-column label="账户变化" align="center"  width="80">
         <template slot-scope="{row}">
           <span v-if="row.accountChangeAmount == null&&row.budget == null">
            <span class="link-type" @click="handleAccountChange(row.bussKey)"><i class="el-icon-s-promotion"></i></span>

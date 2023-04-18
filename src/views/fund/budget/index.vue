@@ -163,12 +163,12 @@
     <!--列表数据-->
     <el-table v-loading="loading" :data="budgetList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="ID" prop="id" sortable="custom" align="center" width="80">
+      <el-table-column label="ID" prop="id" sortable="custom" align="center" width="80" fixed="left">
         <template slot-scope="{row}">
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="名称" min-width="180px" :show-overflow-tooltip="true">
+      <el-table-column label="名称" min-width="180px" :show-overflow-tooltip="true" fixed="left">
         <template slot-scope="{row}">
           <span class="link-type" @click="handleUpdate(row)">{{ row.name }}</span>
         </template>
@@ -228,12 +228,12 @@
           </span>
         </template>
       </el-table-column>
-      <el-table-column label="首次支付时间" align="center" width="160">
+      <el-table-column label="首次支付时间" align="center" width="180">
         <template slot-scope="{row}">
           <span>{{ row.firstPaidTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="上一次支付时间" align="center" width="160">
+      <el-table-column label="上一次支付时间" align="center" width="180">
         <template slot-scope="{row}">
           <span>{{ row.lastPaidTime }}</span>
         </template>
