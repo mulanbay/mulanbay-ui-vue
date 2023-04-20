@@ -38,6 +38,18 @@
           <span>{{ row.occurTime}}</span>
         </template>
       </el-table-column>
+      <el-table-column label="用药量" align="center">
+        <template slot-scope="{row}">
+          <span v-if="row.ec==null">
+          </span>
+          <span v-else-if="row.ec!=row.treatDrug.ec" style="color: red;">
+           {{ row.ec+row.eu}}
+          </span>
+          <span v-else style="color: green;">
+           {{ row.ec+row.eu}}
+          </span>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" width="150" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -197,6 +209,7 @@ export default {
       this.drugDetailVisible = true;
       this.drugDetailTitle = "添加用药";
       this.treatForDrugDetailData = Object.assign({}, this.treatForDrugDetailData, {
+        id:null,
         treatDrugId: this.queryParams.treatDrugId
       });
     },

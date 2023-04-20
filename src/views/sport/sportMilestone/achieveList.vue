@@ -35,12 +35,12 @@
           <span>{{ row.minutes }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="开始日期" align="center">
+      <el-table-column label="开始日期" align="center" width="120">
         <template slot-scope="{row}">
           <span>{{ row.fromExerciseDate }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="实现日期" align="center">
+      <el-table-column label="实现日期" align="center" width="120">
         <template slot-scope="{row}">
           <span>{{ row.toExerciseDate }}</span>
         </template>

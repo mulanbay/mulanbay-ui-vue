@@ -147,6 +147,9 @@
           <span v-if="row.active == true">
            <el-tag type="success">用药中</el-tag>
           </span>
+          <span v-if="row.available==false">
+           <el-tag type="danger">无效</el-tag>
+          </span>
           <span class="link-type" @click="handleUpdate(row)">{{ row.name }}</span>
         </template>
       </el-table-column>
@@ -413,9 +416,9 @@
             <el-col :span="12">
               <el-form-item label="用药频率" prop="perDay">
                 每
-                <el-input-number v-model="form.perDay" controls-position="right" :style="{width: '80px'}" :min="0" :controls="true" :precision="0"/>
+                <el-input-number v-model="form.perDay" controls-position="right" :style="{width: '75px'}" :min="0" :controls="true" :precision="0"/>
                 天
-                <el-input-number v-model="form.perTimes" controls-position="right" :style="{width: '80px'}" :min="0" :controls="true" :precision="0"/>
+                <el-input-number v-model="form.perTimes" controls-position="right" :style="{width: '75px'}" :min="0" :controls="true" :precision="0"/>
                 次
               </el-form-item>
             </el-col>
