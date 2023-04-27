@@ -53,46 +53,51 @@
             <table cellspacing="0" style="width: 100%;">
               <thead>
                 <tr>
-                  <th class="is-leaf"><div class="cell">名称</div></th>
-                  <th class="is-leaf"><div class="cell">统计值</div></th>
-                  <th class="is-leaf"><div class="cell">计划期望值</div></th>
+                  <td class="el-table__cell is-leaf"><div class="cell">名称</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell">统计值</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell">计划期望值</div></td>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td><div class="cell">总次数</div></td>
-                  <td><div class="cell">{{ statData.reportCountValueSum }}{{countUnit}}</div></td>
-                  <td><div class="cell">{{ statData.planCountValueExpectSum }}{{countUnit}}</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell">总次数</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell">{{ statData.reportCountValueSum }}{{countUnit}}</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell">{{ statData.planCountValueExpectSum }}{{countUnit}}</div></td>
                 </tr>
                 <tr>
-                  <td><div class="cell">总值</div></td>
-                  <td><div class="cell">{{ statData.reportValueSum }}{{valueUnit}}</div></td>
-                  <td><div class="cell">{{ statData.planValueExpectSum }}{{valueUnit}}</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell">总值</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell">{{ statData.reportValueSum }}{{valueUnit}}</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell">{{ statData.planValueExpectSum }}{{valueUnit}}</div></td>
                 </tr>
                 <tr>
-                  <td><div class="cell">次数的平均值</div></td>
-                  <td><div class="cell">{{ statData.averageReportCountValue }}{{countUnit}}</div></td>
-                  <td><div class="cell">{{ statData.planCountValue }}{{countUnit}}</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell">次数的平均值</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell">{{ statData.averageReportCountValue }}{{countUnit}}</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell">{{ statData.planCountValue }}{{countUnit}}</div></td>
                 </tr>
                 <tr>
-                  <td><div class="cell">值的平均值</div></td>
-                  <td><div class="cell">{{ statData.averageReportValue }}{{valueUnit}}</div></td>
-                  <td><div class="cell">{{ statData.planValue }}{{valueUnit}}</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell">值的平均值</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell">{{ statData.averageReportValue }}{{valueUnit}}</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell">{{ statData.planValue }}{{valueUnit}}</div></td>
                 </tr>
                 <tr>
-                  <td><div class="cell">值/次的平均值</div></td>
-                  <td><div class="cell">{{ statData.averageValue }}{{valueUnit}}</div></td>
-                  <td><div class="cell" style="color: red;">平均每次计划相差</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell">值/次的平均值</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell">{{ statData.averageValue }}{{valueUnit}}</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell" style="color: red;"></div></td>
                 </tr>
                 <tr>
-                  <td><div class="cell">总次数相差</div></td>
-                  <td><div class="cell">{{ statData.diffCountValueSum }}{{countUnit}}</div></td>
-                  <td><div class="cell">{{ statData.avgDiffCountValue }}{{countUnit}}</div></td>
+                  <td colspan="3">
+                    <el-divider content-position="center">平均每次计划相差</el-divider>
+                  </td>
                 </tr>
                 <tr>
-                  <td><div class="cell">总值相差</div></td>
-                  <td><div class="cell">{{ statData.diffValueSum }}{{valueUnit}}</div></td>
-                  <td><div class="cell">{{ statData.avgDiffValue }}{{valueUnit}}</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell">总次数相差</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell">{{ statData.diffCountValueSum }}{{countUnit}}</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell">{{ statData.avgDiffCountValue }}{{countUnit}}</div></td>
+                </tr>
+                <tr>
+                  <td class="el-table__cell is-leaf"><div class="cell">总值相差</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell">{{ statData.diffValueSum }}{{valueUnit}}</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell">{{ statData.avgDiffValue }}{{valueUnit}}</div></td>
                 </tr>
               </tbody>
             </table>
@@ -102,26 +107,37 @@
 
       <el-col :span="24" class="card-box">
         <el-card>
-          <div slot="header">
-            <span>统计信息</span>
-          </div>
-          <div class="el-table el-table--enable-row-hover el-table--medium">
-            <table cellspacing="0" style="width: 100%;">
-              <tbody>
-                <tr>
-                  <td><div class="cell">当前数据总条数</div></td>
-                  <td><div class="cell">{{ statData.totalCount }}</div></td>
-                  <td><div class="cell">计划期望值参考年份</div></td>
-                  <td><div class="cell">{{ statData.year }}</div></td>
-                </tr>
-                <tr>
-                  <td><div class="cell">计划期望值单位</div></td>
-                  <td><div class="cell">{{ statData.unit }}</div></td>
-                  <td><div class="cell">说明</div></td>
-                  <td><div class="cell" style="color: red;">相差值:正数表示正常(高于预期)，负数表示异常(低于预期)</div></td>
-                </tr>
-              </tbody>
-            </table>
+          <div>
+            <el-descriptions class="margin-top" title="统计信息" :column="2" :size="size" border>
+                <el-descriptions-item :contentStyle="{'text-align': 'center'}">
+                  <template slot="label">
+                    <i class="el-icon-cpu"></i>
+                    当前数据总条数
+                  </template>
+                  <div class="cell">{{ statData.totalCount }}条</div>
+                </el-descriptions-item>
+                <el-descriptions-item :contentStyle="{'text-align': 'center'}">
+                  <template slot="label">
+                    <i class="el-icon-s-home"></i>
+                    计划期望值参考年份
+                  </template>
+                  <div class="cell">{{ statData.year }}年</div>
+                </el-descriptions-item>
+                <el-descriptions-item :contentStyle="{'text-align': 'center'}">
+                  <template slot="label">
+                    <i class="el-icon-s-goods"></i>
+                    计划期望值单位
+                  </template>
+                  <el-tag size="small"><div class="cell">{{ statData.unit }}</div></el-tag>
+                </el-descriptions-item>
+                <el-descriptions-item :contentStyle="{'text-align': 'center'}">
+                  <template slot="label">
+                    <i class="el-icon-info"></i>
+                    说明
+                  </template>
+                  <div class="cell">相差值:正数表示正常(高于预期)，负数表示异常(低于预期)</div>
+                </el-descriptions-item>
+              </el-descriptions>
           </div>
         </el-card>
       </el-col>
@@ -192,7 +208,7 @@ export default {
         response => {
           this.planReportChartData = response.pieData;
           //重新设定高度
-          this.planReportChartData.height = '395px';
+          this.planReportChartData.height = '445px';
           let data = response;
           if(data.userPlanConfigValue){
             this.countUnit='次';

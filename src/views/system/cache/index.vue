@@ -36,14 +36,14 @@
                 </template>
                 <el-descriptions-item>
                   <template slot="label">
-                    <i class="el-icon-user"></i>
+                    <i class="el-icon-star-on"></i>
                     Redis版本
                   </template>
                   <div class="cell" v-if="cache.info">{{ cache.info.redis_version }}</div>
                 </el-descriptions-item>
                 <el-descriptions-item>
                   <template slot="label">
-                    <i class="el-icon-mobile-phone"></i>
+                    <i class="el-icon-s-platform"></i>
                     运行模式
                   </template>
                   <div class="cell" v-if="cache.info">{{ cache.info.redis_mode == "standalone" ? "单机" : "集群" }}</div>
@@ -64,56 +64,56 @@
                 </el-descriptions-item>
                 <el-descriptions-item>
                   <template slot="label">
-                    <i class="el-icon-user"></i>
+                    <i class="el-icon-time"></i>
                     运行时间
                   </template>
                   <div class="cell" v-if="cache.info">{{ cache.info.uptime_in_days }}天</div>
                 </el-descriptions-item>
                 <el-descriptions-item>
                   <template slot="label">
-                    <i class="el-icon-user"></i>
+                    <i class="el-icon-connection"></i>
                     使用内存
                   </template>
                   <div class="cell" v-if="cache.info">{{ cache.info.used_memory_human }}</div>
                 </el-descriptions-item>
                 <el-descriptions-item>
                   <template slot="label">
-                    <i class="el-icon-user"></i>
+                    <i class="el-icon-cpu"></i>
                     使用CPU
                   </template>
                   <div class="cell" v-if="cache.info">{{ parseFloat(cache.info.used_cpu_user_children).toFixed(2) }}</div>
                 </el-descriptions-item>
                 <el-descriptions-item>
                   <template slot="label">
-                    <i class="el-icon-user"></i>
+                    <i class="el-icon-setting"></i>
                     内存配置
                   </template>
                   <div class="cell" v-if="cache.info">{{ cache.info.maxmemory_human }}</div>
                 </el-descriptions-item>
                 <el-descriptions-item>
                   <template slot="label">
-                    <i class="el-icon-user"></i>
+                    <i class="el-icon-s-home"></i>
                     AOF是否开启
                   </template>
                   <div class="cell" v-if="cache.info">{{ cache.info.aof_enabled == "0" ? "否" : "是" }}</div>
                 </el-descriptions-item>
                 <el-descriptions-item>
                   <template slot="label">
-                    <i class="el-icon-user"></i>
+                    <i class="el-icon-s-ticket"></i>
                     RDB是否成功
                   </template>
                   <div class="cell" v-if="cache.info">{{ cache.info.rdb_last_bgsave_status }}</div>
                 </el-descriptions-item>
                 <el-descriptions-item>
                   <template slot="label">
-                    <i class="el-icon-user"></i>
+                    <i class="el-icon-key"></i>
                     Key数量
                   </template>
                   <div class="cell" v-if="cache.dbSize">{{ cache.dbSize }} </div>
                 </el-descriptions-item>
                 <el-descriptions-item>
                   <template slot="label">
-                    <i class="el-icon-user"></i>
+                    <i class="el-icon-copy-document"></i>
                     网络入口/出口
                   </template>
                   <div class="cell" v-if="cache.info">{{ cache.info.instantaneous_input_kbps }}kps/{{cache.info.instantaneous_output_kbps}}kps</div>
