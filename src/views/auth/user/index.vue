@@ -683,7 +683,7 @@ export default {
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
-      const id = row.id || this.ids.join(",")
+      const id = row.id;
       getUser(id).then(response => {
         this.form = response;
         this.form.password = undefined;
