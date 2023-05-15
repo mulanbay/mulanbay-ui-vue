@@ -128,7 +128,7 @@
           <span v-if="row.secondhand==true" style="color: green;">
            <el-tag type="warning">二手</el-tag>
           </span>
-          <span class="link-type">{{ formatGoodsName(row) }}</span>
+          <span class="link-type" @click="handleBuyRecordInfo(row)">{{ formatGoodsName(row) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="购买时间" align="center" width="180">
@@ -186,20 +186,28 @@
       <lifetime-compare :buyRecordData="buyRecordData"/>
     </el-dialog>
 
+    <!-- 消费记录详情 -->
+    <el-dialog :title="buyRecordDetailTitle" width="500px" :visible.sync="buyRecordDetailVisible">
+      <buyRecord-detail :keyValueListData="keyValueListData"/>
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
-  import {getBuyRecordUseTimeStat,getBuyRecordKeywordsTree} from "@/api/consume/buyRecord";
+  import {getBuyRecordUseTimeStat,getBuyRecordKeywordsTree,getBuyRecord} from "@/api/consume/buyRecord";
   import {aiMatch} from "@/api/consume/goodsLifetime";
   import {getGoodsTypeTree} from "@/api/consume/goodsType";
   import {getBuyTypeTree} from "@/api/consume/buyType";
   import {getPercent} from "@/utils/mulanbay";
+  import {formatDays} from "@/utils/datetime";
   import LifetimeCompare from '../goodsLifetimeCompare'
+  import BuyRecordDetail from '../../common/keyValueTable'
 
 export default {
   name: "BuyRecordUseTimeStat",
   components: {
+    'buyRecord-detail':BuyRecordDetail,
     'lifetime-compare':LifetimeCompare
   },
   filters: {
@@ -219,6 +227,12 @@ export default {
       cdnTitle:'更多',
       moreCdn:false,
       //查询条件更多属性 end
+      //消费详情显示
+      buyRecordDetailVisible:false,
+      //消费详情值(子页面使用)
+      keyValueListData: [],
+      //消费详情标题
+      buyRecordDetailTitle:'',
       // 遮罩层
       loading: true,
       // 总条数
@@ -289,21 +303,8 @@ export default {
     },
     /** 使用时长 */
     formatUseDuration(row) {
-      var days = row.days;
       row.color='red';
-      var time = '';
-      if (days >= 365) {
-          time += parseInt(days / 365) + '年';
-          days %= 365;
-          row.color='red';
-      }
-      if (days >= 30) {
-          time += parseInt(days / 30) + '个月';
-          days %= 30;
-      }
-      if (days > 0) {
-          time += parseInt(days) + '天';
-      }
+      var time = formatDays(row.days);
       return time;
     },
     /** 时长的字段颜色 */
@@ -338,6 +339,25 @@ export default {
       	pp = (row.totalPrice-row.soldPrice)/row.days;
       }
       return '￥'+pp.toFixed(2);
+    },
+    /** 收入来源的购买记录详情 */
+    handleBuyRecordInfo(row){
+      let buyRecordId = row.id;
+      getBuyRecord(buyRecordId).then(response => {
+        this.buyRecordDetailTitle=response.goodsName;
+        this.buyRecordDetailVisible=true;
+        var brData  = new Array();
+        brData.push({key:'购买时间',value :response.buyDate });
+        brData.push({key:'购买价格',value :this.formatMoney(response.totalPrice) });
+        brData.push({key:'售出时间',value :response.deleteDate });
+        brData.push({key:'使用时长',value :formatDays(row.days) });
+        brData.push({key:'售出价格',value :this.formatMoney(response.soldPrice) });
+        if(response.soldPrice!=null){
+          var dd = response.soldPrice*10/response.totalPrice;
+          brData.push({key:'折旧率',value :(dd.toFixed(1)+'折')});
+        }
+        this.keyValueListData =brData;
+      });
     },
     /** 寿命比对 */
     handleCompare(row){
