@@ -36,6 +36,9 @@
             <label>
                 <el-checkbox v-model="queryParams.needTreatDrug" @change="handleSourceTypeTypeChange">用药日历</el-checkbox>
             </label>
+            <label>
+                <el-checkbox v-model="queryParams.needBuyRecord" @change="handleSourceTypeTypeChange">商品日历</el-checkbox>
+            </label>
           </div>
         </div>
         <div>
@@ -205,8 +208,9 @@
           needFinished:false,
           needPeriod:true,
           needBudget:true,
-          needTreatDrug:false,
-          needBandLog:false
+          needTreatDrug:true,
+          needBandLog:false,
+          needBuyRecord:true
         },
         totalCalendars: 0,
         viewModeOptions: viewModeOptions,
@@ -287,7 +291,7 @@
       /** 修改按钮操作 */
       handleUpdate(id) {
         this.open = true;
-        this.title = "添加";
+        this.title = "修改";
         this.userCalendarData = Object.assign({}, this.userCalendarData, {
           id: id,
         });

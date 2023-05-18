@@ -244,10 +244,6 @@ export function generateCalendarSchedule(uc,calendarList) {
         }
         schedule.body = cc;
     }
-    if(uc.sourceType=='MANUAL'){
-      let editContent = '【<a href="javascript:handleUpdate('+uc.id+');">点我编辑</a>】';
-      schedule.body = schedule.body+editContent;
-    }
     schedule.isReadOnly = uc.readOnly;
     //generateUserCalendarTime(uc,schedule);
     generateUserCalendarTime(uc,schedule);
@@ -261,7 +257,13 @@ export function generateCalendarSchedule(uc,calendarList) {
         schedule.attendees.push('<a href="#" onclick="showOriginMessage('+uc.messageId+')">【源消息内容】</a>');
     }
     if(uc.sourceId!=null){
-        schedule.attendees.push('<a href="#" onclick="showCalendarSource('+uc.id+')">【来源信息】</a>');
+        schedule.attendees.push('<a href="#" onclick="showCalendarSource(\''+uc.id+'\')">【来源信息】</a>');
+    }
+    if(uc.sourceType=='MANUAL'){
+      let ss = uc.id.split('--');
+      let id = parseInt(ss[1]);
+      let editContent = '<a href="#" onclick="handleUpdate('+id+')">【编辑】</a>';
+      schedule.attendees.push(editContent);
     }
     if('ONCE'==uc.period){
         schedule.recurrenceRule = uc.delayCounts>0 ? '延迟次数:'+uc.delayCounts : '';

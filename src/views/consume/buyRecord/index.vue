@@ -185,6 +185,16 @@
       </el-col>
       <el-col :span="1.5">
         <el-button
+          type="success"
+          icon="el-icon-sort"
+          size="mini"
+          :disabled="single"
+          @click="handleCascade"
+          v-hasPermi="['consume:buyRecord:edit']"
+        >级联</el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
           type="warning"
           icon="el-icon-download"
           size="mini"
@@ -496,7 +506,32 @@
               <el-switch
                 v-model="showSold">
               </el-switch>
-              <span class="link-type" @click="msgAlert('提示','选填，比如某件衣服2019-01-01买的，在2019-10-10扔掉，此处可以填写2019-10-10。为了计算商品的使用寿命')"><i class="el-icon-question" /></span>
+              <span class="link-type" @click="msgAlert('提示','选填内容，预期作废时间：期望该商品丢弃或者售出的时间。售出时间：商品被废弃或者卖出的时间。为了计算商品的使用寿命')"><i class="el-icon-question" /></span>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="预期作废时间" label-width="100px" prop="expectDeleteDate" v-if="true==showSold">
+              <el-date-picker type="datetime" v-model="form.expectDeleteDate" format="yyyy-MM-dd HH:mm:ss" value-format="yyyy-MM-dd HH:mm:ss"
+                        :style="{width: '220px'}" placeholder="请选择时间" clearable >
+              </el-date-picker>
+              &nbsp;&nbsp;
+              <el-select v-model="deleteDatePeriod"
+              clearable
+              placeholder="请选择"
+              style="width: 240px"
+              @change="selectDeleteDatePeriod">
+                <el-option
+                  v-for="dict in deleteDatePeriodOptions"
+                  :key="dict.id"
+                  :label="dict.text"
+                  :value="dict.id"
+                >
+                <span style="float: left">{{ dict.text }}</span>
+                <span style="float: right; color: #8492a6; font-size: 13px">{{ dict.id }}天</span>
+                </el-option>
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -554,7 +589,7 @@
   import {getBuyTypeTree} from "@/api/consume/buyType";
   import {appendTagToOptions} from "@/utils/tagUtils";
   import {dispatchCommonStat} from "@/utils/planUtils";
-  import {getNowDateTimeString} from "@/utils/datetime";
+  import {getNowDateTimeString,getDayByDate} from "@/utils/datetime";
   import Treeselect from "@riophae/vue-treeselect";
   import "@riophae/vue-treeselect/dist/vue-treeselect.css";
   import LifeArchivesDetail from '../../life/lifeArchives/detail'
@@ -631,6 +666,9 @@ export default {
       keywordsTags: [],
       //已经保存过的商品标签
       hisKeywordsTags:[],
+      //预期作废时间快速选择
+      deleteDatePeriodOptions:[],
+      deleteDatePeriod:null,
       inputVisible: false,
       inputValue: '',
       //标签属性 end
@@ -708,6 +746,9 @@ export default {
     });
     this.getDictItemTree('BUY_RECORD_SORT_FIELD',false).then(response => {
       this.querySortFieldOptions = response;
+    });
+    this.getDictItemTree('BUY_RECORD_DELETE_DATE_PERIOD',false).then(response => {
+      this.deleteDatePeriodOptions = response;
     });
     this.getDictItemTree('SORT_TYPE',false).then(response => {
       this.querySortTypeOptions = response;
@@ -820,8 +861,29 @@ export default {
           }
           this.form.shopName = response.shopName;
           this.form.brand = response.brand;
+          this.form.brand = response.brand;
+          this.form.buyTypeId = response.buyTypeId;
+          this.form.price = response.price;
+          this.form.amount = response.amount;
+          this.form.shipment = response.shipment;
+          this.form.totalPrice = response.totalPrice;
+          this.form.payment = response.payment;
+          this.form.secondhand = response.secondhand;
+          this.form.statable = response.statable;
+          this.form.consumeType = response.consumeType;
+          this.form.skuInfo = response.skuInfo;
+
         }
       });
+    },
+    /** 选择作废时间周期下来框 */
+    selectDeleteDatePeriod(val){
+      let date = this.form.buyDate;
+      if(date==null){
+        date = getNowDateTimeString();
+      }
+      let expectDeleteDate = getDayByDate(parseInt(val),date.substr(0, 10))+' 00:00:00';;
+      this.form.expectDeleteDate = expectDeleteDate;
     },
     /** 查询列表 */
     getList() {
@@ -922,6 +984,7 @@ export default {
         shopName:undefined,
         brand:undefined
       };
+      this.deleteDatePeriod = null;
       this.resetForm("form");
     },
     /** 搜索按钮操作 */
