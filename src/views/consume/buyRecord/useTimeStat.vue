@@ -186,10 +186,11 @@
       <lifetime-compare :buyRecordData="buyRecordData"/>
     </el-dialog>
 
-    <!-- 消费记录详情 -->
-    <el-dialog :title="buyRecordDetailTitle" width="500px" :visible.sync="buyRecordDetailVisible">
-      <buyRecord-detail :keyValueListData="keyValueListData"/>
+    <!--消费记录详情,商品级联 -->
+    <el-dialog :title="cascadeTitle" width="850px" :visible.sync="cascadeOpen" append-to-body customClass="customDialogCss">
+      <goods-cascade :buyRecordData="buyRecordData"/>
     </el-dialog>
+
 
   </div>
 </template>
@@ -203,12 +204,14 @@
   import {formatDays} from "@/utils/datetime";
   import LifetimeCompare from '../goodsLifetimeCompare'
   import BuyRecordDetail from '../../common/keyValueTable'
+  import GoodsCascade from './cascade/index'
 
 export default {
   name: "BuyRecordUseTimeStat",
   components: {
     'buyRecord-detail':BuyRecordDetail,
-    'lifetime-compare':LifetimeCompare
+    'lifetime-compare':LifetimeCompare,
+    'goods-cascade':GoodsCascade
   },
   filters: {
     keywordsTagFilter:function(keywords){
@@ -227,12 +230,10 @@ export default {
       cdnTitle:'更多',
       moreCdn:false,
       //查询条件更多属性 end
-      //消费详情显示
-      buyRecordDetailVisible:false,
-      //消费详情值(子页面使用)
-      keyValueListData: [],
-      //消费详情标题
-      buyRecordDetailTitle:'',
+      //商品级联
+      cascadeTitle:'',
+      cascadeOpen:false,
+      buyRecordData:{id:undefined},
       // 遮罩层
       loading: true,
       // 总条数
@@ -340,23 +341,12 @@ export default {
       }
       return '￥'+pp.toFixed(2);
     },
-    /** 收入来源的购买记录详情 */
+    /** 记录详情 */
     handleBuyRecordInfo(row){
-      let buyRecordId = row.id;
-      getBuyRecord(buyRecordId).then(response => {
-        this.buyRecordDetailTitle=response.goodsName;
-        this.buyRecordDetailVisible=true;
-        var brData  = new Array();
-        brData.push({key:'购买时间',value :response.buyDate });
-        brData.push({key:'购买价格',value :this.formatMoney(response.totalPrice) });
-        brData.push({key:'售出时间',value :response.deleteDate });
-        brData.push({key:'使用时长',value :formatDays(row.days) });
-        brData.push({key:'售出价格',value :this.formatMoney(response.soldPrice) });
-        if(response.soldPrice!=null){
-          var dd = response.soldPrice*10/response.totalPrice;
-          brData.push({key:'折旧率',value :(dd.toFixed(1)+'折')});
-        }
-        this.keyValueListData =brData;
+      this.cascadeTitle = '商品级联';
+      this.cascadeOpen=true;
+      this.buyRecordData = Object.assign({}, this.buyRecordData, {
+        id: row.id
       });
     },
     /** 寿命比对 */

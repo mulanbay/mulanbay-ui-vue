@@ -108,8 +108,13 @@
               <span v-if="row.keywords != null">
                ★
               </span>
-              <span v-if="row.pid != null" style="color: red;">
-               ★
+              <span v-if="row.pid != null">
+                <span v-if="row.pid == buyRecordCCData.id" style="color: red;">
+                  <el-tag type="success">下级商品</el-tag>
+                </span>
+                <span v-else style="color: red;">
+                  <el-tag type="danger">关联其他</el-tag>
+                </span>
               </span>
               <span v-if="row.id==buyRecordCCData.id">
                <el-tag type="danger">当前商品</el-tag>
@@ -123,6 +128,11 @@
           <el-table-column label="总价" align="center" width="95">
             <template slot-scope="{row}">
               <span>{{ formatMoney(row.totalPrice) }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="售出价" align="center" width="95">
+            <template slot-scope="{row}">
+              <span>{{ formatMoney(row.soldPrice) }}</span>
             </template>
           </el-table-column>
           <el-table-column label="购买来源" align="center" width="95">

@@ -6,13 +6,17 @@
     <el-tab-pane label="下级商品" name="childrenGoods">
       <children-goods :buyRecordCCData="buyRecordCCData" />
     </el-tab-pane>
+    <el-tab-pane label="寿命/成本" name="useTime">
+      <use-time :buyRecordCCData="buyRecordCCData" />
+    </el-tab-pane>
   </el-tabs>
 </template>
 
 <script>
   import ParentGoods from './parentGoods'
   import ChildrenGoods from './childrenGoods'
-  
+  import UseTime from '../useTimeDetail'
+
 export default {
   name: "BuyRecordCascade",
   props: {
@@ -22,6 +26,7 @@ export default {
   components: {
     'parent-goods':ParentGoods,
     'children-goods':ChildrenGoods,
+    'use-time':UseTime
   },
   mounted() {
      //this.initChart();

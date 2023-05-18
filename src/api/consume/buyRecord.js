@@ -80,6 +80,15 @@ export function deleteChlidrenBuyRecord(data) {
   })
 }
 
+export function getBuyRecordChildrenTotalCost(query) {
+  return request({
+    url: '/buyRecord/getChildrenTotalCost',
+    method: 'get',
+    params: query
+  })
+}
+
+
 export function getBuyRecordKeywordsTree(startDate,endDate,needRoot) {
   return request({
     url: '/buyRecord/getKeywordsTree',

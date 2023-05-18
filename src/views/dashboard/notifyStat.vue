@@ -7,7 +7,7 @@
       <el-carousel v-loading="loading" height="295px">
         <el-carousel-item v-for="item in notifyData" :key="item.id">
           <div>
-            <el-descriptions class="margin-top" title="提醒统计" :column="1" :size="size" border labelStyle="width: 100px">
+            <el-descriptions class="margin-top" title="提醒统计" :column="1" :size="'5'" border :labelStyle="{width: '100px'}">
               <el-descriptions-item>
                 <template slot="label">
                   <i class="el-icon-info"></i>

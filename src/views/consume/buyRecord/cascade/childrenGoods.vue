@@ -105,13 +105,15 @@
                ★
               </span>
               <span v-if="row.pid != null" style="color: red;">
-               ★
+                <span v-if="row.pid == buyRecordCCData.id">
+                  <el-tag type="success">关联当前</el-tag>
+                </span>
+                <span v-else style="color: red;">
+                  <el-tag type="danger">关联其他</el-tag>
+                </span>
               </span>
               <span v-if="row.id==buyRecordCCData.id">
                <el-tag type="danger">当前商品</el-tag>
-              </span>
-              <span v-if="row.pid==buyRecordCCData.id">
-               <el-tag type="success">已关联</el-tag>
               </span>
               <span v-if="row.secondhand==true" style="color: green;">
                <el-tag type="warning">二手</el-tag>
@@ -122,6 +124,11 @@
           <el-table-column label="总价" align="center" width="95">
             <template slot-scope="{row}">
               <span>{{ formatMoney(row.totalPrice) }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="售出价" align="center" width="95">
+            <template slot-scope="{row}">
+              <span>{{ formatMoney(row.soldPrice) }}</span>
             </template>
           </el-table-column>
           <el-table-column label="购买来源" align="center" width="95">
@@ -136,17 +143,27 @@
           </el-table-column>
           <el-table-column label="操作" align="center" fixed="right" width="80" class-name="small-padding fixed-width">
             <template slot-scope="scope">
-              <el-button
-                size="mini"
-                type="text"
-                icon="el-icon-setting"
-                @click="handleSetParent(scope.row)"
-                v-hasPermi="['consume:buyRecord:setParent']"
-              >关联</el-button>
+              <span v-if="scope.row.pid==null">
+                <el-button
+                  size="mini"
+                  type="text"
+                  icon="el-icon-setting"
+                  @click="handleSetParent(scope.row)"
+                  v-hasPermi="['consume:buyRecord:setParent']"
+                >关联</el-button>
+              </span>
+              <span v-if="scope.row.pid!=null">
+                <el-button
+                  size="mini"
+                  type="text"
+                  icon="el-icon-refresh"
+                  @click="handleDeleteParent(scope.row)"
+                  v-hasPermi="['consume:buyRecord:deleteParent']"
+                >取消</el-button>
+              </span>
             </template>
           </el-table-column>
         </el-table>
-
 
         <pagination
           v-show="total>0"
@@ -162,7 +179,7 @@
 </template>
 
 <script>
-  import {fetchList,getBuyRecord,setParentBuyRecord,deleteChlidrenBuyRecord} from "@/api/consume/buyRecord";
+  import {fetchList,getBuyRecord,setParentBuyRecord,deleteParentBuyRecord,deleteChlidrenBuyRecord} from "@/api/consume/buyRecord";
   import {getGoodsTypeTree} from "@/api/consume/goodsType";
 
 export default {
@@ -290,6 +307,37 @@ export default {
         pid:this.buyRecordCCData.id
       };
       deleteChlidrenBuyRecord(data).then(response => {
+        this.msgSuccess('取消成功');
+        this.getList();
+      });
+    },
+    /** 取消上级按钮操作 */
+    handleDeleteParent(row){
+      let id = row.id;
+      let pid = row.pid;
+      let that = this;
+      if(pid!=this.buyRecordCCData.id){
+        this.$confirm('该商品的上级商品非本商品，是否需要继续取消关联?', "警告", {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            type: "warning"
+          }).then(function() {
+            that.deleteParent(id, pid);
+          }).then(() => {
+            this.msgSuccess("取消成功");
+          }).catch(function() {
+          });
+      }else{
+        this.deleteParent(row.id, row.pid);
+      }
+
+    },
+    deleteParent(id,pid){
+      let data={
+        id:id,
+        pid:pid
+      };
+      deleteParentBuyRecord(data).then(response => {
         this.msgSuccess('取消成功');
         this.getList();
       });
