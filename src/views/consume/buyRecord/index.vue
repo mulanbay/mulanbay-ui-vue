@@ -191,7 +191,7 @@
           :disabled="single"
           @click="handleCascade"
           v-hasPermi="['consume:buyRecord:cascade']"
-        >级联</el-button>
+        >关联消费</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -902,7 +902,7 @@ export default {
     /** 级联按钮操作 */
     handleCascade() {
       const id = this.ids.join(",");
-      this.cascadeTitle = '商品级联';
+      this.cascadeTitle = '关联商品';
       this.cascadeOpen=true;
       this.buyRecordData = Object.assign({}, this.buyRecordData, {
         id: id

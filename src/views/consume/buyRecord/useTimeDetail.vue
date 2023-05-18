@@ -34,7 +34,7 @@
     <el-card>
       <el-form :model="queryParams" ref="queryForm" :inline="true">
         <el-form-item label="成本关联子下级" prop="deepCost">
-          <el-switch v-model="queryParams.deepCost"></el-switch>
+          <el-switch v-model="queryParams.deepCost"  @change="handleCostStat" ></el-switch>
           <span class="link-type" @click="msgAlert('提示','如果关联子下级，那么会统计该商品的下级及其下级，为树形统计.速度会比较慢')"><i class="el-icon-question" /></span>
         </el-form-item>
         <el-form-item>
@@ -131,7 +131,7 @@ export default {
         tlData.push({key:'消费时间',value :buyRecord.consumeDate });
       }
       if(buyRecord.expectDeleteDate!=null){
-        tlData.push({key:'预期废弃时间',value :buyRecord.expectDeleteDate });
+        tlData.push({key:'期望废弃时间',value :buyRecord.expectDeleteDate });
       }
       if(buyRecord.deleteDate!=null){
         tlData.push({key:'废弃/售出时间',value :buyRecord.deleteDate });

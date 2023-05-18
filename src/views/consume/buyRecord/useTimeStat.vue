@@ -343,7 +343,7 @@ export default {
     },
     /** 记录详情 */
     handleBuyRecordInfo(row){
-      this.cascadeTitle = '商品级联';
+      this.cascadeTitle = '关联商品';
       this.cascadeOpen=true;
       this.buyRecordData = Object.assign({}, this.buyRecordData, {
         id: row.id
