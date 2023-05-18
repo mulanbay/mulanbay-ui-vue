@@ -4,15 +4,15 @@
       <parent-goods :buyRecordCCData="buyRecordCCData" />
     </el-tab-pane>
     <el-tab-pane label="下级商品" name="childrenGoods">
-      <cpu-info :keyValueListData="cpuData" />
+      <children-goods :buyRecordCCData="buyRecordCCData" />
     </el-tab-pane>
   </el-tabs>
 </template>
 
 <script>
   import ParentGoods from './parentGoods'
-  import CpuInfo from '../../../common/keyValueTable'
-
+  import ChildrenGoods from './childrenGoods'
+  
 export default {
   name: "BuyRecordCascade",
   props: {
@@ -21,7 +21,7 @@ export default {
   },
   components: {
     'parent-goods':ParentGoods,
-    'cpu-info':CpuInfo
+    'children-goods':ChildrenGoods,
   },
   mounted() {
      //this.initChart();
@@ -30,8 +30,7 @@ export default {
     return {
       loading:false,
       buyRecordCCData:{id:undefined},
-      activeName:'parentGoods',
-      cpuData:[]
+      activeName:'parentGoods'
     };
   },
   created() {

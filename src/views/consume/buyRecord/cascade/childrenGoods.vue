@@ -4,9 +4,9 @@
       <el-card>
         <el-col :span="24" class="card-box">
           <div>
-            <el-descriptions class="margin-top" :column="1" :size="'5'" border :labelStyle="{width: '130px'}" title="商品关联信息">
+            <el-descriptions class="margin-top" :column="1" :size="'5'" border :labelStyle="{width: '130px'}" title="商品信息">
               <template slot="extra">
-                <el-button type="query" icon="el-icon-refresh" size="mini" @click="handleDeleteParent" v-hasPermi="['consume:buyRecord:deleteParent']">取消关联</el-button>
+                <el-button type="query" icon="el-icon-refresh" size="mini" @click="handleDeleteChildren" v-hasPermi="['consume:buyRecord:deleteChildren']">取消所有关联</el-button>
               </template>
               <el-descriptions-item>
                 <template slot="label">
@@ -14,13 +14,6 @@
                   当前商品
                 </template>
                 <div class="cell">{{ currentBuyRecordGoodsName }}</div>
-              </el-descriptions-item>
-              <el-descriptions-item>
-                <template slot="label">
-                  <i class="el-icon-star-on"></i>
-                  上级商品
-                </template>
-                <div class="cell">{{ parentBuyRecord.goodsName }}</div>
               </el-descriptions-item>
             </el-descriptions>
           </div>
@@ -40,6 +33,9 @@
               style="width: 240px"
               @keyup.enter.native="handleQuery"
             />
+          </el-form-item>
+          <el-form-item label="只看已关联" prop="compliteDate">
+            <el-switch v-model="cascaded"  @change="handleQuery"></el-switch>
           </el-form-item>
           <el-form-item label="购买日期" v-if="moreCdn==true">
             <el-date-picker
@@ -114,6 +110,9 @@
               <span v-if="row.id==buyRecordCCData.id">
                <el-tag type="danger">当前商品</el-tag>
               </span>
+              <span v-if="row.pid==buyRecordCCData.id">
+               <el-tag type="success">已关联</el-tag>
+              </span>
               <span v-if="row.secondhand==true" style="color: green;">
                <el-tag type="warning">二手</el-tag>
               </span>
@@ -163,11 +162,11 @@
 </template>
 
 <script>
-  import {fetchList,getBuyRecord,setParentBuyRecord,deleteParentBuyRecord} from "@/api/consume/buyRecord";
+  import {fetchList,getBuyRecord,setParentBuyRecord,deleteChlidrenBuyRecord} from "@/api/consume/buyRecord";
   import {getGoodsTypeTree} from "@/api/consume/goodsType";
 
 export default {
-  name: "BuyRecordParentGoods",
+  name: "BuyRecordChildrenGoods",
   props: {
       //父层带过来的信息值
       buyRecordCCData: {id:undefined}
@@ -183,13 +182,10 @@ export default {
       cdnTitle:'更多',
       moreCdn:false,
       //查询条件更多属性 end
+      cascaded:true,
       parentLoading:false,
       loading:false,
       currentBuyRecordGoodsName:undefined,
-      parentBuyRecord:{
-        id:undefined,
-        goodsName:undefined
-      },
       // 总条数
       total: 0,
       // 列表记录
@@ -204,7 +200,8 @@ export default {
         pageSize: 10,
         sortField: 'buyDate',
         sortType: 'desc',
-        userId:undefined
+        userId:undefined,
+        pid:undefined
       },
       //日期范围快速选择
       datePickerOptions:this.datePickerOptions
@@ -268,32 +265,9 @@ export default {
       }
       getBuyRecord(id).then(response => {
         this.currentBuyRecordGoodsName = response.goodsName;
-        let pid = response.pid;
-        this.loadParentBuyRecord(pid);
+        this.cascaded = true;
+        this.handleQuery();
       });
-    },
-    //加载明细
-    loadParentBuyRecord(id){
-      this.parentLoading = true;
-      this.resetParentBuyRecord();
-      if(id==undefined|| id==null){
-        this.parentLoading = false;
-        return;
-      }
-      getBuyRecord(id).then(response => {
-        if(response!=null){
-          this.parentBuyRecord.id = response.id;
-          this.parentBuyRecord.goodsName = response.goodsName;
-          this.parentLoading = false;
-        }
-      });
-    },
-    /** 重置父级信息操作 */
-    resetParentBuyRecord(){
-      this.parentBuyRecord = {
-        id:undefined,
-        goodsName:undefined
-      };
     },
     /** 设置为父级按钮操作 */
     handleSetParent(row){
@@ -301,25 +275,23 @@ export default {
         this.msgError('不能设置自己为父级商品');
         return;
       }
-      //alert(this.buyRecordCCData.id+','+row.id)
       let data={
-        id:this.buyRecordCCData.id,
-        pid:row.id
+        pid:this.buyRecordCCData.id,
+        id:row.id
       };
       setParentBuyRecord(data).then(response => {
         this.msgSuccess('设置成功');
-        this.loadParentBuyRecord(row.id);
+        this.getList();
       });
     },
-    /** 取消上级按钮操作 */
-    handleDeleteParent(){
+    /** 取消下级关联按钮操作 */
+    handleDeleteChildren(){
       let data={
-        id:this.buyRecordCCData.id,
-        pid:this.parentBuyRecord.id
+        pid:this.buyRecordCCData.id
       };
-      deleteParentBuyRecord(data).then(response => {
+      deleteChlidrenBuyRecord(data).then(response => {
         this.msgSuccess('取消成功');
-        this.loadBuyRecord(this.buyRecordCCData.id);
+        this.getList();
       });
     },
     /** 搜索按钮操作 */
@@ -335,6 +307,11 @@ export default {
     /** 查询列表 */
     getList() {
       this.loading = true;
+      if(this.cascaded==true){
+        this.queryParams.pid = this.buyRecordCCData.id;
+      }else{
+        this.queryParams.pid = null;
+      }
       fetchList(this.addDateRange(this.queryParams, this.dateRange)).then(
         response => {
           this.buyRecordList = response.rows;

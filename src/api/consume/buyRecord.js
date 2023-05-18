@@ -72,6 +72,14 @@ export function deleteParentBuyRecord(data) {
   })
 }
 
+export function deleteChlidrenBuyRecord(data) {
+  return request({
+    url: '/buyRecord/deleteChildren',
+    method: 'post',
+    data
+  })
+}
+
 export function getBuyRecordKeywordsTree(startDate,endDate,needRoot) {
   return request({
     url: '/buyRecord/getKeywordsTree',
