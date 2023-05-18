@@ -190,7 +190,7 @@
           size="mini"
           :disabled="single"
           @click="handleCascade"
-          v-hasPermi="['consume:buyRecord:edit']"
+          v-hasPermi="['consume:buyRecord:cascade']"
         >级联</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -244,6 +244,9 @@
       <el-table-column label="商品名称" width="400" :show-overflow-tooltip="true">
         <template slot-scope="{row}">
           <span v-if="row.keywords != null">
+           ★
+          </span>
+          <span v-if="row.pid != null" style="color: red;">
            ★
           </span>
           <span v-if="row.secondhand==true" style="color: green;">
@@ -579,6 +582,12 @@
       <lifetime-calendar :buyRecordData="buyRecordData" @closeMe="closeCalendar"/>
     </el-dialog>
 
+    <!--商品级联 -->
+    <el-dialog :title="cascadeTitle" width="800px" :visible.sync="cascadeOpen" append-to-body customClass="customDialogCss">
+      <goods-cascade :buyRecordData="buyRecordData"/>
+    </el-dialog>
+
+
   </div>
 </template>
 
@@ -596,6 +605,7 @@
   import { mapGetters } from 'vuex'
   import LifetimeCompare from '../goodsLifetimeCompare'
   import LifetimeCalendar from './lifetimeCalendar'
+  import GoodsCascade from './cascade/index'
 
 export default {
   name: "BuyRecord",
@@ -603,7 +613,8 @@ export default {
     Treeselect,
     'life-archives-detail':LifeArchivesDetail,
     'lifetime-compare':LifetimeCompare,
-    'lifetime-calendar':LifetimeCalendar
+    'lifetime-calendar':LifetimeCalendar,
+    'goods-cascade':GoodsCascade
   },
   filters: {
     keywordsTagFilter:function(keywords){
@@ -625,6 +636,9 @@ export default {
       ladOpen:false,
       lifeArchivesData:{},
       //同步档案属性 end
+      //商品级联
+      cascadeTitle:'',
+      cascadeOpen:false,
       //寿命比对
       ltcTitle:'',
       ltcOpen:false,
@@ -884,6 +898,15 @@ export default {
       }
       let expectDeleteDate = getDayByDate(parseInt(val),date.substr(0, 10))+' 00:00:00';;
       this.form.expectDeleteDate = expectDeleteDate;
+    },
+    /** 级联按钮操作 */
+    handleCascade() {
+      const id = this.ids.join(",");
+      this.cascadeTitle = '商品级联';
+      this.cascadeOpen=true;
+      this.buyRecordData = Object.assign({}, this.buyRecordData, {
+        id: id
+      });
     },
     /** 查询列表 */
     getList() {

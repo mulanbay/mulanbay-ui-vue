@@ -24,7 +24,7 @@
       <el-card>
         <el-col :span="24" class="card-box">
           <div>
-            <el-descriptions class="margin-top" :column="1" :size="size" border labelStyle="width: 100px">
+            <el-descriptions class="margin-top" :column="1" :size="'5'" border :labelStyle="{width: '100px'}" >
               <el-descriptions-item>
                 <template slot="label">
                   <i class="el-icon-star-on"></i>
