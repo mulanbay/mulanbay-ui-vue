@@ -101,24 +101,30 @@
           </el-table-column>
           <el-table-column label="商品名称" width="400" :show-overflow-tooltip="true">
             <template slot-scope="{row}">
-              <span v-if="row.keywords != null">
-               ★
-              </span>
-              <span v-if="row.pid != null" style="color: red;">
-                <span v-if="row.pid == buyRecordCCData.id">
-                  <el-tag type="success">关联当前</el-tag>
-                </span>
-                <span v-else style="color: red;">
-                  <el-tag type="danger">关联其他</el-tag>
-                </span>
-              </span>
-              <span v-if="row.id==buyRecordCCData.id">
-               <el-tag type="danger">当前商品</el-tag>
-              </span>
               <span v-if="row.secondhand==true" style="color: green;">
                <el-tag type="warning">二手</el-tag>
               </span>
               <span class="link-type" @click="handleUpdate(row)">{{ row.goodsName }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="关联关系" align="center" width="80">
+            <template slot-scope="{row}">
+              <span v-if="row.pid != null" style="color: green;">
+                <span v-if="row.pid == buyRecordCCData.id">
+                  下级商品
+                </span>
+                <span v-else style="color: red;">
+                  其他下级
+                </span>
+              </span>
+              <span v-if="row.id==buyRecordCCData.id" style="color: rebeccapurple;">
+               当前商品
+              </span>
+            </template>
+          </el-table-column>
+          <el-table-column label="购买日期" align="center" width="190">
+            <template slot-scope="{row}">
+              <span>{{ row.buyDate }}</span>
             </template>
           </el-table-column>
           <el-table-column label="总价" align="center" width="95">

@@ -187,7 +187,7 @@
     </el-dialog>
 
     <!--消费记录详情,商品级联 -->
-    <el-dialog :title="cascadeTitle" width="850px" :visible.sync="cascadeOpen" append-to-body customClass="customDialogCss">
+    <el-dialog :title="cascadeTitle" width="80%" :visible.sync="cascadeOpen" append-to-body customClass="customDialogCss">
       <goods-cascade :buyRecordData="buyRecordData"/>
     </el-dialog>
 

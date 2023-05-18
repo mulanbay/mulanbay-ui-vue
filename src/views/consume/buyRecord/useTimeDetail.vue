@@ -66,7 +66,7 @@
 
 <script>
   import {getBuyRecord,getBuyRecordChildrenTotalCost} from "@/api/consume/buyRecord";
-  import {hourDiff,dateDiff,formatDays,getNowDateTimeString} from "@/utils/datetime";
+  import {hourDiff,dateDiff,formatDays,getNowDateTimeString,getNowDateString} from "@/utils/datetime";
 
 export default {
   name: "BuyRecordUseTimeDetail",
@@ -167,14 +167,20 @@ export default {
         //brData.push({key:'售出时间',value :buyRecord.deleteDate });
         let date = buyRecord.deleteDate;
         if(date ==null){
-          date = getNowDateTimeString();
+          date = getNowDateString();
         }
-        let days = dateDiff(buyRecord.buyDate.substr(0, 10),date.substr(0, 10));
+        let days = dateDiff(buyRecord.buyDate.substr(0, 10),date);
         brData.push({key:'使用时长',value :formatDays(days) });
+        if(buyRecord.deleteDate==null&&buyRecord.expectDeleteDate!=null){
+          let exDays = dateDiff(buyRecord.buyDate.substr(0, 10),getNowDateString());
+          brData.push({key:'离预期作废',value :formatDays(days) });
+        }
         brData.push({key:'售出价格',value :this.formatMoney(buyRecord.soldPrice) });
+        if(response.totalCount!=null&&response.totalCount>0){
+          brData.push({key:'下级商品数',value :response.totalCount+'个',desc:'该商品所有下级商品的个数' });
+        }
         if(childrenTotalSold>0){
-          let chidlrenLabel= '子项('+response.totalCount+'个)售出';
-          brData.push({key:chidlrenLabel,value :this.formatMoney(childrenTotalSold),desc:'该商品所有下级商品的售出价格总额' });
+          brData.push({key:'下级商品售出',value :this.formatMoney(childrenTotalSold),desc:'该商品所有下级商品的售出价格总额' });
         }
         let totalCost = buyRecord.totalPrice*1+childrenTotalCost;
         brData.push({key:'总成本',value :this.formatMoney(totalCost),desc:'该商品买入价格和下级商品的总价之和' });
