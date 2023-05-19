@@ -8,6 +8,22 @@ export function fetchList(query) {
   })
 }
 
+export function getAndMathGoodsLifetime(data) {
+  return request({
+    url: '/goodsLifetime/getAndMath',
+    method: 'post',
+    data
+  })
+}
+
+export function compareAndMathGoodsLifetime(data) {
+  return request({
+    url: '/goodsLifetime/compareAndMath',
+    method: 'post',
+    data
+  })
+}
+
 export function getGoodsLifetime(id) {
   return request({
     url: '/goodsLifetime/get',

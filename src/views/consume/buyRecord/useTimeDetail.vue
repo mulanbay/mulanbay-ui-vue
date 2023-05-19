@@ -32,33 +32,42 @@
     </el-card>
     </br>
     <el-card>
-      <el-form :model="queryParams" ref="queryForm" :inline="true">
-        <el-form-item label="成本关联子下级" prop="deepCost">
-          <el-switch v-model="queryParams.deepCost"  @change="handleCostStat" ></el-switch>
-          <span class="link-type" @click="msgAlert('提示','如果关联子下级，那么会统计该商品的下级及其下级，为树形统计.速度会比较慢')"><i class="el-icon-question" /></span>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="query" icon="el-icon-s-data" size="mini" @click="handleCostStat" v-hasPermi="['consume:buyRecord:childrenTotalCost']">统计</el-button>
-        </el-form-item>
-      </el-form>
-      <!--列表数据-->
-      <el-table :data="dataList" v-loading="loading" >
-        <el-table-column label="项目" prop="key" align="center">
-          <template slot-scope="{row}">
-            {{ row.key }}
-          </template>
-        </el-table-column>
-        <el-table-column label="数值" prop="value" align="center">
-          <template slot-scope="{row}">
-            {{ row.value }}
-          </template>
-        </el-table-column>
-        <el-table-column label="说明" prop="desc" align="center">
-          <template slot-scope="{row}">
-            <span v-if="row.desc != null" class="link-type" @click="msgAlert('提示',row.desc)"><i class="el-icon-question" /></span>
-          </template>
-        </el-table-column>
-      </el-table>
+      <el-col :span="8" class="card-box">
+        <el-card>
+          <lifetime-compare :lifetimeCompareData="lifetimeCompareData" />
+        </el-card>
+      </el-col>
+      <el-col :span="16" class="card-box">
+        <el-card>
+          <el-form :model="queryParams" ref="queryForm" :inline="true">
+            <el-form-item label="成本关联子下级" prop="deepCost">
+              <el-switch v-model="queryParams.deepCost"  @change="handleCostStat" ></el-switch>
+              <span class="link-type" @click="msgAlert('提示','如果关联子下级，那么会统计该商品的下级及其下级，为树形统计.速度会比较慢')"><i class="el-icon-question" /></span>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="query" icon="el-icon-s-data" size="mini" @click="handleCostStat" v-hasPermi="['consume:buyRecord:childrenTotalCost']">统计</el-button>
+            </el-form-item>
+          </el-form>
+          <!--列表数据-->
+          <el-table :data="dataList" v-loading="loading" >
+            <el-table-column label="项目" prop="key" align="center">
+              <template slot-scope="{row}">
+                {{ row.key }}
+              </template>
+            </el-table-column>
+            <el-table-column label="数值" prop="value" align="center">
+              <template slot-scope="{row}">
+                {{ row.value }}
+              </template>
+            </el-table-column>
+            <el-table-column label="说明" prop="desc" align="center">
+              <template slot-scope="{row}">
+                <span v-if="row.desc != null" class="link-type" @click="msgAlert('提示',row.desc)"><i class="el-icon-question" /></span>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-card>
+      </el-col>
     </el-card>
 
   </div>
@@ -67,9 +76,13 @@
 <script>
   import {getBuyRecord,getBuyRecordChildrenTotalCost} from "@/api/consume/buyRecord";
   import {hourDiff,dateDiff,formatDays,getNowDateTimeString,getNowDateString} from "@/utils/datetime";
+  import LifetimeCompare from '../goodsLifetime/compare'
 
 export default {
   name: "BuyRecordUseTimeDetail",
+  components: {
+    'lifetime-compare':LifetimeCompare
+  },
   props: {
       //父层带过来的信息值
       buyRecordCCData: {id:undefined}
@@ -78,6 +91,7 @@ export default {
     return {
       deepCost:true,
       buyRecordData:{},
+      lifetimeCompareData:{},
       //时间线统计
       timelineSize:1,
       timelineList:[],
@@ -115,6 +129,9 @@ export default {
       }
       getBuyRecord(id).then(response => {
         this.buyRecordData = response;
+        this.lifetimeCompareData = Object.assign({}, this.lifetimeCompareData, {
+          goodsName: response.goodsName
+        });
         this.handleTimeline();
         this.handleCostStat();
       });
