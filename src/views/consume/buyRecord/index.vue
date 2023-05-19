@@ -288,7 +288,6 @@
       <el-table-column label="购买日期" align="center" width="190">
         <template slot-scope="{row}">
           <span>{{ row.buyDate }}</span>
-          <span class="link-type" @click="handleCompare(row)"><svg-icon icon-class="compare" /></span>
         </template>
       </el-table-column>
       <el-table-column label="所属用户" v-if="familyMode=='F'" align="center" width="95">
@@ -525,15 +524,15 @@
         </el-row>
         <el-row>
           <el-col :span="24">
-            <el-form-item label="预期作废时间" label-width="100px" prop="expectDeleteDate" v-if="true==showSold">
+            <el-form-item label="期望作废时间" label-width="100px" prop="expectDeleteDate" v-if="true==showSold">
               <el-date-picker type="datetime" v-model="form.expectDeleteDate" format="yyyy-MM-dd HH:mm:ss" value-format="yyyy-MM-dd HH:mm:ss"
-                        :style="{width: '220px'}" placeholder="请选择时间" clearable >
+                        :style="{width: '210px'}" placeholder="请选择时间" clearable >
               </el-date-picker>
               &nbsp;&nbsp;
               <el-select v-model="deleteDatePeriod"
               clearable
               placeholder="请选择"
-              style="width: 240px"
+              style="width: 160px"
               @change="selectDeleteDatePeriod">
                 <el-option
                   v-for="dict in deleteDatePeriodOptions"
@@ -545,6 +544,7 @@
                 <span style="float: right; color: #8492a6; font-size: 13px">{{ dict.id }}天</span>
                 </el-option>
               </el-select>
+              <el-button type="primary" icon="el-icon-star-on" :disabled="form.goodsName==null" @click="handlePeriodRecommend()" v-hasPermi="['consume:goodsLifetime:edit']">推荐</el-button>
             </el-form-item>
           </el-col>
         </el-row>
@@ -582,24 +582,29 @@
         <life-archives-detail :lifeArchivesData="lifeArchivesData" @closeMe="closeLad"/>
       </el-dialog>
 
-    <!-- 商品寿命比对 -->
-    <el-dialog :title="ltcTitle" width="500px" :visible.sync="ltcOpen">
-      <lifetime-compare :buyRecordData="buyRecordData"/>
-    </el-dialog>
-
     <!-- 商品寿命日历 -->
     <el-dialog :title="calendarTitle" width="700px" :visible.sync="calendarOpen">
       <lifetime-calendar :buyRecordData="buyRecordData" @closeMe="closeCalendar"/>
     </el-dialog>
 
-    <!--管理商品 -->
+    <!--关联商品 -->
     <el-dialog :title="cascadeTitle" width="80%" :visible.sync="cascadeOpen" append-to-body customClass="customDialogCss">
       <goods-cascade :buyRecordData="buyRecordData"/>
+        <span slot="footer" class="dialog-footer">
+          <el-button icon="el-icon-close" type="primary" @click="cascadeOpen = false" >关闭</el-button>
+        </span>
+      <div>
+      </div>
     </el-dialog>
 
     <!--关联图 -->
     <el-dialog :title="treeStatTitle" width="80%" :visible.sync="treeStatOpen" >
       <tree-stat :buyRecordTSData="buyRecordTSData"/>
+    </el-dialog>
+
+    <!-- 商品寿命推荐 -->
+    <el-dialog :title="ltcTitle" width="500px" :visible.sync="ltcOpen">
+      <lifetime-compare :lifetimeCompareData="lifetimeCompareData" @confirmLifetimeCompare="confirmLifetimeCompare"/>
     </el-dialog>
 
   </div>
@@ -617,7 +622,7 @@
   import "@riophae/vue-treeselect/dist/vue-treeselect.css";
   import LifeArchivesDetail from '../../life/lifeArchives/detail'
   import { mapGetters } from 'vuex'
-  import LifetimeCompare from '../goodsLifetimeCompare'
+  import LifetimeCompare from '../goodsLifetime/compare'
   import LifetimeCalendar from './lifetimeCalendar'
   import GoodsCascade from './cascade/index'
   import TreeStat from './cascade/treeStat'
@@ -630,7 +635,8 @@ export default {
     'lifetime-compare':LifetimeCompare,
     'lifetime-calendar':LifetimeCalendar,
     'goods-cascade':GoodsCascade,
-    'tree-stat':TreeStat
+    'tree-stat':TreeStat,
+    'lifetime-compare':LifetimeCompare
   },
   filters: {
     keywordsTagFilter:function(keywords){
@@ -659,9 +665,10 @@ export default {
       treeStatTitle:'',
       treeStatOpen:false,
       buyRecordTSData:{},
-      //寿命比对
+      //寿命周期推荐
       ltcTitle:'',
       ltcOpen:false,
+      lifetimeCompareData:{},
       buyRecordData:{},
       //寿命日历
       calendarTitle:'',
@@ -819,13 +826,20 @@ export default {
         };
       });
     },
-    /** 寿命比对 */
-    handleCompare(row){
-      this.ltcTitle='['+row.goodsName+']寿命比对';
+    /** 寿命周期推荐 */
+    handlePeriodRecommend(){
+      this.ltcTitle='寿命周期推荐';
       this.ltcOpen=true;
-      this.buyRecordData = Object.assign({}, this.buyRecordData, {
-        id: row.id
+      this.lifetimeCompareData = Object.assign({}, this.lifetimeCompareData, {
+        goodsName: this.form.goodsName,
+        needCallback: true
       });
+    },
+    /** 确认寿命周期推荐 */
+    confirmLifetimeCompare(data){
+      let days = data.days;
+      this.setExpectDeleteDate(days);
+      this.ltcOpen=false;
     },
     /** 寿命日历 */
     handleCalendar(){
@@ -912,11 +926,16 @@ export default {
     },
     /** 选择作废时间周期下来框 */
     selectDeleteDatePeriod(val){
+      let days = parseInt(val);
+      this.setExpectDeleteDate(days);
+    },
+    /** 设置期望作废时间 */
+    setExpectDeleteDate(days){
       let date = this.form.buyDate;
       if(date==null){
         date = getNowDateTimeString();
       }
-      let expectDeleteDate = getDayByDate(parseInt(val),date.substr(0, 10))+' 00:00:00';;
+      let expectDeleteDate = getDayByDate(days,date.substr(0, 10))+' 00:00:00';;
       this.form.expectDeleteDate = expectDeleteDate;
     },
     /** 级联按钮操作 */

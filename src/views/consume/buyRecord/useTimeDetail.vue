@@ -32,12 +32,12 @@
     </el-card>
     </br>
     <el-card>
-      <el-col :span="8" class="card-box">
+      <el-col :span="10" class="card-box">
         <el-card>
           <lifetime-compare :lifetimeCompareData="lifetimeCompareData" />
         </el-card>
       </el-col>
-      <el-col :span="16" class="card-box">
+      <el-col :span="14" class="card-box">
         <el-card>
           <el-form :model="queryParams" ref="queryForm" :inline="true">
             <el-form-item label="成本关联子下级" prop="deepCost">
@@ -189,8 +189,8 @@ export default {
         let days = dateDiff(buyRecord.buyDate.substr(0, 10),date);
         brData.push({key:'使用时长',value :formatDays(days) });
         if(buyRecord.deleteDate==null&&buyRecord.expectDeleteDate!=null){
-          let exDays = dateDiff(buyRecord.buyDate.substr(0, 10),getNowDateString());
-          brData.push({key:'离预期作废',value :formatDays(days) });
+          let exDays = dateDiff(getNowDateString(),buyRecord.expectDeleteDate.substr(0, 10));
+          brData.push({key:'离预期作废',value :formatDays(exDays) });
         }
         brData.push({key:'售出价格',value :this.formatMoney(buyRecord.soldPrice) });
         if(response.totalCount!=null&&response.totalCount>0){

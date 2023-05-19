@@ -146,11 +146,13 @@
           <span :style="{'color':getDaysColor(row.days)}">{{ formatUseDuration(row) }}</span>
         </template>
       </el-table-column>
+      <!--
       <el-table-column label="寿命比对" width="80px" align="center" >
         <template slot-scope="{row}">
           <span class="link-type" @click="handleCompare(row)"><svg-icon icon-class="compare"/></span>
         </template>
       </el-table-column>
+      -->
       <el-table-column label="买入价格" align="center" width="95">
         <template slot-scope="{row}">
           <span>{{ formatMoney(row.totalPrice) }}</span>
@@ -189,6 +191,9 @@
     <!--消费记录详情,商品级联 -->
     <el-dialog :title="cascadeTitle" width="80%" :visible.sync="cascadeOpen" append-to-body customClass="customDialogCss">
       <goods-cascade :buyRecordData="buyRecordData"/>
+      <span slot="footer" class="dialog-footer">
+        <el-button icon="el-icon-close" type="primary" @click="cascadeOpen = false" >关闭</el-button>
+      </span>
     </el-dialog>
 
 

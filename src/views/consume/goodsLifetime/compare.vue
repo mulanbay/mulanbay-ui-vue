@@ -1,13 +1,13 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" :inline="true">
-      <el-form-item label="系统寿命配置" prop="id">
+    <el-form :model="queryParams" ref="queryForm" :inline="true" >
+      <el-form-item label="配置" prop="id">
         <el-select
           v-model="queryParams.id"
           placeholder="商品类型"
           clearable
           size="medium"
-          style="width: 100%"
+          style="width: 220px"
           @change="match"
         >
           <el-option
@@ -21,6 +21,7 @@
       <el-form-item>
         <el-button type="primary" icon="el-icon-d-arrow-left" size="mini" @click="matchPrevious()" v-hasPermi="['config:goodsLifetime:getAndMath']">上一批</el-button>
         <el-button type="primary" icon="el-icon-d-arrow-right" size="mini" @click="matchNext()" v-hasPermi="['config:goodsLifetime:getAndMath']">下一批</el-button>
+        <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleCreate()" v-hasPermi="['consume:goodsLifetime:create']">新增</el-button>
       </el-form-item>
     </el-form>
 
@@ -47,11 +48,25 @@
                 <i class="el-icon-star-on"></i>
                 设计寿命
               </template>
-              <div class="cell">{{ matchInfo.daysInfo }}</div>
+              <div class="cell">
+              {{ matchInfo.daysInfo }}
+              <el-button type="success" icon="el-icon-edit" size="mini" @click="handleUpdate()" v-hasPermi="['consume:goodsLifetime:edit']">修改</el-button>
+              </div>
             </el-descriptions-item>
           </el-descriptions>
         </div>
       </el-col>
+    </el-row>
+
+    <el-row type="flex" class="row-bg" justify="end">
+      <el-col :span="6">
+        <div class="grid-content bg-purple-light">
+          <span v-if="lifetimeCompareData.needCallback==true"  slot="footer" class="dialog-footer">
+            </br>
+            <el-button type="primary" icon="el-icon-circle-check" @click="handleConfirm()" >确定</el-button>
+          </span>
+        </div>
+        </el-col>
     </el-row>
 
   </div>
@@ -65,8 +80,8 @@ export default {
   name: "GoodsLifetimeCompare",
   props: {
     lifetimeCompareData: {
-      type: Object,
-      required: true
+      goodsName: undefined,
+      needCallback: false
     }
   },
   data() {
@@ -78,7 +93,7 @@ export default {
         keywords:undefined
       },
       page: 1,
-      pageSize: 5,
+      pageSize: 10,
       lifetimeOptions:[],
       //匹配信息
       matchInfo:{}
@@ -118,6 +133,7 @@ export default {
         let n = configList.length;
         if(n<=0){
           this.msgError('没有更多数据');
+          this.page =1;
           return;
         }
         this.lifetimeOptions = [];
@@ -150,6 +166,10 @@ export default {
     },
     /** 上一批按钮操作 */
     matchPrevious(){
+      if(this.page<=1){
+        this.msgError('没有更多数据');
+        return;
+      }
       this.page = this.page-1;
       this.getAndMath();
     },
@@ -158,9 +178,26 @@ export default {
       this.page = this.page+1;
       this.getAndMath();
     },
+    /** 确定按钮操作 */
+    handleConfirm(){
+      const mi={
+        days:this.matchInfo.days,
+        match:this.matchInfo.match
+      }
+      //调用父组件的方法
+      this.$emit('confirmLifetimeCompare',mi);
+    },
     /** 搜索按钮操作 */
     handleQuery() {
 
+    },
+    /** 新增按钮操作 */
+    handleCreate() {
+      this.msgError('未实现');
+    },
+    /** 修改按钮操作 */
+    handleUpdate() {
+      this.msgError('未实现');
     }
   }
 };

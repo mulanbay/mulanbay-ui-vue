@@ -1,15 +1,18 @@
 <template>
-  <el-tabs v-loading="loading"  v-model="activeName" @tab-click="handleClick">
-    <el-tab-pane label="上级商品" name="parentGoods">
-      <parent-goods :buyRecordCCData="buyRecordCCData" />
-    </el-tab-pane>
-    <el-tab-pane label="下级商品" name="childrenGoods">
-      <children-goods :buyRecordCCData="buyRecordCCData" />
-    </el-tab-pane>
-    <el-tab-pane label="寿命/成本" name="useTime">
-      <use-time :buyRecordCCData="buyRecordCCData" />
-    </el-tab-pane>
-  </el-tabs>
+  <div class="app-container">
+    <el-tabs v-loading="loading"  v-model="activeName" @tab-click="handleClick">
+      <el-tab-pane label="上级商品" name="parentGoods">
+        <parent-goods :buyRecordCCData="buyRecordCCData" />
+      </el-tab-pane>
+      <el-tab-pane label="下级商品" name="childrenGoods">
+        <children-goods :buyRecordCCData="buyRecordCCData" />
+      </el-tab-pane>
+      <el-tab-pane label="寿命/成本" name="useTime">
+        <use-time :buyRecordCCData="buyRecordCCData" />
+      </el-tab-pane>
+    </el-tabs>
+
+  </div>
 </template>
 
 <script>
