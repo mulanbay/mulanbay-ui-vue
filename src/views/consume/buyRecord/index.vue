@@ -195,6 +195,16 @@
       </el-col>
       <el-col :span="1.5">
         <el-button
+          type="success"
+          icon="el-icon-s-data"
+          size="mini"
+          :disabled="single"
+          @click="handleTreeStat"
+          v-hasPermi="['consume:buyRecord:treeStat']"
+        >关联图</el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
           type="warning"
           icon="el-icon-download"
           size="mini"
@@ -582,11 +592,15 @@
       <lifetime-calendar :buyRecordData="buyRecordData" @closeMe="closeCalendar"/>
     </el-dialog>
 
-    <!--商品级联 -->
+    <!--管理商品 -->
     <el-dialog :title="cascadeTitle" width="80%" :visible.sync="cascadeOpen" append-to-body customClass="customDialogCss">
       <goods-cascade :buyRecordData="buyRecordData"/>
     </el-dialog>
 
+    <!--关联图 -->
+    <el-dialog :title="treeStatTitle" width="80%" :visible.sync="treeStatOpen" >
+      <tree-stat :buyRecordTSData="buyRecordTSData"/>
+    </el-dialog>
 
   </div>
 </template>
@@ -606,6 +620,7 @@
   import LifetimeCompare from '../goodsLifetimeCompare'
   import LifetimeCalendar from './lifetimeCalendar'
   import GoodsCascade from './cascade/index'
+  import TreeStat from './cascade/treeStat'
 
 export default {
   name: "BuyRecord",
@@ -614,7 +629,8 @@ export default {
     'life-archives-detail':LifeArchivesDetail,
     'lifetime-compare':LifetimeCompare,
     'lifetime-calendar':LifetimeCalendar,
-    'goods-cascade':GoodsCascade
+    'goods-cascade':GoodsCascade,
+    'tree-stat':TreeStat
   },
   filters: {
     keywordsTagFilter:function(keywords){
@@ -639,6 +655,10 @@ export default {
       //商品级联
       cascadeTitle:'',
       cascadeOpen:false,
+      //关联图
+      treeStatTitle:'',
+      treeStatOpen:false,
+      buyRecordTSData:{},
       //寿命比对
       ltcTitle:'',
       ltcOpen:false,
@@ -905,6 +925,15 @@ export default {
       this.cascadeTitle = '关联商品';
       this.cascadeOpen=true;
       this.buyRecordData = Object.assign({}, this.buyRecordData, {
+        id: id
+      });
+    },
+    /** 关联图按钮操作 */
+    handleTreeStat() {
+      const id = this.ids.join(",");
+      this.treeStatTitle = '商品关联图';
+      this.treeStatOpen=true;
+      this.buyRecordTSData = Object.assign({}, this.buyRecordTSData, {
         id: id
       });
     },

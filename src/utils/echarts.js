@@ -2029,10 +2029,11 @@ export function createPolarBarChart(data, myChart) {
 
 /**
  * 树形结构
- * @param {Object} data
+ * @param {Object} fullData
  * @param {Object} myChart
  */
-export function createTreeChart(data, myChart, echarts) {
+export function createTreeChart(fullData, myChart, echarts) {
+  let data = fullData.data;
   //myChart.showLoading();
   myChart.hideLoading();
 
@@ -2041,13 +2042,19 @@ export function createTreeChart(data, myChart, echarts) {
   });
 
   let option = {
+    title: {
+      text: fullData.title,
+      subtext: fullData.subTitle,
+      left: 'left'
+    },
     tooltip: {
       trigger: 'item',
-      triggerOn: 'mousemove'
+      triggerOn: 'mousemove',
+      formatter: "{a}<br/>{b}({c}" + fullData.unit + ")"
     },
     series: [{
       type: 'tree',
-
+      name: '数据',
       data: [data],
 
       top: '1%',
@@ -2055,14 +2062,14 @@ export function createTreeChart(data, myChart, echarts) {
       bottom: '1%',
       right: '20%',
 
-      symbolSize: 7,
+      symbolSize: 9,
 
       label: {
         normal: {
           position: 'left',
           verticalAlign: 'middle',
           align: 'right',
-          fontSize: 9
+          fontSize: 11
         }
       },
 

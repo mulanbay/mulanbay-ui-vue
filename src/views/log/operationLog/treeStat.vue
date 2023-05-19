@@ -106,7 +106,7 @@ export default {
       getOperationLogTreeStat(this.addDateRange(this.queryParams, this.dateRange)).then(
         response => {
           //组装chart数据
-          this.chartData = response.data;
+          this.chartData = response;
           this.chartData.chartType='TREE';
           this.loading.close();
         }

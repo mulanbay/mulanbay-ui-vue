@@ -88,6 +88,13 @@ export function getBuyRecordChildrenTotalCost(query) {
   })
 }
 
+export function getBuyRecordTreeStat(query) {
+  return request({
+    url: '/buyRecord/treeStat',
+    method: 'get',
+    params: query
+  })
+}
 
 export function getBuyRecordKeywordsTree(startDate,endDate,needRoot) {
   return request({
