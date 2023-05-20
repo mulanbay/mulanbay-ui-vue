@@ -53,6 +53,20 @@
               <el-button type="success" icon="el-icon-edit" size="mini" @click="handleUpdate()" v-hasPermi="['consume:goodsLifetime:edit']">修改</el-button>
               </div>
             </el-descriptions-item>
+            <el-descriptions-item v-if="matchInfo.usedDaysInfo!=null">
+              <template slot="label">
+                <i class="el-icon-star-on"></i>
+                使用时长
+              </template>
+              <div class="cell">{{ matchInfo.usedDaysInfo }}</div>
+            </el-descriptions-item>
+            <el-descriptions-item v-if="matchInfo.usedRateInfo!=null">
+              <template slot="label">
+                <i class="el-icon-star-on"></i>
+                实际/设计
+              </template>
+              <div class="cell">{{ matchInfo.usedRateInfo }}</div>
+            </el-descriptions-item>
           </el-descriptions>
         </div>
       </el-col>
@@ -75,12 +89,14 @@
 <script>
   import {getAndMathGoodsLifetime,compareAndMathGoodsLifetime} from "@/api/consume/goodsLifetime";
   import {formatDays} from "@/utils/datetime";
+  import {getPercent} from "@/utils/mulanbay";
 
 export default {
   name: "GoodsLifetimeCompare",
   props: {
     lifetimeCompareData: {
       goodsName: undefined,
+      usedDays: undefined,
       needCallback: false
     }
   },
@@ -151,6 +167,7 @@ export default {
         }else{
           this.matchInfo = {};
         }
+        this.compareUseInfo();
         this.loading = false;
       });
     },
@@ -161,8 +178,24 @@ export default {
       compareAndMathGoodsLifetime(this.queryParams).then(response => {
         this.matchInfo = response;
         this.matchInfo.daysInfo = formatDays(this.matchInfo.days);
+        this.compareUseInfo();
         this.loading = false;
       });
+    },
+    /** 比对实际使用 */
+    compareUseInfo(){
+      let usedDays = this.lifetimeCompareData.usedDays;
+      if(usedDays!=null){
+        this.matchInfo.usedDaysInfo = formatDays(usedDays);
+        let p =0;
+        if(this.matchInfo.days>=usedDays){
+          p = getPercent(usedDays,this.matchInfo.days).toFixed(0)+'%';
+        }else{
+          p = (usedDays / this.matchInfo.days ).toFixed(1)+'倍';
+        }
+        this.matchInfo.usedDays = usedDays;
+        this.matchInfo.usedRateInfo = p;
+      }
     },
     /** 上一批按钮操作 */
     matchPrevious(){

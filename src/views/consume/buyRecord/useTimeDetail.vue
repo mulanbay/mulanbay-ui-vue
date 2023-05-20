@@ -42,7 +42,7 @@
           <el-form :model="queryParams" ref="queryForm" :inline="true">
             <el-form-item label="成本关联子下级" prop="deepCost">
               <el-switch v-model="queryParams.deepCost"  @change="handleCostStat" ></el-switch>
-              <span class="link-type" @click="msgAlert('提示','如果关联子下级，那么会统计该商品的下级及其下级，为树形统计.速度会比较慢')"><i class="el-icon-question" /></span>
+              <span class="link-type" @click="msgAlert('提示','如果关联子下级，那么会统计该商品的下级及其下级，为树形统计.')"><i class="el-icon-question" /></span>
             </el-form-item>
             <el-form-item>
               <el-button type="query" icon="el-icon-s-data" size="mini" @click="handleCostStat" v-hasPermi="['consume:buyRecord:childrenTotalCost']">统计</el-button>
@@ -129,9 +129,7 @@ export default {
       }
       getBuyRecord(id).then(response => {
         this.buyRecordData = response;
-        this.lifetimeCompareData = Object.assign({}, this.lifetimeCompareData, {
-          goodsName: response.goodsName
-        });
+        //时间线
         this.handleTimeline();
         this.handleCostStat();
       });
@@ -186,8 +184,8 @@ export default {
         if(date ==null){
           date = getNowDateString();
         }
-        let days = dateDiff(buyRecord.buyDate.substr(0, 10),date);
-        brData.push({key:'使用时长',value :formatDays(days) });
+        let usedDays = dateDiff(buyRecord.buyDate.substr(0, 10),date);
+        brData.push({key:'使用时长',value :formatDays(usedDays),desc:'购买时间距离废弃时间的时间差，如果没有废弃时间那么距离当前时间的时间差' });
         if(buyRecord.deleteDate==null&&buyRecord.expectDeleteDate!=null){
           let exDays = dateDiff(getNowDateString(),buyRecord.expectDeleteDate.substr(0, 10));
           brData.push({key:'离预期作废',value :formatDays(exDays) });
@@ -201,24 +199,30 @@ export default {
         }
         let totalCost = buyRecord.totalPrice*1+childrenTotalCost;
         brData.push({key:'总成本',value :this.formatMoney(totalCost),desc:'该商品买入价格和下级商品的总价之和' });
-        var dailyCost = '';
+        //不包括下级商品
+        let dailyCost = '';
+        //包含下级商品
+        let dailyCost2 = '';
         if(buyRecord.soldPrice==null){
-        	dailyCost = (buyRecord.totalPrice)/days;
+        	dailyCost = (buyRecord.totalPrice)/usedDays;
+          dailyCost2 = (buyRecord.totalPrice+childrenTotalCost-childrenTotalSold)/usedDays;
         }else{
-        	dailyCost = (buyRecord.totalPrice-buyRecord.soldPrice)/days;
+        	dailyCost = (buyRecord.totalPrice-buyRecord.soldPrice)/usedDays;
+          dailyCost2 = (buyRecord.totalPrice-buyRecord.soldPrice+childrenTotalCost-childrenTotalSold)/usedDays;
         }
-        brData.push({key:'每天花费',value :this.formatMoney(dailyCost),desc:'(买入价格-售出价格)/使用天数' });
+        brData.push({key:'每天花费',value :this.formatMoney(dailyCost)+' / '+this.formatMoney(dailyCost2),desc:'前项:(买入价格-售出价格)/使用天数.</br>后项:(买入价格-售出价格+下级商品成本-下级商品售出价格)/使用天数' });
         if(buyRecord.soldPrice!=null){
           let dd = buyRecord.soldPrice*10/buyRecord.totalPrice;
-          brData.push({key:'折旧率',value :(dd.toFixed(1)+'折'),desc:'售出价格/买入价格'});
-          if(childrenTotalCost>0){
-            let dd2 = buyRecord.soldPrice*10/(totalCost-childrenTotalSold);
-            brData.push({key:'总折旧率',value :(dd2.toFixed(1)+'折'),desc:'售出价格/(总成本-子项售价)'});
-          }
+          let dd2 = buyRecord.soldPrice*10/(totalCost-childrenTotalSold);
+          brData.push({key:'折旧率',value :(dd.toFixed(1)+'折 / '+dd2.toFixed(1)+'折'),desc:'前项:售出价格/买入价格.</br>后项:售出价格/(总成本-下级商品售价)'});
         }
         this.dataList = brData;
         this.loading = false;
-
+        //跟系统配置比对
+        this.lifetimeCompareData = Object.assign({}, this.lifetimeCompareData, {
+          goodsName: this.buyRecordData.goodsName,
+          usedDays: usedDays
+        });
       });
     }
   }
