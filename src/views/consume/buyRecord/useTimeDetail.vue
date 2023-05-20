@@ -151,19 +151,9 @@ export default {
       if(buyRecord.deleteDate!=null){
         tlData.push({key:'废弃/售出时间',value :buyRecord.deleteDate });
       }
-      //排序
+      //
       const len = tlData.length;
       this.timelineSize = len;
-      for (let i = 0; i < len; i++) {
-        for (let j = 0; j < i; j++) {
-          let hh = hourDiff(tlData[j],tlData[i]);
-          if (hh>0) {
-            let temp = tlData[j];
-            tlData[j] = tlData[i];
-            tlData[i] = temp;
-          }
-        }
-      }
       //赋值
       this.timelineList = tlData;
     },
@@ -192,7 +182,7 @@ export default {
         }
         brData.push({key:'售出价格',value :this.formatMoney(buyRecord.soldPrice) });
         if(response.totalCount!=null&&response.totalCount>0){
-          brData.push({key:'下级商品数',value :response.totalCount+'个',desc:'该商品所有下级商品的个数' });
+          brData.push({key:'下级商品成本',value :this.formatMoney(childrenTotalCost)+' ('+response.totalCount+'个)',desc:'该商品所有下级商品的个数' });
         }
         if(childrenTotalSold>0){
           brData.push({key:'下级商品售出',value :this.formatMoney(childrenTotalSold),desc:'该商品所有下级商品的售出价格总额' });

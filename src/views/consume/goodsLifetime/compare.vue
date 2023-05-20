@@ -19,8 +19,7 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-d-arrow-left" size="mini" @click="matchPrevious()" v-hasPermi="['config:goodsLifetime:getAndMath']">上一批</el-button>
-        <el-button type="primary" icon="el-icon-d-arrow-right" size="mini" @click="matchNext()" v-hasPermi="['config:goodsLifetime:getAndMath']">下一批</el-button>
+        <el-button type="primary" icon="el-icon-refresh" size="mini" @click="matchNext()" v-hasPermi="['config:goodsLifetime:getAndMath']">换一批</el-button>
         <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleCreate()" v-hasPermi="['consume:goodsLifetime:create']">新增</el-button>
       </el-form-item>
     </el-form>
@@ -83,6 +82,11 @@
         </el-col>
     </el-row>
 
+    <!--寿命配置表单 -->
+    <el-dialog :title="formTitle" width="600px" :visible.sync="formOpen" append-to-body>
+      <goods-lifetime-form :goodsLifetimeData="goodsLifetimeData" @confirmLifetimeForm="confirmLifetimeForm" @closeMe="formOpen=false"/>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -90,9 +94,13 @@
   import {getAndMathGoodsLifetime,compareAndMathGoodsLifetime} from "@/api/consume/goodsLifetime";
   import {formatDays} from "@/utils/datetime";
   import {getPercent} from "@/utils/mulanbay";
+  import GoodsLifetimeForm from './form'
 
 export default {
   name: "GoodsLifetimeCompare",
+  components: {
+    'goods-lifetime-form':GoodsLifetimeForm
+  },
   props: {
     lifetimeCompareData: {
       goodsName: undefined,
@@ -112,7 +120,11 @@ export default {
       pageSize: 10,
       lifetimeOptions:[],
       //匹配信息
-      matchInfo:{}
+      matchInfo:{},
+      //表单修改
+      goodsLifetimeData:{},
+      formTitle: '',
+      formOpen: false
     };
   },
   created() {
@@ -145,11 +157,12 @@ export default {
         pageSize: this.pageSize
       };
       getAndMathGoodsLifetime(para).then(response => {
+        this.loading = false;
         let configList = response.configs.beanList;
         let n = configList.length;
         if(n<=0){
           this.msgError('没有更多数据');
-          this.page =1;
+          this.page =0;
           return;
         }
         this.lifetimeOptions = [];
@@ -168,7 +181,6 @@ export default {
           this.matchInfo = {};
         }
         this.compareUseInfo();
-        this.loading = false;
       });
     },
     /** 下拉框选择操作操作 */
@@ -197,16 +209,7 @@ export default {
         this.matchInfo.usedRateInfo = p;
       }
     },
-    /** 上一批按钮操作 */
-    matchPrevious(){
-      if(this.page<=1){
-        this.msgError('没有更多数据');
-        return;
-      }
-      this.page = this.page-1;
-      this.getAndMath();
-    },
-    /** 下一批按钮操作 */
+    /** 换一批按钮操作 */
     matchNext(){
       this.page = this.page+1;
       this.getAndMath();
@@ -226,11 +229,28 @@ export default {
     },
     /** 新增按钮操作 */
     handleCreate() {
-      this.msgError('未实现');
+      this.formTitle = '新增';
+      this.formOpen = true;
+      this.goodsLifetimeData = Object.assign({}, this.goodsLifetimeData, {
+        id: undefined
+      });
     },
     /** 修改按钮操作 */
     handleUpdate() {
-      this.msgError('未实现');
+      this.formTitle = '修改';
+      this.formOpen = true;
+      this.goodsLifetimeData = Object.assign({}, this.goodsLifetimeData, {
+        id: this.queryParams.id
+      });
+    },
+    /** 表单提交完成 */
+    confirmLifetimeForm(data){
+      this.formOpen = false;
+      if(data.update==false){
+        //新增回第一页
+        this.page =1;
+      }
+      this.getAndMath();
     }
   }
 };

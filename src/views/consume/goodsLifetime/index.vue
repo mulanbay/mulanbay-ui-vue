@@ -114,107 +114,27 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
-
-    <!-- 添加或修改对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="400px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="类型名称" prop="name">
-          <el-input v-model="form.name" :style="{width: '100%'}" placeholder="请输入名称" />
-        </el-form-item>
-        <el-form-item label="关键字" prop="keywords">
-          <el-tag
-            :key="tag"
-            v-for="tag in keywordsTags"
-            closable
-            :disable-transitions="false"
-            @close="handleTagClose(tag)">
-            {{tag}}
-          </el-tag>
-          <el-input
-            class="input-new-tag"
-            v-if="inputVisible"
-            v-model="inputValue"
-            ref="saveTagInput"
-            size="small"
-            @keyup.enter.native="handleTagInputConfirm"
-            @blur="handleTagInputConfirm"
-          >
-          </el-input>
-          <el-button v-else class="button-new-tag" size="small" @click="showTagInput">+ 新建</el-button>
-          <el-popover
-              placement="bottom"
-              title="请选择"
-              width="500"
-              trigger="click">
-              <el-tag
-                effect="plain"
-                :key="tag"
-                v-for="tag in hisKeywordsTags"
-                :disable-transitions="false"
-                @click="handleTagAppend(tag)">
-                {{tag}}
-              </el-tag>
-              <el-button slot="reference" type="success" size="mini" round>选择</el-button>
-          </el-popover>
-        </el-form-item>
-        <el-form-item label="有效天数" prop="days">
-          <el-input-number v-model="form.days" :style="{width: '60%'}" controls-position="right" :min="0" :controls="true" :precision="0"/>
-          <el-select
-            v-model="fc"
-            placeholder="快速选择"
-            size="small"
-            style="width: 105px"
-            @change="selectDays"
-          >
-            <el-option
-              v-for="dict in daysOptions"
-              :key="dict.id"
-              :label="dict.text"
-              :value="dict.id"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="备注信息">
-          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"></el-input>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
-      </div>
+    <!--寿命配置表单 -->
+    <el-dialog :title="formTitle" width="600px" :visible.sync="formOpen" >
+      <goods-lifetime-form :goodsLifetimeData="goodsLifetimeData" @confirmLifetimeForm="confirmLifetimeForm" @closeMe="formOpen=false"/>
     </el-dialog>
 
   </div>
 </template>
 
 <script>
-import {fetchList,getGoodsLifetime,createGoodsLifetime,updateGoodsLifetime,deleteGoodsLifetime} from "@/api/consume/goodsLifetime";
-import {appendTagToOptions} from "@/utils/tagUtils";
-import {formatDays} from "@/utils/datetime";
+  import {fetchList,getGoodsLifetime,deleteGoodsLifetime} from "@/api/consume/goodsLifetime";
+  import {appendTagToOptions} from "@/utils/tagUtils";
+  import {formatDays} from "@/utils/datetime";
+  import GoodsLifetimeForm from './form'
 
 export default {
   name: "GoodsLifetime",
+  components: {
+    'goods-lifetime-form':GoodsLifetimeForm
+  },
   data() {
     return {
-      //标签属性 start
-      keywordsTags: [],
-      //已经保存过的商品标签
-      hisKeywordsTags:[],
-      inputVisible: false,
-      inputValue: '',
-      //标签属性 end
-      //时长快速选择
-      fc:30,
-      daysOptions:[
-        {id:30,text:'一个月'},
-        {id:90,text:'三个月'},
-        {id:180,text:'半年'},
-        {id:365,text:'一年'},
-        {id:730,text:'两年'},
-        {id:1095,text:'三年'},
-        {id:1825,text:'五年'},
-        {id:3650,text:'十年'}
-      ],
       // 遮罩层
       loading: true,
       // 选中数组
@@ -237,20 +157,10 @@ export default {
         pageSize: 10,
         name: undefined
       },
-      // 表单参数
-      form: {},
-      // 表单校验
-      rules: {
-        name: [
-          { required: true, message: "名称不能为空", trigger: "blur" }
-        ],
-        keywords: [
-          { required: true, message: "关键字不能为空", trigger: "blur" }
-        ],
-        days: [
-          { required: true, message: "有效天数不能为空", trigger: "blur" }
-        ]
-      }
+      //表单修改
+      goodsLifetimeData:{},
+      formTitle: '',
+      formOpen: false
     };
   },
   created() {
@@ -260,37 +170,6 @@ export default {
     /** 时长显示处理 */
     formatLifetimeDays(days){
       return formatDays(days);
-    },
-    /** 时长快速选择 */
-    selectDays(){
-      this.form.days = this.fc;
-    },
-    /** 标签处理 start */
-    handleTagClose(tag){
-      this.keywordsTags.splice(this.keywordsTags.indexOf(tag), 1);
-    },
-    handleTagAppend(tag) {
-      appendTagToOptions(tag,this.keywordsTags);
-    },
-    showTagInput() {
-      this.inputVisible = true;
-      this.$nextTick(_ => {
-        this.$refs.saveTagInput.$refs.input.focus();
-      });
-    },
-    handleTagInputConfirm() {
-      let inputValue = this.inputValue;
-      if (inputValue) {
-        appendTagToOptions(inputValue,this.keywordsTags);
-      }
-      this.inputVisible = false;
-      this.inputValue = '';
-    },
-    /** 标签处理 end */
-    /** 查询历史的关键字下拉树结构 */
-    getKeywordsTreeselect() {
-      //后期从用户的客服记录中获取
-      this.hisKeywordsTags=['默认'];
     },
     /** 查询列表 */
     getList() {
@@ -302,20 +181,6 @@ export default {
           this.loading = false;
         }
       );
-    },
-    // 取消按钮
-    cancel() {
-      this.open = false;
-      this.reset();
-    },
-    // 表单重置
-    reset() {
-      this.form = {
-        id: undefined,
-        name: undefined,
-        days: 30
-      };
-      this.resetForm("form");
     },
     /** 搜索按钮操作 */
     handleQuery() {
@@ -335,44 +200,30 @@ export default {
     },
     /** 新增按钮操作 */
     handleCreate() {
-      this.reset();
-      this.getKeywordsTreeselect();
-      this.keywordsTags=[];
-      this.open = true;
-      this.title = "添加";
+      this.formTitle = '新增';
+      this.formOpen = true;
+      this.goodsLifetimeData = Object.assign({}, this.goodsLifetimeData, {
+        id: undefined
+      });
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
-      this.reset();
-      this.getKeywordsTreeselect();
+      this.formTitle = '修改';
+      this.formOpen = true;
       const id = row.id || this.ids.join(",");
-      getGoodsLifetime(id).then(response => {
-        this.form = response;
-        this.keywordsTags = response.keywords.split(',');
-        this.open = true;
-        this.title = "修改";
+      this.goodsLifetimeData = Object.assign({}, this.goodsLifetimeData, {
+        id: id
       });
     },
-    /** 提交按钮 */
-    submitForm: function() {
-      this.form.keywords = this.keywordsTags.join(',');
-      this.$refs["form"].validate(valid => {
-        if (valid!=null) {
-          if (this.form.id != undefined) {
-            updateGoodsLifetime(this.form).then(response => {
-              this.msgSuccess("修改成功");
-              this.open = false;
-              this.getList();
-            });
-          } else {
-            createGoodsLifetime(this.form).then(response => {
-              this.msgSuccess("新增成功");
-              this.open = false;
-              this.getList();
-            });
-          }
-        }
-      });
+    /** 表单提交完成 */
+    confirmLifetimeForm(data){
+      this.formOpen = false;
+      if(data.update==false){
+        //新增回第一页
+        this.handleQuery();
+      }else{
+        this.getList();
+      }
     },
     /** 删除按钮操作 */
     handleDelete(row) {
