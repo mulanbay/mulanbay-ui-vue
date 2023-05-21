@@ -80,9 +80,9 @@ export function deleteChlidrenBuyRecord(data) {
   })
 }
 
-export function getBuyRecordChildrenTotalCost(query) {
+export function getBuyRecordCostStat(query) {
   return request({
-    url: '/buyRecord/getChildrenTotalCost',
+    url: '/buyRecord/costStat',
     method: 'get',
     params: query
   })
