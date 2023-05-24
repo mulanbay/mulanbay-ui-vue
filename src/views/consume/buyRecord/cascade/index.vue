@@ -1,5 +1,6 @@
 <template>
   <div class="app-container">
+
     <el-tabs v-loading="loading"  v-model="activeName" @tab-click="handleClick">
       <el-tab-pane label="上级商品" name="parentGoods">
         <parent-goods :buyRecordCCData="buyRecordCCData" />
@@ -10,6 +11,9 @@
       <el-tab-pane label="寿命/成本" name="useTime">
         <use-time :buyRecordCCData="buyRecordCCData" />
       </el-tab-pane>
+      <el-tab-pane label="关联图" name="treeStat">
+        <tree-stat :buyRecordTSData="buyRecordCCData" />
+      </el-tab-pane>
     </el-tabs>
 
   </div>
@@ -19,6 +23,7 @@
   import ParentGoods from './parentGoods'
   import ChildrenGoods from './childrenGoods'
   import UseTime from '../useTimeDetail'
+  import TreeStat from './treeStat'
 
 export default {
   name: "BuyRecordCascade",
@@ -29,7 +34,8 @@ export default {
   components: {
     'parent-goods':ParentGoods,
     'children-goods':ChildrenGoods,
-    'use-time':UseTime
+    'use-time':UseTime,
+    'tree-stat':TreeStat
   },
   mounted() {
      //this.initChart();

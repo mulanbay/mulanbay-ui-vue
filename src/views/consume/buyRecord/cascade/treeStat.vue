@@ -1,6 +1,16 @@
 <template>
   <div class="app-container">
 
+    <el-row type="flex" class="row-bg" justify="end">
+      <el-col :span="6">
+        <div class="grid-content bg-purple-light">
+          <span slot="footer" class="dialog-footer">
+            <el-button icon="el-icon-refresh" type="query" @click="refresh" v-hasPermi="['consume:buyRecord:treeStat']">刷新</el-button>
+          </span>
+        </div>
+        </el-col>
+    </el-row>
+
     <!--图表数据-->
     <div>
       <common-chart :chartData="chartData"/>
@@ -60,6 +70,10 @@ export default {
     // 打开加载层
     openLoading() {
       this.loading = this.$loading(this.loadingOptions);
+    },
+    /** 刷新图表 */
+    refresh(){
+      this.initChart(this.buyRecordTSData.id);
     },
     initChart(id) {
       this.openLoading();

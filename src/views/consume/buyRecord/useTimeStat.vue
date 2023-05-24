@@ -192,7 +192,7 @@
     <el-dialog :title="cascadeTitle" width="80%" :visible.sync="cascadeOpen" append-to-body customClass="customDialogCss">
       <goods-cascade :buyRecordData="buyRecordData"/>
       <span slot="footer" class="dialog-footer">
-        <el-button icon="el-icon-close" type="primary" @click="cascadeOpen = false" >关闭</el-button>
+        <el-button icon="el-icon-close" type="danger" @click="cascadeOpen = false" >关闭</el-button>
       </span>
     </el-dialog>
 

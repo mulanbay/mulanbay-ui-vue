@@ -195,16 +195,6 @@
       </el-col>
       <el-col :span="1.5">
         <el-button
-          type="success"
-          icon="el-icon-s-data"
-          size="mini"
-          :disabled="single"
-          @click="handleTreeStat"
-          v-hasPermi="['consume:buyRecord:treeStat']"
-        >关联图</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
           type="warning"
           icon="el-icon-download"
           size="mini"
@@ -591,15 +581,10 @@
     <el-dialog :title="cascadeTitle" width="80%" :visible.sync="cascadeOpen" append-to-body customClass="customDialogCss">
       <goods-cascade :buyRecordData="buyRecordData"/>
         <span slot="footer" class="dialog-footer">
-          <el-button icon="el-icon-close" type="primary" @click="cascadeOpen = false" >关闭</el-button>
+          <el-button icon="el-icon-close" type="danger" @click="cascadeOpen = false" >关闭</el-button>
         </span>
       <div>
       </div>
-    </el-dialog>
-
-    <!--关联图 -->
-    <el-dialog :title="treeStatTitle" width="80%" :visible.sync="treeStatOpen" >
-      <tree-stat :buyRecordTSData="buyRecordTSData"/>
     </el-dialog>
 
     <!-- 商品寿命推荐 -->
@@ -625,7 +610,6 @@
   import LifetimeCompare from '../goodsLifetime/compare'
   import LifetimeCalendar from './lifetimeCalendar'
   import GoodsCascade from './cascade/index'
-  import TreeStat from './cascade/treeStat'
 
 export default {
   name: "BuyRecord",
@@ -635,7 +619,6 @@ export default {
     'lifetime-compare':LifetimeCompare,
     'lifetime-calendar':LifetimeCalendar,
     'goods-cascade':GoodsCascade,
-    'tree-stat':TreeStat,
     'lifetime-compare':LifetimeCompare
   },
   filters: {
@@ -661,10 +644,6 @@ export default {
       //商品级联
       cascadeTitle:'',
       cascadeOpen:false,
-      //关联图
-      treeStatTitle:'',
-      treeStatOpen:false,
-      buyRecordTSData:{},
       //寿命周期推荐
       ltcTitle:'',
       ltcOpen:false,
