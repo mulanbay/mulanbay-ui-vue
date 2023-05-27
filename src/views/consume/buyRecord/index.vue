@@ -886,19 +886,21 @@ export default {
           if(response.subGoodsTypeId!=null){
             this.form.subGoodsTypeId = response.subGoodsTypeId+'';
           }
-          this.form.shopName = response.shopName;
-          this.form.brand = response.brand;
-          this.form.brand = response.brand;
           this.form.buyTypeId = response.buyTypeId;
-          this.form.price = response.price;
-          this.form.amount = response.amount;
-          this.form.shipment = response.shipment;
-          this.form.totalPrice = response.totalPrice;
-          this.form.payment = response.payment;
-          this.form.secondhand = response.secondhand;
-          this.form.statable = response.statable;
-          this.form.consumeType = response.consumeType;
-          this.form.skuInfo = response.skuInfo;
+          this.form.shopName = response.shopName;
+          if(response.match>=0.8){
+            //基本上是同一件商品类型
+            this.form.brand = response.brand;
+            this.form.price = response.price;
+            this.form.amount = response.amount;
+            this.form.shipment = response.shipment;
+            this.form.totalPrice = response.totalPrice;
+            this.form.payment = response.payment;
+            this.form.secondhand = response.secondhand;
+            this.form.statable = response.statable;
+            this.form.consumeType = response.consumeType;
+            this.form.skuInfo = response.skuInfo;
+          }
 
         }
       });
@@ -1021,6 +1023,7 @@ export default {
       this.form = {
         id: undefined,
         goodsName: undefined,
+        skuInfo: undefined,
         amount: 1,
         shipment:0,
         payment:'ALIPAY',
