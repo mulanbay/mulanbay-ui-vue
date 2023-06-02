@@ -10,6 +10,7 @@
                   size="small"
                   :precision="0"
                   style="width: 120px"
+                  @blur="updateRefreshInterval"
                 />秒
               </el-form-item>
               <el-form-item>
@@ -111,14 +112,21 @@ export default {
       cpuMonitorChartData:{},
       timelineChartData:{},
       resourceType:'MEMORY',
-      systemDetails:{}
+      systemDetails:{},
+      //自动刷新
+      timer: undefined
     };
   },
   created() {
     this.handleQuery();
     //每秒检查参数
-    //setInterval(this.autoRefresh, 1000);
+    this.timer = setInterval(() => {
+     this.handleQuery();
+    }, this.seconds*1000)
   },
+  beforeDestroy() {
+     clearInterval(this.timer);
+   },
   methods: {
     /** 更多详情按钮操作 */
     handleMoreDetail(){
@@ -126,9 +134,12 @@ export default {
       this.sdOpen=true;
     },
     /** 自动刷新 */
-    autoRefresh(){
+    updateRefreshInterval(){
+      clearInterval(this.timer);
       if(!this.isObjectEmpty(this.seconds)&&this.seconds>0){
-        //setTimeout(this.getList(), this.seconds*1000);
+        this.timer = setInterval(() => {
+         this.handleQuery();
+        }, this.seconds*1000)
       }
     },
     /** 磁盘操作 */
@@ -189,13 +200,13 @@ export default {
     },
     /** 查询服务器信息 */
     getList() {
-      this.openLoading();
+      //this.openLoading();
       getSystemDetail().then(
         response => {
           this.createDiskMonitorChart(response.sysFiles);
           this.createMemoryMonitorChart(response.mem);
           this.createCpuMonitorChart(response.cpu);
-          this.loading.close();
+          //this.loading.close();
         }
       );
     },
