@@ -236,12 +236,12 @@
     <!--列表数据-->
     <el-table v-loading="loading" :data="buyRecordList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="ID" prop="id" sortable="custom" align="center" width="80">
+      <el-table-column label="ID"  fixed="left"  prop="id" sortable="custom" align="center" width="80">
         <template slot-scope="{row}">
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="商品名称" width="400" :show-overflow-tooltip="true">
+      <el-table-column label="商品名称" fixed="left"  width="400" :show-overflow-tooltip="true">
         <template slot-scope="{row}">
           <span v-if="row.keywords != null">
            ★

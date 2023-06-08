@@ -34,12 +34,12 @@
     <!--列表数据-->
     <el-table v-loading="loading" :data="dataList">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="ID" prop="id" sortable="custom" align="center" width="80">
+      <el-table-column label="ID" fixed="left"  prop="id" sortable="custom" align="center" width="80">
         <template slot-scope="{row}">
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="疾病标签" align="center" width="160" :show-overflow-tooltip="true">
+      <el-table-column label="疾病标签" fixed="left"  align="center" width="160" :show-overflow-tooltip="true">
         <template slot-scope="{row}">
           {{ row.tags }}
         </template>
@@ -97,6 +97,11 @@
           <span class="link-type" @click="handleFeeDetail(row)"><i class="el-icon-s-data"/></i></span>
         </template>
       </el-table-column>
+      <el-table-column label="分析" width="80" align="center">
+        <template slot-scope="{row}">
+          <span class="link-type" @click="handleAnalyse(row)"><i class="el-icon-s-data"/></i></span>
+        </template>
+      </el-table-column>
       <el-table-column label="药品" width="80" align="center">
         <template slot-scope="{row}">
           <span class="link-type" @click="handleDrugList(row)"><i class="el-icon-s-grid"/></i></span>
@@ -128,6 +133,11 @@
       <fee-detail :fullStatData="fullStatData"/>
     </el-dialog>
 
+    <!-- 分析 -->
+    <el-dialog :title="analyseTitle" width="900px" :visible.sync="analyseOpen" append-to-body customClass="customDialogCss">
+      <analyse :treatRecordData="treatRecordData"/>
+    </el-dialog>
+
     <!-- 药品列表页面 -->
     <el-dialog :title="drugListTitle" width="900px" :visible.sync="drugListOpen"  append-to-body>
       <drug-list
@@ -149,6 +159,7 @@
 import {getTreatRecordFullStat} from "@/api/health/treat/treatRecord";
 import {formatDays} from "@/utils/datetime";
 import FeeDetail from './fullStatFeeDetail'
+import Analyse from './fullStatAnalyse'
 import DrugList from "../treatDrug/index";
 import OperationList from "../treatOperation/index";
 
@@ -157,7 +168,8 @@ export default {
   components: {
     'drug-list':DrugList,
     'operation-list':OperationList,
-    'fee-detail':FeeDetail
+    'fee-detail':FeeDetail,
+    'analyse':Analyse
   },
   data() {
     return {
@@ -174,6 +186,10 @@ export default {
       feeDetailOpen:false,
       feeDetailTitle:'',
       fullStatData:{},
+      //分析
+      analyseOpen:false,
+      analyseTitle:'',
+      //treatRecordData:{},
       // 遮罩层
       loading: true,
       // 选中数组
@@ -248,6 +264,14 @@ export default {
       this.feeDetailOpen = true;
       this.feeDetailTitle = '['+row.tags+']费用详情';
       this.fullStatData = Object.assign({}, this.fullStatData, row);
+    },
+    /** 分析操作 */
+    handleAnalyse(row){
+      this.analyseOpen = true;
+      this.analyseTitle = '['+row.tags+']分析';
+      this.treatRecordData = Object.assign({}, this.treatRecordData, {
+        tags: row.tags
+      });
     },
     /** 检验报告列表操作 */
     handleTreatTest(row){

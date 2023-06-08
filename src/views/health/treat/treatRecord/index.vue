@@ -92,6 +92,16 @@
       </el-col>
       <el-col :span="1.5">
         <el-button
+          type="primary"
+          icon="el-icon-plus"
+          size="mini"
+          :disabled="single"
+          @click="handleCreateAsTemplate"
+          v-hasPermi="['health:treat:treatRecord:create']"
+        >以此为模板</el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
           type="success"
           icon="el-icon-edit"
           size="mini"
@@ -162,13 +172,13 @@
           <span>{{ row.treatTypeName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="疾病症状" width="160" :show-overflow-tooltip="true">
+      <el-table-column label="疾病症状" width="120" :show-overflow-tooltip="true">
         <template slot-scope="{row}">
           <span class="link-type" @click="handleUpdate(row)">{{ row.disease }}</span>
           <span class="link-type" @click="showBodyAbnormalRecordAnalyse(row.disease,'DISEASE')"><i class="el-icon-s-promotion" /></span>
         </template>
       </el-table-column>
-      <el-table-column label="医院" :show-overflow-tooltip="true">
+      <el-table-column label="医院"  min-width="180" :show-overflow-tooltip="true">
         <template slot-scope="{row}">
           <span>{{ row.hospital }}</span>
         </template>
@@ -210,17 +220,18 @@
           </span>
         </template>
       </el-table-column>
-      <el-table-column label="看病日期" width="110" :show-overflow-tooltip="true">
+      <el-table-column label="看病日期" align="center" width="180">
         <template slot-scope="{row}">
           <span>{{ row.treatDate }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="费用" width="120">
+      <el-table-column label="费用" align="center" width="120">
         <template slot-scope="{row}">
           <span>{{ formatMoney(row.totalFee) }}</span>
           <span class="link-type" @click="showFeeDetail(row)"><i class="el-icon-s-grid" /></span>
         </template>
       </el-table-column>
+      <!--
       <el-table-column label="疼痛级别" align="center" width="140">
         <template slot-scope="{row}">
           <el-rate v-model="row.painLevel" disabled show-text></el-rate>
@@ -231,12 +242,13 @@
           <el-rate v-model="row.importantLevel" disabled show-text></el-rate>
         </template>
       </el-table-column>
-      <el-table-column label="门诊类型">
+      -->
+      <el-table-column label="门诊类型" align="center">
         <template slot-scope="{row}">
           <span>{{ row.osName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="医生">
+      <el-table-column label="医生" align="center">
         <template slot-scope="{row}">
           <span>{{ row.doctor }}</span>
         </template>
@@ -599,6 +611,7 @@ import {dispatchCommonStat} from "@/utils/planUtils";
 import DrugList from "../treatDrug/index";
 import OperationList from "../treatOperation/index";
 import {copyObject,getQueryObject} from "@/utils/index";
+import {getNowDateTimeString} from "@/utils/datetime";
 import LifeArchivesDetail from '../../../life/lifeArchives/detail'
 import Stat from './stat'
 
@@ -916,6 +929,23 @@ export default {
       this.open = true;
       this.title = "添加";
       this.tagsOptions = [];
+    },
+    /** 以模板新增按钮操作 */
+    handleCreateAsTemplate() {
+      this.reset();
+      const id = this.ids.join(",")
+      getTreatRecord(id).then(response => {
+        this.form = response;
+        this.form.id=undefined;
+        this.form.treatDate=getNowDateTimeString();
+        if(!this.isObjectEmpty(response.tags)){
+          this.tagsOptions = response.tags.split(',');
+        }else{
+          this.tagsOptions = [];
+        }
+        this.open = true;
+        this.title = "新增";
+      });
     },
     /** 修改按钮操作 */
     handleUpdate(row) {

@@ -44,7 +44,7 @@
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="阅读时间" min-width="120px">
+      <el-table-column label="阅读时间" min-width="150px">
         <template slot-scope="{row}">
           <span class="link-type" @click="handleUpdate(row)">{{ row.readTime }}</span>
         </template>
