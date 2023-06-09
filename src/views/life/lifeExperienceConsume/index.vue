@@ -130,7 +130,7 @@
             <el-form-item label="消费记录" prop="buyRecordId">
              <el-input v-model="form.buyRecordId" placeholder="" style="width: 180px;" disabled/>
              <el-button type="query" icon="el-icon-magic-stick" @click="handleSelectGoods()" >绑定消费记录</el-button>
-             <el-button type="danger" icon="el-icon-close" @click="handleUnSelectGoods()" >解绑</el-button>
+             <el-button type="danger" icon="el-icon-close" @click="handleUnSelectGoods()" :disabled="form.buyRecordId==null">解绑</el-button>
             </el-form-item>
           </el-col>
         </el-row>
@@ -322,6 +322,9 @@ export default {
     },
     /** 解绑商品 */
     handleUnSelectGoods(){
+      if(this.form.buyRecordId == null){
+        return;
+      }
       this.form.buyRecordId = null;
       this.form.name = null;
       this.form.cost = 0;
