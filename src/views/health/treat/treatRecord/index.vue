@@ -543,13 +543,13 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="药品费用" prop="drugFee">
-              <el-input-number v-model="form.drugFee" :style="{width: '90%'}" placeholder="单位:元" controls-position="right" :min="0" :controls="false" :precision="2" :disabled="feeReadOnly"/>
+              <el-input-number v-model="form.drugFee" @change="calTotalFee" :style="{width: '90%'}" placeholder="单位:元" controls-position="right" :min="0" :controls="false" :precision="2" :disabled="feeReadOnly"/>
               元
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="手术/治疗费用" prop="operationFee">
-              <el-input-number v-model="form.operationFee" :style="{width: '90%'}" placeholder="单位:元" controls-position="right" :min="0" :controls="false" :precision="2" :disabled="feeReadOnly"/>
+              <el-input-number v-model="form.operationFee" @change="calTotalFee" :style="{width: '90%'}" placeholder="单位:元" controls-position="right" :min="0" :controls="false" :precision="2" :disabled="feeReadOnly"/>
               元
             </el-form-item>
           </el-col>
@@ -557,13 +557,13 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="挂号费用" prop="registeredFee">
-              <el-input-number v-model="form.registeredFee" :style="{width: '90%'}" placeholder="单位:元" controls-position="right" :min="0" :controls="false" :precision="2" :disabled="feeReadOnly"/>
+              <el-input-number v-model="form.registeredFee" @change="calTotalFee" :style="{width: '90%'}" placeholder="单位:元" controls-position="right" :min="0" :controls="false" :precision="2" :disabled="feeReadOnly"/>
               元
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="其他费用" prop="otherFee">
-              <el-input-number v-model="form.otherFee" :style="{width: '90%'}" placeholder="单位:元" controls-position="right" :min="0" :controls="false" :precision="2" :disabled="feeReadOnly"/>
+              <el-input-number v-model="form.otherFee" @change="calTotalFee" :style="{width: '90%'}" placeholder="单位:元" controls-position="right" :min="0" :controls="false" :precision="2" disabled/>
               元
             </el-form-item>
           </el-col>
@@ -571,7 +571,7 @@
         </el-card>
         </br>
         <el-card>
-          <div slot="header" align="center"><span>支付详情</span></div>
+          <div slot="header" align="center"><span>支付详情(统计)</span></div>
         <el-row>
           <el-col :span="12">
             <el-form-item label="总共花费" prop="totalFee">
@@ -755,6 +755,10 @@ export default {
     /** 计算医保费用 */
     calMIPFee(){
       this.form.medicalInsurancePaidFee=this.form.totalFee-this.form.personalPaidFee;
+    },
+    /** 计算总费用 */
+    calTotalFee(){
+      this.form.totalFee=this.form.drugFee+this.form.operationFee+this.form.registeredFee;
     },
     /** 显示费用详情 */
     showFeeDetail(row){
