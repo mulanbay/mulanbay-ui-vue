@@ -81,7 +81,7 @@
           <span>{{ formatMoney(row.cost) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="关联总的消费记录" width="160" align="center">
+      <el-table-column label="关联消费记录" width="140" align="center">
         <template slot-scope="{row}">
           <span v-if="row.buyRecordId!=null">
            <i class="el-icon-check" />
@@ -128,38 +128,9 @@
         <el-row>
           <el-col :span="24">
             <el-form-item label="消费记录" prop="buyRecordId">
-              <el-select
-                v-model="form.buyRecordId"
-                placeholder="消费记录"
-                clearable
-                collapse-tags
-                size="small"
-                style="width: 315px"
-                @change="loadBuyRecord"
-              >
-                <el-option
-                  v-for="dict in buyRecordOptions"
-                  :key="dict.id"
-                  :label="dict.text"
-                  :value="dict.id"
-                />
-              </el-select>
-              <el-select
-                v-model="form.roundDays"
-                placeholder="时间段"
-                clearable
-                collapse-tags
-                size="small"
-                style="width: 120px"
-                @change="getBuyRecordTreeselect"
-              >
-                <el-option
-                  v-for="dict in roundDaysOptions"
-                  :key="dict.id"
-                  :label="dict.text"
-                  :value="dict.id"
-                />
-              </el-select>
+             <el-input v-model="form.buyRecordId" placeholder="" style="width: 180px;" disabled/>
+             <el-button type="query" icon="el-icon-magic-stick" @click="handleSelectGoods()" >绑定消费记录</el-button>
+             <el-button type="danger" icon="el-icon-close" @click="handleUnSelectGoods()" >解绑</el-button>
             </el-form-item>
           </el-col>
         </el-row>
@@ -217,16 +188,26 @@
     </el-dialog>
 
 
+  <!-- 消费记录选择页面 -->
+  <el-dialog :title="chooseGoodsTitle" width="900px" :visible.sync="chooseGoodsOpen"  append-to-body customClass="customDialogCss">
+    <choose-goods @closeMe="chooseGoodsOpen=false" @selectGoods="selectGoods"/>
+  </el-dialog>
+
+
   </div>
 </template>
 
 <script>
-import {fetchList,getBuyRecordTree,getLifeExperienceConsume,createLifeExperienceConsume,updateLifeExperienceConsume,deleteLifeExperienceConsume} from "@/api/life/lifeExperienceConsume";
-import {getBuyRecord} from "@/api/consume/buyRecord";
-import {getConsumeTypeTree} from "@/api/life/consumeType";
+  import {fetchList,getBuyRecordTree,getLifeExperienceConsume,createLifeExperienceConsume,updateLifeExperienceConsume,deleteLifeExperienceConsume} from "@/api/life/lifeExperienceConsume";
+  import {getBuyRecord} from "@/api/consume/buyRecord";
+  import {getConsumeTypeTree} from "@/api/life/consumeType";
+  import ChooseGoods from '../../consume/buyRecord/chooseGoods'
 
 export default {
   name: "LifeExperienceConsume",
+  components: {
+    'choose-goods':ChooseGoods
+  },
   props: {
     //父层带过来的账户信息值
     detailForConsumeListData:{
@@ -237,6 +218,10 @@ export default {
     return {
       // 遮罩层
       loading: true,
+      //选择商品start
+      chooseGoodsTitle:'',
+      chooseGoodsOpen:false,
+      //选择商品end
       // 选中数组
       ids: [],
       // 非单个禁用
@@ -330,6 +315,23 @@ export default {
     handleReceiveData(data){
       this.queryParams.lifeExperienceDetailId=data.lifeExperienceDetailId;
       this.getList();
+    },
+    /** 打开选择商品 */
+    handleSelectGoods(){
+      this.chooseGoodsOpen=true;
+    },
+    /** 解绑商品 */
+    handleUnSelectGoods(){
+      this.form.buyRecordId = null;
+      this.form.name = null;
+      this.form.cost = 0;
+    },
+    /** 选择商品 */
+    selectGoods(data){
+      this.form.buyRecordId = data.id;
+      this.form.name = data.goodsName;
+      this.form.cost = data.totalPrice;
+      this.chooseGoodsOpen=false;
     },
     /** 查询列表 */
     getList() {

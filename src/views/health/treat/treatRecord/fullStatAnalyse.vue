@@ -175,7 +175,7 @@ export default {
         response => {
           //组装chart数据
           response.chartType='PIE';
-          response.title ='门诊类型分析';
+          response.title ='门诊分析';
           this.osNameChartData = response;
           //重新设定高度
           this.osNameChartData.height = '300px';
