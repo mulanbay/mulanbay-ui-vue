@@ -249,6 +249,9 @@
           <span v-if="row.pid != null" style="color: red;">
            ★
           </span>
+          <span v-if="row.consumeType == 'TREAT'" style="color: yellowgreen;">
+           ★
+          </span>
           <span v-if="row.secondhand==true" style="color: green;">
            <el-tag type="warning">二手</el-tag>
           </span>

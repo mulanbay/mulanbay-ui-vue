@@ -93,15 +93,6 @@
                   </td>
                 </tr>
                 <tr>
-                  <td class="el-table__cell is-leaf"><div class="cell">看病(自费)</div></td>
-                  <td class="el-table__cell is-leaf"><div class="cell">{{ formatMoney(statData.totalTreatAmount) }}</div></td>
-                  <td class="el-table__cell is-leaf">
-                    <div class="cell">
-                      <span class="link-type" @click="handleDispatch('TreatRecord')"><i class="el-icon-s-promotion" /></span>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
                   <td class="el-table__cell is-leaf"><div class="cell">新增存款</div></td>
                   <td class="el-table__cell is-leaf"><div class="cell">{{ formatMoney(statData.remainMoney) }}</div></td>
                   <td class="el-table__cell is-leaf">
@@ -427,7 +418,7 @@ export default {
       statWithTreat(para).then(
         response => {
           //组装chart数据
-          response.height = '645px';
+          response.height = '600px';
           this.chartData = response;
           this.loading.close();
         }

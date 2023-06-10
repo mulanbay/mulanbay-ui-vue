@@ -170,6 +170,9 @@
       </el-table-column>
       <el-table-column label="名称" min-width="180px" :show-overflow-tooltip="true" fixed="left">
         <template slot-scope="{row}">
+          <span v-if="row.goodsTypeId != null">
+           ★
+          </span>
           <span class="link-type" @click="handleUpdate(row)">{{ row.name }}</span>
         </template>
       </el-table-column>
@@ -278,7 +281,7 @@
     />
 
     <!-- 添加或修改对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="650px" append-to-body>
+    <el-dialog :title="title" :visible.sync="open" width="640px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-row>
           <el-col :span="24">
@@ -331,25 +334,23 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="资金类型" prop="feeType">
-              <el-select
-                v-model="form.feeType"
-                placeholder="类型"
-                clearable
-                @change="onFeeTypeChange"
-              >
-                <el-option
-                  v-for="dict in feeTypeOptions"
-                  :key="dict.id"
-                  :label="dict.text"
-                  :value="dict.id"
-                />
-              </el-select>
+          <el-col :span="6">
+            <el-form-item label="是否提醒" prop="remind">
+              <el-switch
+                v-model="form.remind">
+              </el-switch>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="绑定消费" prop="showGoodsType">
+              <el-switch
+                v-model="showGoodsType">
+              </el-switch>
+              <span class="link-type" @click="msgAlert('提示','绑定消费后，则该预算会自动从消费数据中计算获取')"><i class="el-icon-question" /></span>
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row v-if="'BUY_RECORD'==this.form.feeType">
+        <el-row  v-if="true==showGoodsType">
           <el-col :span="12">
             <el-form-item label="商品类型" prop="goodsTypeId">
               <!--普通的el-option会导致显示问题-->
@@ -374,10 +375,10 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row v-if="'BUY_RECORD'==this.form.feeType">
+        <el-row v-if="true==showGoodsType">
           <el-col :span="24">
             <el-form-item label="商品标签" prop="keywords">
-              <el-input v-model="form.keywords" :style="{width: '510px'}"/>
+              <el-input v-model="form.keywords" :style="{width: '500px'}"/>
               <span class="link-type" @click="msgAlert('提示','商品名称或商品标签中包含的关键字')"><i class="el-icon-question" /></span>
             </el-form-item>
           </el-col>
@@ -391,15 +392,6 @@
               <span class="link-type" @click="msgAlert('提示','<1>对于单次类型，必须设置预期实现时间，则预算金额会加入到该日期所在月的月预算中。<br><2>对于每年类型，如果设置预期实现时间，则预算金额会加入到该日期所在月的每年的该月预算中')"><i class="el-icon-question" /></span>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="是否提醒" prop="remind">
-              <el-switch
-                v-model="form.remind">
-              </el-switch>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
           <el-col :span="12">
             <el-form-item label="预算状态" prop="period">
               <el-radio-group v-model="form.status">
@@ -485,8 +477,6 @@ export default {
       statusOptions:this.commonStatusOptions,
       //周期
       periodOptions:[],
-      //资金列表
-      feeTypeOptions:[],
       //商品类型
       goodsTypeOptions:[],
       //商品子类
@@ -500,6 +490,7 @@ export default {
       },
       //进度百分比颜色
       customColors: progressColors,
+      showGoodsType: false,
       // 表单参数
       form: {},
       // 表单校验
@@ -542,9 +533,6 @@ export default {
     //预算周期采用数据字典配置，有些周期类型不好实现
     this.getDictItemTree('BUDGET_PERIOD_TYPE',false).then(response => {
       this.periodOptions = response;
-    });
-    this.getEnumTree('BudgetFeeType','FIELD',false).then(response => {
-      this.feeTypeOptions = response;
     });
     this.getGoodsTypeTreeselect();
   },
@@ -742,6 +730,11 @@ export default {
       const id = row.id || this.ids.join(",")
       getBudget(id).then(response => {
         this.form = response;
+        if(this.form.goodsTypeId!=null){
+          this.showGoodsType = true;
+        }else{
+          this.showGoodsType = false;
+        }
         this.open = true;
         this.title = "修改";
       });
