@@ -1,13 +1,42 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true">
-      <el-form-item label="名称" prop="name">
-        <el-input v-model="queryParams.name" placeholder="请输入名称" clearable size="small" style="width: 240px"
-          @keyup.enter.native="handleQuery" />
+      <el-form-item label="看病日期">
+        <el-date-picker
+          v-model="dateRange"
+          size="small"
+          style="width: 240px"
+          value-format="yyyy-MM-dd"
+          type="daterange"
+          unlink-panels
+          range-separator="-"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          :picker-options="datePickerOptions"
+        ></el-date-picker>
+      </el-form-item>
+      <el-form-item label="疾病标签" prop="tags">
+        <el-select
+          v-model="queryParams.tags"
+          placeholder="疾病标签"
+          clearable
+          size="small"
+          style="width: 240px"
+        >
+          <el-option
+            v-for="dict in hisTagOptions"
+            :key="dict.id"
+            :label="dict.text"
+            :value="dict.id"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="全链接" prop="unionAll">
+        <el-switch v-model="queryParams.unionAll" @change="handleQuery"></el-switch>
       </el-form-item>
       <el-form-item>
         <el-button type="stat" icon="el-icon-s-data" size="mini" @click="handleQuery"
-          v-hasPermi="['system:qaConfig:stat']">统计</el-button>
+          v-hasPermi="['health:treat:treatRecord:relation']">统计</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
@@ -20,13 +49,14 @@
 </template>
 
 <script>
-  import {getQaConfigStat} from "@/api/system/qaConfig";
+  import {getTreatRecordRelation,getTreatRecordTagsTree} from "@/api/health/treat/treatRecord";
   import * as echarts from 'echarts';
   import {chartProps,createChart} from "@/utils/echarts";
-  import resize from '../../dashboard/mixins/resize.js'
+  import resize from '../../../dashboard/mixins/resize.js'
+  import {copyObject,getQueryObject} from "@/utils/index";
 
   export default {
-    name: "QaConfigStat",
+    name: "TreatRecordRelation",
     mixins: [resize],
     mixins: [resize],
     props: {
@@ -60,14 +90,35 @@
         loading: [],
         //加载层配置
         loadingOptions: this.loadingOptions,
+        //日期范围快速选择
+        datePickerOptions:this.datePickerOptions,
+        // 日期范围
+        dateRange: [],
+        //历史标签（查询或者选择使用）
+        hisTagOptions:[],
         // 查询参数
-        queryParams: {}
+        queryParams: {
+          tags:undefined,
+          unionAll:false
+        }
       };
     },
     created() {
-      this.initChart();
+      this.getTreatRecordTagsTreeselect();
+      let qb = getQueryObject(null);
+      if(qb.tags!=null){
+        this.queryParams.tags = qb.tags;
+        this.handleQuery();
+      }
+
     },
     methods: {
+      /** 查询标签下拉树结构 */
+      getTreatRecordTagsTreeselect() {
+        getTreatRecordTagsTree(false).then(response => {
+          this.hisTagOptions = response;
+        });
+      },
       // 打开加载层
       openLoading() {
         this.loading = this.$loading(this.loadingOptions);
@@ -83,13 +134,13 @@
       },
       initChart() {
         this.openLoading();
-        getQaConfigStat(this.queryParams).then(
+        getTreatRecordRelation(this.addDateRange(this.queryParams, this.dateRange)).then(
           response => {
             //组装chart数据
             if (this.chart == null) {
               this.chart = echarts.init(document.getElementById(this.id));
             }
-            this.chart.resize();
+            //this.chart.resize();
             let option = this.createChartOption(response);
             createChart(option, this.chart);
             this.loading.close();

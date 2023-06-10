@@ -64,6 +64,14 @@ export function getTreatCategoryTree(groupField,needRoot) {
   })
 }
 
+export function getTreatRecordRelation(query) {
+  return request({
+    url: '/treatRecord/relation',
+    method: 'get',
+    params: query
+  })
+}
+
 export function getTreatRecordFullStat(query) {
   return request({
     url: '/treatRecord/fullStat',

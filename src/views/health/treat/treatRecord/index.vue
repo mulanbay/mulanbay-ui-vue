@@ -198,7 +198,7 @@
           <span>{{ row.department }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="器官">
+      <el-table-column label="器官" width="120" >
         <template slot-scope="{row}">
           <span>{{ row.organ }}</span>
           <span class="link-type" @click="showBodyAbnormalRecordAnalyse(row.organ,'ORGAN')"><i class="el-icon-s-promotion" /></span>

@@ -42,6 +42,7 @@
       <el-table-column label="疾病标签" fixed="left"  align="center" width="160" :show-overflow-tooltip="true">
         <template slot-scope="{row}">
           {{ row.tags }}
+          <span class="link-type" @click="showRelation(row)"><i class="el-icon-connection" /></span>
         </template>
       </el-table-column>
       <el-table-column label="看病总次数" width="120" align="center" >
@@ -231,6 +232,11 @@ export default {
       const min = new Date(Date.parse(row.maxTreatDate.replace(/-/g,"/")));
       let r = (parseInt(max - min)) / (1000*24*3600);
       return formatDays(r);
+    },
+    /** 关系图 */
+    showRelation(row){
+      //路由定向
+      this.$router.push({name:'TreatRecordRelation',query: {tags:row.tags}})
     },
     /** 查询列表 */
     getList() {
