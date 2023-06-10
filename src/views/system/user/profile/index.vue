@@ -72,6 +72,9 @@
             <el-tab-pane label="基本资料" name="userinfo">
               <userInfo :user="user" />
             </el-tab-pane>
+            <el-tab-pane label="用户偏好" name="userSetting">
+              <userSetting :user="user" />
+            </el-tab-pane>
             <el-tab-pane label="修改密码" name="resetPwd">
               <resetPwd :user="user" />
             </el-tab-pane>
@@ -103,6 +106,7 @@
 <script>
 import userAvatar from "./userAvatar";
 import userInfo from "./userInfo";
+import userSetting from "./userSetting";
 import resetPwd from "./resetPwd";
 import fastMenu from "./fastMenu";
 import lifeArchives from "./lifeArchives";
@@ -117,6 +121,7 @@ export default {
   components: {
     userAvatar,
     userInfo,
+    userSetting,
     resetPwd,
     fastMenu,
     lifeArchives,

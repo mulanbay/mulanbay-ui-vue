@@ -321,10 +321,8 @@
     </el-dialog>
 
     <!-- 地图统计页面 -->
-    <el-dialog :title="transferMapStatTitle" width="900px" :visible.sync="transferMapStatVisible"  append-to-body>
-      <life-experience-transfer-map-stat
-        :lifeExpData="lifeExpData"
-      />
+    <el-dialog :title="transferMapStatTitle" width="900px" :visible.sync="transferMapStatVisible"  append-to-body customClass="customDialogCss">
+      <life-experience-transfer-map-stat :lifeExpData="lifeExpData"/>
     </el-dialog>
 
     <!-- 明细列表页面 -->

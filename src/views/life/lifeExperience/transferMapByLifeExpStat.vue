@@ -61,7 +61,7 @@ export default {
     },
     height: {
       type: String,
-      default: (document.body.clientHeight - 400).toString() + 'px'
+      default: (document.body.clientHeight - 200).toString() + 'px'
     },
   },
   mounted() {

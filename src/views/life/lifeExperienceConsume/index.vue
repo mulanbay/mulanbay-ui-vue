@@ -128,8 +128,8 @@
         <el-row>
           <el-col :span="24">
             <el-form-item label="消费记录" prop="buyRecordId">
-             <el-input v-model="form.buyRecordId" placeholder="" style="width: 180px;" disabled/>
-             <el-button type="query" icon="el-icon-magic-stick" @click="handleSelectGoods()" >绑定消费记录</el-button>
+             <el-input v-model="form.buyRecordId" placeholder="" style="width: 250px;" disabled/>
+             <el-button type="query" icon="el-icon-magic-stick" @click="handleSelectGoods()" >绑定</el-button>
              <el-button type="danger" icon="el-icon-close" @click="handleUnSelectGoods()" :disabled="form.buyRecordId==null">解绑</el-button>
             </el-form-item>
           </el-col>

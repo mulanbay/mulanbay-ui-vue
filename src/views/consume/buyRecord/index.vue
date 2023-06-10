@@ -882,9 +882,14 @@ export default {
       aiMatch(goodsName).then(response => {
         this.aiMatchRes = response;
         if(response!=null){
-          this.form.goodsTypeId = response.goodsTypeId+'';
+          if(response.goodsTypeId!=null){
+            this.form.goodsTypeId = response.goodsTypeId+'';
+          }
           if(response.subGoodsTypeId!=null){
             this.form.subGoodsTypeId = response.subGoodsTypeId+'';
+          }
+          if(response.payment!=null){
+            this.form.payment = response.payment;
           }
           this.form.buyTypeId = response.buyTypeId;
           this.form.shopName = response.shopName;

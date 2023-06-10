@@ -73,6 +73,22 @@
           />
         </el-select>
       </el-form-item>
+      <el-form-item v-if="moreCdn==true" label="门诊阶段" prop="stage">
+        <el-select
+          v-model="queryParams.stage"
+          placeholder="门诊阶段"
+          clearable
+          size="small"
+          style="width: 240px"
+        >
+          <el-option
+            v-for="dict in stageOptions"
+            :key="dict.id"
+            :label="dict.text"
+            :value="dict.id"
+          />
+        </el-select>
+      </el-form-item>
       <el-form-item>
         <el-button type="query" icon="el-icon-search" size="mini" @click="handleQuery" v-hasPermi="['health:treat:treatRecord:query']">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -183,6 +199,16 @@
           <span>{{ row.hospital }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="阶段" width="80" align="center">
+        <template slot-scope="{row}">
+          <span v-if="row.stage=='FIRST'">
+           <el-tag type="success">首诊</el-tag>
+          </span>
+          <span v-if="row.stage=='RETURN'">
+           <el-tag type="danger">复诊</el-tag>
+          </span>
+        </template>
+      </el-table-column>
       <el-table-column label="药品" width="80" align="center">
         <template slot-scope="{row}">
           <span class="link-type" @click="handleDrugList(row)"><i class="el-icon-s-grid" /></span>
@@ -191,6 +217,12 @@
       <el-table-column label="手术" width="80" align="center">
         <template slot-scope="{row}">
           <span class="link-type" @click="handleOperationList(row)"><i class="el-icon-s-grid" /></span>
+        </template>
+      </el-table-column>
+      <el-table-column label="确诊疾病"  min-width="120" :show-overflow-tooltip="true">
+        <template slot-scope="{row}">
+          <span>{{ row.diagnosedDisease }}</span>
+          <span class="link-type" @click="showBodyAbnormalRecordAnalyse(row.diagnosedDisease,'DISEASE')"><i class="el-icon-s-promotion" /></span>
         </template>
       </el-table-column>
       <el-table-column label="科室" :show-overflow-tooltip="true">
@@ -204,13 +236,7 @@
           <span class="link-type" @click="showBodyAbnormalRecordAnalyse(row.organ,'ORGAN')"><i class="el-icon-s-promotion" /></span>
         </template>
       </el-table-column>
-      <el-table-column label="确诊疾病"  min-width="120" :show-overflow-tooltip="true">
-        <template slot-scope="{row}">
-          <span>{{ row.diagnosedDisease }}</span>
-          <span class="link-type" @click="showBodyAbnormalRecordAnalyse(row.diagnosedDisease,'DISEASE')"><i class="el-icon-s-promotion" /></span>
-        </template>
-      </el-table-column>
-      <el-table-column label="是否有病" align="center" width="100">
+      <el-table-column label="是否有病" align="center" width="80">
         <template slot-scope="{row}">
           <span v-if="row.isSick==true" style="color: red;">
            是
@@ -283,7 +309,7 @@
     />
 
     <!-- 表单页面 -->
-    <el-dialog :title="title" width="780px" :visible.sync="open" append-to-body>
+    <el-dialog :title="title" width="780px" :visible.sync="open" append-to-body  customClass="customDialogCss">
       <el-form ref="form" :model="form" :rules="rules" label-width="120px">
           <el-row>
             <el-col :span="12">
@@ -473,17 +499,28 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="医生姓名" prop="doctor">
-                <el-input v-model="form.doctor" :style="{width: '100%'}" placeholder="" />
+              <el-form-item label="门诊阶段" prop="stage">
+                <el-select
+                  v-model="form.stage"
+                  :style="{width: '100%'}"
+                  allow-create
+                  clearable
+                  default-first-option
+                  placeholder="请选择">
+                  <el-option
+                    v-for="dict in stageOptions"
+                    :key="dict.id"
+                    :label="dict.text"
+                    :value="dict.id"
+                  />
+                </el-select>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="12">
-              <el-form-item label="看病时间" prop="treatDate">
-                <el-date-picker type="datetime" v-model="form.treatDate" format="yyyy-MM-dd HH:mm:ss" value-format="yyyy-MM-dd HH:mm:ss"
-                          :style="{width: '100%'}" placeholder="请选择时间" clearable >
-                </el-date-picker>
+              <el-form-item label="医生姓名" prop="doctor">
+                <el-input v-model="form.doctor" :style="{width: '100%'}" placeholder="" />
               </el-form-item>
             </el-col>
             <el-col :span="6">
@@ -498,6 +535,21 @@
             </el-col>
           </el-row>
           <el-row>
+            <el-col :span="12">
+              <el-form-item label="看病时间" prop="treatDate">
+                <el-date-picker type="datetime" v-model="form.treatDate" format="yyyy-MM-dd HH:mm:ss" value-format="yyyy-MM-dd HH:mm:ss"
+                          :style="{width: '100%'}" placeholder="请选择时间" clearable >
+                </el-date-picker>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="同步消费" prop="syncToConsume">
+                <el-switch v-model="syncToConsume"></el-switch>
+                <span class="link-type" @click="msgAlert('提示','勾选后自动同步该看病记录到消费记录列表中')"><i class="el-icon-question" /></span>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
             <el-col :span="24">
               <el-form-item label="备注信息">
                 <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"></el-input>
@@ -505,7 +557,7 @@
             </el-col>
           </el-row>
         </el-form>
-        <div slot="footer" class="dialog-footer" align="center">
+        <div slot="footer" class="dialog-footer" align="right">
           <el-button type="primary" @click="submitForm">保 存</el-button>
           <el-button @click="cancel">取 消</el-button>
         </div>
@@ -684,6 +736,7 @@ export default {
       diagnosedDiseaseOptions:[],
       treatTypeOptions:[],
       osNameOptions:[],
+      stageOptions:[],
       loading:false,
       //历史标签（查询或者选择使用）
       hisTagOptions:[],
@@ -694,6 +747,7 @@ export default {
       form: {},
       //费用是否只读
       feeReadOnly:false,
+      syncToConsume:true,
       defaultProps: {
         children: "children",
         label: "label"
@@ -720,6 +774,12 @@ export default {
         ],
         osName: [
           { required: true, message: "门诊类型不能为空", trigger: "blur" }
+        ],
+        stage: [
+          { required: true, message: "门诊阶段不能为空", trigger: "blur" }
+        ],
+        treatType: [
+          { required: true, message: "看病类型不能为空", trigger: "blur" }
         ]
       }
     };
@@ -731,6 +791,10 @@ export default {
     this.getEnumTree('TreatType','FIELD',false).then(response => {
       this.treatTypeOptions = response;
     });
+    this.getEnumTree('TreatStage','FIELD',false).then(response => {
+      this.stageOptions = response;
+    });
+
   },
   methods: {
     /** 更多查询条件处理 */
@@ -941,6 +1005,7 @@ export default {
       getTreatRecord(id).then(response => {
         this.form = response;
         this.form.id=undefined;
+        this.syncToConsume = true;
         this.form.treatDate=getNowDateTimeString();
         if(!this.isObjectEmpty(response.tags)){
           this.tagsOptions = response.tags.split(',');
@@ -966,6 +1031,7 @@ export default {
         }else{
           this.tagsOptions = [];
         }
+        this.syncToConsume = true;
       });
     },
     // 表单重置
@@ -983,7 +1049,8 @@ export default {
         medicalInsurancePaidFee:0,
         registeredFee:0,
         totalFee:0,
-        otherFee:0
+        otherFee:0,
+        stage:'FIRST'
       };
       this.resetForm("form");
       this.drugList=[];
@@ -1001,13 +1068,14 @@ export default {
       }else{
         this.form.tags = undefined;
       }
+      this.form.syncToConsume = this.syncToConsume;
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.form.id != undefined) {
             updateTreatRecord(this.form).then(response => {
               this.msgSuccess("修改成功");
               this.open=false;
-              this.handleQuery();
+              this.getList();
             });
           } else {
             createTreatRecord(this.form).then(response => {
