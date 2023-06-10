@@ -18,6 +18,9 @@
         <!--普通的el-option会导致显示问题-->
         <treeselect v-model="form.treatSubGoodsTypeId" :options="subGoodsTypeOptions" :disable-branch-nodes="false" :show-count="true" placeholder="请选择商品子类" />
       </el-form-item>
+      <el-form-item label="看病购买来源" prop="treatBuyTypeId">
+        <treeselect v-model="form.treatBuyTypeId" :options="buyTypeOptions" :disable-branch-nodes="false" :show-count="true" placeholder="请选择购买来源" />
+      </el-form-item>
       <el-form-item label="默认购买来源" prop="buyTypeId">
         <treeselect v-model="form.buyTypeId" :options="buyTypeOptions" :disable-branch-nodes="false" :show-count="true" placeholder="请选择购买来源" />
       </el-form-item>
@@ -32,11 +35,11 @@
         </el-select>
       </el-form-item>
       <el-form-item label="我的常驻城市" prop="residentCity">
-        <el-input v-model="user.residentCity" maxlength="50" />
+        <el-input v-model="form.residentCity" maxlength="50" />
       </el-form-item>
       <el-form-item label="用户评分模板" prop="scoreGroup">
         <el-select
-          v-model="user.scoreGroup"
+          v-model="form.scoreGroup"
           placeholder="评分模板"
           clearable
           collapse-tags
@@ -243,6 +246,7 @@ export default {
         residentCity:undefined,
         treatGoodsTypeId:undefined,
         treatSubGoodsTypeId:undefined,
+        treatBuyTypeId:undefined,
         payment:undefined,
         buyTypeId:undefined
       };
