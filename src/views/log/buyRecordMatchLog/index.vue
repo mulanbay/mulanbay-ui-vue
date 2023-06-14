@@ -15,6 +15,22 @@
           :picker-options="datePickerOptions"
         ></el-date-picker>
       </el-form-item>
+      <el-form-item v-if="moreCdn==true" label="匹配类型" prop="compareIdType">
+        <el-select
+          v-model="queryParams.compareIdType"
+          placeholder="匹配类型"
+          clearable
+          size="small"
+          style="width: 240px"
+        >
+          <el-option
+            v-for="dict in compareIdTypeOptions"
+            :key="dict.id"
+            :label="dict.text"
+            :value="dict.id"
+          />
+        </el-select>
+      </el-form-item>
       <el-form-item label="名称检索" prop="name">
         <el-input
           v-model="queryParams.name"
@@ -27,6 +43,7 @@
       </el-form-item>
       <el-form-item>
         <el-button type="query" icon="el-icon-search" size="mini" @click="handleQuery" v-hasPermi="['log:buyRecordMatchLog:query']">搜索</el-button>
+        <el-button type="stat" icon="el-icon-s-data" size="mini" @click="handleBudgetLogStat" v-hasPermi="['log:buyRecordMatchLog:stat']">分析</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
         <el-button type="primary" icon="el-icon-more" size="mini" @click="handleMoreCdn">{{cdnTitle}}</el-button>
       </el-form-item>
@@ -53,10 +70,10 @@
       <el-table-column label="匹配类型" align="center" width="80">
         <template slot-scope="{row}">
            <span v-if="row.compareId!=null">
-            以前数据
+            <el-tag type="success">历史商品</el-tag>
            </span>
            <span v-else>
-            商品类型
+            <el-tag type="warning">商品类型</el-tag>
            </span>
         </template>
       </el-table-column>
@@ -145,6 +162,7 @@ export default {
       logData:{
         id:undefined
       },
+      compareIdTypeOptions:[],
       // 遮罩层
       loading: true,
       // 选中数组
@@ -170,6 +188,9 @@ export default {
   },
   created() {
     this.getList();
+    this.getDictItemTree('BUY_RECORD_MATCH_LOG_COMPARE_TYPE',false).then(response => {
+      this.compareIdTypeOptions = response;
+    });
   },
   methods: {
     /** 更多查询条件处理 */
@@ -182,6 +203,11 @@ export default {
         this.moreCdn=true;
         this.cdnTitle='取消';
       }
+    },
+    /** 统计分析 */
+    handleBudgetLogStat(){
+      //路由定向
+      this.$router.push({name:'BuyRecordMatchLogStat',query: {}})
     },
     /** 消费记录详情 */
     showBuyRecord(row){

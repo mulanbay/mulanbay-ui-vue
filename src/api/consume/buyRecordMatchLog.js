@@ -35,3 +35,11 @@ export function getCompareData(id) {
     }
   })
 }
+
+export function statMatchLog(para) {
+  return request({
+    url: '/buyRecordMatchLog/stat',
+    method: 'get',
+    params: para
+  })
+}

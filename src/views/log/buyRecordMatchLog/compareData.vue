@@ -12,32 +12,36 @@
     </el-row>
     <el-row>
       <el-col :span="12">
-        <el-table :data="aiData">
-          <el-table-column label="字段" align="center">
-            <template slot-scope="{row}">
-              <span>{{ row.id }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="值"  align="center" :show-overflow-tooltip="true">
-            <template slot-scope="{row}">
-              <span>{{ row.text }}</span>
-            </template>
-          </el-table-column>
-        </el-table>
+        <el-card>
+          <el-table :data="aiData">
+            <el-table-column label="字段" align="center">
+              <template slot-scope="{row}">
+                <span>{{ row.id }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="值"  align="center" :show-overflow-tooltip="true">
+              <template slot-scope="{row}">
+                <span>{{ row.text }}</span>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-card>
       </el-col>
       <el-col :span="12">
-        <el-table :data="acData">
-          <el-table-column label="字段" align="center">
-            <template slot-scope="{row}">
-              <span>{{ row.id }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="值" align="center" :show-overflow-tooltip="true">
-            <template slot-scope="{row}">
-              <span>{{ row.text }}</span>
-            </template>
-          </el-table-column>
-        </el-table>
+        <el-card>
+          <el-table :data="acData">
+            <el-table-column label="字段" align="center">
+              <template slot-scope="{row}">
+                <span>{{ row.id }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="值" align="center" :show-overflow-tooltip="true">
+              <template slot-scope="{row}">
+                <span>{{ row.text }}</span>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-card>
       </el-col>
     </el-row>
 

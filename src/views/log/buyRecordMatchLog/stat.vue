@@ -15,16 +15,32 @@
           :picker-options="datePickerOptions"
         ></el-date-picker>
       </el-form-item>
-      <el-form-item label="数据类型" prop="dataType">
+      <el-form-item label="匹配类型" prop="compareIdType">
         <el-select
-          v-model="queryParams.dataType"
-          placeholder="数据类型"
-          collapse-tags
+          v-model="queryParams.compareIdType"
+          placeholder="匹配类型"
+          clearable
           size="small"
-          style="width: 120px"
+          style="width: 240px"
         >
           <el-option
-            v-for="dict in dataTypeOptions"
+            v-for="dict in compareIdTypeOptions"
+            :key="dict.id"
+            :label="dict.text"
+            :value="dict.id"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="图表类型" prop="chartType">
+        <el-select
+          v-model="queryParams.chartType"
+          placeholder="图表类型"
+          size="small"
+          style="width: 115px"
+          @change="handleQuery"
+        >
+          <el-option
+            v-for="dict in chartTypeOptions"
             :key="dict.id"
             :label="dict.text"
             :value="dict.id"
@@ -32,7 +48,7 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="stat" icon="el-icon-s-data" size="mini" @click="handleQuery" v-hasPermi="['data:userScore:stat']">统计</el-button>
+        <el-button type="stat" icon="el-icon-s-data" size="mini" @click="handleQuery" v-hasPermi="['log:buyRecordMatchLog:stat']">统计</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
@@ -46,11 +62,12 @@
 </template>
 
 <script>
-  import {getUserScorePointsCompare} from "@/api/data/userScore";
+  import {statMatchLog} from "@/api/consume/buyRecordMatchLog";
+  import {deepClone} from "@/utils/index";
   import CommonChart from '../../chart/commonChart'
 
 export default {
-  name: "UserScoreScorePointsCompare",
+  name: "BuyRecordMatchLogStat",
   components: {
     'common-chart':CommonChart
   },
@@ -59,20 +76,23 @@ export default {
   },
   data() {
     return {
-      //图表数据
-      chartData:{},
       // 加载层信息
       loading: [],
       //加载层配置
       loadingOptions:this.loadingOptions,
-      dataTypeOptions:[
+      //图表数据
+      chartData:{},
+      //统计分类
+      compareIdTypeOptions:[],
+      //图表类型
+      chartTypeOptions:[
         {
-          id: 'OPPOSITE',
-          text: '相对值'
+          id: 'BAR',
+          text: '柱状图'
         },
         {
-          id: 'ABSOLUTE',
-          text: '绝对值'
+          id: 'LINE',
+          text: '折线图'
         }
       ],
       //日期范围快速选择
@@ -81,18 +101,17 @@ export default {
       dateRange: this.getYearDateRange(0),
       // 查询参数
       queryParams: {
-        dataType:'OPPOSITE'
+        chartType:'LINE'
       }
     };
   },
   created() {
+    this.getDictItemTree('BUY_RECORD_MATCH_LOG_COMPARE_TYPE',false).then(response => {
+      this.compareIdTypeOptions = response;
+    });
     this.initChart();
   },
   methods: {
-    // 打开加载层
-    openLoading() {
-      this.loading = this.$loading(this.loadingOptions);
-    },
     /** 搜索按钮操作 */
     handleQuery() {
       this.initChart();
@@ -103,11 +122,11 @@ export default {
       this.initChart();
     },
     initChart() {
-      this.openLoading();
-      getUserScorePointsCompare(this.addDateRange(this.queryParams, this.dateRange)).then(
+      this.loading = this.$loading(this.loadingOptions);
+      statMatchLog(this.addDateRange(this.queryParams, this.dateRange)).then(
         response => {
           //组装chart数据
-          response.chartType='LINE';
+          response.chartType=this.queryParams.chartType;
           this.chartData = response;
           this.chartData.smooth = true;
           this.loading.close();

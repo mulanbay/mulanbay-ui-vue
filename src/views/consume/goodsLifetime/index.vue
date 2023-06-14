@@ -155,7 +155,8 @@ export default {
       queryParams: {
         page: 1,
         pageSize: 10,
-        name: undefined
+        name: undefined,
+        deleteDateType: 'NOT_NULL'
       },
       //表单修改
       goodsLifetimeData:{},
