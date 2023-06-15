@@ -1,18 +1,35 @@
 <template>
   <div class="app-container">
 
-    <!--比较数据-->
-    <el-row>
-      <el-col :span="12" align="center" style="font-weight:bold;font-size: 16px;color:	#778899;" >
-        <i class="el-icon-info" />AI匹配数据
-      </el-col>
-      <el-col :span="12"  align="center" style="font-weight:bold;font-size: 16px;color:	#778899;">
-        <i class="el-icon-info" />实际消费数据
-      </el-col>
+    <el-row :gutter="32" v-loading="loading" >
+        <el-col :span="24" class="card-box">
+          <el-card>
+          <div>
+            <el-descriptions class="margin-top" :column="1" :size="'5'" border :labelStyle="{width: '100px'}" >
+              <el-descriptions-item>
+                <template slot="label">
+                  <i class="el-icon-star-on"></i>
+                  商品名称
+                </template>
+                <div class="cell">{{ goodsName }}</div>
+              </el-descriptions-item>
+              <el-descriptions-item>
+                <template slot="label">
+                  <i class="el-icon-star-on"></i>
+                  比较目标
+                </template>
+                <div class="cell">{{ compareGoodsName }}</div>
+              </el-descriptions-item>
+            </el-descriptions>
+          </div>
+          </el-card>
+        </el-col>
     </el-row>
+    <!--比较数据-->
     <el-row>
       <el-col :span="12">
         <el-card>
+          <el-divider><i class="el-icon-info"></i>AI匹配数据</el-divider>
           <el-table :data="aiData">
             <el-table-column label="字段" align="center">
               <template slot-scope="{row}">
@@ -29,6 +46,7 @@
       </el-col>
       <el-col :span="12">
         <el-card>
+          <el-divider><i class="el-icon-info"></i>实际消费数据</el-divider>
           <el-table :data="acData">
             <el-table-column label="字段" align="center">
               <template slot-scope="{row}">
@@ -66,6 +84,9 @@ export default {
         children: "children",
         label: "text"
       },
+      loading:false,
+      goodsName:undefined,
+      compareGoodsName:undefined,
       //AI数据
       aiData:[],
       //实际数据
@@ -83,16 +104,31 @@ export default {
     }
   },
   methods: {
-    //处理数据
+    /** 重置 */
+    reset(){
+      this.goodsName = undefined;
+      this.compareGoodsName = undefined;
+      //ai数据
+      this.aiData = [];
+      //实际数据
+      this.acData = [];
+    },
+    /** 处理数据 */
     handleReceiveData(data){
+      this.loading = true;
+      this.reset();
       getCompareData(data.id).then(response => {
+        this.goodsName = response.goodsName;
+        this.compareGoodsName = response.compareGoodsName;
         //ai数据
         this.aiData = this.generateData(response.aiData);
         //实际数据
         this.acData = this.generateData(response.acData);
+        this.loading = false;
+
       });
     },
-    //数据组装
+    /** 数据组装 */
     generateData(data){
       let list = new Array();
       list.push({id:'商品大类',text:data.goodsTypeName+'('+data.goodsTypeId+')'});

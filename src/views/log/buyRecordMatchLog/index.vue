@@ -123,7 +123,7 @@
     </el-dialog>
 
     <!-- 比较信息 -->
-    <el-dialog :title="cdTitle" width="650px" :visible.sync="cdOpen" append-to-body>
+    <el-dialog :title="cdTitle" width="750px" :visible.sync="cdOpen" append-to-body>
       <compare-data :logData="logData" />
     </el-dialog>
 
@@ -223,7 +223,7 @@ export default {
     /** 被比较的消费记录和该条消费记录 */
     showCompare(row){
       this.cdOpen=true;
-      this.cdTitle='['+row.goodsName+']比较详情';
+      this.cdTitle='比较详情';
       this.logData = Object.assign({}, this.logData, {
         id: row.id,
       });

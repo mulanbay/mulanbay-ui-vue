@@ -129,6 +129,43 @@
           <el-input v-model="form.behaviorName" :style="{width: '95%'}"/>
           <span class="link-type" @click="msgAlert('提示','用户行为分析使用，默认与名称相同')"><i class="el-icon-question" /></span>
         </el-form-item>
+        <el-form-item label="类型标签" prop="tags">
+          <el-tag
+            :key="tag"
+            v-for="tag in keywordsTags"
+            closable
+            :disable-transitions="false"
+            @close="handleTagClose(tag)">
+            {{tag}}
+          </el-tag>
+          <el-input
+            class="input-new-tag"
+            v-if="inputVisible"
+            v-model="inputValue"
+            ref="saveTagInput"
+            size="small"
+            @keyup.enter.native="handleTagInputConfirm"
+            @blur="handleTagInputConfirm"
+          >
+          </el-input>
+          <el-button v-else class="button-new-tag" size="small" @click="showTagInput">+ 新建</el-button>
+          <el-popover
+              placement="bottom"
+              title="请选择"
+              width="500"
+              trigger="click">
+              <el-tag
+                effect="plain"
+                :key="tag"
+                v-for="tag in hisKeywordsTags"
+                :disable-transitions="false"
+                @click="handleTagAppend(tag)">
+                {{tag}}
+              </el-tag>
+              <el-button slot="reference" type="success" size="mini" round>选择</el-button>
+          </el-popover>
+          <span class="link-type" @click="msgAlert('提示','关键字，便于商品类型自动匹配')"><i class="el-icon-question" /></span>
+        </el-form-item>
         <el-form-item label="显示顺序" prop="orderIndex">
           <el-input-number v-model="form.orderIndex" controls-position="right" :min="0" :controls="true" :precision="0"/>
         </el-form-item>
@@ -161,6 +198,7 @@
   import Treeselect from "@riophae/vue-treeselect";
   import "@riophae/vue-treeselect/dist/vue-treeselect.css";
   import IconSelect from "@/components/IconSelect";
+  import {appendTagToOptions} from "@/utils/tagUtils";
 
 export default {
   name: "GoodsType",
@@ -184,6 +222,13 @@ export default {
       goodsTypeList:[],
       // 上层分类数据
       parentGoodsTypeOptions: [],
+      //标签编辑
+      //标签属性 start
+      keywordsTags: [],
+      //已经保存过的商品标签
+      hisKeywordsTags:[],
+      inputVisible: false,
+      inputValue: '',
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -249,7 +294,6 @@ export default {
         subGoodsTypeId = row.id;
       }
       this.$router.push({ name: 'Budget', query: {
-        feeType:'BUY_RECORD',
         goodsTypeId:goodsTypeId,
         subGoodsTypeId:subGoodsTypeId
       }});
@@ -269,6 +313,28 @@ export default {
           row.status = row.status === "ENABLE" ? "DISABLE" : "ENABLE";
         });
     },
+    /** 标签处理 start */
+    handleTagClose(tag){
+      this.keywordsTags.splice(this.keywordsTags.indexOf(tag), 1);
+    },
+    handleTagAppend(tag) {
+      appendTagToOptions(tag,this.keywordsTags);
+    },
+    showTagInput() {
+      this.inputVisible = true;
+      this.$nextTick(_ => {
+        this.$refs.saveTagInput.$refs.input.focus();
+      });
+    },
+    handleTagInputConfirm() {
+      let inputValue = this.inputValue;
+      if (inputValue) {
+        appendTagToOptions(inputValue,this.keywordsTags);
+      }
+      this.inputVisible = false;
+      this.inputValue = '';
+    },
+    /** 标签处理 end */
     // 取消按钮
     cancel() {
       this.open = false;
@@ -320,6 +386,11 @@ export default {
       const id = row.id || this.ids.join(",")
       getGoodsType(id).then(response => {
         this.form = response;
+        if(!this.isObjectEmpty(response.tags)){
+          this.keywordsTags = response.tags.split(',');
+        }else{
+          this.keywordsTags = [];
+        }
         this.open = true;
         this.title = "修改";
       });
@@ -328,6 +399,11 @@ export default {
     submitForm: function() {
       this.$refs["form"].validate(valid => {
         if (valid) {
+          if(this.keywordsTags.length>0){
+            this.form.tags = this.keywordsTags.join(',');
+          }else{
+            this.form.tags = undefined;
+          }
           if (this.form.id != undefined) {
             updateGoodsType(this.form).then(response => {
               this.msgSuccess("修改成功");

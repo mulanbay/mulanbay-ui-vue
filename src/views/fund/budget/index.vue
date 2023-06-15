@@ -59,9 +59,43 @@
           />
         </el-select>
       </el-form-item>
+      <el-form-item v-if="moreCdn==true" label="商品类型" prop="goodsTypeId">
+        <el-select
+          v-model="queryParams.goodsTypeId"
+          placeholder="商品类型"
+          clearable
+          size="small"
+          style="width: 240px"
+          @change="getQuerySubGoodsTypeTreeselect"
+        >
+          <el-option
+            v-for="dict in goodsTypeOptions"
+            :key="dict.id"
+            :label="dict.text"
+            :value="dict.id"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item v-if="moreCdn==true" label="商品子类" prop="subGoodsTypeId">
+        <el-select
+          v-model="queryParams.subGoodsTypeId"
+          placeholder="商品子类"
+          clearable
+          size="small"
+          style="width: 240px"
+        >
+          <el-option
+            v-for="dict in querySubGoodsTypeOptions"
+            :key="dict.id"
+            :label="dict.text"
+            :value="dict.id"
+          />
+        </el-select>
+      </el-form-item>
       <el-form-item>
         <el-button type="query" icon="el-icon-search" size="mini" @click="handleQuery" v-hasPermi="['fund:budget:query']">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+        <el-button type="primary" icon="el-icon-more" size="mini" @click="handleMoreCdn">{{cdnTitle}}</el-button>
       </el-form-item>
     </el-form>
 
@@ -445,6 +479,14 @@ export default {
   },
   data() {
     return {
+      //查询条件更多属性 start
+      cdnTitle:'更多',
+      moreCdn:false,
+      //查询条件更多属性 end
+      //商品类型(搜索和表单是同一个)
+      goodsTypeOptions:[],
+      //搜索条件的商品子类型
+      querySubGoodsTypeOptions:[],
       //新增预算流水
       createBudgetLogVisible:false,
       //预算分析
@@ -519,11 +561,11 @@ export default {
   created() {
     //处理查询参数
     let qb = getQueryObject(null);
-    if(!this.isObjectEmpty(qb.feeType)){
+    if(!this.isObjectEmpty(qb.goodsTypeId)){
       //商品类型页面过来
-      this.queryParams.feeType = qb.feeType;;
       this.queryParams.goodsTypeId = qb.goodsTypeId;;
       this.queryParams.subGoodsTypeId = qb.subGoodsTypeId;;
+      this.moreCdn = true;
     }
     //查询
     this.getList();
@@ -537,6 +579,17 @@ export default {
     this.getGoodsTypeTreeselect();
   },
   methods: {
+    /** 更多查询条件处理 */
+    handleMoreCdn(){
+      if(this.moreCdn==true){
+        //this.resetForm("queryForm");
+        this.moreCdn=false;
+        this.cdnTitle='更多';
+      }else{
+        this.moreCdn=true;
+        this.cdnTitle='取消';
+      }
+    },
     /** 查询列表 */
     getList() {
       this.loading = true;
@@ -551,16 +604,6 @@ export default {
     /** 展示历史 */
     showHistory(row){
       this.$router.push({name:'BudgetSnapshotHistory',query: {budgetId:row.id}})
-    },
-    /** 资金类型改变 */
-    onFeeTypeChange(){
-      if('BUY_RECORD'==this.form.feeType){
-        this.getGoodsTypeTreeselect();
-      }else{
-        this.goodsTypeOptions = [];
-        this.form.goodsTypeId = undefined;
-        this.form.subGoodsTypeId = undefined;
-      }
     },
     /** 查询商品大类下拉树结构 */
     getGoodsTypeTreeselect() {
@@ -577,6 +620,17 @@ export default {
       }else{
         getGoodsTypeTree(pid,'COMMON',false).then(response => {
           this.subGoodsTypeOptions = response;
+        });
+      }
+    },
+    /** 查询搜索条件中的商品子类下拉树结构 */
+    getQuerySubGoodsTypeTreeselect(pid) {
+      if(pid===undefined||pid===null||pid===''){
+        this.querySubGoodsTypeOptions = [];
+        this.queryParams.subGoodsType = undefined;
+      }else{
+        getGoodsTypeTree(pid,'COMMON',false).then(response => {
+          this.querySubGoodsTypeOptions = response;
         });
       }
     },
