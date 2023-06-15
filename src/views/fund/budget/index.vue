@@ -453,7 +453,7 @@
     </el-dialog>
 
     <!-- 预算分析 -->
-    <el-dialog title="预算分析" width="850px" :visible.sync="budgetAnalyseDetailVisible">
+    <el-dialog title="预算分析" width="870px" :visible.sync="budgetAnalyseDetailVisible"  append-to-body  customClass="customDialogCss">
       <budget-anaylse-detail/>
     </el-dialog>
 

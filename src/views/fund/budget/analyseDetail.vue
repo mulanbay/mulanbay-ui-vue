@@ -37,26 +37,26 @@
       <table cellspacing="0" style="width: 100%;">
         <tbody>
           <tr>
-            <td><div class="cell">预算金额</div></td>
-            <td><div class="cell" >{{ formatMoney(form.budgetAmount) }}</div></td>
-            <td><div class="cell">消费/预算比例</div></td>
-            <td><div class="cell" >{{ form.consumeBudgetRate+'%' }}</div></td>
+            <td class="el-table__cell is-leaf"><div class="cell">预算金额</div></td>
+            <td class="el-table__cell is-leaf"><div class="cell" >{{ formatMoney(form.budgetAmount) }}</div></td>
+            <td class="el-table__cell is-leaf"><div class="cell">消费/预算比例</div></td>
+            <td class="el-table__cell is-leaf"><div class="cell" >{{ form.consumeBudgetRate+'%' }}</div></td>
           </tr>
           <tr>
-            <td><div class="cell">总消费</div></td>
-            <td><div class="cell" >{{ formatMoney(form.consumeAmount) }}</div></td>
-            <td><div class="cell">普通消费</div></td>
-            <td><div class="cell" >{{ formatMoney(form.ncAmount) }}</div></td>
+            <td class="el-table__cell is-leaf"><div class="cell">总消费</div></td>
+            <td class="el-table__cell is-leaf"><div class="cell" >{{ formatMoney(form.consumeAmount) }}</div></td>
+            <td class="el-table__cell is-leaf"><div class="cell">普通消费</div></td>
+            <td class="el-table__cell is-leaf"><div class="cell" >{{ formatMoney(form.ncAmount) }}</div></td>
           </tr>
           <tr>
-            <td><div class="cell">突发消费</div></td>
-            <td><div class="cell" >{{ formatMoney(form.bcAmount) }}</div></td>
-            <td><div class="cell">看病花费</div></td>
-            <td><div class="cell" >{{ formatMoney(form.trAmount) }}</div></td>
+            <td class="el-table__cell is-leaf"><div class="cell">突发消费</div></td>
+            <td class="el-table__cell is-leaf"><div class="cell" >{{ formatMoney(form.bcAmount) }}</div></td>
+            <td class="el-table__cell is-leaf"><div class="cell">看病花费</div></td>
+            <td class="el-table__cell is-leaf"><div class="cell" >{{ formatMoney(form.trAmount) }}</div></td>
           </tr>
           <tr>
-            <td><div class="cell">收入</div></td>
-            <td><div class="cell" >{{ formatMoney(form.lastIncome) }}</div></td>
+            <td class="el-table__cell is-leaf"><div class="cell">收入</div></td>
+            <td class="el-table__cell is-leaf"><div class="cell" >{{ formatMoney(form.lastIncome) }}</div></td>
           </tr>
         </tbody>
       </table>
