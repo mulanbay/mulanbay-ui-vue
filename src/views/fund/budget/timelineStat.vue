@@ -35,22 +35,6 @@
           placeholder="选择月份">
         </el-date-picker>
       </el-form-item>
-      <el-form-item label="消费类型" prop="consumeType">
-        <el-select
-          v-model="queryParams.consumeType"
-          placeholder="方式"
-          clearable
-          size="small"
-          style="width: 120px"
-        >
-          <el-option
-            v-for="dict in consumeTypeOptions"
-            :key="dict.id"
-            :label="dict.text"
-            :value="dict.id"
-          />
-        </el-select>
-      </el-form-item>
       <el-form-item label="数据" prop="statType">
         <el-select
           v-model="queryParams.statType"
@@ -66,6 +50,12 @@
             :value="dict.id"
           />
         </el-select>
+      </el-form-item>
+      <el-form-item label="消费预测" prop="predict">
+        <el-switch v-model="queryParams.predict"></el-switch>
+      </el-form-item>
+      <el-form-item label="包含突发消费" prop="needOutBurst">
+        <el-switch v-model="queryParams.needOutBurst"></el-switch>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-s-data" size="mini" @click="handleQuery">统计</el-button>
@@ -103,8 +93,6 @@ export default {
       loading: [],
       //加载层配置
       loadingOptions:this.loadingOptions,
-      //账户状态
-      consumeTypeOptions:[],
       //周期
       periodOptions:[
         {
@@ -131,14 +119,13 @@ export default {
       queryParams: {
         period:'MONTHLY',
         yearMonth:(new Date()).Format("yyyy-MM"),
-        statType:'RATE'
+        statType:'RATE',
+        predict:false,
+        needOutBurst:false
       }
     };
   },
   created() {
-    this.getEnumTree('GoodsConsumeType','FIELD',false).then(response => {
-      this.consumeTypeOptions = response;
-    });
     this.initChart();
   },
   methods: {
@@ -201,6 +188,7 @@ export default {
           if(period=='YEARLY'){
             response.itemLabelShow=false;
           }
+          response.smooth=true;
           this.chartData = response;
           this.loading.close();
         }

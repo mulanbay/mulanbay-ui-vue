@@ -24,6 +24,9 @@
           :picker-options="datePickerOptions">
         </el-date-picker>
       </el-form-item>
+      <el-form-item label="消费预测" prop="predict">
+        <el-switch v-model="queryParams.predict"></el-switch>
+      </el-form-item>
       <el-form-item label="包含突发消费" prop="needOutBurst">
         <el-switch v-model="queryParams.needOutBurst"></el-switch>
       </el-form-item>
@@ -75,6 +78,7 @@
         queryParams: {
           type: 'MONTHLY',
           needOutBurst: true,
+          predict:false,
           budgetKey: "p3"
         }
       };
@@ -108,6 +112,8 @@
         getBudgetLogStat(this.addDateRange(this.queryParams, this.dateRange)).then(
           response => {
             response.chartType='MIX_LINE_BAR';
+            response.serieTypes=['line','line'];
+            response.smooth=true;
             this.chartData = response;
             this.loading.close();
           }

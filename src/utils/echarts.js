@@ -291,7 +291,8 @@ export function createLineChart(data, myChart) {
       data: data.legendData,
       orient: 'horizontal',
       x: 'center',
-      y: 'bottom'
+      y: 'bottom',
+      padding:[0,0,0,0]//可设定图例[距上方距离，距右方距离，距下方距离，距左方距离]
     },
     grid: { //四周的宽度
       left: '2%',
@@ -464,14 +465,19 @@ export function createMixLineBarChart(data, myChart) {
     ya1Unit = data.yaxis[1].unit;
   }
   let series = new Array();
+  //图例类型，默认是柱状图和折线图
+  let serieTypes = data.serieTypes;
+  if(serieTypes==null){
+    serieTypes=['bar','line']
+  }
   let n = data.ydata.length;
   for (let i = 0; i < n; i++) {
     let cd = data.ydata[i];
     let yAxisIndex = 0;
-    let type = 'bar';
+    let type = serieTypes[0];
     if (i == n - 1) {
       yAxisIndex = 1;
-      type = 'line';
+      type = serieTypes[1];
     }
     let serie = {
       name: cd.name,
