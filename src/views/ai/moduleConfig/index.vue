@@ -119,7 +119,7 @@
       </el-table-column>
       <el-table-column label="操作" fixed="right" align="center" width="180" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <span v-if="scope.row.status == 'ENABLE'">Ω≈
+          <span v-if="scope.row.status == 'ENABLE'">
             <el-button
               size="mini"
               type="text"
@@ -127,6 +127,13 @@
               @click="handleRevoke(scope.row)"
               v-hasPermi="['ai:moduleConfig:edit']"
             >撤销</el-button>
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-refresh"
+              @click="handleRefresh(scope.row)"
+              v-hasPermi="['ai:moduleConfig:edit']"
+            >刷新</el-button>
           </span>
           <span v-if="scope.row.status == 'DISABLE'">
             <el-button
@@ -162,7 +169,7 @@
     />
 
     <!-- 添加或修改对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="650px" append-to-body>
+    <el-dialog :title="title" :visible.sync="open" width="650px" append-to-body >
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-row>
           <el-col :span="24">
@@ -182,6 +189,20 @@
           <el-col :span="24">
             <el-form-item label="模型文件" prop="fileName">
               <el-input v-model="form.fileName" :style="{width: '100%'}" placeholder="请输入名称" />
+              <el-upload
+                class="upload-demo"
+                ref="upload"
+                accept=".pmml"
+                :on-change="fileChange"
+                action=""
+                :multiple="false"
+                :on-preview="handlePreview"
+                :on-remove="handleRemove"
+                :file-list="fileList"
+                :before-upload="beforeUpload"
+                :auto-upload="false">
+                <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+              </el-upload>
             </el-form-item>
           </el-col>
         </el-row>
@@ -221,7 +242,10 @@
 
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <span v-if="formSubmitting == true">
+          表单提交中...&nbsp;&nbsp;
+        </span>
+        <el-button type="primary" @click="submitForm" :disabled="formSubmitting">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
@@ -250,6 +274,8 @@ export default {
       // 列表数据
       dataList:[],
       algorithmOptions:[],
+      fileList:[],
+      formSubmitting: false,
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -293,6 +319,30 @@ export default {
     this.getList();
   },
   methods: {
+    fileChange (file, fileList) {
+    	// 这是关键一句
+      if (fileList.length > 0) {
+        this.fileList = [fileList[fileList.length - 1]]
+      }
+      let ff = this.fileList[0]
+      this.form.fileName = ff.name;
+    },
+    /** 删除选择文件 */
+    handleRemove(file, fileList) {
+      console.log(file, fileList);
+    },
+    handlePreview(file) {
+      console.log(file);
+    },
+    beforeUpload(file){
+      let fileName = file.name;
+      alert(fileName);
+      let fileExt = fileName.replace(/.+\./, "").toLowerCase();
+      if(fileExt!='pmml'){
+        this.msgError("文件类型必须为pmml");
+      }
+      this.form.fileName = fileName;
+    },
     /** 查询列表 */
     getList() {
       this.loading = true;
@@ -318,9 +368,10 @@ export default {
         fileName: undefined,
         du: false,
         algorithm:undefined,
-        remark:undefined,
+        remark:undefined
       };
       this.resetForm("form");
+      this.clearFile();
     },
     /** 搜索按钮操作 */
     handleQuery() {
@@ -356,16 +407,33 @@ export default {
     },
     /** 提交按钮 */
     submitForm: function() {
+      let formData = new FormData();
+      let files = this.$refs.upload.uploadFiles;
+      if(files.length>0){
+        this.form.file = files[0].raw;
+        formData.append("file", files[0].raw);
+      }
+      //undefined会以字符传到后端
+      formData.append('id', this.form.id==undefined ? '':this.form.id);
+      formData.append('name', this.form.name);
+      formData.append('code', this.form.code);
+      formData.append('fileName', this.form.fileName);
+      formData.append('du', this.form.du);
+      formData.append('algorithm', this.form.algorithm);
+      formData.append('remark', this.form.remark==undefined ? '':this.form.remark);
+      this.formSubmitting = true;
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.form.id != undefined) {
-            updateModuleConfig(this.form).then(response => {
+            updateModuleConfig(formData).then(response => {
+              this.formSubmitting = false;;
               this.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
-            createModuleConfig(this.form).then(response => {
+            createModuleConfig(formData).then(response => {
+              this.formSubmitting = false;;
               this.msgSuccess("新增成功");
               this.open = false;
               this.getList();
@@ -374,13 +442,25 @@ export default {
         }
       });
     },
+    /** 清除上传文件信息 */
+    clearFile(){
+      if(this.$refs.upload!=null){
+        this.$refs.upload.clearFiles()//清空上传列表
+      }
+      this.fileList = []//集合清空
+    },
+    /** 获取操作的名称 */
+    getHandleTitle(row){
+      return row.name + '(code='+row.code+')';
+    },
     /** 撤销按钮操作 */
     handleRevoke(row){
       const id = row.id;
       let para ={
         id:id
       }
-      this.$confirm('是否确认撤销编号为"' + id + '"的数据项?', "警告", {
+      let title = this.getHandleTitle(row);
+      this.$confirm('是否确认撤销"' + title + '"的数据项?', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
@@ -397,7 +477,8 @@ export default {
       let para ={
         id:id
       }
-      this.$confirm('是否确认发布编号为"' + id + '"的数据项?', "警告", {
+      let title = this.getHandleTitle(row);
+      this.$confirm('是否确认发布"' + title + '"的数据项?', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
@@ -414,7 +495,8 @@ export default {
       let para ={
         id:id
       }
-      this.$confirm('是否确认刷新编号为"' + id + '"的数据项?', "警告", {
+      let title = this.getHandleTitle(row);
+      this.$confirm('是否确认刷新"' + title + '"的数据项?', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
