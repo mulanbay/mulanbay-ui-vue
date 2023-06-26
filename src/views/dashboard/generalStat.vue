@@ -118,6 +118,15 @@
                   </td>
                 </tr>
                 <tr>
+                  <td class="el-table__cell is-leaf"><div class="cell">预测消费</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell">{{ formatMoney(statData.yearPredict) }}</div></td>
+                  <td class="el-table__cell is-leaf">
+                    <div class="cell">
+                      <span class="link-type" @click="msgAlert('提示','根据历年的消费习惯对比今年的预算金额预测出的值')"><i class="el-icon-question" /></span>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
                   <td colspan="3">
                     <div class="cell" align="center" style="color: royalblue;">
                       <i class="el-icon-info" />本月统计数据
@@ -139,6 +148,15 @@
                   <td class="el-table__cell is-leaf">
                     <div class="cell">
                       <span class="link-type" @click="handleDispatch('BuyRecord')"><i class="el-icon-s-promotion" /></span>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="el-table__cell is-leaf"><div class="cell">预测消费</div></td>
+                  <td class="el-table__cell is-leaf"><div class="cell">{{ formatMoney(statData.monthPredict) }}</div></td>
+                  <td class="el-table__cell is-leaf">
+                    <div class="cell">
+                      <span class="link-type" @click="msgAlert('提示','根据历年的消费习惯对比本月的预算金额预测出的值')"><i class="el-icon-question" /></span>
                     </div>
                   </td>
                 </tr>
@@ -182,7 +200,7 @@
                   <td class="el-table__cell is-leaf"><div class="cell">{{ formatMoney(statData.monthRCPerDay) }}</div></td>
                   <td class="el-table__cell is-leaf">
                     <div class="cell">
-                      <span class="link-type" @click="handleDispatch('BuyRecord')"><i class="el-icon-s-promotion" /></span>
+                      剩{{statData.remainMonthDays}}天
                     </div>
                   </td>
                 </tr>
@@ -373,10 +391,12 @@ export default {
           //本月还可以消费
           let monthRemainConsume = data.monthBudget - data.monthConsumeAmount;
           //本月每天还可以消费
-          let monthRCPerDay = monthRemainConsume / data.remainMonthDays ;
+          let monthRCPerDay = data.remainMonthDays<=0? '': (monthRemainConsume / data.remainMonthDays) ;
           this.statData = {
             monthBudget: data.monthBudget,
             yearBudget: data.yearBudget,
+            monthPredict: data.monthPredict,
+            yearPredict: data.yearPredict,
             totalIncome: data.totalIncome,
             totalConsumeAmount: data.totalConsumeAmount,
             totalBuyCount: data.totalBuyCount,
@@ -418,7 +438,7 @@ export default {
       statWithTreat(para).then(
         response => {
           //组装chart数据
-          response.height = '600px';
+          response.height = '690px';
           this.chartData = response;
           this.loading.close();
         }
