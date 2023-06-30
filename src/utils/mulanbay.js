@@ -140,7 +140,7 @@ export function handleTree(data, id, parentId, children, rootId) {
 
 // 字符加上金钱前缀
 export function formatMoney(pp) {
-  if (pp == null) {
+  if (pp == null||pp==undefined||pp=='') {
     return '';
   }
   return '￥' + pp.toFixed(2);
