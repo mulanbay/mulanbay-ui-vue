@@ -2,67 +2,67 @@ import request from '@/utils/request'
 
 export function fetchList(query) {
   return request({
-    url: '/moduleConfig/getData',
+    url: '/modelConfig/getData',
     method: 'get',
     params: query
   })
 }
 
-export function getModuleConfig(id) {
+export function getModelConfig(id) {
   return request({
-    url: '/moduleConfig/get',
+    url: '/modelConfig/get',
     method: 'get',
     params: { id }
   })
 }
 
 
-export function createModuleConfig(data) {
+export function createModelConfig(data) {
   return request({
-    url: '/moduleConfig/create',
+    url: '/modelConfig/create',
     method: 'post',
     data
   })
 }
 
-export function updateModuleConfig(data) {
+export function updateModelConfig(data) {
   return request({
-    url: '/moduleConfig/edit',
+    url: '/modelConfig/edit',
     method: 'post',
     data
   })
 }
 
-export function deleteModuleConfig(ids) {
+export function deleteModelConfig(ids) {
   const data = {
       ids
   }
   return request({
-    url: '/moduleConfig/delete',
+    url: '/modelConfig/delete',
     method: 'post',
     data
   })
 }
 
-export function publishModuleConfig(data) {
+export function publishModelConfig(data) {
   return request({
-    url: '/moduleConfig/publish',
+    url: '/modelConfig/publish',
     method: 'post',
     data
   })
 }
 
-export function refreshModuleConfig(data) {
+export function refreshModelConfig(data) {
   return request({
-    url: '/moduleConfig/refresh',
+    url: '/modelConfig/refresh',
     method: 'post',
     data
   })
 }
 
-export function revokeModuleConfig(data) {
+export function revokeModelConfig(data) {
   return request({
-    url: '/moduleConfig/revoke',
+    url: '/modelConfig/revoke',
     method: 'post',
     data
   })

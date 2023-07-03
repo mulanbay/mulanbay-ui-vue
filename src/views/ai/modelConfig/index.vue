@@ -28,7 +28,7 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="query" icon="el-icon-search" size="mini" @click="handleQuery" v-hasPermi="['ai:moduleConfig:query']">搜索</el-button>
+        <el-button type="query" icon="el-icon-search" size="mini" @click="handleQuery" v-hasPermi="['ai:modelConfig:query']">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
@@ -40,7 +40,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleCreate"
-          v-hasPermi="['ai:moduleConfig:create']"
+          v-hasPermi="['ai:modelConfig:create']"
         >新增</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -50,7 +50,7 @@
           size="mini"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['ai:moduleConfig:edit']"
+          v-hasPermi="['ai:modelConfig:edit']"
         >修改</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -60,7 +60,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['ai:moduleConfig:delete']"
+          v-hasPermi="['ai:modelConfig:delete']"
         >删除</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -69,7 +69,7 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['ai:moduleConfig:export']"
+          v-hasPermi="['ai:modelConfig:export']"
         >导出</el-button>
       </el-col>
     </el-row>
@@ -125,14 +125,14 @@
               type="text"
               icon="el-icon-refresh-right"
               @click="handleRevoke(scope.row)"
-              v-hasPermi="['ai:moduleConfig:edit']"
+              v-hasPermi="['ai:modelConfig:edit']"
             >撤销</el-button>
             <el-button
               size="mini"
               type="text"
               icon="el-icon-refresh"
               @click="handleRefresh(scope.row)"
-              v-hasPermi="['ai:moduleConfig:edit']"
+              v-hasPermi="['ai:modelConfig:edit']"
             >刷新</el-button>
           </span>
           <span v-if="scope.row.status == 'DISABLE'">
@@ -141,7 +141,7 @@
               type="text"
               icon="el-icon-s-promotion"
               @click="handlePublish(scope.row)"
-              v-hasPermi="['ai:moduleConfig:edit']"
+              v-hasPermi="['ai:modelConfig:edit']"
             >发布</el-button>
           </span>
           <span>
@@ -151,7 +151,7 @@
               type="text"
               icon="el-icon-delete"
               @click="handleDelete(scope.row)"
-              v-hasPermi="['ai:moduleConfig:delete']"
+              v-hasPermi="['ai:modelConfig:delete']"
             >删除</el-button>
           </span>
 
@@ -255,10 +255,10 @@
 </template>
 
 <script>
-import {fetchList,getModuleConfig,createModuleConfig,updateModuleConfig,deleteModuleConfig,publishModuleConfig,refreshModuleConfig,revokeModuleConfig} from "@/api/ai/moduleConfig";
+import {fetchList,getModelConfig,createModelConfig,updateModelConfig,deleteModelConfig,publishModelConfig,refreshModelConfig,revokeModelConfig} from "@/api/ai/modelConfig";
 
 export default {
-  name: "ModuleConfig",
+  name: "ModelConfig",
   data() {
     return {
       // 遮罩层
@@ -399,7 +399,7 @@ export default {
     handleUpdate(row) {
       this.reset();
       const id = row.id || this.ids.join(",");
-      getModuleConfig(id).then(response => {
+      getModelConfig(id).then(response => {
         this.form = response;
         this.open = true;
         this.title = "修改";
@@ -425,14 +425,14 @@ export default {
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.form.id != undefined) {
-            updateModuleConfig(formData).then(response => {
+            updateModelConfig(formData).then(response => {
               this.formSubmitting = false;;
               this.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
-            createModuleConfig(formData).then(response => {
+            createModelConfig(formData).then(response => {
               this.formSubmitting = false;;
               this.msgSuccess("新增成功");
               this.open = false;
@@ -465,7 +465,7 @@ export default {
           cancelButtonText: "取消",
           type: "warning"
         }).then(function() {
-          return revokeModuleConfig(para);
+          return revokeModelConfig(para);
         }).then(() => {
           this.getList();
           this.msgSuccess("撤销成功");
@@ -483,7 +483,7 @@ export default {
           cancelButtonText: "取消",
           type: "warning"
         }).then(function() {
-          return publishModuleConfig(para);
+          return publishModelConfig(para);
         }).then(() => {
           this.getList();
           this.msgSuccess("发布成功");
@@ -501,7 +501,7 @@ export default {
           cancelButtonText: "取消",
           type: "warning"
         }).then(function() {
-          return refreshModuleConfig(para);
+          return refreshModelConfig(para);
         }).then(() => {
           this.getList();
           this.msgSuccess("刷新成功");
@@ -515,7 +515,7 @@ export default {
           cancelButtonText: "取消",
           type: "warning"
         }).then(function() {
-          return deleteModuleConfig(ids);
+          return deleteModelConfig(ids);
         }).then(() => {
           this.getList();
           this.msgSuccess("删除成功");
