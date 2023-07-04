@@ -43,6 +43,9 @@ Vue、Element UI、Echarts
 # 进入项目目录
 cd mulanbay-ui-vue
 
+# 配置api地址
+在vue.config.js中配置api服务器的地址（已配置好后端默认地址localhost:8080/api）
+
 # 安装依赖
 npm install
 
@@ -56,19 +59,20 @@ npm run dev
 ```
 
 浏览器访问 http://localhost:9527
+（前后端可以联动访问，开发模式运行主要是修改代码后直接热部署看到实时修改的效果）
 
 ### 正式环境
 
 ```bash
 # 构建测试环境
-npm run build:stage
 git clone https://gitee.com/mulanbay/mulanbay-ui-vue.git
-
-# 配置api地址
-在vue.config.js中配置api服务器的地址（已配置好默认地址）
 
 # 构建生产环境
 npm run build:prod
+
+# 配置nginx
+构建成功后会在工程的dist输出打包好的文件，然后需要再在nginx配置代理，配置方法参加上面的木兰湾文档。
+
 ```
 
 ## 运行说明
