@@ -117,7 +117,7 @@
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="名称" min-width="150px" :show-overflow-tooltip="true">
+      <el-table-column label="名称" min-width="200px" :show-overflow-tooltip="true">
         <template slot-scope="{row}">
           <span class="link-type" @click="handleUpdate(row)">{{ row.name }}</span>
         </template>
@@ -205,8 +205,8 @@
           </el-col>
           <el-col :span="14">
             <el-form-item label="地理坐标" prop="location">
-             <el-input v-model="form.location" placeholder="" style="width: 170px;"/>
-             <el-button type="query" icon="el-icon-check" size="mini" @click="handleMapLocation()" >选择</el-button>
+             <el-input v-model="form.location" placeholder="" style="width: 175px;"/>
+             <el-button type="query" @click="handleMapLocation()" >选择</el-button>
             </el-form-item>
           </el-col>
         </el-row>

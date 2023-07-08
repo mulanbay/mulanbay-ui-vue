@@ -157,7 +157,7 @@
           <el-col :span="14">
             <el-form-item label="地理坐标" prop="scLocation">
              <el-input v-model="form.scLocation" placeholder="" style="width: 195px;"/>
-             <el-button type="query" icon="el-icon-check" size="mini" @click="handleStartCityML" >选择</el-button>
+             <el-button type="query" @click="handleStartCityML" >选择</el-button>
             </el-form-item>
           </el-col>
         </el-row>
@@ -170,20 +170,32 @@
           <el-col :span="14">
             <el-form-item label="地理坐标" prop="acLocation">
              <el-input v-model="form.acLocation" placeholder="" style="width: 195px;"/>
-             <el-button type="query" icon="el-icon-check" size="mini" @click="handleArriveCityML" >选择</el-button>
+             <el-button type="query" @click="handleArriveCityML" >选择</el-button>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="10">
             <el-form-item label="所在国家" prop="country">
-             <el-input v-model="form.country" placeholder="请输入国家" @blur="getCountryLocation" />
+              <el-select
+                v-model="form.country"
+                :style="{width: '100%'}"
+                filterable
+                allow-create
+                default-first-option>
+                <el-option
+                  v-for="dict in countryOptions"
+                  :key="dict.id"
+                  :label="dict.text"
+                  :value="dict.id"
+                />
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="14">
             <el-form-item label="地理坐标" prop="countryLocation">
              <el-input v-model="form.countryLocation" placeholder="" style="width: 195px;"/>
-             <el-button type="query" icon="el-icon-check" size="mini" @click="handleCountryML" >选择</el-button>
+             <el-button type="query" @click="handleCountryML" >选择</el-button>
             </el-form-item>
           </el-col>
         </el-row>
@@ -337,6 +349,8 @@ export default {
       provinceOptions:[],
       cityOptions:[],
       districtOptions:[],
+      //国家列表
+      countryOptions:[],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -400,6 +414,12 @@ export default {
     }
   },
   methods: {
+    /** 查询国家下拉树结构 */
+    getCountrySelect() {
+      this.getDictItemTree('COUNTRY',false).then(response => {
+        this.countryOptions = response;
+      });
+    },
     /** 查询省份下拉树结构 */
     getProvinceTreeselect() {
       getAllProvince().then(response => {
@@ -540,6 +560,7 @@ export default {
         acLocation:undefined
       };
       this.resetForm("form");
+      this.getCountrySelect();
     },
     /** 搜索按钮操作 */
     handleQuery() {

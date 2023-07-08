@@ -19,7 +19,7 @@
         <el-input v-model="geoPoint" />
       </el-col>
       <el-col :span="2">
-        <el-button type="success" icon="el-icon-check" size="mini" @click="confirmLocationPoint">确定</el-button>
+        <el-button type="success" icon="el-icon-check" @click="confirmLocationPoint">确定</el-button>
       </el-col>
     </el-row>
   </div>
