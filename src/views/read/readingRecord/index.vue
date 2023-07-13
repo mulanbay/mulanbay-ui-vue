@@ -114,6 +114,9 @@
       </el-table-column>
       <el-table-column label="书籍名称" fixed="left"  min-width="280px" :show-overflow-tooltip="true">
         <template slot-scope="{row}">
+          <span v-if="row.secondhand==true" style="color: green;">
+           <el-tag type="warning">二手</el-tag>
+          </span>
           <span class="link-type" @click="handleUpdate(row)">{{ row.bookName }}</span>
         </template>
       </el-table-column>
@@ -186,6 +189,11 @@
           <span>{{ row.languageName }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="来源" align="center">
+        <template slot-scope="{row}">
+          <span>{{ row.sourceName }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="书籍类型" align="center">
         <template slot-scope="{row}">
           <span>{{ row.bookTypeName }}</span>
@@ -246,7 +254,7 @@
     />
 
     <!-- 添加或修改对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="720px" append-to-body>
+    <el-dialog :title="title" :visible.sync="open" width="720px" append-to-body customClass="customDialogCss">
       <el-form ref="form" :model="form" :rules="rules" label-width="120px">
         <el-row>
           <el-col :span="24">
@@ -257,7 +265,7 @@
         </el-row>
         <el-row>
           <el-col :span="24">
-            <el-form-item label="作者" prop="author">
+            <el-form-item label="图书作者" prop="author">
              <el-input v-model="form.author" placeholder="请输入作者" />
             </el-form-item>
           </el-col>
@@ -271,12 +279,12 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="ISBN" prop="isbn">
+            <el-form-item label="条码ISBN" prop="isbn">
              <el-input v-model="form.isbn" placeholder="请输入isbn" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="国家" prop="nation">
+            <el-form-item label="作者国家" prop="nation">
              <el-input v-model="form.nation" placeholder="请输入国家" />
             </el-form-item>
           </el-col>
@@ -302,7 +310,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="评分" prop="score">
+            <el-form-item label="我的评分" prop="score">
               <el-rate
                 v-model="form.score"
                 show-score
@@ -316,7 +324,7 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="语言" prop="language">
+            <el-form-item label="图书语言" prop="language">
              <el-select
                v-model="form.language"
                placeholder="语言"
@@ -373,7 +381,7 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="状态" prop="status">
+            <el-form-item label="阅读状态" prop="status">
              <el-select
                v-model="form.status"
                placeholder="状态"
@@ -410,8 +418,35 @@
           </el-col>
         </el-row>
         <el-row>
+          <el-col :span="12">
+            <el-form-item label="图书来源" prop="source">
+             <el-select
+               v-model="form.source"
+               placeholder="来源"
+               clearable
+               size="medium"
+               style="width: 220px"
+             >
+               <el-option
+                 v-for="dict in sourceOptions"
+                 :key="dict.id"
+                 :label="dict.text"
+                 :value="dict.id"
+               />
+             </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="是否二手" prop="secondhand">
+              <el-switch
+                v-model="form.secondhand">
+              </el-switch>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="24">
-            <el-form-item label="备注" prop="remark">
+            <el-form-item label="备注信息" prop="remark">
               <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"></el-input>
             </el-form-item>
           </el-col>
@@ -474,6 +509,7 @@ export default {
       bookCategoryOptions:[],
       languageOptions:[],
       bookTypeOptions:[],
+      sourceOptions:[],
       // 查询参数
       queryParams: {
         page: 1,
@@ -521,6 +557,9 @@ export default {
         ],
         publishedYear: [
           { required: true, message: "出版年份不能为空", trigger: "blur" }
+        ],
+        source: [
+          { required: true, message: "来源不能为空", trigger: "blur" }
         ]
       }
     };
@@ -535,6 +574,9 @@ export default {
     });
     this.getEnumTree('BookType','FIELD',false).then(response => {
       this.bookTypeOptions = response;
+    });
+    this.getEnumTree('BookSource','FIELD',false).then(response => {
+      this.sourceOptions = response;
     });
 
     this.getBookCategoryTreeselect();
@@ -604,7 +646,9 @@ export default {
         status: 'UNREAD',
         language:'CHINESE',
         bookType:'PAPER',
-        score:3
+        score:3,
+        source:'BUY',
+        secondhand:false
       };
       this.resetForm("form");
     },
