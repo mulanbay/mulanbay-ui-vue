@@ -160,7 +160,7 @@
       </el-table-column>
       <el-table-column label="国家" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.nation }}</span>
+          <span>{{ row.country.cnName }}</span>
         </template>
       </el-table-column>
       <el-table-column label="状态" align="center" >
@@ -284,8 +284,23 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="作者国家" prop="nation">
-             <el-input v-model="form.nation" placeholder="请输入国家" />
+            <el-form-item label="作者国家" prop="countryId">
+              <el-select
+                v-model="form.countryId"
+                placeholder="作者国家"
+                clearable
+                filterable
+                size="medium"
+                style="width: 220px"
+                @change="handleCountryChange"
+              >
+                <el-option
+                  v-for="dict in countryOptions"
+                  :key="dict.id"
+                  :label="dict.text"
+                  :value="dict.id"
+                />
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -471,6 +486,7 @@
 <script>
 import {fetchList,getReadingRecordCostTimes,getReadingRecord,createReadingRecord,updateReadingRecord,deleteReadingRecord} from "@/api/read/readingRecord";
 import {getBookCategoryTree} from "@/api/read/bookCategory";
+import {getAllCountry} from "@/api/common";
 import {getNowDateString,dateDiff,formatDays,formatSeconds} from "@/utils/datetime";
 import ReadingRecordDetailList from '../readingRecordDetail/index'
 import {dispatchCommonStat} from "@/utils/planUtils";
@@ -510,6 +526,7 @@ export default {
       languageOptions:[],
       bookTypeOptions:[],
       sourceOptions:[],
+      countryOptions:[],
       // 查询参数
       queryParams: {
         page: 1,
@@ -580,6 +597,7 @@ export default {
     });
 
     this.getBookCategoryTreeselect();
+    this.getCountryTreeselect();
   },
   methods: {
     /** 计算时间 */
@@ -600,8 +618,18 @@ export default {
         this.bookCategoryOptions = response;
       });
     },
+    /** 国家列表 */
+    getCountryTreeselect() {
+      getAllCountry(false).then(response => {
+        this.countryOptions = response;
+      });
+    },
     /** 图书分类变化 */
     handleBookCategoryChange(){
+      this.$forceUpdate();
+    },
+    /** 国家变化 */
+    handleCountryChange(){
       this.$forceUpdate();
     },
     /** 明细列表 */
@@ -681,6 +709,7 @@ export default {
       getReadingRecord(id).then(response => {
         this.form = response;
         this.form.bookCategoryId = response.bookCategory.id+'';
+        this.form.countryId = response.country.id;
         this.open = true;
         this.title = "修改";
       });
