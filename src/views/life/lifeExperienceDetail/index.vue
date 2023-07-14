@@ -96,26 +96,6 @@
           <span>{{ row.occurDate }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="国家" align="center"  width="110">
-        <template slot-scope="{row}">
-          <span>{{ row.country }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="省份" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.provinceId }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="城市" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.cityId }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="县(地区)" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.districtId }}</span>
-        </template>
-      </el-table-column>
       <el-table-column label="操作" align="center" fixed="right" width="150" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -176,13 +156,15 @@
         </el-row>
         <el-row>
           <el-col :span="10">
-            <el-form-item label="所在国家" prop="country">
+            <el-form-item label="所在国家" prop="countryId">
               <el-select
-                v-model="form.country"
-                :style="{width: '100%'}"
+                v-model="form.countryId"
+                placeholder="所在国家"
+                clearable
                 filterable
-                allow-create
-                default-first-option>
+                size="medium"
+                @change="handleCountryChange"
+              >
                 <el-option
                   v-for="dict in countryOptions"
                   :key="dict.id"
@@ -300,7 +282,7 @@
 <script>
   import {fetchList,getLifeExperienceDetail,createLifeExperienceDetail,
   updateLifeExperienceDetail,deleteLifeExperienceDetail,getCountryLocation,getCityLocation} from "@/api/life/lifeExperienceDetail";
-  import {getAllProvince,getCityList,getDistrictList} from "@/api/common";
+  import {getAllCountry,getAllProvince,getCityList,getDistrictList} from "@/api/common";
   import LifeExperienceConsumeList from '../lifeExperienceConsume/index'
   import LocationSelect from '../lifeExperience/locationSelect'
 
@@ -371,7 +353,7 @@ export default {
       },
       // 表单校验
       rules: {
-        country: [
+        countryId: [
           { required: true, message: "国家不能为空", trigger: "blur" }
         ],
         // provinceId: [
@@ -414,11 +396,15 @@ export default {
     }
   },
   methods: {
-    /** 查询国家下拉树结构 */
-    getCountrySelect() {
-      this.getDictItemTree('COUNTRY',false).then(response => {
+    /** 国家列表 */
+    getCountryTreeselect() {
+      getAllCountry(false).then(response => {
         this.countryOptions = response;
       });
+    },
+    /** 国家变化 */
+    handleCountryChange(){
+      this.$forceUpdate();
     },
     /** 查询省份下拉树结构 */
     getProvinceTreeselect() {
@@ -552,7 +538,7 @@ export default {
     reset() {
       this.form = {
         id: undefined,
-        country: '中国',
+        countryId: 290,
         countryLocation: '116.266206,41.034901',
         mapStat:true,
         international:false,
@@ -560,7 +546,7 @@ export default {
         acLocation:undefined
       };
       this.resetForm("form");
-      this.getCountrySelect();
+      this.getCountryTreeselect();
     },
     /** 搜索按钮操作 */
     handleQuery() {
@@ -606,6 +592,7 @@ export default {
     },
     /** 提交按钮 */
     submitForm: function() {
+      this.form.lifeExperience = null;
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.form.id != undefined) {
