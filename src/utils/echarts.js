@@ -2219,7 +2219,7 @@ export function createGaugeChart(data, myChart) {
         fontSize: 15
       },
       detail: {
-        valueAnimation: true,
+        //valueAnimation: true,
         formatter: '{value} ' + unit,
         color: 'auto',
         fontSize: 20
