@@ -213,51 +213,31 @@
       <el-col :span="12" class="card-box">
         <el-card>
           <div slot="header">
-            <span>消费统计详情</span>
+            <span>最新月度计划统计</span>
           </div>
           <div class="el-table el-table--enable-row-hover el-table--medium">
-            <table cellspacing="0" style="width: 100%;">
-              <thead>
-                <tr>
-                  <td class="el-table__cell is-leaf"><div class="cell">名称</div></td>
-                  <td class="el-table__cell is-leaf"><div class="cell" align="center">次数</div></td>
-                  <td class="el-table__cell is-leaf"><div class="cell" align="center">统计值</div></td>
-                  <td class="el-table__cell is-leaf"><div class="cell" align="center">链接</div></td>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td class="el-table__cell is-leaf"><div class="cell">消费信息</div></td>
-                  <td class="el-table__cell is-leaf"><div class="cell" align="center">{{ statData.totalBuyCount }}</div></td>
-                  <td class="el-table__cell is-leaf"><div class="cell" align="center">{{ formatMoney(statData.totalConsumeAmount) }}</div></td>
-                  <td class="el-table__cell is-leaf">
-                    <div class="cell" align="center">
-                      <span class="link-type" @click="handleDispatch('BuyRecord')"><i class="el-icon-s-promotion" /></span>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="el-table__cell is-leaf"><div class="cell">看病信息</div></td>
-                  <td class="el-table__cell is-leaf"><div class="cell" align="center">{{ statData.totalTreatCount }}</div></td>
-                  <td class="el-table__cell is-leaf"><div class="cell" align="center">{{ formatMoney(statData.totalTreatAmount) }}</div></td>
-                  <td class="el-table__cell is-leaf">
-                    <div class="cell" align="center">
-                      <span class="link-type" @click="handleDispatch('TreatRecord')"><i class="el-icon-s-promotion" /></span>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="el-table__cell is-leaf"><div class="cell">其他信息</div></td>
-                  <td class="el-table__cell is-leaf"><div class="cell" align="center">--</div></td>
-                  <td class="el-table__cell is-leaf"><div class="cell" align="center">--</div></td>
-                  <td class="el-table__cell is-leaf">
-                    <div class="cell" align="center">
-                      <span class="link-type" @click="handleDispatch('BuyRecord')"><i class="el-icon-s-promotion" /></span>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+            <el-table v-loading="monthLoading" :data="monthUserPlanData">
+              <el-table-column label="名称" align="center" width="160" :show-overflow-tooltip="true">
+                <template slot-scope="{row}">
+                  <span>{{ row.title }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="次数" align="center">
+                <template slot-scope="{row}">
+                  <span>{{ row.planReport.reportCountValue }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="值" align="center">
+                <template slot-scope="{row}">
+                  <span>{{ row.planReport.reportValue+row.unit }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="链接" align="center">
+                <template slot-scope="{row}">
+                  <span class="link-type" @click="handleDispatch(row.planConfig.url)"><i class="el-icon-s-promotion" /></span>
+                </template>
+              </el-table-column>
+            </el-table>
           </div>
         </el-card>
       </el-col>
@@ -265,51 +245,31 @@
       <el-col :span="12" class="card-box">
         <el-card>
           <div slot="header">
-            <span>其他统计数据</span>
+            <span>最新年度计划统计</span>
           </div>
           <div class="el-table el-table--enable-row-hover el-table--medium">
-            <table cellspacing="0" style="width: 100%;">
-              <thead>
-                <tr>
-                  <td class="el-table__cell is-leaf"><div class="cell">名称</div></td>
-                  <td class="el-table__cell is-leaf"><div class="cell" align="center">次数</div></td>
-                  <td class="el-table__cell is-leaf"><div class="cell" align="center">统计值</div></td>
-                  <td class="el-table__cell is-leaf"><div class="cell" align="center">链接</div></td>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td class="el-table__cell is-leaf"><div class="cell">锻炼时间</div></td>
-                  <td class="el-table__cell is-leaf"><div class="cell" align="center">{{ statLifeData.totalSportExerciseCount }}</div></td>
-                  <td class="el-table__cell is-leaf"><div class="cell" align="center">{{ statLifeData.totalSportExerciseHours }}小时</div></td>
-                  <td class="el-table__cell is-leaf">
-                    <div class="cell" align="center">
-                      <span class="link-type" @click="handleDispatch('SportExercise')"><i class="el-icon-s-promotion" /></span>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="el-table__cell is-leaf"><div class="cell">音乐练习</div></td>
-                  <td class="el-table__cell is-leaf"><div class="cell" align="center">{{ statLifeData.totalMusicPracticeCount }}</div></td>
-                  <td class="el-table__cell is-leaf"><div class="cell" align="center">{{ statLifeData.totalMusicPracticeHours }}小时</div></td>
-                  <td class="el-table__cell is-leaf">
-                    <div class="cell" align="center">
-                      <span class="link-type" @click="handleDispatch('MusicPractice')"><i class="el-icon-s-promotion" /></span>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="el-table__cell is-leaf"><div class="cell">阅读时间</div></td>
-                  <td class="el-table__cell is-leaf"><div class="cell" align="center">{{ statLifeData.totalReadingCount }}</div></td>
-                  <td class="el-table__cell is-leaf"><div class="cell" align="center">{{ statLifeData.totalReadingHours }}小时</div></td>
-                  <td class="el-table__cell is-leaf">
-                    <div class="cell" align="center">
-                      <span class="link-type" @click="handleDispatch('ReadingRecord')"><i class="el-icon-s-promotion" /></span>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+            <el-table v-loading="yearLoading" :data="yearUserPlanData">
+              <el-table-column label="名称" align="center" width="160" :show-overflow-tooltip="true">
+                <template slot-scope="{row}">
+                  <span>{{ row.title }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="次数" align="center">
+                <template slot-scope="{row}">
+                  <span>{{ row.planReport.reportCountValue }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="值" align="center">
+                <template slot-scope="{row}">
+                  <span>{{ row.planReport.reportValue+row.unit }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="链接" align="center">
+                <template slot-scope="{row}">
+                  <span class="link-type" @click="handleDispatch(row.planConfig.url)"><i class="el-icon-s-promotion" /></span>
+                </template>
+              </el-table-column>
+            </el-table>
           </div>
         </el-card>
       </el-col>
@@ -321,6 +281,7 @@
 <script>
   import {generalStat,generalLifeStat } from "@/api/main";
   import {statWithTreat} from "@/api/consume/buyRecord";
+  import {fetchList as fetchUserPlanList} from "@/api/report/plan/userPlan";
   import {getPercent,progressColors} from "@/utils/mulanbay";
   import PieChart from '../chart/pieChart';
   import resize from './mixins/resize.js'
@@ -348,12 +309,18 @@ export default {
       chartData:{},
       statData:{},
       statLifeData:{},
+      monthLoading:false,
+      monthUserPlanData:[],
+      yearLoading:false,
+      yearUserPlanData:[],
       //进度百分比颜色
       customColors: progressColors
     };
   },
   created() {
     this.getList();
+    this.getMonthUserPlanList();
+    this.getYearUserPlanList();
     this.getEnumTree('GoodsConsumeType','ORDINAL',false).then(response => {
       this.consumeTypeOptions = response;
     });
@@ -373,7 +340,7 @@ export default {
       let para = this.addDateRange(this.queryParams, this.dateRange);
       this.chartStat(para);
       this.dataStat(para);
-      this.lifeDataStat(para);
+      //this.lifeDataStat(para);
     },
     // 数据统计
     dataStat(para){
@@ -412,6 +379,49 @@ export default {
             monthRemainConsume:monthRemainConsume,
             monthRCPerDay:monthRCPerDay
           };
+        }
+      );
+    },
+    //路由跳转
+    handleDispatch(name) {
+      //路由定向
+      this.$router.push({name:name,query: {}})
+    },
+    /** 加载月度计划报告 */
+    getMonthUserPlanList(){
+      let para ={
+        page: 1,
+        pageSize: 5,
+        dataType: 'LATEST',
+        filterType: 'ORIGINAL',
+        status: 'ENABLE',
+        statNow: true,
+        planType: 'MONTH'
+      }
+      this.monthLoading = true;
+      fetchUserPlanList(para).then(
+        response => {
+          this.monthLoading = false;
+          this.monthUserPlanData = response.rows;
+        }
+      );
+    },
+    /** 加载年度计划报告 */
+    getYearUserPlanList(){
+      let para ={
+        page: 1,
+        pageSize: 5,
+        dataType: 'LATEST',
+        filterType: 'ORIGINAL',
+        status: 'ENABLE',
+        statNow: true,
+        planType: 'YEAR'
+      }
+      this.yearLoading = true;
+      fetchUserPlanList(para).then(
+        response => {
+          this.yearUserPlanData = response.rows;
+          this.yearLoading = false;
         }
       );
     },
