@@ -40,13 +40,17 @@
       :data="goodsTypeList"
       row-key="id"
       :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
-      <el-table-column label="ID" prop="id" sortable="custom" align="center">
+      <el-table-column label="名称" min-width="120px" fixed="left" :show-overflow-tooltip="true">
         <template slot-scope="{row}">
-          <span>{{ row.id }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="名称" min-width="120px">
-        <template slot-scope="{row}">
+          <span v-if="row.children!=null&&row.children.length>0">
+           <svg-icon icon-class="tree" />
+          </span>
+          <span v-else-if="row.parentId==0">
+           <svg-icon icon-class="tree" />
+          </span>
+          <span v-else>
+           <i class="el-icon-user-solid"></i>
+          </span>
           <span class="link-type" @click="handleUpdate(row)">{{ row.name }}</span>
         </template>
       </el-table-column>
@@ -236,7 +240,7 @@ export default {
       commonStatusOptions:this.commonStatusOptions,
       // 查询参数
       queryParams: {
-        page: 1,
+        page: 0,
         pageSize: 10,
         name: undefined,
         status: undefined
@@ -273,6 +277,7 @@ export default {
   methods: {
     /** 查询列表 */
     getList() {
+      this.queryParams.page = 0;
       this.loading = true;
       fetchList(this.queryParams).then(
         response => {
@@ -353,7 +358,6 @@ export default {
     },
     /** 搜索按钮操作 */
     handleQuery() {
-      this.queryParams.page = 1;
       this.getList();
     },
     /** 重置按钮操作 */
