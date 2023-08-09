@@ -45,6 +45,16 @@
       </el-col>
       <el-col :span="1.5">
         <el-button
+          type="primary"
+          icon="el-icon-plus"
+          size="mini"
+          :disabled="single"
+          @click="handleCreateAsTemplate"
+          v-hasPermi="['ai:modelConfig:create']"
+        >以此为模板</el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
           type="success"
           icon="el-icon-edit"
           size="mini"
@@ -394,6 +404,17 @@ export default {
       this.reset();
       this.open = true;
       this.title = "添加";
+    },
+    /** 以模板新增按钮操作 */
+    handleCreateAsTemplate() {
+      this.reset();
+      const id = this.ids.join(",")
+      getModelConfig(id).then(response => {
+        this.form = response;
+        this.form.id=undefined;
+        this.open = true;
+        this.title = "新增";
+      });
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
