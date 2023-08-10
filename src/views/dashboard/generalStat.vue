@@ -214,6 +214,7 @@
         <el-card>
           <div slot="header">
             <span>最新月度计划统计</span>
+            -->预测:<el-switch v-model="monthPlanPredict" @change="getMonthUserPlanList()"></el-switch>
           </div>
           <div class="el-table el-table--enable-row-hover el-table--medium">
             <el-table v-loading="monthLoading" :data="monthUserPlanData">
@@ -225,11 +226,13 @@
               <el-table-column label="次数" align="center">
                 <template slot-scope="{row}">
                   <span>{{ row.planReport.reportCountValue }}</span>
+                  <span v-if="true==monthPlanPredict">{{ '/'+formatePredictValue(row.predictCount,1) }}</span>
                 </template>
               </el-table-column>
               <el-table-column label="值" align="center">
                 <template slot-scope="{row}">
                   <span>{{ row.planReport.reportValue+row.unit }}</span>
+                  <span v-if="true==monthPlanPredict">{{ '/'+formatePredictValue(row.predictValue,1)+row.unit }}</span>
                 </template>
               </el-table-column>
               <el-table-column label="链接" align="center">
@@ -246,6 +249,7 @@
         <el-card>
           <div slot="header">
             <span>最新年度计划统计</span>
+            -->预测:<el-switch v-model="yearPlanPredict" @change="getYearUserPlanList()"></el-switch>
           </div>
           <div class="el-table el-table--enable-row-hover el-table--medium">
             <el-table v-loading="yearLoading" :data="yearUserPlanData">
@@ -257,11 +261,13 @@
               <el-table-column label="次数" align="center">
                 <template slot-scope="{row}">
                   <span>{{ row.planReport.reportCountValue }}</span>
+                  <span v-if="true==yearPlanPredict">{{ '/'+formatePredictValue(row.predictCount,1) }}</span>
                 </template>
               </el-table-column>
               <el-table-column label="值" align="center">
                 <template slot-scope="{row}">
                   <span>{{ row.planReport.reportValue+row.unit }}</span>
+                  <span v-if="true==yearPlanPredict">{{ '/'+formatePredictValue(row.predictValue,1)+row.unit }}</span>
                 </template>
               </el-table-column>
               <el-table-column label="链接" align="center">
@@ -282,7 +288,7 @@
   import {generalStat,generalLifeStat } from "@/api/main";
   import {statWithTreat} from "@/api/consume/buyRecord";
   import {fetchList as fetchUserPlanList} from "@/api/report/plan/userPlan";
-  import {getPercent,progressColors} from "@/utils/mulanbay";
+  import {getPercent,progressColors,formatFloat} from "@/utils/mulanbay";
   import PieChart from '../chart/pieChart';
   import resize from './mixins/resize.js'
 
@@ -314,7 +320,9 @@ export default {
       yearLoading:false,
       yearUserPlanData:[],
       //进度百分比颜色
-      customColors: progressColors
+      customColors: progressColors,
+      monthPlanPredict: false,
+      yearPlanPredict: false
     };
   },
   created() {
@@ -341,6 +349,10 @@ export default {
       this.chartStat(para);
       this.dataStat(para);
       //this.lifeDataStat(para);
+    },
+    /** 格式化预测值 */
+    formatePredictValue(v,n) {
+      return formatFloat(v,n);
     },
     // 数据统计
     dataStat(para){
@@ -396,7 +408,8 @@ export default {
         filterType: 'ORIGINAL',
         status: 'ENABLE',
         statNow: true,
-        planType: 'MONTH'
+        planType: 'MONTH',
+        predict:this.monthPlanPredict
       }
       this.monthLoading = true;
       fetchUserPlanList(para).then(
@@ -415,7 +428,8 @@ export default {
         filterType: 'ORIGINAL',
         status: 'ENABLE',
         statNow: true,
-        planType: 'YEAR'
+        planType: 'YEAR',
+        predict:this.yearPlanPredict
       }
       this.yearLoading = true;
       fetchUserPlanList(para).then(

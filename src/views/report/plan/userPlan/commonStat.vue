@@ -78,6 +78,9 @@
           <el-radio label="HISTORY">历史</el-radio>
         </el-radio-group>
       </el-form-item>
+      <el-form-item label="计划预测" prop="predict">
+        <el-switch v-model="queryParams.predict"></el-switch>
+      </el-form-item>
       <el-form-item>
         <el-button type="stat" icon="el-icon-s-data" size="mini" @click="handleQuery" v-hasPermi="['report:plan:userPlan:commonStat']">统计</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -93,7 +96,7 @@
           <el-card>
             <el-col :span="12">
               <div>
-                <el-descriptions class="margin-top" :column="1" :size="size" border labelStyle="width: 100px">
+                <el-descriptions class="margin-top" :column="1" :size="size" border >
                   <el-descriptions-item>
                     <template slot="label">
                       <i class="el-icon-star-on"></i>
@@ -130,17 +133,17 @@
                   </el-descriptions-item>
                   <el-descriptions-item>
                     <template slot="label">
-                      <i class="el-icon-cpu"></i>
-                      次数统计
+                      <i class="el-icon-date"></i>
+                      统计日期
                     </template>
-                    <div class="cell">{{ item.reportCountValue+'次(计划:'+item.planCountValue+'次)' }}</div>
+                    <div class="cell">{{ item.bussStatDate.substring(0,10) }}</div>
                   </el-descriptions-item>
                   <el-descriptions-item>
                     <template slot="label">
-                      <i class="el-icon-wallet"></i>
-                      值统计
+                      <i class="el-icon-s-order"></i>
+                      统计时间
                     </template>
-                    <div class="cell">{{ item.reportValue+item.userPlan.unit+'(计划:'+item.planValue+item.userPlan.unit+')' }}</div>
+                    <div class="cell">{{ item.createdTime }}</div>
                   </el-descriptions-item>
                   <el-descriptions-item>
                     <template slot="label">
@@ -155,6 +158,14 @@
                       参考年份
                     </template>
                     <div class="cell">{{ item.planConfigYear }}年</div>
+                  </el-descriptions-item>
+                  <el-descriptions-item>
+                    <template slot="label">
+                      <i class="el-icon-s-promotion"></i>
+                      统计选择
+                    </template>
+                    进度:<span class="link-type" @click="timelineStat(item)"><i class="el-icon-s-data" /></span>
+                    计划:<span class="link-type" @click="planStat(item)"><i class="el-icon-s-data" /></span>
                   </el-descriptions-item>
                 </el-descriptions>
               </div>
@@ -192,29 +203,34 @@
               </table>
               </div>
               <div>
-                <el-descriptions class="margin-top" :column="1" :size="size" border labelStyle="width: 100px">
-                  <el-descriptions-item>
-                    <template slot="label">
-                      <i class="el-icon-date"></i>
-                      统计日期
-                    </template>
-                    <div class="cell">{{ item.bussStatDate.substring(0,10) }}</div>
-                  </el-descriptions-item>
-                  <el-descriptions-item>
-                    <template slot="label">
-                      <i class="el-icon-s-order"></i>
-                      统计时间
-                    </template>
-                    <div class="cell">{{ item.createdTime }}</div>
-                  </el-descriptions-item>
-                  <el-descriptions-item>
-                    <template slot="label">
-                      <i class="el-icon-s-promotion"></i>
-                      统计选择
-                    </template>
-                    进度:<span class="link-type" @click="timelineStat(item)"><i class="el-icon-s-data" /></span>
-                    计划:<span class="link-type" @click="planStat(item)"><i class="el-icon-s-data" /></span>
-                  </el-descriptions-item>
+                <div class="el-table el-table--enable-row-hover el-table--medium">
+                <el-divider content-position="center">信息统计</el-divider>
+                <table cellspacing="0">
+                  <thead>
+                    <tr>
+                      <td class="el-table__cell is-leaf"><div class="cell">项目</div></td>
+                      <td class="el-table__cell is-leaf"><div class="cell">统计值</div></td>
+                      <td class="el-table__cell is-leaf"><div class="cell">计划值</div></td>
+                      <td class="el-table__cell is-leaf"><div class="cell">预测值</div></td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="el-table__cell is-leaf"><div class="cell">{{ '次数' }}</div></td>
+                      <td class="el-table__cell is-leaf"><div class="cell">{{ item.reportCountValue }}</div></td>
+                      <td class="el-table__cell is-leaf"><div class="cell">{{ item.planCountValue }}</div></td>
+                      <td class="el-table__cell is-leaf"><div class="cell">{{ formatePredictValue(item.predictCount,1) }}</div></td>
+                    </tr>
+                    <tr>
+                      <td class="el-table__cell is-leaf"><div class="cell">{{ '值('+item.userPlan.unit+')' }}</div></td>
+                      <td class="el-table__cell is-leaf"><div class="cell">{{ item.reportValue }}</div></td>
+                      <td class="el-table__cell is-leaf"><div class="cell">{{ item.planValue }}</div></td>
+                      <td class="el-table__cell is-leaf"><div class="cell">{{ formatePredictValue(item.predictValue,1) }}</div></td>
+                    </tr>
+                  </tbody>
+                </table>
+                </div>
+                <el-descriptions class="margin-top" :column="1" :size="size" border >
                   <el-descriptions-item>
                     <template slot="label">
                       <i class="el-icon-info"></i>
@@ -262,7 +278,7 @@
   import {fetchList as fetchUserPlanList} from "@/api/report/plan/userPlan";
   import {getUserPlanTree} from "@/api/report/plan/userPlan";
   import {deepClone,getQueryObject} from "@/utils/index";
-  import {ellipsis} from "@/utils/mulanbay";
+  import {ellipsis,formatFloat} from "@/utils/mulanbay";
   import {getBussTypeTree} from "@/api/common";
   import {getValueCompareResult,getCompareYearString,getPercent} from "@/utils/planUtils";
   import Treeselect from "@riophae/vue-treeselect";
@@ -333,7 +349,8 @@ export default {
         filterType:'ORIGINAL',
         status:'ENABLE',
         statNow:true,
-        relatedBeans:undefined
+        relatedBeans:undefined,
+        predict:false
       },
       booleanOptions:this.booleanOptions,
       //用户计划
@@ -386,6 +403,10 @@ export default {
     handleDispatch(name) {
       //路由定向
       this.$router.push({name:name,query: {}})
+    },
+    /** 格式化预测值 */
+    formatePredictValue(v,n) {
+      return formatFloat(v,n);
     },
     /** 加载用户计划 */
     loadUserPlan(){
@@ -467,9 +488,13 @@ export default {
           let list = new Array();
           const n = response.rows.length;
           for(let i=0;i<n;i++){
-            let dd = response.rows[i].planReport;
-            dd.userPlan = response.rows[i];
-            dd.id=response.rows[i].id;
+            let row = response.rows[i];
+            let dd = row.planReport;
+            dd.userPlan = row;
+            dd.id=row.id;
+            dd.predictCount = row.predictCount;
+            dd.predictValue = row.predictValue;
+            
             dd.fullTitle = this.formatName(dd);
             list.push(dd);
           }

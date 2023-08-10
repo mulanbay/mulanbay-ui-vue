@@ -34,6 +34,9 @@
           placeholder="选择月份">
         </el-date-picker>
       </el-form-item>
+      <el-form-item label="计划预测" prop="predict">
+        <el-switch v-model="queryParams.predict"></el-switch>
+      </el-form-item>
       <el-form-item>
         <el-button type="stat" icon="el-icon-s-data" size="mini" @click="handleQuery" v-hasPermi="['report:plan:planReport:timelineStat']">统计</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -85,6 +88,7 @@ export default {
       // 查询参数
       queryParams: {
         dateGroupType:'MONTH',
+        predict: false,
         year:undefined,
         yearMonth:undefined,
         userPlanId:undefined
