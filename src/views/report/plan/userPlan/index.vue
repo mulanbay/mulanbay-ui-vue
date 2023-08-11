@@ -350,7 +350,7 @@
     </el-dialog>
 
     <!-- 统计页面 -->
-    <el-dialog :title="statTitle" width="800px" :visible.sync="statVisible"  append-to-body>
+    <el-dialog :title="statTitle" width="850px" :visible.sync="statVisible"  append-to-body  customClass="customDialogCss">
       <plan-stat :userPlanData="userPlanData"/>
     </el-dialog>
 

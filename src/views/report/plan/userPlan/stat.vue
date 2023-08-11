@@ -5,13 +5,16 @@
        <treeselect
         v-model="queryParams.id"
         @input="handleQuery"
-        style="width: 450px"
+        style="width: 300px"
         :options="userPlanOptions"
         :disable-branch-nodes="true"
         :show-count="true"
         :searchable="true"
         placeholder="请选择"
         />
+      </el-form-item>
+      <el-form-item label="计划预测" prop="predict">
+        <el-switch v-model="queryParams.predict"></el-switch>
       </el-form-item>
       <el-form-item>
         <el-button type="stat" icon="el-icon-s-data" size="mini" @click="handleQuery" v-hasPermi="['report:notify:userNotify:stat']">统计</el-button>
@@ -32,13 +35,43 @@
       </el-col>
     </el-row>
 
+    <div class="el-table el-table--enable-row-hover el-table--medium">
+    <el-divider content-position="center">{{ planReport.name }}--信息统计</el-divider>
+    <el-card>
+      <table cellspacing="0" style="width: 100%;">
+        <thead>
+          <tr>
+            <td class="el-table__cell is-leaf"><div class="cell">项目</div></td>
+            <td class="el-table__cell is-leaf"><div class="cell">统计值</div></td>
+            <td class="el-table__cell is-leaf"><div class="cell">计划值</div></td>
+            <td class="el-table__cell is-leaf"><div class="cell">预测值</div></td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="el-table__cell is-leaf"><div class="cell">{{ '次数' }}</div></td>
+            <td class="el-table__cell is-leaf"><div class="cell">{{ planReport.reportCountValue }}</div></td>
+            <td class="el-table__cell is-leaf"><div class="cell">{{ planReport.planCountValue }}</div></td>
+            <td class="el-table__cell is-leaf"><div class="cell">{{ formatePredictValue(planReport.predictCount,1) }}</div></td>
+          </tr>
+          <tr>
+            <td class="el-table__cell is-leaf"><div class="cell">{{ '值('+planReport.unit+')' }}</div></td>
+            <td class="el-table__cell is-leaf"><div class="cell">{{ planReport.reportValue }}</div></td>
+            <td class="el-table__cell is-leaf"><div class="cell">{{ planReport.planValue }}</div></td>
+            <td class="el-table__cell is-leaf"><div class="cell">{{ formatePredictValue(planReport.predictValue,1) }}</div></td>
+          </tr>
+        </tbody>
+      </table>
+    </el-card>
+    </div>
+
   </div>
 </template>
 
 <script>
   import {getUserPlanStat,getUserPlanTree} from "@/api/report/plan/userPlan";
   import {deepClone} from "@/utils/index";
-  import {getPercent} from "@/utils/mulanbay";
+  import {getPercent,formatFloat} from "@/utils/mulanbay";
 
   import Treeselect from "@riophae/vue-treeselect";
   import "@riophae/vue-treeselect/dist/vue-treeselect.css";
@@ -63,11 +96,15 @@ export default {
       valueChartData:{},
       // 查询参数
       queryParams: {
-        id:undefined
+        id:undefined,
+        predict:false
       },
       relatedBeans:undefined,
       userPlanOptions:[],
-      statContent:''
+      statContent:'',
+      planReport:{},
+      //加载层配置
+      loadingOptions:this.loadingOptions
     };
   },
   created() {
@@ -97,6 +134,10 @@ export default {
         this.userPlanOptions = response;
       });
     },
+    /** 格式化预测值 */
+    formatePredictValue(v,n) {
+      return formatFloat(v,n);
+    },
     /** 搜索按钮操作 */
     handleQuery() {
       const id = this.queryParams.id;
@@ -111,9 +152,17 @@ export default {
       this.resetForm("queryForm");
       this.initChart();
     },
+    // 打开加载层
+    openLoading() {
+      this.loading = this.$loading(this.loadingOptions);
+    },
     initChart() {
+      this.planReport = {};
+      this.openLoading();
       getUserPlanStat(this.queryParams).then(
         response => {
+          this.planReport = response;
+          this.planReport.unit = response.userPlan.unit;
           let rateCountPercent = getPercent(response.reportCountValue,response.planCountValue);
           let countData={};
           countData.value = rateCountPercent;
@@ -129,6 +178,9 @@ export default {
           valueData.title='值完成比例';
           valueData.subTitle= '完成值:'+response.reportValue+",计划值:"+response.planValue+',单位:'+response.userPlan.unit;
           this.valueChartData = valueData;
+
+          this.loading.close();
+
         }
       );
     }
