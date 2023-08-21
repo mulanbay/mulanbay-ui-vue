@@ -940,10 +940,7 @@ export function createCalanderChart(data, myChart) {
       }
     },
     calendar: [{
-      top: 100,
-      left: 0,
-      right: 0,
-      cellSize: ['auto', 35],
+      top: 80,
       itemStyle: {
         borderWidth: 0.5
       },
@@ -969,14 +966,11 @@ export function createCalanderChart(data, myChart) {
         borderColor: '#111'
       }
     }, {
-      top: 400,
-      left: 0,
-      right: 0,
-      cellSize: ['auto', 30],
+      top: 269,
+      left: 'center',
       itemStyle: {
         borderWidth: 0.5
       },
-      left: 'center',
       range: data.rangeSecond,
       splitLine: {
         show: true,
