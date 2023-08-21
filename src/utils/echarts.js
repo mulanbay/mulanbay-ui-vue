@@ -2552,9 +2552,12 @@ export function createWorldCloudChart(chartData, myChart) {
       // 最小字体和最大字体
       sizeRange: [24, 128],
       // 字体旋转角度的范围
-      //rotationRange: [-45, 0, 45, 90],
+      //文本旋转范围和步进度。文本将通过rotationStep:45在[- 90,90]范围内随机旋转
+      //rotationRange: [-90, 90],
       rotationRange: [0, 0],
-      shape: 'circle',
+      rotationStep: 45,
+      //可用的形状有(circle)圆形(默认)、(cardioid)心形，(diamond)菱形，(triangle-forward)三角形向前，(triangle)三角形，(pentagon)五边形和(star)星形。*/
+      shape: 'diamond',
       // 词云的形状，可选值有
       // cardioid心形,diamond菱形,square正方形,triangle-forward指向右边的三角形,triangle-upright正三角形
       // triangle三角形，pentagon五角形，star五角星形，
