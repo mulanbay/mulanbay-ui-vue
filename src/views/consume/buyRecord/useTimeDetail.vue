@@ -62,7 +62,7 @@
                 {{ row.value }}
               </template>
             </el-table-column>
-            <el-table-column label="说明" prop="desc" align="center">
+            <el-table-column label="说明" prop="desc" align="center" width="60px">
               <template slot-scope="{row}">
                 <span v-if="row.desc != null" class="link-type" @click="msgAlert('提示',row.desc)"><i class="el-icon-question" /></span>
               </template>

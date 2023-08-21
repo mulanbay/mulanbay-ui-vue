@@ -4,35 +4,43 @@
     <!--调度比较数据-->
     <el-row>
       <el-col :span="24" align="center" style="font-weight:bold;font-size: 16px;color:#6495ED;">
-        <div class="el-table el-table--enable-row-hover el-table--medium">
-          <table cellspacing="0" style="width: 100%;">
-            <tbody>
-              <tr>
-                <td><div class="cell"><i class="el-icon-info"></i>加入调度器时间</div></td>
-                <td>
+        <el-card>
+          <el-col :span="24" class="card-box">
+            <div>
+              <el-descriptions class="margin-top" :column="1" :size="'5'" border :labelStyle="{width: '160px'}" >
+                <el-descriptions-item>
+                  <template slot="label">
+                    <i class="el-icon-date"></i>
+                    加入调度器时间
+                  </template>
                   <div class="cell">
-                    <span class="table-title">{{ scheduleInfo.addToScheduleTime }}</span>
+                    {{ scheduleInfo.addToScheduleTime +' ('+scheduleInfo.tillNow+')'}}
                   </div>
-                </td>
-              </tr>
-              <tr>
-                <td><div class="cell"><i class="el-icon-info"></i>调度状态</div></td>
-                <td>
+                </el-descriptions-item>
+                <el-descriptions-item>
+                  <template slot="label">
+                    <i class="el-icon-message-solid"></i>
+                    调度运行状态
+                  </template>
                   <div class="cell">
-                    <span class="table-title">{{ scheduleInfo.statusInfo }}</span>
+                    <span v-if="scheduleInfo.isExecuting==true" class="link-type" style="color:red ;">
+                      <i class="el-icon-loading"></i>正在运行中
+                    </span>
+                    <span v-else>未运行</span>
                   </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+                </el-descriptions-item>
+              </el-descriptions>
+            </div>
+          </el-col>
+        </el-card>
       </el-col>
     </el-row>
+    <el-divider content-position="center">数据比对</el-divider>
     <el-row>
       <!--数据-->
       <div style="padding: 0px 20px 0px 20px;">
-        <el-steps>
-          <el-step title="数据库中数据" status="finish" icon="el-icon-edit"></el-step>
+        <el-steps align-center>
+          <el-step title="数据库中数据" status="finish" icon="el-icon-coin"></el-step>
           <el-step title="调度服务器中数据" status="finish" icon="el-icon-upload"></el-step>
         </el-steps>
       </div>
@@ -84,6 +92,8 @@
 <script>
   import {getScheduleDetail} from "@/api/schedule/taskTrigger";
   import {parseJsonToTree} from "@/utils/mulanbay";
+  import {tillNowSeconds,tillNowString} from "@/utils/datetime";
+
 
 export default {
   name: "TaskTriggerScheduleDetail",
@@ -123,15 +133,12 @@ export default {
         this.dbData = parseJsonToTree(response.dbInfo);
         //console.log(JSON.stringify(this.dbData));
         this.scheduleData = parseJsonToTree(response.scheduleInfo);
-        let ss ='';
-        if(response.isExecuting!=null&&response.isExecuting==true){
-          ss+='正在运行中';
-        }else{
-          ss+='未运行';
-        }
+        let ts = tillNowSeconds(null,response.addToScheduleTime);
+        let tillNow = tillNowString(ts);
         this.scheduleInfo = {
           addToScheduleTime:response.addToScheduleTime,
-          statusInfo:ss
+          tillNow:tillNow,
+          isExecuting:response.isExecuting
         };
       });
     }

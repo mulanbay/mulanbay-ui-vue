@@ -137,7 +137,7 @@
       <el-table-column label="名称" fixed="left"  min-width="200px" :show-overflow-tooltip="true">
         <template slot-scope="{row}">
          <span v-if="row.executing==true" class="link-type"  @click="handleUpdate(row)" style="color:red ;">
-          {{ formatName(row)+'[执行中]' }}
+         <i class="el-icon-loading"></i> {{ formatName(row)+'[执行中]' }}
          </span>
          <span v-else class="link-type"  @click="handleUpdate(row)">
            {{ formatName(row) }}

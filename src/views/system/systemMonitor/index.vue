@@ -17,6 +17,11 @@
                 <el-button type="stat" icon="el-icon-refresh" size="mini" @click="handleQuery" v-hasPermi="['system:systemMonitor:query']">刷新</el-button>
                 <el-button type="query" icon="el-icon-info" size="mini" @click="handleMoreDetail" v-hasPermi="['system:systemMonitor:query']">更多详情</el-button>
               </el-form-item>
+              <el-form-item >
+                <span v-if="dataLoading==true" class="link-type" style="color:red ;">
+                  <i class="el-icon-loading"></i>数据刷新中
+                </span>
+              </el-form-item>
             </el-form>
           </div>
       </el-col>
@@ -114,7 +119,8 @@ export default {
       resourceType:'MEMORY',
       systemDetails:{},
       //自动刷新
-      timer: undefined
+      timer: undefined,
+      dataLoading : false
     };
   },
   created() {
@@ -200,6 +206,7 @@ export default {
     },
     /** 查询服务器信息 */
     getList() {
+      this.dataLoading = true;
       //this.openLoading();
       getSystemDetail().then(
         response => {
@@ -207,6 +214,7 @@ export default {
           this.createMemoryMonitorChart(response.mem);
           this.createCpuMonitorChart(response.cpu);
           //this.loading.close();
+          this.dataLoading = false;
         }
       );
     },

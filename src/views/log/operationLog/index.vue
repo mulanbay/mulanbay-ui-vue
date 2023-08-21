@@ -195,7 +195,7 @@
           <span v-else>{{ row.storeDuration }}毫秒</span>
         </template>
       </el-table-column>
-      <el-table-column label="请求IP" align="center" width="150">
+      <el-table-column label="请求IP" align="center" min-width="160px" :show-overflow-tooltip="true">
         <template slot-scope="{row}">
           <span>{{ row.ipAddress }}</span>
         </template>
