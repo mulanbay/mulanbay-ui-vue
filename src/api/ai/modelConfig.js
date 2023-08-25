@@ -16,6 +16,14 @@ export function getModelConfig(id) {
   })
 }
 
+export function getProcessorTree(needRoot) {
+  return request({
+    url: '/modelConfig/getProcessorTree',
+    method: 'get',
+    params: { needRoot }
+  })
+}
+
 
 export function createModelConfig(data) {
   return request({

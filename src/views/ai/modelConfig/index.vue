@@ -1,6 +1,22 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true">
+      <el-form-item label="模型" prop="code">
+        <el-select
+          v-model="queryParams.code"
+          placeholder="模型"
+          clearable
+          size="small"
+          style="width: 240px"
+        >
+          <el-option
+            v-for="dict in codeOptions"
+            :key="dict.id"
+            :label="dict.text"
+            :value="dict.id"
+          />
+        </el-select>
+      </el-form-item>
       <el-form-item label="名称" prop="name">
         <el-input
           v-model="queryParams.name"
@@ -182,16 +198,31 @@
     <el-dialog :title="title" :visible.sync="open" width="650px" append-to-body >
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-row>
+          <el-row>
+            <el-col :span="24">
+              <el-form-item label="选择模型" prop="code">
+                 <el-select
+                   v-model="form.code"
+                   placeholder="选择模型"
+                   clearable
+                   collapse-tags
+                   size="medium"
+                   style="width: 100%"
+                 >
+                   <el-option
+                     v-for="dict in codeOptions"
+                     :key="dict.id"
+                     :label="dict.text"
+                     :value="dict.id"
+                     @click.native="handleCodeChange(dict)"
+                   />
+                 </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
           <el-col :span="24">
             <el-form-item label="模型名称" prop="name">
               <el-input v-model="form.name" :style="{width: '100%'}" placeholder="请输入名称" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="24">
-            <el-form-item label="模型代码" prop="code">
-              <el-input v-model="form.code" :style="{width: '100%'}" placeholder="请输入名称" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -265,7 +296,7 @@
 </template>
 
 <script>
-import {fetchList,getModelConfig,createModelConfig,updateModelConfig,deleteModelConfig,publishModelConfig,refreshModelConfig,revokeModelConfig} from "@/api/ai/modelConfig";
+import {fetchList,getModelConfig,createModelConfig,updateModelConfig,deleteModelConfig,publishModelConfig,refreshModelConfig,revokeModelConfig,getProcessorTree} from "@/api/ai/modelConfig";
 
 export default {
   name: "ModelConfig",
@@ -284,6 +315,7 @@ export default {
       // 列表数据
       dataList:[],
       algorithmOptions:[],
+      codeOptions:[],
       fileList:[],
       formSubmitting: false,
       // 弹出层标题
@@ -326,9 +358,23 @@ export default {
     this.getEnumTree('MLAlgorithm','FIELD',false).then(response => {
       this.algorithmOptions = response;
     });
+    this.getProcessorTreeselect();
     this.getList();
   },
   methods: {
+    /** 查询类型下拉树结构 */
+    getProcessorTreeselect() {
+      getProcessorTree(false).then(response => {
+        this.codeOptions = response;
+      });
+    },
+    /** 选择类型按钮操作 */
+    handleCodeChange(item) {
+      if (this.form.id == null|| this.form.id==undefined) {
+        //新增情况下
+        this.form.name = item.text;
+      }
+    },
     fileChange (file, fileList) {
     	// 这是关键一句
       if (fileList.length > 0) {
