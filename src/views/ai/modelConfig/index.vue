@@ -417,6 +417,7 @@ export default {
     },
     // 表单重置
     reset() {
+      this.formSubmitting = false;;
       this.form = {
         id: undefined,
         name: undefined,
