@@ -108,12 +108,12 @@
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="模型名称" fixed="left" min-width="180px" :show-overflow-tooltip="true">
+      <el-table-column label="模型名称" fixed="left" min-width="250px" :show-overflow-tooltip="true">
         <template slot-scope="{row}">
           <span class="link-type" @click="handleUpdate(row)">{{ row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="模型代码" align="center" width="150" :show-overflow-tooltip="true">
+      <el-table-column label="模型代码" align="center" width="180" :show-overflow-tooltip="true">
         <template slot-scope="{row}">
           <span>{{ row.code }}</span>
         </template>
@@ -283,8 +283,8 @@
 
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <span v-if="formSubmitting == true">
-          表单提交中...&nbsp;&nbsp;
+        <span v-if="formSubmitting==true" class="link-type" style="color:red ;">
+          <i class="el-icon-loading"></i>表单提交中...&nbsp;&nbsp;
         </span>
         <el-button type="primary" @click="submitForm" :disabled="formSubmitting">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
