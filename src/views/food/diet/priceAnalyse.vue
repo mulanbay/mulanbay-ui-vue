@@ -31,6 +31,9 @@
           />
         </el-select>
       </el-form-item>
+      <el-form-item label="价格预测" prop="predict">
+        <el-switch v-model="queryParams.predict" :disabled="moreCdn==true||(queryParams.dateGroupTypeStr!='MONTH'&&queryParams.dateGroupTypeStr!='YEAR')"></el-switch>
+      </el-form-item>
       <el-form-item v-if="moreCdn==true" label="食物类型" prop="foodType">
         <el-select
           v-model="queryParams.foodType"
@@ -135,7 +138,8 @@ export default {
       queryParams: {
         minPrice:0,
         dateGroupTypeStr:'MONTH',
-        compliteDate:true
+        compliteDate:true,
+        predict: false
       }
     };
   },
@@ -184,6 +188,10 @@ export default {
       let qp = this.addDateRange(this.queryParams, this.dateRange);
       if(qp.minPrice=='null'){
         qp.minPrice=undefined;
+      }
+      if(this.moreCdn==true||(this.queryParams.dateGroupTypeStr!='MONTH'&&this.queryParams.dateGroupTypeStr!='YEAR')){
+        //无法进行条件查询预测
+        qp.predict = false;
       }
       getDietPriceAnalyse(qp).then(
         response => {
