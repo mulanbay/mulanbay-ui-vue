@@ -458,7 +458,8 @@ export function createMixLineBarChart(data, myChart) {
   let ya0Unit = '';
   let ya1Name = '';
   let ya1Unit = '';
-  if (data.yaxis.length > 0) {
+  let yaxisLen = data.yaxis.length;
+  if (yaxisLen > 0) {
     ya0Name = data.yaxis[0].name;
     ya0Unit = data.yaxis[0].unit;
     ya1Name = data.yaxis[1].name;
@@ -509,6 +510,16 @@ export function createMixLineBarChart(data, myChart) {
     },
     tooltip: {
       trigger: 'axis',
+      formatter: function (params) {
+        var relVal = params[0].name
+        for (var i = 0, l = params.length; i < l; i++) {
+          relVal += '<br/>' + params[i].seriesName +": &nbsp;&nbsp;&nbsp;"+ params[i].data
+          if (yaxisLen > 0){
+            relVal += data.yaxis[i].unit
+          }
+        }
+        return relVal
+      },
       axisPointer: {
         type: 'cross',
         crossStyle: {

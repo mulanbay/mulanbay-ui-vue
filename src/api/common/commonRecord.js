@@ -49,3 +49,35 @@ export function getCommonRecordDateStat(query) {
     params: query
   })
 }
+
+export function getCommonRecordAnalyse(query) {
+  return request({
+    url: '/commonRecord/analyse',
+    method: 'get',
+    params: query
+  })
+}
+
+export function getCommonRecordTimeline(query) {
+  return request({
+    url: '/commonRecord/timeline',
+    method: 'get',
+    params: query
+  })
+}
+
+export function getLatestCommonRecord(query) {
+  return request({
+    url: '/commonRecord/getLatest',
+    method: 'get',
+    params: query
+  })
+}
+
+export function statCommonRecord(query) {
+  return request({
+    url: '/commonRecord/stat',
+    method: 'get',
+    params: query
+  })
+}

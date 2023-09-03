@@ -106,7 +106,7 @@
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="类型" align="center">
+      <el-table-column label="类型" align="center" min-width="120px">
         <template slot-scope="{row}">
           <span>{{ row.commonRecordType.name }}</span>
         </template>
@@ -119,6 +119,11 @@
       <el-table-column label="值" align="center" width="160">
         <template slot-scope="{row}">
           <span>{{ row.value+ row.commonRecordType.unit}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="分析" width="60">
+        <template slot-scope="{row}">
+          <span class="link-type" @click="handleAnalyse(row.commonRecordType.id)"><i class="el-icon-s-data" /></span>
         </template>
       </el-table-column>
       <el-table-column label="发生时间" align="center" width="180">
@@ -327,6 +332,11 @@ export default {
       getCommonRecordTypeTree(false).then(response => {
         this.commonRecordTypeOptions = response;
       });
+    },
+    //分析
+    handleAnalyse(commonRecordTypeId){
+      //路由定向
+      this.$router.push({name:'CommonRecordAnalyse',query: {commonRecordTypeId:commonRecordTypeId}})
     },
     /** 查询列表 */
     getList() {
