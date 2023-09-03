@@ -3,16 +3,32 @@
     <el-row>
       <el-col :span="24" class="card-box">
         <div>
-          <el-form :model="queryParams" :rules="rules" ref="queryForm" :inline="true">
+          <el-form :model="queryParams" ref="queryForm" :inline="true">
             <el-form-item label="记录类型" prop="commonRecordTypeId">
               <el-select
                 v-model="queryParams.commonRecordTypeId"
                 placeholder="类型"
                 clearable
                 style="width: 240px"
+                @change="handleCommonRecordTypeChange"
               >
                 <el-option
                   v-for="dict in commonRecordTypeOptions"
+                  :key="dict.id"
+                  :label="dict.text"
+                  :value="dict.id"
+                />
+              </el-select>
+            </el-form-item>
+            <el-form-item label="子项名称" prop="name">
+              <el-select
+                v-model="queryParams.name"
+                placeholder="子项名称"
+                clearable
+                style="width: 240px"
+              >
+                <el-option
+                  v-for="dict in nameOptions"
                   :key="dict.id"
                   :label="dict.text"
                   :value="dict.id"
@@ -63,8 +79,7 @@
           </div>
           <div align="center">
             <el-button type="stat" icon="el-icon-s-data" size="mini" @click="handleChartStat('TIMES')" >按次数</el-button>
-            <el-button type="stat" icon="el-icon-s-data" size="mini" @click="handleChartStat('MINUTE')" >按时长(分钟)</el-button>
-            <el-button type="stat" icon="el-icon-s-data" size="mini" @click="handleChartStat('HOUR')" >按时长(小时)</el-button>
+            <el-button type="stat" icon="el-icon-s-data" size="mini" @click="handleChartStat('MINUTE')" >按时长</el-button>
           </div>
         </el-card>
       </el-col>
@@ -96,14 +111,14 @@
                   <i class="el-icon-date"></i>
                   总时长
                 </template>
-                <div class="cell">{{ statData.totalValueStr }}</div>
+                <div class="cell">{{ statData.totalValue+statData.unit }}</div>
               </el-descriptions-item>
               <el-descriptions-item labelStyle="width: 120px">
                 <template slot="label">
                   <i class="el-icon-data-line"></i>
                   平均时长
                 </template>
-                <div class="cell">{{ statData.perValue }}</div>
+                <div class="cell">{{ statData.perValue+statData.unit }}</div>
               </el-descriptions-item>
               <el-descriptions-item labelStyle="width: 120px">
                 <template slot="label">
@@ -173,7 +188,7 @@
 
 <script>
   import {getCommonRecordTypeTree } from "@/api/common/commonRecordType";
-  import {getCommonRecordAnalyse,getCommonRecordTimeline,getLatestCommonRecord,statCommonRecord} from "@/api/common/commonRecord";
+  import {getCommonRecordAnalyse,getCommonRecordTimeline,getLatestCommonRecord,statCommonRecord,getNameTree} from "@/api/common/commonRecord";
 
   import {getPercent,progressColors,formatFloat} from "@/utils/mulanbay";
   import {dateDiff,tillNowDays,formatDays} from "@/utils/datetime";
@@ -209,6 +224,7 @@ export default {
       //类型
       commonRecordTypeOptions:[],
       groupFieldOptions:[],
+      nameOptions:[],
       //分析图表
       analyseChartData:{},
       timelineChartData:{},
@@ -250,7 +266,7 @@ export default {
     /** 查询信息 */
     getList() {
       if(this.queryParams.commonRecordTypeId==null||this.queryParams.commonRecordTypeId==undefined){
-        this.msgError('请先选择类型');
+        this.msgError('请先选择记录类型');
       }else{
         this.analyseStat();
         this.timelineStat();
@@ -263,6 +279,19 @@ export default {
       getCommonRecordTypeTree(false).then(response => {
         this.commonRecordTypeOptions = response;
       });
+    },
+    /** 查询类型下拉树结构 */
+    getCommonRecordNameTreeselect() {
+      let para ={
+        commonRecordTypeId:this.queryParams.commonRecordTypeId
+      }
+      getNameTree(para).then(response => {
+        this.nameOptions = response;
+      });
+    },
+    /** 类型变化 */
+    handleCommonRecordTypeChange(){
+      this.getCommonRecordNameTreeselect();
     },
     /** 格式化预测值 */
     formatePredictValue(v,n) {
@@ -297,7 +326,8 @@ export default {
     /** 时间线统计 */
     timelineStat(){
       let para = {
-        commonRecordTypeId : this.queryParams.commonRecordTypeId
+        commonRecordTypeId : this.queryParams.commonRecordTypeId,
+        name : this.queryParams.name
       }
       getCommonRecordTimeline(this.addDateRange(para, this.dateRange)).then(
         response => {
@@ -311,7 +341,8 @@ export default {
     /** 获取最新 */
     getLatestData(){
       let para = {
-        commonRecordTypeId : this.queryParams.commonRecordTypeId
+        commonRecordTypeId : this.queryParams.commonRecordTypeId,
+        name : this.queryParams.name
       }
       getLatestCommonRecord(this.addDateRange(para, this.dateRange)).then(
         response => {
@@ -325,7 +356,8 @@ export default {
     /** 获取统计 */
     getStatData(){
       let para = {
-        commonRecordTypeId : this.queryParams.commonRecordTypeId
+        commonRecordTypeId : this.queryParams.commonRecordTypeId,
+        name : this.queryParams.name
       }
       statCommonRecord(this.addDateRange(para, this.dateRange)).then(
         response => {
@@ -337,20 +369,15 @@ export default {
             this.statData = {};
             return;
           }
-          let totalValue = (response.totalValue/60.0).toFixed(1)+'小时';
           let perValue = response.totalValue*1.0/response.totalCount;
-          if(perValue<60){
-            perValue = perValue.toFixed(1) +'分钟/次'
-          }else{
-            perValue = (perValue/60).toFixed(1) +'小时/次'
-          }
           let frequency = days / response.totalCount;
           this.statData ={
             daysStr: formatDays(days),
             totalCount: response.totalCount,
-            totalValueStr: totalValue,
-            perValue: perValue,
-            frequency: frequency.toFixed(1)
+            totalValue: response.totalValue,
+            perValue: perValue.toFixed(1),
+            frequency: frequency.toFixed(1),
+            unit:response.unit
           };
 
         }

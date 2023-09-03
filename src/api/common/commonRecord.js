@@ -81,3 +81,11 @@ export function statCommonRecord(query) {
     params: query
   })
 }
+
+export function getNameTree(query) {
+  return request({
+    url: '/commonRecord/getNameTree',
+    method: 'get',
+    params: query
+  })
+}

@@ -193,7 +193,19 @@
         <el-row>
           <el-col :span="24">
             <el-form-item label="名称" prop="name">
-              <el-input v-model="form.name" placeholder="请输入名称" />
+              <el-select
+                v-model="form.name"
+                :style="{width: '100%'}"
+                filterable
+                allow-create
+                default-first-option>
+                <el-option
+                  v-for="dict in nameOptions"
+                  :key="dict.id"
+                  :label="dict.text"
+                  :value="dict.id"
+                />
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -237,7 +249,7 @@
 </template>
 
 <script>
-import {fetchList,getCommonRecord,createCommonRecord,updateCommonRecord,deleteCommonRecord} from "@/api/common/commonRecord";
+import {fetchList,getCommonRecord,createCommonRecord,updateCommonRecord,deleteCommonRecord,getNameTree} from "@/api/common/commonRecord";
 import {getCommonRecordTypeTree,getCommonRecordType } from "@/api/common/commonRecordType";
 import {getNowDateTimeString } from "@/utils/datetime";
 import {getUserResidentCity } from "@/api/auth/user";
@@ -267,6 +279,7 @@ export default {
       commonRecordList:[],
       //类型
       commonRecordTypeOptions:[],
+      nameOptions:[],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -325,6 +338,12 @@ export default {
       getCommonRecordType(this.form.commonRecordTypeId).then(response => {
         this.valueUnit = response.unit;
         this.form.name = response.name;
+      });
+      let para ={
+        commonRecordTypeId:this.form.commonRecordTypeId
+      }
+      getNameTree(para).then(response => {
+        this.nameOptions = response;
       });
     },
     /** 查询类型下拉树结构 */
