@@ -31,7 +31,7 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="价格预测" prop="predict">
+      <el-form-item label="消费预测" prop="predict">
         <el-switch v-model="queryParams.predict" :disabled="moreCdn==true||(queryParams.dateGroupTypeStr!='MONTH'&&queryParams.dateGroupTypeStr!='YEAR')"></el-switch>
       </el-form-item>
       <el-form-item v-if="moreCdn==true" label="食物类型" prop="foodType">

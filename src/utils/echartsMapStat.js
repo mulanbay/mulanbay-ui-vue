@@ -75,8 +75,8 @@ export function createDefaultMapChart(mapData, myChart, echarts) {
       formatter: function(params) {
         if (params.data != null && params.data.days != null) {
           var toolTiphtml = params.data.name +
-            '<br>天数:' + params.data.days +
-            '<br>次数:' + params.data.counts +
+            '<br>天数:' + params.data.days + '天' + 
+            '<br>次数:' + params.data.counts + '次' + 
             '<br>花费:' + params.data.cost + '元'
           return toolTiphtml;
         } else {

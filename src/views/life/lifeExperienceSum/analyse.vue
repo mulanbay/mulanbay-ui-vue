@@ -25,14 +25,18 @@
 
     <el-row :gutter="32">
       <el-col :xs="24" :sm="24" :lg="16">
-        <div class="chart-wrapper">
-          <shadow-chart :chart-data="shadowChartData"/>
-        </div>
+        <el-card>
+          <div class="chart-wrapper">
+            <shadow-chart :chart-data="shadowChartData"/>
+          </div>
+        </el-card>
       </el-col>
       <el-col :xs="24" :sm="24" :lg="8">
-        <div class="chart-wrapper">
-          <pie-chart :chart-data="pieChartData"/>
-        </div>
+        <el-card>
+          <div class="chart-wrapper">
+            <pie-chart :chart-data="pieChartData"/>
+          </div>
+        </el-card>
       </el-col>
     </el-row>
 

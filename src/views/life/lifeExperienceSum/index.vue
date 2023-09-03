@@ -166,28 +166,17 @@
       </div>
     </el-dialog>
 
-    <!-- 分析页面 -->
-    <el-dialog :title="analyseTitle" width="70%" :visible.sync="analyseVisible"  append-to-body>
-      <sum-analyse/>
-    </el-dialog>
-
   </div>
 </template>
 
 <script>
 import {fetchList,reviseLifeExperienceSum,getLifeExperienceSum,createLifeExperienceSum,updateLifeExperienceSum,deleteLifeExperienceSum} from "@/api/life/lifeExperienceSum";
 import {getYear} from "@/utils/datetime";
-import SumAnalyse from './analyse'
 
 export default {
   name: "LifeExperienceSum",
-  components: {
-    'sum-analyse':SumAnalyse
-  },
   data() {
     return {
-      analyseTitle:'',
-      analyseVisible:false,
       // 遮罩层
       loading: true,
       // 选中数组
@@ -243,8 +232,8 @@ export default {
   methods: {
     /** 分析 */
     handleAnalyse(){
-      this.analyseTitle='分析';
-      this.analyseVisible=true;
+      //路由定向
+      this.$router.push({name:'LifeExperienceSumAnalyse',query: {}})
     },
     /** 查询列表 */
     getList() {

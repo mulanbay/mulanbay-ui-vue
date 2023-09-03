@@ -162,7 +162,14 @@ export function createBarChart(data, myChart) {
       x: 'center'
     },
     tooltip: {
-      trigger: 'axis'
+      trigger: 'axis',
+      formatter: function (params) {
+        var relVal = params[0].name
+        for (var i = 0, l = params.length; i < l; i++) {
+          relVal += '<br/>' + params[i].seriesName +":"+ params[i].data +data.ydata[i].unit
+        }
+        return relVal
+      }
     },
     legend: {
       data: data.legendData,
@@ -282,6 +289,13 @@ export function createLineChart(data, myChart) {
     },
     tooltip: {
       trigger: 'axis',
+      formatter: function (params) {
+        var relVal = params[0].name
+        for (var i = 0, l = params.length; i < l; i++) {
+          relVal += '<br/>' + params[i].seriesName +": &nbsp;&nbsp;&nbsp;"+ params[i].data +data.ydata[i].unit
+        }
+        return relVal
+      },
       axisPointer: {
         type: 'cross'
       }
@@ -464,6 +478,8 @@ export function createMixLineBarChart(data, myChart) {
     ya0Unit = data.yaxis[0].unit;
     ya1Name = data.yaxis[1].name;
     ya1Unit = data.yaxis[1].unit;
+  }else{
+    //可以去data.ydata里面获取
   }
   let series = new Array();
   //图例类型，默认是柱状图和折线图
@@ -513,10 +529,7 @@ export function createMixLineBarChart(data, myChart) {
       formatter: function (params) {
         var relVal = params[0].name
         for (var i = 0, l = params.length; i < l; i++) {
-          relVal += '<br/>' + params[i].seriesName +": &nbsp;&nbsp;&nbsp;"+ params[i].data
-          if (yaxisLen > 0){
-            relVal += data.yaxis[i].unit
-          }
+          relVal += '<br/>' + params[i].seriesName +": &nbsp;&nbsp;&nbsp;"+ params[i].data +data.ydata[i].unit
         }
         return relVal
       },
@@ -1014,6 +1027,7 @@ export function createCalanderChart(data, myChart) {
  * @param {Object} myChart
  */
 export function createCalanderPieChart(data, myChart, echarts) {
+  const unit = data.unit == null ? '' : data.unit;
   let cellSize = [cellSizeValue, cellSizeValue];
   let cellSizeValue = data.cellSize ==null ? 100:data.cellSize;
   let pieRadius = data.pieRadius ==null ? 30:data.pieRadius;
@@ -1062,7 +1076,15 @@ export function createCalanderPieChart(data, myChart, echarts) {
       y: 'top',
       textAlign: 'left'
     },
-    tooltip: {},
+    tooltip: {
+      formatter: function (params) {
+        //console.log(params)
+        let vv = params.seriesName;
+        vv+='<br/>'+params.name + ':' + params.value+unit
+        vv+= ' ('+params.percent+'%'+')'
+        return vv;
+      }
+    },
     legend: {
       data: data.legendData,
       bottom:'10',
@@ -2261,6 +2283,13 @@ export function createShadowChart(data, myChart) {
     },
     tooltip: {
       trigger: 'axis',
+      formatter: function (params) {
+        var relVal = params[0].name
+        for (var i = 0, l = params.length; i < l; i++) {
+          relVal += '<br/>' + params[i].seriesName +": &nbsp;&nbsp;&nbsp;"+ params[i].data +data.series[i].unit
+        }
+        return relVal
+      },
       axisPointer: {
         type: 'cross',
         label: {
