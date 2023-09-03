@@ -66,9 +66,9 @@ export function getCommonRecordTimeline(query) {
   })
 }
 
-export function getLatestCommonRecord(query) {
+export function getNearestCommonRecord(query) {
   return request({
-    url: '/commonRecord/getLatest',
+    url: '/commonRecord/getNearest',
     method: 'get',
     params: query
   })

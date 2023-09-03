@@ -128,7 +128,13 @@
                 <div class="cell">{{ statData.frequency }}天/次</div>
               </el-descriptions-item>
             </el-descriptions>
-            <el-divider content-position="center">最近记录</el-divider>
+            <el-divider content-position="center">数据信息</el-divider>
+            <el-tabs v-model="nearestType" @tab-click="handleNearest">
+                <el-tab-pane label="时间最早" name="MIN_TIME"></el-tab-pane>
+                <el-tab-pane label="时间最新" name="MAX_TIME"></el-tab-pane>
+                <el-tab-pane label="时长最短" name="MIN_VALUE"></el-tab-pane>
+                <el-tab-pane label="时长最长" name="MAX_VALUE"></el-tab-pane>
+              </el-tabs>
             <el-descriptions class="margin-top" title="" :column="1" :size="size" border >
               <el-descriptions-item labelStyle="width: 120px">
                 <template slot="label">
@@ -142,7 +148,10 @@
                   <i class="el-icon-date"></i>
                   时长
                 </template>
-                <div class="cell">{{ latestData.value }}分钟</div>
+                <div class="cell">
+                {{ latestData.value }}
+                <span v-if="latestData.commonRecordType!=null">{{latestData.commonRecordType.unit}}</span>
+                </div>
               </el-descriptions-item>
               <el-descriptions-item labelStyle="width: 120px">
                 <template slot="label">
@@ -188,7 +197,7 @@
 
 <script>
   import {getCommonRecordTypeTree } from "@/api/common/commonRecordType";
-  import {getCommonRecordAnalyse,getCommonRecordTimeline,getLatestCommonRecord,statCommonRecord,getNameTree} from "@/api/common/commonRecord";
+  import {getCommonRecordAnalyse,getCommonRecordTimeline,getNearestCommonRecord,statCommonRecord,getNameTree} from "@/api/common/commonRecord";
 
   import {getPercent,progressColors,formatFloat} from "@/utils/mulanbay";
   import {dateDiff,tillNowDays,formatDays} from "@/utils/datetime";
@@ -221,6 +230,7 @@ export default {
         valueType: 'TIMES',
         commonRecordTypeId:undefined
       },
+      nearestType:"MAX_TIME",
       //类型
       commonRecordTypeOptions:[],
       groupFieldOptions:[],
@@ -270,7 +280,7 @@ export default {
       }else{
         this.analyseStat();
         this.timelineStat();
-        this.getLatestData();
+        this.getNearestData();
         this.getStatData();
       }
     },
@@ -292,6 +302,10 @@ export default {
     /** 类型变化 */
     handleCommonRecordTypeChange(){
       this.getCommonRecordNameTreeselect();
+    },
+    /** 查询最新记录 */
+    handleNearest(){
+      this.getNearestData();
     },
     /** 格式化预测值 */
     formatePredictValue(v,n) {
@@ -317,7 +331,7 @@ export default {
       getCommonRecordAnalyse(this.addDateRange(this.queryParams, this.dateRange)).then(
         response => {
           //组装chart数据
-          response.height = '490px';
+          response.height = '585px';
           this.analyseChartData = response;
           this.loading.close();
         }
@@ -338,13 +352,14 @@ export default {
         }
       );
     },
-    /** 获取最新 */
-    getLatestData(){
+    /** 获取最近 */
+    getNearestData(){
       let para = {
         commonRecordTypeId : this.queryParams.commonRecordTypeId,
-        name : this.queryParams.name
+        name : this.queryParams.name,
+        nearestType: this.nearestType
       }
-      getLatestCommonRecord(this.addDateRange(para, this.dateRange)).then(
+      getNearestCommonRecord(this.addDateRange(para, this.dateRange)).then(
         response => {
           this.latestData ={};
           if(response!=null){
