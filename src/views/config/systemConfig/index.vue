@@ -65,6 +65,15 @@
       </el-col>
       <el-col :span="1.5">
         <el-button
+          type="primary"
+          icon="el-icon-s-tools"
+          size="mini"
+          @click="handleProperties"
+          v-hasPermi="['config:systemConfig:getProperties']"
+        >配置信息</el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
           type="warning"
           icon="el-icon-download"
           size="mini"
@@ -187,11 +196,42 @@
     </el-dialog>
 
 
+    <!-- 配置信息详情 -->
+    <el-dialog title="配置信息" width="850px" append-to-body customClass="customDialogCss" :visible.sync="propertiesOpen">
+      <!--列表数据-->
+      <el-table :data="propertiesData" >
+        <el-table-column label="配置项" prop="key" align="center" width="250"  :show-overflow-tooltip="true">
+          <template slot-scope="{row}">
+            {{ row.key }}
+          </template>
+        </el-table-column>
+        <el-table-column label="配置值" prop="value" :show-overflow-tooltip="true">
+          <template slot-scope="{row}">
+            {{ row.value }}
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="来源"
+          prop="source"
+          align="center"
+          width="200"
+          :show-overflow-tooltip="true"
+          :filters="[{ text: 'systemEnvironment', value: 'systemEnvironment' }, { text: 'systemProperties', value: 'systemProperties' }, { text: 'application.properties', value: 'applicationConfig: [classpath:/application.properties]' }, { text: 'application-local.properties', value: 'applicationConfig: [classpath:/application-local.properties]' }]"
+          :filter-method="filterSource"
+          filter-placement="bottom-end">
+          <template slot-scope="{row}">
+            {{ row.source }}
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-dialog>
+
+
   </div>
 </template>
 
 <script>
-import {fetchList,refreshCache,getSystemConfig,createSystemConfig,updateSystemConfig,deleteSystemConfig} from "@/api/config/systemConfig";
+import {fetchList,refreshCache,getSystemConfig,createSystemConfig,updateSystemConfig,deleteSystemConfig,getProperties} from "@/api/config/systemConfig";
 
 export default {
   name: "SystemConfig",
@@ -213,6 +253,8 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      propertiesOpen:false,
+      propertiesData:[],
       commonStatusOptions:this.commonStatusOptions,
       // 查询参数
       queryParams: {
@@ -292,6 +334,19 @@ export default {
       this.ids = selection.map(item => item.id)
       this.single = selection.length!=1
       this.multiple = !selection.length
+    },
+    /**配置文件配置信息按钮操作 */
+    handleProperties(){
+      getProperties().then(
+        response => {
+          this.propertiesData = response;
+          this.propertiesOpen = true;
+        }
+      );
+    },
+    /** 配置信息列表来源筛选操作 */
+    filterSource(value, row) {
+      return row.source === value;
     },
     /** 新增按钮操作 */
     handleCreate() {

@@ -173,7 +173,16 @@ export default {
         if(cc.deleteDate==null&&cc.expMillSecs!=null){
           brData.push({key:'离预期作废',value :formatDays(cc.expMillSecs/(24*3600*1000)) });
         }
-        brData.push({key:'售出价格',value :this.formatMoney(cc.soldPrice) });
+        let spDesc ='';
+        if(cc.soldPrice!=null){
+          let sb = cc.totalPrice-cc.soldPrice;
+          if(sb>0){
+            spDesc ='亏'+sb.toFixed(2)+'元';
+          }else{
+            spDesc ='赚'+(0-sb).toFixed(2)+'元';
+          }
+        }
+        brData.push({key:'售出价格',value :this.formatMoney(cc.soldPrice),desc:spDesc });
         if(cc.childrens>0){
           brData.push({key:'下级商品成本',value :this.formatMoney(cc.childrenPrice)+' ('+cc.childrens+'个)',desc:'该商品所有下级商品的个数' });
         }

@@ -49,3 +49,10 @@ export function refreshCache() {
     method: 'post'
   })
 }
+
+export function getProperties() {
+  return request({
+    url: '/systemConfig/getProperties',
+    method: 'get'
+  })
+}
