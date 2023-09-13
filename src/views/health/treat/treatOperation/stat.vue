@@ -40,12 +40,12 @@
 
     <!--列表数据-->
     <el-table v-loading="loading" :data="dataList" :row-class-name="tableRowClassName">
-      <el-table-column label="手术名称">
-        <template slot-scope="{row}"  :show-overflow-tooltip="true">
+      <el-table-column label="手术名称" fixed="left"  width="190" :show-overflow-tooltip="true">
+        <template slot-scope="{row}" >
           <span>{{ row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="次数" align="center" width="110">
+      <el-table-column label="次数" align="center" width="60">
         <template slot-scope="{row}">
           <span>{{ row.totalCount }}</span>
         </template>
@@ -55,6 +55,28 @@
           <span>{{ formatMoney(row.totalFee) }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="最早时间" align="center" width="110">
+        <template slot-scope="{row}">
+          <span>{{ row.minDate }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="最晚时间" align="center" width="110">
+        <template slot-scope="{row}">
+          <span>{{ row.maxDate }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="时长" align="center" width="110" :show-overflow-tooltip="true">
+        <template slot-scope="{row}">
+          <span>{{ row.daysDesc }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="频率" align="center" width="110">
+        <template slot-scope="{row}">
+          <span>
+            <el-tag :type="row.type">{{ row.frequence }}</el-tag>
+          </span>
+        </template>
+      </el-table-column>
     </el-table>
 
 </div>
@@ -62,6 +84,7 @@
 
 <script>
 import {getTreatOperationStat} from "@/api/health/treat/treatOperation";
+import {formatDays,dateDiff} from "@/utils/datetime";
 
 export default {
   name: "TreatOperationStat",
@@ -126,14 +149,36 @@ export default {
           for (var i = 0; i < n; i++) {
             let name = response[i].name==null ? '未知':response[i].name;
             let sum =false;
+            let daysDesc ='';
+            let frequence ='';
+            let type='';
             if(i==n-1){
               sum=true;
+            }else{
+              let days = dateDiff(response[i].minDate,response[i].maxDate);
+              daysDesc = formatDays(days);
+              frequence = days / 365 /response[i].totalCount ;
+              if(frequence<1/(12*30)){
+                frequence = (days/response[i].totalCount).toFixed(1)+'天/次';
+                type= 'danger';
+              }else if(frequence<1){
+                frequence = (frequence*12).toFixed(1)+'月/次';
+                type= '';
+              }else{
+                frequence = frequence.toFixed(1)+'年/次'
+                type= 'success';
+              }
             }
             let row = {
                 name:name,
                 totalCount:response[i].totalCount,
                 totalFee:response[i].totalFee,
-                sum:sum
+                sum:sum,
+                minDate:response[i].minDate,
+                maxDate:response[i].maxDate,
+                daysDesc:daysDesc,
+                frequence:frequence,
+                type:type
             };
             this.dataList.push(row);
           }

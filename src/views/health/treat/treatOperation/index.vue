@@ -353,7 +353,7 @@
     </el-dialog>
 
     <!-- 手术统计列表页面 -->
-    <el-dialog :title="statListTitle" width="780px" :visible.sync="statListVisible"  append-to-body customClass="customDialogCss">
+    <el-dialog :title="statListTitle" width="900px" :visible.sync="statListVisible"  append-to-body customClass="customDialogCss">
       <stat-list/>
     </el-dialog>
 
