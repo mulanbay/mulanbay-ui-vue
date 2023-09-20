@@ -132,6 +132,14 @@ export function getBuyRecordUseTimeStat(query) {
   })
 }
 
+export function getBuyRecordUseTimeList(query) {
+  return request({
+    url: '/buyRecord/useTimeList',
+    method: 'get',
+    params: query
+  })
+}
+
 export function getBuyRecordDateStat(query) {
   return request({
     url: '/buyRecord/dateStat',
